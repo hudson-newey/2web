@@ -1,0 +1,6 @@
+version: "3"
+
+tasks:
+  build:
+    cmds:
+      - go build -o ./dist/2web ./src/main.go
