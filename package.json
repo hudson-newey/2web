@@ -1,0 +1,16 @@
+{
+  "name": "2web",
+  "version": "0.1.0",
+  "description": "A compiler for reactive web apps",
+  "type": "module",
+  "scripts": {
+    "dev": "vite ./dist/"
+  },
+  "keywords": ["frontend", "framework", "compiler"],
+  "author": "hudson-newey",
+  "license": "MIT",
+  "packageManager": "pnpm@10.6.5",
+  "devDependencies": {
+    "vite": "^6.2.3"
+  }
+}

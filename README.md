@@ -7,3 +7,7 @@ I am to make all reactivity compiled so that there is zero runtime overhead.
 
 This framework is **HIGHLY opinionated** and will provide you with a dev server,
 minification, optimization, and minifier.
+
+## Resources
+
+- [Theory](./docs/theory.md)

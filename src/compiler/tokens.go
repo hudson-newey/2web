@@ -1,3 +1,3 @@
 package compiler
 
-const VARIABLE_TOKEN = "$"
+const variableToken = "$"
