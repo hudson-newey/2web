@@ -7,7 +7,7 @@ import (
 )
 
 func includeSsgContent(value string, filePath string) string {
-	log.Println("[ssg] ", value)
+	log.Println("\t\t-", value)
 
 	hostDirectoryEnd := strings.LastIndex(filePath, "/")
 	hostDirectory := filePath[:hostDirectoryEnd]

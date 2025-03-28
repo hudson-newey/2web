@@ -8,7 +8,7 @@ import (
 )
 
 func CompileFile(path string) string {
-	log.Println(path)
+	log.Println("\t-", path)
 
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -16,7 +16,16 @@ func CompileFile(path string) string {
 		return ""
 	}
 
-	ssgSource := ssg.ProcessStaticSite(string(data), path)
+	ssgSource := string(data)
+	stable := false
+	for {
+		ssgSource, stable = ssg.ProcessStaticSite(ssgSource, path)
+
+		if stable {
+			break
+		}
+	}
+
 	return compileSource(ssgSource)
 }
 

@@ -9,8 +9,11 @@ type ssgContent struct {
 	content  string
 }
 
-func ProcessStaticSite(content string, filePath string) string {
+type isStable = bool
+
+func ProcessStaticSite(content string, filePath string) (string, isStable) {
 	ssgContent := extractSsgContent(content)
+	ssgResult := content
 
 	for _, ssgItem := range ssgContent {
 		ssgCommand := strings.Split(ssgItem.content, " ")
@@ -25,11 +28,14 @@ func ProcessStaticSite(content string, filePath string) string {
 			}
 		}
 
-		println(ssgItem.selector, selectorContent)
-		content = strings.Replace(content, ssgItem.selector, selectorContent, 1)
+		ssgResult = strings.Replace(ssgResult, ssgItem.selector, selectorContent, 1)
 	}
 
-	return content
+	// by comparing the original content with the result, we can determine if
+	// the content is stable
+	unstable := strings.Contains(ssgResult, ssgStartToken) && strings.Contains(ssgResult, ssgEndToken)
+
+	return ssgResult, !unstable
 }
 
 func extractSsgContent(content string) []ssgContent {

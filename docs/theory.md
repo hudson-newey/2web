@@ -22,12 +22,12 @@ Your first instict might be "well what if we want the word 'Hello' to be
 reactive?".
 
 ```html
-<compile>
+<script compiled>
 $ text = "Hello"
-</compile>
+</script>
 
 <template>
-    <span>{{ text }}</span>
+    <span>{{ $text }}</span>
     <button @click="text = 'world'">Change</button>
 </template>
 ```
@@ -54,12 +54,12 @@ $ text = "Hello"
 Want to create an incrementing number?
 
 ```html
-<compile>
+<script compiled>
 $ number = 0
-</compile>
+</script>
 
 <template>
-    <span>{{ number }}</span>
+    <span>{{ $number }}</span>
     <button @click="number++">Increment</button>
 </template>
 ```
@@ -76,11 +76,11 @@ $ number = 0
     </body>
 
     <script>
-        let number = 0;
+        let $number = 0;
 
         function increment0() {
-            number++;
-            document.getElementById("out-element").innerText = number;
+            $number++;
+            document.getElementById("out-element").innerText = $number;
         }
     </script>
 </html>
@@ -170,12 +170,12 @@ e.g. The following code is a simple example with templated computed values
 
 ```html
 ```html
-<compile>
+<script compiled>
 $ number = 0
-</compile>
+</script>
 
 <template>
-    <span>{{ number * 2 }}</span>
+    <span>{{ $number * 2 }}</span>
     <button @click="number++">Increment</button>
 </template>
 ```
@@ -193,11 +193,11 @@ calculation into the onclick function.
     </body>
 
     <script>
-        let number = 0;
+        let $number = 0;
 
         function increment0() {
             number++;
-            document.getElementById("out-element").innerText = number * 2;
+            document.getElementById("out-element").innerText = $number * 2;
         }
     </script>
 </html>
@@ -206,19 +206,19 @@ calculation into the onclick function.
 However, more complex examples are harder.
 
 ```html
-<compile>
+<script compiled>
 $ itemId = 0
 
 // fetch the number from the server
 $ itemTitle = (async () => {
-    const response = await fetch("https://example.com/number");
+    const response = await fetch(`https://example.com/${$itemId}`);
     const responseBody = response.json();
     return responseBody.title;
 })();
-</compile>
+</script>
 
 <template>
-    <span>{{ itemTitle }}</span>
+    <span>{{ $itemTitle }}</span>
     <button @click="itemId++">Change Item Id</button>
 </template>
 ```
@@ -226,14 +226,14 @@ $ itemTitle = (async () => {
 As you can probably notice, we can first inline the callback
 
 ```html
-<compile>
+<script compile>
 $ itemId = 0
-</compile>
+</script>
 
 <template>
     <span>{{
         (() => {
-            const response = await fetch("https://example.com/number");
+            const response = await fetch(`https://example.com/${$itemId}`);
             const responseBody = response.json();
             return responseBody.title;
         })
@@ -254,12 +254,12 @@ Then we can simply inline the function to the compiled code
     </body>
 
     <script>
-        let itemId = 0;
+        let $itemId = 0;
 
         function increment0() {
             itemId++;
             document.getElementById("out-element").innerText = (async () => {
-                const response = await fetch("https://example.com/number");
+                const response = await fetch(`https://example.com/${$itemId}`);
                 const responseBody = response.json();
                 return responseBody.title;
             })();

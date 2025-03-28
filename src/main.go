@@ -3,6 +3,7 @@ package main
 import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/compiler"
+	"log"
 	"os"
 )
 
@@ -13,6 +14,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	log.Println(*args.InputPath)
 
 	if inputPath.IsDir() {
 		// find all direct children of the input directory
