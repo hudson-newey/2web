@@ -225,7 +225,7 @@ $ itemTitle = (async () => {
 
 As you can probably notice, we can first inline the callback
 
-```HTML
+```html
 <compile>
 $ itemId = 0
 </compile>
@@ -240,6 +240,7 @@ $ itemId = 0
     }}</span>
     <button @click="itemId++"></button>
 </template>
+```
 
 Then we can simply inline the function to the compiled code
 
