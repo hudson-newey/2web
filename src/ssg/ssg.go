@@ -9,7 +9,7 @@ import (
 type isStable = bool
 
 func ProcessStaticSite(filePath string, content string) (string, isStable) {
-	ssgContent := lexer.FindNodes(content, ssgStartToken, ssgEndToken)
+	ssgContent := lexer.FindNodes[lexer.SsgNode](content, ssgStartToken, ssgEndToken)
 	ssgResult := content
 
 	for _, node := range ssgContent {

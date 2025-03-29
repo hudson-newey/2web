@@ -8,7 +8,8 @@ import (
 
 func FromNode(node lexer.LexNode[lexer.VarNode]) (models.ReactiveVariable, error) {
 	if len(node.Tokens) != 3 || node.Tokens[1] != "=" {
-		return models.ReactiveVariable{}, fmt.Errorf("Incorrect compiler variable format:\nUsage: $ variableName = 'variableValue'")
+		errorMessage := fmt.Errorf("incorrect reactive variable assignment:\n\tExpected: [variableName = 'variableValue']\n\tFound: %s", node.Selector)
+		return models.ReactiveVariable{}, errorMessage
 	}
 
 	varName := node.Tokens[0]

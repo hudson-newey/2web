@@ -13,7 +13,11 @@
     </script>
 
     <!--
-        This weird syntax exists
+        This weird syntax exists because I didn't want to make the lexer
+        use regex for tokenization.
+        Maybe in the future I'll improve the lexer to use regex and then I can
+        probably have a better syntax for this.
+        e.g. innerText="$message"
     -->
     <h1 [innerText $message]></h1>
 

@@ -8,3 +8,6 @@ type VarNode LexNodeType[PropNode]
 
 // [propName $varName]
 type PropNode LexNodeType[PropNode]
+
+// {% ssgModule arguments %}
+type SsgNode LexNodeType[SsgNode]
