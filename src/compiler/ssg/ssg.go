@@ -1,6 +1,7 @@
 package ssg
 
 import (
+	"hudson-newey/2web/src/compiler/ssg/modules"
 	"strings"
 )
 
@@ -24,7 +25,10 @@ func ProcessStaticSite(content string, filePath string) (string, isStable) {
 
 			switch ssgKeyword {
 			case includeToken:
-				selectorContent = includeSsgContent(ssgCommand[1], filePath)
+				selectorContent = modules.IncludeSsgContent(ssgCommand[1], filePath)
+
+			case forToken:
+				selectorContent = modules.ForSsgContent(ssgCommand[1], ssgCommand[2])
 			}
 		}
 
