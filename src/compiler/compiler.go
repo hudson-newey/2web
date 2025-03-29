@@ -4,18 +4,22 @@ import (
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/lexer"
 	"hudson-newey/2web/src/models"
-	"strings"
+	"hudson-newey/2web/src/models/reactiveVariable"
 )
 
 func Compile(path string, content string) string {
-	compilerNodes := lexer.FindNodes(content, compilerStartToken, compilerEndToken)
+	compilerNodes := lexer.FindNodes[lexer.CompNode](content, compilerStartToken, compilerEndToken)
 
 	reactiveVariables := []models.ReactiveVariable{}
+	reactiveProperties := []models.ReactiveProperty{}
 
 	for _, node := range compilerNodes {
-		variableNodes := lexer.FindNodes(node.Content, variableToken, statementEndToken)
+		variableNodes := lexer.FindNodes[lexer.VarNode](node.Content, variableToken, statementEndToken)
+		propertyNodes := lexer.FindNodes[lexer.PropNode](node.Content, reactiveStartToken, reactiveEndToken)
+
 		for _, variableNode := range variableNodes {
-			if len(variableNode.Tokens) != 3 || variableNode.Tokens[1] != variableAssignmentToken {
+			variableModel, err := reactiveVariable.FromNode(variableNode)
+			if err != nil {
 				documentErrors.AddError(models.Error{
 					FilePath: path,
 					Message:  "Incorrect compiler variable format:\nUsage: $ variableName = 'variableValue'",
@@ -23,22 +27,11 @@ func Compile(path string, content string) string {
 				continue
 			}
 
-			varName := variableNode.Tokens[0]
-			varValue := variableNode.Tokens[2]
-
-			variableModel := models.ReactiveVariable{
-				Name:         "$" + varName,
-				InitialValue: varValue,
-			}
-
 			reactiveVariables = append(reactiveVariables, variableModel)
 		}
 	}
 
-	for _, variable := range reactiveVariables {
-		content = strings.ReplaceAll(content, mustacheStartToken+variable.Name+mustacheEndToken, variable.InitialValue)
-		content = strings.ReplaceAll(content, variable.Name, variable.InitialValue)
-	}
+	content = compileReactivity(content, reactiveVariables, reactiveProperties)
 
 	return content
 }

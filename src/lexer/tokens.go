@@ -2,9 +2,9 @@ package lexer
 
 import "regexp"
 
-type LexerToken *regexp.Regexp
+type LexToken *regexp.Regexp
 
-func token(expression string) LexerToken {
+func token(expression string) LexToken {
 	r, err := regexp.Compile(expression)
 	if err != nil {
 		panic(err)

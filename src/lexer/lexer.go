@@ -2,14 +2,14 @@ package lexer
 
 import "strings"
 
-type lexNode struct {
+type LexNode[T LexNodeType[T]] struct {
 	Selector string
 	Content  string
 	Tokens   []string
 }
 
-func FindNodes(content string, startToken string, endToken string) []lexNode {
-	resultContent := []lexNode{}
+func FindNodes[T any](content string, startToken string, endToken string) []LexNode[T] {
+	resultContent := []LexNode[T]{}
 
 	rawContent := ""
 	inNode := false
@@ -73,7 +73,7 @@ func FindNodes(content string, startToken string, endToken string) []lexNode {
 				refinedSplitTokens = append(refinedSplitTokens, token)
 			}
 
-			contentObject := lexNode{
+			contentObject := LexNode[T]{
 				Selector: startToken + rawContent + endToken,
 				Content:  refinedContent,
 				Tokens:   refinedSplitTokens,
