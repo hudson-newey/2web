@@ -6,6 +6,7 @@ import (
 )
 
 func compileReactivity(
+	filePath string,
 	content string,
 	varNodes []models.ReactiveVariable,
 	propNodes []models.ReactiveProperty,

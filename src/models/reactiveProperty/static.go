@@ -12,10 +12,13 @@ func FromNode(node lexer.LexNode[lexer.PropNode]) (models.ReactiveProperty, erro
 		return models.ReactiveProperty{}, errorMessage
 	}
 
-	propName := node.Tokens[1]
+	propName := node.Tokens[0]
+	bindingName := node.Tokens[1]
 
 	propertyModel := models.ReactiveProperty{
-		Name: propName,
+		Node:        &node,
+		PropName:    propName,
+		BindingName: bindingName,
 	}
 
 	return propertyModel, nil
