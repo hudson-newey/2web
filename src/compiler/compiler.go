@@ -36,10 +36,7 @@ func Compile(path string, content string) string {
 	}
 
 	for _, variable := range reactiveVariables {
-		// all content inside mustache brackets need to be replaced with the
-		// corresponding variable name
-		content = strings.ReplaceAll(content, "{{ "+variable.Name+" }}", variable.InitialValue)
-
+		content = strings.ReplaceAll(content, mustacheStartToken+variable.Name+mustacheEndToken, variable.InitialValue)
 		content = strings.ReplaceAll(content, variable.Name, variable.InitialValue)
 	}
 

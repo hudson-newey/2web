@@ -27,7 +27,7 @@ func createErrorTemplate(errors []models.Error) string {
         <div>
             <div class="__2_error_container">
                 <h1 class="__2_error_header">
-                    <strong>2Web Compiler Error</strong>
+                    <strong>Compiler Error</strong>
                 </h1>
                 <div class="__2_error_list">
                     {{range .}}
@@ -63,15 +63,15 @@ func createErrorTemplate(errors []models.Error) string {
                     font-size: 2.2rem;
 
                     color: #fff;
-                    margin-bottom: 3rem;
+                    margin-bottom: 2rem;
                     border-bottom: 1px solid #fff;
-                    padding-bottom: 2rem;
+                    padding-bottom: 1rem;
                 }
 
                 .__2_error_list {
                     & > .__2_error {
                         color: white;
-                        margin-bottom: 20px;
+                        margin-bottom: 1.5rem;
                         padding: 1rem;
                         background-color: rgba(80, 20, 20, 0.1);
                         border-radius: 0.5rem;
@@ -89,10 +89,11 @@ func createErrorTemplate(errors []models.Error) string {
                         color: rgb(255, 230, 230);
                         margin: 0;
                         font-size: 1.1rem;
-                        font-weight: 300;
+                        font-weight: 400;
                         white-space: pre-wrap;
-                        font-family: monospace;
                         line-height: 2;
+                        
+                        overflow-wrap: break-word;
                     }
                 }
             </style>
