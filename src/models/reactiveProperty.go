@@ -4,9 +4,8 @@ import "hudson-newey/2web/src/lexer"
 
 type ReactiveProperty struct {
 	PropName    string
-	BindingName string
-	RawValue    string
 	Node        *lexer.LexNode[lexer.PropNode]
+	BindingName string
 	Variable    *ReactiveVariable
 }
 

@@ -12,8 +12,8 @@ import (
 func Compile(filePath string, content string) string {
 	compilerNodes := lexer.FindNodes[lexer.CompNode](content, compilerStartToken, compilerEndToken)
 
-	reactiveVariables := []models.ReactiveVariable{}
-	reactiveProperties := []models.ReactiveProperty{}
+	reactiveVariables := []*models.ReactiveVariable{}
+	reactiveProperties := []*models.ReactiveProperty{}
 
 	propertyNodes := lexer.FindNodes[lexer.PropNode](content, reactiveStartToken, reactiveEndToken)
 
@@ -30,12 +30,12 @@ func Compile(filePath string, content string) string {
 				continue
 			}
 
-			reactiveVariables = append(reactiveVariables, variableModel)
+			reactiveVariables = append(reactiveVariables, &variableModel)
 		}
 	}
 
 	for _, propertyNode := range propertyNodes {
-		propertyModel, err := reactiveProperty.FromNode(propertyNode)
+		property, err := reactiveProperty.FromNode(propertyNode)
 		if err != nil {
 			documentErrors.AddError(models.Error{
 				FilePath: filePath,
@@ -47,18 +47,16 @@ func Compile(filePath string, content string) string {
 		// find the reactive variable that matches the binding name
 		foundAssociatedProperty := false
 		for _, variable := range reactiveVariables {
-			if variable.Name == propertyModel.BindingName {
-				variable.Type = models.Assignment
-
-				propertyModel.AddBinding(&variable)
-
+			if variable.Name == property.BindingName {
+				variable.AddBinding(&property)
+				property.AddBinding(variable)
 				foundAssociatedProperty = true
 				break
 			}
 		}
 
 		if !foundAssociatedProperty {
-			errorMessage := fmt.Sprintf("could not find reactive variable '%s' for property %s", propertyModel.BindingName, propertyModel.Node.Selector)
+			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for property %s", property.BindingName, property.Node.Selector)
 			documentErrors.AddError(models.Error{
 				FilePath: filePath,
 				Message:  errorMessage,
@@ -66,7 +64,7 @@ func Compile(filePath string, content string) string {
 			continue
 		}
 
-		reactiveProperties = append(reactiveProperties, propertyModel)
+		reactiveProperties = append(reactiveProperties, &property)
 	}
 
 	content = compileReactivity(filePath, content, reactiveVariables, reactiveProperties)

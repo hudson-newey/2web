@@ -1,6 +1,8 @@
 package models
 
-import "hudson-newey/2web/src/lexer"
+import (
+	"hudson-newey/2web/src/lexer"
+)
 
 type ReactiveType int
 
@@ -132,5 +134,19 @@ type ReactiveVariable struct {
 	Node         *lexer.LexNode[lexer.VarNode]
 	Name         string
 	InitialValue string
-	Type         ReactiveType
+	Bindings     []*ReactiveProperty
+}
+
+func (model *ReactiveVariable) AddBinding(property *ReactiveProperty) {
+	model.Bindings = append(model.Bindings, property)
+}
+
+// TODO: expand this out to assignment and reactive types
+// TODO: this should probably cache the type for faster compile times
+func (model *ReactiveVariable) Type() ReactiveType {
+	if len(model.Bindings) == 0 {
+		return Static
+	}
+
+	return StaticProperty
 }

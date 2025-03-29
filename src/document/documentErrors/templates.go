@@ -2,7 +2,7 @@ package documentErrors
 
 import "time"
 
-func errorHtmlTemplate() string {
+func errorHtmlSource() string {
 	currentTime := time.Now().Format(time.DateTime)
 
 	return `
@@ -96,6 +96,6 @@ func errorHtmlTemplate() string {
                     }
                 }
             </style>
-        <div>
+        </div>
     `
 }

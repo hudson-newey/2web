@@ -1,8 +1,7 @@
 package documentErrors
 
 import (
-	"bytes"
-	"html/template"
+	"hudson-newey/2web/src/document"
 	"hudson-newey/2web/src/models"
 )
 
@@ -17,22 +16,19 @@ func InjectErrors(pageContent string) string {
 		return pageContent
 	}
 
-	return pageContent + createErrorTemplate(errorList)
+	errorTemplateResult := createErrorTemplate(errorList)
+
+	return document.InjectContent(pageContent, errorTemplateResult, document.Body)
 }
 
 // creates a HTML error template that can be used to display errors
 // in the browser
 func createErrorTemplate(errors []models.Error) string {
-	htmlTemplate := errorHtmlTemplate()
-
-	errorTemplate := template.Must(template.New("errorTemplate").Parse(htmlTemplate))
-	var buf bytes.Buffer
-	err := errorTemplate.Execute(&buf, errors)
+	errorHtml, err := document.BuildTemplate(errorHtmlSource(), errors)
 	if err != nil {
 		// Handle the error, maybe add it to errorList
 		AddError(models.Error{Message: "Failed to render error template: " + err.Error()})
 	}
-	errorHtml := buf.String()
 
 	return errorHtml
 }
