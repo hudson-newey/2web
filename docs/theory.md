@@ -1,14 +1,6 @@
 # Theory
 
-Even the most efficient web frameworks have a runtime overhead. Even if they
-use a compiler (e.g. Svelte).
-
-I recently saw a demo where a svelte app was "blazingly fast" and "super small"
-because it only took 1KB of JS to render the word "Hello".
-
-That is crazy. That's nearly 1,000 characters to render 5 characters.
-
-An app that renders the word "Hello" should have the source code
+With 2Web, you get what you write, if you write the following code
 
 ```html
 <!DOCTYPE html>
@@ -17,6 +9,8 @@ An app that renders the word "Hello" should have the source code
     <body>Hello</body>
 </html>
 ```
+
+We will not inject any additional reactivity into the page
 
 Your first instict might be "well what if we want the word 'Hello' to be
 reactive?".
@@ -102,7 +96,8 @@ implemented with the following runtime code.
 type Subscriber = () => void;
 
 // this class would typically use a WeakMap to store the subscribers, it would
-// typically have a way to unsubscribe, and would typically be faster.
+// typically have a way to unsubscribe, and would also use Proxy objects for
+// property subscriptions.
 class Signal<T> {
     #value: T;
     #subscribers: Subscriber[] = [];
@@ -272,11 +267,8 @@ And this is exactly what we do
 
 See. It's not as hard as you think.
 
-You might be thinking that duplicating this callback multiple times would
-become inefficient if there were multiple items that used the {{ itemTitle }}
-reactive value.
+What about objects and reactivity? Wouldn't I need to use a Proxy object? No.
 
-Yes. This is why we use Google's Closure Compiler to optimize the code.
-
-Closure can correctly de-duplicate this callback and extract it into a
-separate function that is only called once.
+Since we use a compiler, we know all of the properties that will be accessed
+at runtime.
+I can easily destructure the object and make each individual property reactive.
