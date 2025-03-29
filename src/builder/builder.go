@@ -3,6 +3,7 @@ package builder
 import (
 	"hudson-newey/2web/src/compiler"
 	"hudson-newey/2web/src/models"
+	"hudson-newey/2web/src/ssg"
 	"log"
 	"os"
 )
@@ -35,6 +36,21 @@ func Build(args models.CliArguments) {
 }
 
 func compileAndWriteFile(inputPath string, outputPath string) {
-	compilerResult := compiler.CompileFile(inputPath)
+	data, err := os.ReadFile(inputPath)
+	if err != nil {
+		panic(err)
+	}
+
+	ssgSource := string(data)
+	stable := false
+	for {
+		ssgSource, stable = ssg.ProcessStaticSite(inputPath, ssgSource)
+
+		if stable {
+			break
+		}
+	}
+
+	compilerResult := compiler.Compile(inputPath, ssgSource)
 	os.WriteFile(outputPath, []byte(compilerResult), 0644)
 }

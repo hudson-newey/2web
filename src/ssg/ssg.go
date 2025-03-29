@@ -8,7 +8,7 @@ import (
 
 type isStable = bool
 
-func ProcessStaticSite(content string, filePath string) (string, isStable) {
+func ProcessStaticSite(filePath string, content string) (string, isStable) {
 	ssgContent := lexer.FindNodes(content, ssgStartToken, ssgEndToken)
 	ssgResult := content
 

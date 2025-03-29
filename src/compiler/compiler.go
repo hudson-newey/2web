@@ -1,32 +1,12 @@
 package compiler
 
 import (
-	"fmt"
-	"hudson-newey/2web/src/ssg"
 	"log"
-	"os"
 )
 
-func CompileFile(path string) string {
+func Compile(path string, content string) string {
 	log.Println("\t-", path)
-
-	data, err := os.ReadFile(path)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return ""
-	}
-
-	ssgSource := string(data)
-	stable := false
-	for {
-		ssgSource, stable = ssg.ProcessStaticSite(ssgSource, path)
-
-		if stable {
-			break
-		}
-	}
-
-	return compileSource(ssgSource)
+	return compileSource(content)
 }
 
 func compileSource(fileContent string) string {
