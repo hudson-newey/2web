@@ -9,10 +9,11 @@
 
 <body>
     <script compiled>
-        $ message = "This-is-a-page-title";
+        $ message = "Hello";
     </script>
 
     <h1>{{ $message }}</h1>
+    <button @click="$message = 'world'"></button>
 </body>
 
 </html>

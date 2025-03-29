@@ -1,7 +1,9 @@
 package builder
 
 import (
+	"fmt"
 	"hudson-newey/2web/src/compiler"
+	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/ssg"
 	"log"
@@ -38,8 +40,14 @@ func Build(args models.CliArguments) {
 func compileAndWriteFile(inputPath string, outputPath string) {
 	data, err := os.ReadFile(inputPath)
 	if err != nil {
-		panic(err)
+		data = []byte{}
+		documentErrors.AddError(models.Error{
+			FilePath: inputPath,
+			Message:  fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
+		})
 	}
+
+	log.Println("\t-", inputPath)
 
 	ssgSource := string(data)
 	stable := false
@@ -52,5 +60,8 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 	}
 
 	compilerResult := compiler.Compile(inputPath, ssgSource)
-	os.WriteFile(outputPath, []byte(compilerResult), 0644)
+
+	injectedErrorResult := documentErrors.InjectErrors(compilerResult)
+
+	os.WriteFile(outputPath, []byte(injectedErrorResult), 0644)
 }

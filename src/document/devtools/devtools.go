@@ -1,0 +1,4 @@
+package devtools
+
+func InjectDevTools() {
+}
