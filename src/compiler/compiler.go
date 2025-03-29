@@ -4,10 +4,13 @@ import (
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/lexer"
 	"hudson-newey/2web/src/models"
+	"strings"
 )
 
 func Compile(path string, content string) string {
 	compilerNodes := lexer.FindNodes(content, compilerStartToken, compilerEndToken)
+
+	reactiveVariables := []models.ReactiveVariable{}
 
 	for _, node := range compilerNodes {
 		variableNodes := lexer.FindNodes(node.Content, variableToken, statementEndToken)
@@ -23,8 +26,21 @@ func Compile(path string, content string) string {
 			varName := variableNode.Tokens[0]
 			varValue := variableNode.Tokens[2]
 
-			println(varName, varValue)
+			variableModel := models.ReactiveVariable{
+				Name:         "$" + varName,
+				InitialValue: varValue,
+			}
+
+			reactiveVariables = append(reactiveVariables, variableModel)
 		}
+	}
+
+	for _, variable := range reactiveVariables {
+		// all content inside mustache brackets need to be replaced with the
+		// corresponding variable name
+		content = strings.ReplaceAll(content, "{{ "+variable.Name+" }}", variable.InitialValue)
+
+		content = strings.ReplaceAll(content, variable.Name, variable.InitialValue)
 	}
 
 	return content
