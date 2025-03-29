@@ -49,7 +49,6 @@ func createErrorTemplate(errors []models.Error) string {
                     position: fixed;
                     inset: 5%;
                     padding: 2rem 5rem;
-                    width: 80%;
                     z-index: 5000;
 
                     background: radial-gradient(circle, rgba(5, 0, 0, 0.9) 0%, rgba(20, 0, 0, 0.98) 99%, rgba(40, 0, 0, 1) 100%);
