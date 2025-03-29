@@ -6,9 +6,5 @@ import (
 
 func Compile(path string, content string) string {
 	log.Println("\t-", path)
-	return compileSource(content)
-}
-
-func compileSource(fileContent string) string {
-	return fileContent
+	return content
 }

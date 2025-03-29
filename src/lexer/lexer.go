@@ -5,6 +5,7 @@ import "strings"
 type lexNode struct {
 	Selector string
 	Content  string
+	Tokens   []string
 }
 
 func FindNodes(content string, startToken string, endToken string) []lexNode {
@@ -32,10 +33,12 @@ func FindNodes(content string, startToken string, endToken string) []lexNode {
 			// and strip any leading/trailing whitespace
 			rawContent = rawContent[len(startToken)-1:]
 			refinedContent := strings.TrimSpace(rawContent)
+			splitTokens := strings.Split(refinedContent, " ")
 
 			contentObject := lexNode{
 				Selector: startToken + rawContent + endToken,
 				Content:  refinedContent,
+				Tokens:   splitTokens,
 			}
 
 			resultContent = append(resultContent, contentObject)

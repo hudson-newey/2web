@@ -13,18 +13,16 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 	ssgResult := content
 
 	for _, node := range ssgContent {
-		ssgCommand := strings.Split(node.Content, " ")
 		selectorContent := ""
 
-		if len(ssgCommand) >= 2 {
-			ssgKeyword := ssgCommand[0]
+		if len(node.Tokens) >= 2 {
+			ssgKeyword := node.Tokens[0]
 
 			switch ssgKeyword {
 			case includeToken:
-				selectorContent = modules.IncludeSsgContent(ssgCommand[1], filePath)
-
+				selectorContent = modules.IncludeSsgContent(node.Tokens[1], filePath)
 			case forToken:
-				selectorContent = modules.ForSsgContent(ssgCommand[1], ssgCommand[2])
+				selectorContent = modules.ForSsgContent(node.Tokens[1], node.Tokens[2])
 			}
 		}
 
