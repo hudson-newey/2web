@@ -2,7 +2,7 @@ package compiler
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/compiler/ssg"
+	"hudson-newey/2web/src/ssg"
 	"log"
 	"os"
 )

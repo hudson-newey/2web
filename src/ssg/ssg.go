@@ -1,7 +1,7 @@
 package ssg
 
 import (
-	"hudson-newey/2web/src/compiler/ssg/modules"
+	"hudson-newey/2web/src/ssg/modules"
 	"strings"
 )
 
