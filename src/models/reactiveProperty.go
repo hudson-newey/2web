@@ -3,10 +3,10 @@ package models
 import "hudson-newey/2web/src/lexer"
 
 type ReactiveProperty struct {
-	Node     *lexer.LexNode[lexer.PropNode]
 	PropName string
 	VarName  string
 	Variable *ReactiveVariable
+	Node     *lexer.LexNode[lexer.PropNode]
 }
 
 func (model *ReactiveProperty) BindVariable(variable *ReactiveVariable) {

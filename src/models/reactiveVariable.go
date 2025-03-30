@@ -131,21 +131,32 @@ const (
 )
 
 type ReactiveVariable struct {
-	Node         *lexer.LexNode[lexer.VarNode]
 	Name         string
 	InitialValue string
 	Props        []*ReactiveProperty
 	Events       []*ReactiveEvent
+	Node         *lexer.LexNode[lexer.VarNode]
 }
 
 func (model *ReactiveVariable) AddProp(property *ReactiveProperty) {
 	model.Props = append(model.Props, property)
 }
 
-// TODO: expand this out to assignment and reactive types
+func (model *ReactiveVariable) AddEvent(event *ReactiveEvent) {
+	model.Events = append(model.Events, event)
+}
+
+// TODO: expand this out to reactive types
 // TODO: this should probably cache the type for faster compile times
 func (model *ReactiveVariable) Type() ReactiveType {
-	if len(model.Props) == 0 {
+	// If a variable is being modified in an event, it is reasonable to assume
+	// that there is an associated prop. Because why would you want a reactive
+	// variable that never modifies the ODM?
+	// However, we have this condition so that we can tree shake the variable
+	// to a static variable if it doesn't have any output.
+	if len(model.Events) > 0 {
+		return Assignment
+	} else if len(model.Props) == 0 {
 		return Static
 	}
 

@@ -26,7 +26,7 @@
     <h1 [innerText $message]></h1>
     <p>message: {{ $message }}</p>
 
-    <button @click="$message = World">Next</button>
+    <button (click $message = "World")>Next</button>
 </body>
 
 </html>
