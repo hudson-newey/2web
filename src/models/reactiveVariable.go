@@ -134,17 +134,18 @@ type ReactiveVariable struct {
 	Node         *lexer.LexNode[lexer.VarNode]
 	Name         string
 	InitialValue string
-	Bindings     []*ReactiveProperty
+	Props        []*ReactiveProperty
+	Events       []*ReactiveEvent
 }
 
-func (model *ReactiveVariable) AddBinding(property *ReactiveProperty) {
-	model.Bindings = append(model.Bindings, property)
+func (model *ReactiveVariable) AddProp(property *ReactiveProperty) {
+	model.Props = append(model.Props, property)
 }
 
 // TODO: expand this out to assignment and reactive types
 // TODO: this should probably cache the type for faster compile times
 func (model *ReactiveVariable) Type() ReactiveType {
-	if len(model.Bindings) == 0 {
+	if len(model.Props) == 0 {
 		return Static
 	}
 

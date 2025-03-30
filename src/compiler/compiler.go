@@ -47,16 +47,16 @@ func Compile(filePath string, content string) string {
 		// find the reactive variable that matches the binding name
 		foundAssociatedProperty := false
 		for _, variable := range reactiveVariables {
-			if variable.Name == property.BindingName {
-				variable.AddBinding(&property)
-				property.AddBinding(variable)
+			if variable.Name == property.VarName {
+				variable.AddProp(&property)
+				property.BindVariable(variable)
 				foundAssociatedProperty = true
 				break
 			}
 		}
 
 		if !foundAssociatedProperty {
-			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for property %s", property.BindingName, property.Node.Selector)
+			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for property %s", property.VarName, property.Node.Selector)
 			documentErrors.AddError(models.Error{
 				FilePath: filePath,
 				Message:  errorMessage,

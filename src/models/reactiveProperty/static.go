@@ -16,9 +16,9 @@ func FromNode(node lexer.LexNode[lexer.PropNode]) (models.ReactiveProperty, erro
 	bindingName := node.Tokens[1]
 
 	propertyModel := models.ReactiveProperty{
-		Node:        &node,
-		PropName:    propName,
-		BindingName: bindingName,
+		Node:     &node,
+		PropName: propName,
+		VarName:  bindingName,
 	}
 
 	return propertyModel, nil

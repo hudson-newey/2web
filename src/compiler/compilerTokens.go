@@ -16,4 +16,5 @@ const reactiveEndToken = "]"
 const mustacheStartToken = "{{ "
 const mustacheEndToken = " }}"
 
-const eventToken = "@"
+const eventStartToken = "@"
+const eventEndToken = "@"

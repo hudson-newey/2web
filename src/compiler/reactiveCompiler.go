@@ -14,12 +14,11 @@ func compileReactivity(
 	propNodes []*models.ReactiveProperty,
 ) string {
 	for _, varNode := range varNodes {
-		switch varNode.Type() {
-		case models.Static:
-			content = compileStatic(content, varNode)
-		case models.StaticProperty:
+		if varNode.Type() >= models.StaticProperty {
 			content = compileStaticProperty(content, varNode)
 		}
+
+		content = compileStatic(content, varNode)
 	}
 
 	return content
@@ -34,7 +33,7 @@ func compileStatic(content string, varNode *models.ReactiveVariable) string {
 
 func compileStaticProperty(content string, varNode *models.ReactiveVariable) string {
 	nextNodeId := 0
-	for _, propNode := range varNode.Bindings {
+	for _, propNode := range varNode.Props {
 		elementSelector := fmt.Sprint("data-2='", nextNodeId, "'")
 		content = strings.ReplaceAll(content, propNode.Node.Selector, elementSelector)
 		nextNodeId++
