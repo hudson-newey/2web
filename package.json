@@ -11,6 +11,6 @@
   "license": "MIT",
   "packageManager": "pnpm@10.6.5",
   "devDependencies": {
-    "vite": "^6.2.3"
+    "vite": "^6.2.4"
   }
 }
