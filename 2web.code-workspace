@@ -10,7 +10,7 @@
     "editor.inlineSuggest.enabled": true,
     "editor.renderWhitespace": "trailing",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "editor.rulers": [80, 120],
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
@@ -18,7 +18,10 @@
     "cSpell.caseSensitive": false,
     "cSpell.words": [],
     "cSpell.flagWords": ["yuo"],
-    "cSpell.ignorePaths": ["**/node_modules/**", "2web.code-workspace"]
+    "cSpell.ignorePaths": ["**/node_modules/**", "2web.code-workspace"],
+    "[go]": {
+      "editor.defaultFormatter": "golang.go"
+    }
   },
   "extensions": {
     "recommendations": [

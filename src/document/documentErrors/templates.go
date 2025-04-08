@@ -15,6 +15,13 @@ func errorHtmlSource() string {
                     <time class="__2_error_time">` + currentTime + `</time>
                 </div>
 
+                <div class="__2_error_overview">
+                    <ul>
+                        <li>{{ len . }} Errors</li>
+                        <li>0 Warnings</li>
+                    <ul>
+                </div>
+
                 <div class="__2_error_list">
                     {{range .}}
                         <div class="__2_error">
@@ -44,10 +51,11 @@ func errorHtmlSource() string {
                     box-shadow: 0 0.5rem 10rem rgba(0, 0, 0);
 
                     font-family: sans-serif;
+
+                    overflow-y: auto;
                 }
 
                 .__2_error_header {
-                    margin-bottom: 2rem;
                     border-bottom: 1px solid #fff;
                     padding-bottom: 1rem;
                 }
@@ -64,6 +72,29 @@ func errorHtmlSource() string {
                     font-size: 1rem;
                     color: #fff;
                     font-style: italic;
+                }
+
+                .__2_error_overview {
+                    display: flex;
+                    margin-bottom: 2rem;
+                    border-bottom-left-radius: 0.5rem;
+                    border-bottom-right-radius: 0.5rem;
+
+                    background-color: rgba(140, 30, 40, 0.7);
+                    color: white;
+
+                    font-size: 1em;
+                    letter-spacing: 1px;
+
+                    & > ul {
+                        padding-left: 1.5rem;
+                        list-style-type: none;
+
+                        li {
+                            display: inline-block;
+                            margin-right: 2rem;
+                        }
+                    }
                 }
 
                 .__2_error_list {

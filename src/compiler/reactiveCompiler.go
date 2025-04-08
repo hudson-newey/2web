@@ -31,7 +31,8 @@ func compileReactivity(
 }
 
 func compileStatic(content string, varNode *models.ReactiveVariable) string {
-	content = strings.ReplaceAll(content, mustacheStartToken+varNode.Name+mustacheEndToken, varNode.InitialValue)
+	// TODO: remove this hard coded hack
+	content = strings.ReplaceAll(content, mustacheStartToken[0]+varNode.Name+mustacheEndToken[0], varNode.InitialValue)
 	content = strings.ReplaceAll(content, varNode.Name, varNode.InitialValue)
 
 	return content

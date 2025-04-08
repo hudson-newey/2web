@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Assignment</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <p>
-        In this dev test, a reactive variable has a variable assigned to it.
-        Meaning tha we should see the change reflected in the document.
+      In this dev test, a reactive variable has a variable assigned to it. Meaning tha we
+      should see the change reflected in the document.
     </p>
 
     <p>
-        Unlike some other reactivity methods, this reactivity type does not
-        require a runtime variable to keep track of state because the state is
-        not dependent on the previous state of the same reactive variable.
+      Unlike some other reactivity methods, this reactivity type does not require a
+      runtime variable to keep track of state because the state is not dependent on the
+      previous state of the same reactive variable.
     </p>
 
     <script compiled>
-    $ message = "Hello";
+      $ message = "Hello";
     </script>
 
     <h1 [innerText $message]></h1>
     <p>message: {{ $message }}</p>
 
-    <button &click $message = "World"*>Next</button>
-</body>
-
+    <button @click $message = 'World'*>Next</button>
+  </body>
 </html>

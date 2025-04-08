@@ -1,20 +1,20 @@
 package compiler
 
-// all tokens are regex patterns
+import "hudson-newey/2web/src/lexer"
 
-const compilerStartToken = "<script compiled>"
-const compilerEndToken = "</script>"
+var compilerStartToken lexer.LexerToken = []string{"<script compiled>"}
+var compilerEndToken lexer.LexerToken = []string{"</script>"}
 
-const statementEndToken = ";"
+var statementEndToken lexer.LexerToken = []string{";"}
 
-const variableToken = "$"
-const variableAssignmentToken = "="
+var variableToken lexer.LexerToken = []string{"$"}
+var variableAssignmentToken lexer.LexerToken = []string{"="}
 
-const reactiveStartToken = "["
-const reactiveEndToken = "]"
+var reactiveStartToken lexer.LexerToken = []string{"["}
+var reactiveEndToken lexer.LexerToken = []string{"]"}
 
-const mustacheStartToken = "{{ "
-const mustacheEndToken = " }}"
+var mustacheStartToken lexer.LexerToken = []string{"{{ "}
+var mustacheEndToken lexer.LexerToken = []string{" }}"}
 
-const eventStartToken = "&"
-const eventEndToken = "*"
+var eventStartToken lexer.LexerToken = []string{"@"}
+var eventEndToken lexer.LexerToken = []string{"*", ">", " ", "\n", "/"}

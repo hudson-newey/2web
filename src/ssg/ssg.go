@@ -8,6 +8,7 @@ import (
 
 type isStable = bool
 
+// TODO: remove the token[0] hacks below
 func ProcessStaticSite(filePath string, content string) (string, isStable) {
 	ssgContent := lexer.FindNodes[lexer.SsgNode](content, ssgStartToken, ssgEndToken)
 	ssgResult := content
@@ -19,9 +20,9 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 			ssgKeyword := node.Tokens[0]
 
 			switch ssgKeyword {
-			case includeToken:
+			case includeToken[0]:
 				selectorContent = modules.IncludeSsgContent(node.Tokens[1], filePath)
-			case forToken:
+			case forToken[0]:
 				selectorContent = modules.ForSsgContent(node.Tokens[1], node.Tokens[2])
 			}
 		}
@@ -31,7 +32,7 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 
 	// by comparing the original content with the result, we can determine if
 	// the content is stable
-	unstable := strings.Contains(ssgResult, ssgStartToken) && strings.Contains(ssgResult, ssgEndToken)
+	unstable := strings.Contains(ssgResult, ssgStartToken[0]) && strings.Contains(ssgResult, ssgEndToken[0])
 
 	return ssgResult, !unstable
 }

@@ -1,6 +1,8 @@
 package lexer
 
-import "strings"
+import (
+	"strings"
+)
 
 type LexNode[T LexNodeType[T]] struct {
 	Selector string
@@ -8,8 +10,15 @@ type LexNode[T LexNodeType[T]] struct {
 	Tokens   []string
 }
 
-func FindNodes[T any](content string, startToken string, endToken string) []LexNode[T] {
+func FindNodes[T any](
+	content string,
+	candidateStartTokens LexerToken,
+	candidateEndTokens LexerToken,
+) []LexNode[T] {
 	resultContent := []LexNode[T]{}
+
+	startToken := candidateStartTokens[0]
+	endToken := candidateEndTokens[0]
 
 	rawContent := ""
 	inNode := false
