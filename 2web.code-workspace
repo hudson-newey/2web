@@ -1,0 +1,39 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.insertFinalNewline": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.inlineSuggest.enabled": true,
+    "editor.renderWhitespace": "trailing",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.rulers": [80, 120],
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "explorer.compactFolders": false,
+    "cSpell.caseSensitive": false,
+    "cSpell.words": [],
+    "cSpell.flagWords": ["yuo"],
+    "cSpell.ignorePaths": ["**/node_modules/**", "2web.code-workspace"]
+  },
+  "extensions": {
+    "recommendations": [
+      "editorconfig.editorconfig",
+      "streetsidesoftware.code-spell-checker",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "pkief.material-icon-theme",
+      "aaron-bond.better-comments",
+      "zignd.html-css-class-completion",
+      "yzhang.markdown-all-in-one",
+      "davidanson.vscode-markdownlint",
+      "visualstudioexptteam.vscodeintellicode",
+      "tamasfe.even-better-toml",
+      "golang.go"
+    ]
+  }
+}
