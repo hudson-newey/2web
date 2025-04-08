@@ -12,8 +12,6 @@ import (
 
 func Compile(filePath string, content string) string {
 	reactiveVariables := []*models.ReactiveVariable{}
-	reactiveProperties := []*models.ReactiveProperty{}
-	reactiveEvents := []*models.ReactiveEvent{}
 
 	compilerNodes := lexer.FindNodes[lexer.CompNode](content, compilerStartToken, compilerEndToken)
 	propertyNodes := lexer.FindNodes[lexer.PropNode](content, reactiveStartToken, reactiveEndToken)
@@ -65,8 +63,6 @@ func Compile(filePath string, content string) string {
 			})
 			continue
 		}
-
-		reactiveProperties = append(reactiveProperties, &property)
 	}
 
 	for _, node := range eventNodes {
@@ -97,8 +93,6 @@ func Compile(filePath string, content string) string {
 			})
 			continue
 		}
-
-		reactiveEvents = append(reactiveEvents, &event)
 	}
 
 	content = compileReactivity(filePath, content, reactiveVariables)

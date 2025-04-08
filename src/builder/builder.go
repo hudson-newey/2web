@@ -3,6 +3,7 @@ package builder
 import (
 	"fmt"
 	"hudson-newey/2web/src/compiler"
+	"hudson-newey/2web/src/document/devtools"
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/ssg"
@@ -30,14 +31,14 @@ func Build(args models.CliArguments) {
 				continue
 			}
 
-			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+file.Name())
+			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+file.Name(), *args.IsDev)
 		}
 	} else {
-		compileAndWriteFile(*args.InputPath, *args.OutputPath)
+		compileAndWriteFile(*args.InputPath, *args.OutputPath, *args.IsDev)
 	}
 }
 
-func compileAndWriteFile(inputPath string, outputPath string) {
+func compileAndWriteFile(inputPath string, outputPath string, isDev bool) {
 	data, err := os.ReadFile(inputPath)
 	if err != nil {
 		data = []byte{}
@@ -63,5 +64,10 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 
 	injectedErrorResult := documentErrors.InjectErrors(compilerResult)
 
-	os.WriteFile(outputPath, []byte(injectedErrorResult), 0644)
+	finalResult := injectedErrorResult
+	if isDev {
+		finalResult = devtools.InjectDevTools(injectedErrorResult)
+	}
+
+	os.WriteFile(outputPath, []byte(finalResult), 0644)
 }
