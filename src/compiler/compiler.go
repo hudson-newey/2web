@@ -15,7 +15,7 @@ func Compile(filePath string, content string) string {
 
 	compilerNodes := lexer.FindNodes[lexer.CompNode](content, compilerStartToken, compilerEndToken)
 	propertyNodes := lexer.FindNodes[lexer.PropNode](content, reactiveStartToken, reactiveEndToken)
-	eventNodes := lexer.FindNodes[lexer.EventNode](content, eventStartToken, eventEndToken)
+	eventNodes := lexer.FindNodes[lexer.EventNode](content, eventStartToken, attributeEndToken)
 
 	for _, node := range compilerNodes {
 		variableNodes := lexer.FindNodes[lexer.VarNode](node.Content, variableToken, statementEndToken)

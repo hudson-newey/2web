@@ -4,12 +4,6 @@ import (
 	"strings"
 )
 
-type LexNode[T LexNodeType[T]] struct {
-	Selector string
-	Content  string
-	Tokens   []string
-}
-
 func FindNodes[T any](
 	content string,
 	candidateStartTokens LexerToken,

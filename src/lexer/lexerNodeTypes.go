@@ -14,3 +14,5 @@ type EventNode LexNodeType[EventNode]
 
 // {% ssgModule arguments %}
 type SsgNode LexNodeType[SsgNode]
+
+type voidNode LexNodeType[struct{}]
