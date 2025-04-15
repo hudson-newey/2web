@@ -19,6 +19,7 @@ func FromNode(node lexer.LexNode[lexer.VarNode]) (models.ReactiveVariable, error
 		Node:         &node,
 		Name:         "$" + varName,
 		InitialValue: varValue,
+		Reactive:     false,
 	}
 
 	return variableModel, nil

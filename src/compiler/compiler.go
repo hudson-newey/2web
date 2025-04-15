@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/compiler/reactiveCompiler"
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/lexer"
 	"hudson-newey/2web/src/models"
@@ -95,7 +96,7 @@ func Compile(filePath string, content string) string {
 		}
 	}
 
-	content = compileReactivity(filePath, content, reactiveVariables)
+	content = reactiveCompiler.CompileReactivity(filePath, content, reactiveVariables)
 
 	return content
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func FromNode(node lexer.LexNode[lexer.EventNode]) (models.ReactiveEvent, error) {
-	if len(node.Tokens) != 4 || node.Tokens[2] != "=" {
+	if len(node.Tokens) < 4 || node.Tokens[2] != "=" {
 		errorMessage := fmt.Errorf("incorrect reactive event assignment:\n\tExpected: @eventName='$variable = value'\n\tFound: %s", node.Selector)
 		return models.ReactiveEvent{}, errorMessage
 	}

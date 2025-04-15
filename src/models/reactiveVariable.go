@@ -4,7 +4,7 @@ import (
 	"hudson-newey/2web/src/lexer"
 )
 
-type ReactiveType int
+type ReactiveClass int
 
 /*
 Reactive types progressively get less performant as you go down this list.
@@ -116,7 +116,7 @@ In this example, out compiled code will look **something** (not exact) like this
 */
 const (
 	// does not require any JavaScript. Can be inlined at compile time.
-	Static ReactiveType = iota
+	Static ReactiveClass = iota
 
 	// Requires JavaScript to modify the DOM on initial render.
 	StaticProperty
@@ -136,6 +136,7 @@ type ReactiveVariable struct {
 	Props        []*ReactiveProperty
 	Events       []*ReactiveEvent
 	Node         *lexer.LexNode[lexer.VarNode]
+	Reactive     bool
 }
 
 func (model *ReactiveVariable) AddProp(property *ReactiveProperty) {
@@ -148,7 +149,7 @@ func (model *ReactiveVariable) AddEvent(event *ReactiveEvent) {
 
 // TODO: expand this out to reactive types
 // TODO: this should probably cache the type for faster compile times
-func (model *ReactiveVariable) Type() ReactiveType {
+func (model *ReactiveVariable) Type() ReactiveClass {
 	// If a variable is being modified in an event, it is reasonable to assume
 	// that there is an associated prop. Because why would you want a reactive
 	// variable that never modifies the ODM?
@@ -166,5 +167,5 @@ func (model *ReactiveVariable) Type() ReactiveType {
 }
 
 func (model *ReactiveVariable) doesSelfReference() bool {
-	return false
+	return model.Reactive
 }
