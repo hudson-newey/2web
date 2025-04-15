@@ -154,11 +154,17 @@ func (model *ReactiveVariable) Type() ReactiveType {
 	// variable that never modifies the ODM?
 	// However, we have this condition so that we can tree shake the variable
 	// to a static variable if it doesn't have any output.
-	if len(model.Events) > 0 {
+	if model.doesSelfReference() {
+		return Reactive
+	} else if len(model.Events) > 0 {
 		return Assignment
 	} else if len(model.Props) == 0 {
 		return Static
 	}
 
 	return StaticProperty
+}
+
+func (model *ReactiveVariable) doesSelfReference() bool {
+	return false
 }

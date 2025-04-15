@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Assignment Variables</title>
+    <title>Reactive Variables</title>
   </head>
 
   <body>
@@ -19,11 +19,11 @@
     </p>
 
     <script compiled>
-      $ message = "Hello";
+      $ count = 0;
     </script>
 
-    <h1 [innerText $message]></h1>
+    <h1 [innerText $count]></h1>
 
-    <button @click $message = 'World'*>Next</button>
+    <button @click $count = $count + 1*>Increment</button>
   </body>
 </html>
