@@ -4,9 +4,6 @@ import (
 	"hudson-newey/2web/src/models"
 )
 
-// TODO: move this to another place
-var nextNodeId int = 0
-
 func CompileReactivity(
 	filePath string,
 	content string,

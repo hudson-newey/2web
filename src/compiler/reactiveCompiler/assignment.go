@@ -3,13 +3,13 @@ package reactiveCompiler
 import (
 	"fmt"
 	"hudson-newey/2web/src/document"
+	"hudson-newey/2web/src/javascript"
 	"hudson-newey/2web/src/models"
 	"strings"
 )
 
 func compileAssignmentProp(content string, varNode *models.ReactiveVariable) string {
-	callbackName := fmt.Sprint("__2_", nextNodeId)
-	nextNodeId++
+	callbackName := javascript.CreateJsFunctionName()
 
 	htmlSource := `
     <script>
