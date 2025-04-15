@@ -36,6 +36,7 @@ func (model *ReactiveEvent) BindVariable(variable *ReactiveVariable) {
 	// properties
 	varReferences := strings.Count(model.Reducer, variable.Name)
 	if varReferences > 0 {
+		println(model.Reducer)
 		variable.Reactive = true
 	}
 }

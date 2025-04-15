@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hudson-newey/2web/src/lexer"
 	"hudson-newey/2web/src/models"
+	"strings"
 )
 
 func FromNode(node lexer.LexNode[lexer.EventNode]) (models.ReactiveEvent, error) {
@@ -14,7 +15,7 @@ func FromNode(node lexer.LexNode[lexer.EventNode]) (models.ReactiveEvent, error)
 
 	eventName := node.Tokens[0]
 	variableName := node.Tokens[1]
-	reducer := node.Tokens[3]
+	reducer := strings.Join(node.Tokens[3:], "")
 
 	eventModel := models.ReactiveEvent{
 		Node:      &node,
