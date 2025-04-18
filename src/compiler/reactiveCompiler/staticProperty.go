@@ -1,6 +1,7 @@
 package reactiveCompiler
 
 import (
+	"fmt"
 	"hudson-newey/2web/src/document"
 	"hudson-newey/2web/src/javascript"
 	"hudson-newey/2web/src/models"
@@ -12,11 +13,11 @@ func compileStaticProperty(content string, varNode *models.ReactiveVariable) str
 		elementSelector := javascript.CreateJsElement()
 		content = strings.ReplaceAll(content, propNode.Node.Selector, elementSelector)
 
-		htmlSource := `
+		htmlSource := fmt.Sprintf(`
       <script>
-          document.querySelector("[` + elementSelector + `]").` + propNode.PropName + ` = {{.Variable.InitialValue}};
+          document.querySelector("[%s]")["%s"] = {{.Variable.InitialValue}};
       </script>
-    `
+    `, elementSelector, propNode.PropName)
 
 		injectableTemplate, err := document.BuildTemplate(htmlSource, *propNode)
 		if err != nil {

@@ -15,16 +15,16 @@ func compileReactiveTemplate(
 	callbackName := javascript.CreateJsFunctionName()
 	variableName := javascript.CreateJsVariableName()
 
-	htmlSource := `
+	htmlSource := fmt.Sprintf(`
     <script>
-      let ` + variableName + ` = ` + varNode.InitialValue + `;
-      function ` + callbackName + `(newValue) {
+      let %s = %s;
+      function %s(newValue) {
         {{range .Props}}
             document.querySelector("[{{.Node.Selector}}]")[{{.PropName}}] = newValue;
         {{end}}
       }
     </script>
-  `
+  `, variableName, varNode.InitialValue, callbackName)
 
 	injectableTemplate, err := document.BuildTemplate(htmlSource, *varNode)
 	if err != nil {

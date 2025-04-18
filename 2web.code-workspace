@@ -32,7 +32,8 @@
     },
     "search.exclude": {
       "dist/": true,
-      "build/": true
+      "build/": true,
+      "tmp/": true
     },
   },
   "extensions": {

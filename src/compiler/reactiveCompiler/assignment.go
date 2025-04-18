@@ -11,15 +11,15 @@ import (
 func compileAssignmentProp(content string, varNode *models.ReactiveVariable) string {
 	callbackName := javascript.CreateJsFunctionName()
 
-	htmlSource := `
+	htmlSource := fmt.Sprintf(`
     <script>
-      function ` + callbackName + `(newValue) {
+      function %s(newValue) {
         {{range .Props}}
             document.querySelector("[{{.Node.Selector}}]")[{{.PropName}}] = newValue;
         {{end}}
       }
     </script>
-	`
+	`, callbackName)
 
 	injectableTemplate, err := document.BuildTemplate(htmlSource, *varNode)
 	if err != nil {
