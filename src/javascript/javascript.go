@@ -15,3 +15,9 @@ func CreateJsVariableName() string {
 	nextNodeId++
 	return variableName
 }
+
+func CreateJsElement() string {
+	functionName := fmt.Sprint("data-__2_element_", nextNodeId)
+	nextNodeId++
+	return functionName
+}

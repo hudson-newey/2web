@@ -1,17 +1,16 @@
 package reactiveCompiler
 
 import (
-	"fmt"
 	"hudson-newey/2web/src/document"
+	"hudson-newey/2web/src/javascript"
 	"hudson-newey/2web/src/models"
 	"strings"
 )
 
 func compileStaticProperty(content string, varNode *models.ReactiveVariable) string {
 	for _, propNode := range varNode.Props {
-		elementSelector := fmt.Sprint("data-2='", nextNodeId, "'")
+		elementSelector := javascript.CreateJsElement()
 		content = strings.ReplaceAll(content, propNode.Node.Selector, elementSelector)
-		nextNodeId++
 
 		htmlSource := `
       <script>

@@ -12,7 +12,7 @@ func CompileReactivity(
 	for _, varNode := range varNodes {
 		if varNode.Type() >= models.Reactive {
 			content = compileReactiveTemplate(content, varNode)
-			continue
+			// continue
 		}
 
 		// TODO: this should have a "continue". But the implementation is bugged
