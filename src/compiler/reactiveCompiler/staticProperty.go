@@ -13,6 +13,8 @@ func compileStaticProperty(content string, varNode *models.ReactiveVariable) str
 		elementSelector := javascript.CreateJsElement()
 		content = strings.ReplaceAll(content, propNode.Node.Selector, elementSelector)
 
+		// we use the square brackets here because some properties have dashes which
+		// cannot be acceded with a period
 		htmlSource := fmt.Sprintf(`
       <script>
           document.querySelector("[%s]")["%s"] = {{.Variable.InitialValue}};
