@@ -1,38 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Static Compiled</title>
-    <link rel="stylesheet" href="dev-styles.css">
-</head>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
 
-<body>
+  <body>
     <script compiled>
-        $ pageTitle = "This is a page title";
-        $ pageDescription = "This is a page description";
-        $ publishedTime = "1970-01-01";
-        $ fontColor = green;
+      $ pageTitle = "This is a page title";
+      $ pageDescription = "This is a page description";
+      $ publishedTime = "1970-01-01";
+      $ fontColor = green;
     </script>
 
-    <h1 style="color: $fontColor;">{{ $pageTitle }}</h1>
+    <h1 style="color: $fontColor">{{ $pageTitle }}</h1>
     <time>{{ $publishedTime }}</time>
-    <p title="$pageDescription">
-        {{ $pageDescription }}
-    </p>
+    <p title="$pageDescription">{{ $pageDescription }}</p>
 
     <h2>Standalone</h2>
 
     <main>
-        <p>
-            {{ $standalone }}
-        </p>
+      <p>{{ $standalone }}</p>
     </main>
 
     <script compiled>
-        $ standalone = "lorem ipsum dolor sit amet";
+      $ standalone = "lorem ipsum dolor sit amet";
     </script>
-</body>
-
+  </body>
 </html>

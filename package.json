@@ -4,13 +4,19 @@
   "description": "A compiler for reactive web apps",
   "type": "module",
   "scripts": {
-    "dev": "vite ./dist/"
+    "dev": "vite ./dist/",
+    "format": "prettier --write ./dev/"
   },
-  "keywords": ["frontend", "framework", "compiler"],
+  "keywords": [
+    "frontend",
+    "framework",
+    "compiler"
+  ],
   "author": "hudson-newey",
   "license": "MIT",
   "packageManager": "pnpm@10.6.5",
   "devDependencies": {
+    "prettier": "^3.5.3",
     "vite": "^6.2.6"
   }
 }

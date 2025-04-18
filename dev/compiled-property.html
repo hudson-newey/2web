@@ -1,24 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Compiled Property</title>
-    <link rel="stylesheet" href="dev-styles.css">
-</head>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
 
-<body>
+  <body>
     <script compiled>
-        $ message = "Hello World!";
+      $ message = "Hello World!";
     </script>
 
     <h1 [innerText $message]></h1>
 
     <p>
-        You should see a "Hello World!" header on this page because the message
-        variable is being assigned to the headers innerText property.
+      You should see a "Hello World!" header on this page because the message
+      variable is being assigned to the headers innerText property.
     </p>
-</body>
-
+  </body>
 </html>

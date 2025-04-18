@@ -1,18 +1,13 @@
 {
-    "compilerOptions": {
-      "lib": ["ESNext", "DOM", "DOM.Iterable"],
-      "target": "ESNext",
-      "newLine": "lf",
-      "module": "ESNext",
-      "types": [
-        "vite/client",
-        "./types/twoWeb.d.ts"
-      ],
-  
-      // Bundler mode
-      "moduleResolution": "Bundler",
-      "resolveJsonModule": true,
-      "allowSyntheticDefaultImports": true,
-    }
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "target": "ESNext",
+    "newLine": "lf",
+    "module": "ESNext",
+    "types": ["vite/client", "./types/twoWeb"],
+    // Bundler mode
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   }
-
+}

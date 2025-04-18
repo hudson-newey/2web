@@ -1,8 +1,8 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": ".",
+    },
   ],
   "settings": {
     "files.insertFinalNewline": true,
@@ -11,29 +11,21 @@
     "editor.renderWhitespace": "trailing",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": false,
-    "editor.rulers": [
-      80,
-      120
-    ],
+    "editor.rulers": [80, 120],
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "explorer.compactFolders": false,
     "cSpell.caseSensitive": false,
     "cSpell.words": [],
-    "cSpell.flagWords": [
-      "yuo"
-    ],
-    "cSpell.ignorePaths": [
-      "**/node_modules/**",
-      "2web.code-workspace"
-    ],
+    "cSpell.flagWords": ["yuo"],
+    "cSpell.ignorePaths": ["**/node_modules/**", "2web.code-workspace"],
     "[go]": {
-      "editor.defaultFormatter": "golang.go"
+      "editor.defaultFormatter": "golang.go",
     },
     "search.exclude": {
       "dist/": true,
       "build/": true,
-      "tmp/": true
+      "tmp/": true,
     },
   },
   "extensions": {
@@ -49,7 +41,11 @@
       "davidanson.vscode-markdownlint",
       "visualstudioexptteam.vscodeintellicode",
       "tamasfe.even-better-toml",
-      "golang.go"
-    ]
-  }
+      "golang.go",
+      "ms-vscode.vscode-typescript-next",
+      "esbenp.prettier-vscode",
+      "zignd.html-css-class-completion",
+      "dbaeumer.vscode-eslint",
+    ],
+  },
 }
