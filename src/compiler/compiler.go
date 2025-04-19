@@ -98,6 +98,7 @@ func Compile(filePath string, content string) string {
 		}
 	}
 
+	content = removeCompilerScripts(content)
 	content = reactiveCompiler.CompileReactivity(filePath, content, reactiveVariables)
 
 	return content
