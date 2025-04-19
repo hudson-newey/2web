@@ -1,6 +1,10 @@
 version: "3"
 
 tasks:
+  dev:
+    cmds:
+      - air
+
   build:
     cmds:
       - go build -o ./build/2web ./src/main.go
