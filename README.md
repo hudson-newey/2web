@@ -7,4 +7,5 @@ I am to make all reactivity compiled so that there is zero runtime overhead.
 
 ## Resources
 
+- [Tutorial (beta)](./docs/tutorial.md)
 - [Theory](./docs/theory.md)

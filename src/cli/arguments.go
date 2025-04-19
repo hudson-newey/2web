@@ -9,6 +9,7 @@ func ParseArguments() models.CliArguments {
 	inputPath := flag.String("i", "index.html", "Input file path")
 	outputPath := flag.String("o", "./dist/index.html", "Output file path")
 	isDev := flag.Bool("dev-tools", false, "Whether to include dev tools in the build")
+	isProd := flag.Bool("production", false, "Whether to include dev tools in the build")
 
 	flag.Parse()
 
@@ -16,5 +17,6 @@ func ParseArguments() models.CliArguments {
 		InputPath:  inputPath,
 		OutputPath: outputPath,
 		IsDev:      isDev,
+		IsProd:     isProd,
 	}
 }
