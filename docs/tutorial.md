@@ -43,8 +43,7 @@ To be honest, while the "hello world" example was exciting from a technical
 standpoint, it doesn't show the exciting reactivity features provided by 2web.
 
 I'll follow the typical reactivity demonstration that all web frameworks do and
-demonstrate a simple counter that can increment and decrement a number on the
-screen.
+demonstrate a simple counter that can increment and a number on the screen.
 
 Because 2Web maintains simplicity as one of its core principles.
 I believe that if I can't show the entire website in a single mobile/terminal

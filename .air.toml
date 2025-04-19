@@ -5,6 +5,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/main -i dev/ -o dist/ --dev-tools"
+  # bin = "./tmp/main -i dev/ -o dist/ --dev-tools --production"
   cmd = "go build -o ./tmp/main ./src"
   delay = 1
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]

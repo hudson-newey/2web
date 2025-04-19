@@ -2,16 +2,22 @@ package builder
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/compiler"
 	"hudson-newey/2web/src/document/devtools"
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/models"
+	"hudson-newey/2web/src/optimizer"
 	"hudson-newey/2web/src/ssg"
 	"log"
 	"os"
 )
 
 func Build(args models.CliArguments) {
+	if *args.IsDev && *args.IsProd {
+		cli.PrintWarning("'--dev-tools' is being used with '--production'")
+	}
+
 	log.Println(*args.InputPath)
 
 	inputPath, err := os.Stat(*args.InputPath)
@@ -31,14 +37,18 @@ func Build(args models.CliArguments) {
 				continue
 			}
 
-			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+file.Name(), *args.IsDev)
+			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+file.Name(), &args)
 		}
 	} else {
-		compileAndWriteFile(*args.InputPath, *args.OutputPath, *args.IsDev)
+		compileAndWriteFile(*args.InputPath, *args.OutputPath, &args)
 	}
 }
 
-func compileAndWriteFile(inputPath string, outputPath string, isDev bool) {
+func compileAndWriteFile(
+	inputPath string,
+	outputPath string,
+	args *models.CliArguments,
+) {
 	data, err := os.ReadFile(inputPath)
 	if err != nil {
 		data = []byte{}
@@ -65,8 +75,12 @@ func compileAndWriteFile(inputPath string, outputPath string, isDev bool) {
 	injectedErrorResult := documentErrors.InjectErrors(compilerResult)
 
 	finalResult := injectedErrorResult
-	if isDev {
+	if *args.IsDev {
 		finalResult = devtools.InjectDevTools(injectedErrorResult)
+	}
+
+	if *args.IsProd {
+		finalResult = optimizer.OptimizeContent(finalResult)
 	}
 
 	os.WriteFile(outputPath, []byte(finalResult), 0644)
