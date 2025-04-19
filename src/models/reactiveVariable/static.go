@@ -8,7 +8,7 @@ import (
 
 func FromNode(node lexer.LexNode[lexer.VarNode]) (models.ReactiveVariable, error) {
 	if len(node.Tokens) != 3 || node.Tokens[1] != "=" {
-		errorMessage := fmt.Errorf("incorrect reactive variable assignment:\n\tExpected: [variableName = 'variableValue']\n\tFound: %s", node.Selector)
+		errorMessage := fmt.Errorf("incorrect reactive variable assignment:\n\tExpected: $ variableName = variableValue\n\tFound: %s", node.Selector)
 		return models.ReactiveVariable{}, errorMessage
 	}
 

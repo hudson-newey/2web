@@ -22,10 +22,12 @@ func CompileReactivity(
 		// leaving a comment for now.
 		if varNode.Type() >= models.Assignment {
 			content = compileAssignmentProp(content, varNode)
+			// continue
 		}
 
 		if varNode.Type() >= models.StaticProperty {
 			content = compileStaticProperty(content, varNode)
+			// continue
 		}
 
 		content = compileStatic(content, varNode)

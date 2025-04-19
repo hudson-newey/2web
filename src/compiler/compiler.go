@@ -14,9 +14,11 @@ import (
 func Compile(filePath string, content string) string {
 	reactiveVariables := []*models.ReactiveVariable{}
 
+	// find all <script compiled></script> content
 	compilerNodes := lexer.FindNodes[lexer.CompNode](content, compilerStartToken, compilerEndToken)
-	propertyNodes := lexer.FindNodes[lexer.PropNode](content, reactiveStartToken, reactiveEndToken)
-	eventNodes := lexer.FindNodes[lexer.EventNode](content, eventStartToken, attributeEndToken)
+
+	propertyNodes := lexer.FindPropNodes[lexer.PropNode](content, propertyPrefix)
+	eventNodes := lexer.FindPropNodes[lexer.EventNode](content, eventPrefix)
 
 	for _, node := range compilerNodes {
 		variableNodes := lexer.FindNodes[lexer.VarNode](node.Content, variableToken, statementEndToken)

@@ -8,18 +8,21 @@ package lexer
 //
 // E.g. This is all valid attribute syntax
 //
-//  <button @click="$count++">+1</button>
+//	<button @click="$count++">+1</button>
 //
-//  <button @click="$count++" title="increment">+1</button>
+//	<button @click="$count++" title="increment">+1</button>
 //
-//  <button
-//   @click="$count++"
-//   title="increment"
-//  >
-//   +1
-//  </button>
+//	<button
+//	 @click="$count++"
+//	 title="increment"
+//	>
+//	 +1
+//	</button>
 //
-//  <img @load="onImageLoad()"/>
+//	<img @load="onImageLoad()"/>
+//
 // _Note: this last example of a slash being a valid terminator is due to self_
 // closing tags.
 type LexerToken = []string
+
+type LexerPropPrefix = LexerToken

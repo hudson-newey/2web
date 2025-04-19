@@ -23,8 +23,8 @@
       $ count = 0;
     </script>
 
-    <h1 [innerText $count]></h1>
+    <h1 *innerText="$count"></h1>
 
-    <button @click $count = "++$count"*>Increment</button>
+    <button @click="$count = ++$count">Increment</button>
   </body>
 </html>

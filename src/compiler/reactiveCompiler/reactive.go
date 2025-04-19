@@ -31,6 +31,10 @@ func compileReactiveTemplate(
 		panic(err)
 	}
 
+	// TODO: remove this stupid hack once the reactive compiler doesn't rely
+	// on the static compiler to make element references
+	injectableTemplate = strings.ReplaceAll(injectableTemplate, "\\u0022", "\"")
+
 	content = document.InjectContent(content, injectableTemplate, document.Body)
 
 	for _, event := range varNode.Events {

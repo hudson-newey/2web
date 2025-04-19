@@ -26,10 +26,20 @@ func compileAssignmentProp(content string, varNode *models.ReactiveVariable) str
 		panic(err)
 	}
 
+	// TODO: remove this stupid hack once the reactive compiler doesn't rely
+	// on the static compiler to make element references
+	injectableTemplate = strings.ReplaceAll(injectableTemplate, "\\u0022", "\"")
+
 	content = document.InjectContent(content, injectableTemplate, document.Body)
 
 	for _, event := range varNode.Events {
-		eventBindingAttribute := fmt.Sprintf("on%s='%s(\"%s\")'", event.EventName, callbackName, event.Reducer)
+		eventBindingAttribute := ""
+		if useDoubleQuotes(event.Reducer) {
+			eventBindingAttribute = fmt.Sprintf("on%s=\"%s(%s)\"", event.EventName, callbackName, event.Reducer)
+		} else {
+			eventBindingAttribute = fmt.Sprintf("on%s='%s(%s)'", event.EventName, callbackName, event.Reducer)
+		}
+
 		content = strings.ReplaceAll(content, event.Node.Selector, eventBindingAttribute)
 	}
 

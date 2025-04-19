@@ -24,7 +24,7 @@ e.g.
 $ message = "Hello!";
 </script>
 
-<h1 [innerText $message]></h1>
+<h1 *innerText="$message"></h1>
 ```
 
 As you can see from the example, the variable is not really reactive, but it

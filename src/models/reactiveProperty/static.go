@@ -8,7 +8,7 @@ import (
 
 func FromNode(node lexer.LexNode[lexer.PropNode]) (models.ReactiveProperty, error) {
 	if len(node.Tokens) != 2 {
-		errorMessage := fmt.Errorf("incorrect reactive property assignment:\n\tExpected: [propertyName $variable]\n\tFound: %s", node.Selector)
+		errorMessage := fmt.Errorf("incorrect reactive property assignment:\n\tExpected: *propertyName=\"$variable\"\n\tFound: %s", node.Selector)
 		return models.ReactiveProperty{}, errorMessage
 	}
 
