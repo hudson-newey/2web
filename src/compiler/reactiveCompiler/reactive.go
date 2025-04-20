@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func compileReactiveTemplate(
+func compileReactiveVar(
 	content string,
 	varNode *models.ReactiveVariable,
 ) string {

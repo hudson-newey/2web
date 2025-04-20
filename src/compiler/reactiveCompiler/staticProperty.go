@@ -8,10 +8,13 @@ import (
 	"strings"
 )
 
-func compileStaticProperty(content string, varNode *models.ReactiveVariable) string {
+func compileStaticPropVar(content string, varNode *models.ReactiveVariable) string {
 	for _, propNode := range varNode.Props {
 		elementSelector := javascript.CreateJsElement()
-		content = strings.ReplaceAll(content, propNode.Node.Selector, elementSelector)
+
+		// preserve the original node selector so that other reactivity classes can
+		// target this element.
+		content = strings.ReplaceAll(content, propNode.Node.Selector, propNode.Node.Selector+" "+elementSelector)
 
 		// we use the square brackets here because some properties have dashes which
 		// cannot be acceded with a period

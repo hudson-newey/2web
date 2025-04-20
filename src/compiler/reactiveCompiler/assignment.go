@@ -8,20 +8,27 @@ import (
 	"strings"
 )
 
-func compileAssignmentProp(content string, varNode *models.ReactiveVariable) string {
+func compileAssignmentVar(content string, varNode *models.ReactiveVariable) string {
 	callbackName := javascript.CreateJsFunctionName()
+	elementSelector := javascript.CreateJsElement()
 
-	htmlSource := fmt.Sprintf(`
+	updateJsSource := fmt.Sprintf(`
     <script>
       function %s(newValue) {
-        {{range .Props}}
-            document.querySelector("[{{.Node.Selector}}]")[{{.PropName}}] = newValue;
-        {{end}}
+  `, callbackName)
+	for _, propNode := range varNode.Props {
+		content = strings.ReplaceAll(content, propNode.Node.Selector, propNode.Node.Selector+" "+elementSelector)
+
+		updateJsSource += fmt.Sprintf(`
+      document.querySelector("[%s]")["%s"] = newValue;
+    `, elementSelector, propNode.PropName)
+	}
+	updateJsSource += `
       }
     </script>
-	`, callbackName)
+  `
 
-	injectableTemplate, err := document.BuildTemplate(htmlSource, *varNode)
+	injectableTemplate, err := document.BuildTemplate(updateJsSource, *varNode)
 	if err != nil {
 		panic(err)
 	}
