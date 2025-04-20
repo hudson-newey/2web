@@ -24,9 +24,9 @@ func CompileReactivity(
 		// different property targets.
 		if varNode.Type() >= models.Reactive {
 			content = compileReactiveVar(content, varNode)
-		}
-
-		if varNode.Type() >= models.Assignment {
+		} else if varNode.Type() >= models.Assignment {
+			// TODO: explore if reactive and assignment reactivity are mutually
+			// exclusive for variables, events, or props
 			content = compileAssignmentVar(content, varNode)
 		}
 
