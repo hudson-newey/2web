@@ -2,6 +2,8 @@ package javascript
 
 import "fmt"
 
+const ValueVar string = "__2_value"
+
 var nextNodeId int = 0
 
 func CreateJsFunctionName() string {
@@ -16,7 +18,7 @@ func CreateJsVariableName() string {
 	return variableName
 }
 
-func CreateJsElement() string {
+func CreateJsElementName() string {
 	functionName := fmt.Sprint("data-__2_element_", nextNodeId)
 	nextNodeId++
 	return functionName

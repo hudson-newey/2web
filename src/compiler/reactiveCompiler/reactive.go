@@ -18,13 +18,13 @@ func compileReactiveVar(
 	htmlSource := fmt.Sprintf(`
     <script>
       let %s = %s;
-      function %s(newValue) {
+      function %s(%s) {
         {{range .Props}}
-            document.querySelector("[{{.Node.Selector}}]")[{{.PropName}}] = newValue;
+            document.querySelector("[{{.Node.Selector}}]")[{{.PropName}}] = %s;
         {{end}}
       }
     </script>
-  `, variableName, varNode.InitialValue, callbackName)
+  `, variableName, varNode.InitialValue, callbackName, javascript.ValueVar, javascript.ValueVar)
 
 	injectableTemplate, err := document.BuildTemplate(htmlSource, *varNode)
 	if err != nil {

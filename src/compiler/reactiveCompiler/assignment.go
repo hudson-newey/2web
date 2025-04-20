@@ -10,23 +10,23 @@ import (
 
 func compileAssignmentVar(content string, varNode *models.ReactiveVariable) string {
 	callbackName := javascript.CreateJsFunctionName()
-	elementSelector := javascript.CreateJsElement()
+	elementSelector := javascript.CreateJsElementName()
+
+	functionContent := ""
+	for _, propNode := range varNode.Props {
+		content = strings.ReplaceAll(content, propNode.Node.Selector, propNode.Node.Selector+" "+elementSelector)
+		functionContent += fmt.Sprintf(`
+      document.querySelector("[%s]")["%s"] = %s;
+    `, elementSelector, propNode.PropName, javascript.ValueVar)
+	}
 
 	updateJsSource := fmt.Sprintf(`
     <script>
-      function %s(newValue) {
-  `, callbackName)
-	for _, propNode := range varNode.Props {
-		content = strings.ReplaceAll(content, propNode.Node.Selector, propNode.Node.Selector+" "+elementSelector)
-
-		updateJsSource += fmt.Sprintf(`
-      document.querySelector("[%s]")["%s"] = newValue;
-    `, elementSelector, propNode.PropName)
-	}
-	updateJsSource += `
+      function %s(%s) {
+        %s
       }
     </script>
-  `
+  `, callbackName, javascript.ValueVar, functionContent)
 
 	injectableTemplate, err := document.BuildTemplate(updateJsSource, *varNode)
 	if err != nil {

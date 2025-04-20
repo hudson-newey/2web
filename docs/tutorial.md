@@ -78,8 +78,8 @@ _NOTE_: This is an dev build. optimized for readability, not performance.
 
     <script>
       let __2_var_0 = 0;
-      function __2_func_0(newValue) {
-        document.querySelector("__data-2-element-0")["innerText"] = newValue;
+      function __2_func_0(__2_value) {
+        document.querySelector("__data-2-element-0")["innerText"] = __2_value;
       }
     </script>
   </body>

@@ -10,7 +10,7 @@ import (
 
 func compileStaticPropVar(content string, varNode *models.ReactiveVariable) string {
 	for _, propNode := range varNode.Props {
-		elementSelector := javascript.CreateJsElement()
+		elementSelector := javascript.CreateJsElementName()
 
 		// preserve the original node selector so that other reactivity classes can
 		// target this element.
