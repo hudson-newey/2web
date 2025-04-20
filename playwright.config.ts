@@ -1,4 +1,4 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
@@ -12,9 +12,7 @@ export default defineConfig({
     bypassCSP: true,
     screenshot: "only-on-failure",
   },
-  projects: !!process.env.CI
-    ? [{ name: "chromium" }, { name: "firefox" }, { name: "webkit" }]
-    : [{ name: "chromium" }],
+  projects: [{ name: "chromium" }, { name: "firefox" }, { name: "webkit" }],
   webServer: {
     // we run the dev server on port 3000 so that we can run a separate
     // development server that is independent of the test server

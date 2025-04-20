@@ -1,7 +1,7 @@
 {
   "name": "2web",
   "version": "0.1.0",
-  "description": "A compiler for reactive web apps",
+  "description": "An example website that I use to test 2web",
   "type": "module",
   "scripts": {
     "dev": "vite ./dist/",
