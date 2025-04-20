@@ -2,6 +2,7 @@
   "name": "2web",
   "version": "0.1.0",
   "description": "An example website that I use to test 2web",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite ./dist/",

@@ -25,7 +25,14 @@
 
     <h1 *innerText="$count"></h1>
 
-    <button @click="$count = ++$count">Increment</button>
-    <button @click="$count = --$count">Decrement</button>
+    <div>
+      <button @click="$count = $count + 1">Increment</button>
+      <button @click="$count = $count - 1">Decrement</button>
+    </div>
+
+    <div style="margin-top: 1rem;">
+      <button @click="$count = ++$count">+1 (alternative)</button>
+      <button @click="$count = --$count">-1 (alternative)</button>
+    </div>
   </body>
 </html>
