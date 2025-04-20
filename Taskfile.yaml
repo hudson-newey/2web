@@ -5,6 +5,11 @@ tasks:
     cmds:
       - air
 
+  test:
+    cmds:
+      - go test ./src/...
+      - pnpm test
+
   build:
     cmds:
       - go build -o ./build/2web ./src/main.go
