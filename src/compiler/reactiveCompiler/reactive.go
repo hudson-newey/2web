@@ -14,19 +14,26 @@ func compileReactiveVar(
 ) string {
 	callbackName := javascript.CreateJsFunctionName()
 	variableName := javascript.CreateJsVariableName()
+	elementSelector := javascript.CreateJsElementName()
 
-	htmlSource := fmt.Sprintf(`
+	functionContent := ""
+	for _, propNode := range varNode.Props {
+		content = strings.ReplaceAll(content, propNode.Node.Selector, propNode.Node.Selector+" "+elementSelector)
+		functionContent += fmt.Sprintf(`
+      document.querySelector("[%s]")["%s"] = %s;
+    `, elementSelector, propNode.PropName, javascript.ValueVar)
+	}
+
+	updateJsSource := fmt.Sprintf(`
     <script>
       let %s = %s;
       function %s(%s) {
-        {{range .Props}}
-            document.querySelector("[{{.Node.Selector}}]")[{{.PropName}}] = %s;
-        {{end}}
+        %s
       }
     </script>
-  `, variableName, varNode.InitialValue, callbackName, javascript.ValueVar, javascript.ValueVar)
+  `, variableName, varNode.InitialValue, callbackName, javascript.ValueVar, functionContent)
 
-	injectableTemplate, err := document.BuildTemplate(htmlSource, *varNode)
+	injectableTemplate, err := document.BuildTemplate(updateJsSource, *varNode)
 	if err != nil {
 		panic(err)
 	}
@@ -44,5 +51,5 @@ func compileReactiveVar(
 		content = strings.ReplaceAll(content, event.Node.Selector, eventBindingAttribute)
 	}
 
-	return content + htmlSource
+	return content
 }
