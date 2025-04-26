@@ -1,0 +1,52 @@
+<!--
+  You can use this router by simply including this file where you want the
+  router outlet to be.
+-->
+
+<script compiled>
+  $ pageContent = document.innerHTML;
+</script>
+
+<script>
+  (() => {
+    /** @param {HTMLAnchorElement} target */
+    function bootstrapLink(target) {
+      target.addEventListener("click", async (event) => {
+        event.preventDefault();
+
+        const linkLocation = target.href;
+        const locationResponse = await fetch(linkLocation);
+        if (!locationResponse.ok) {
+          // navigate to the page so that the user can see the error message
+          window.location.href = linkLocation;
+        }
+
+        $pageContent = locationResponse.body;
+      });
+    }
+
+    function bootstrap() {
+      const linkElements = document.getElementsByTagName("a");
+      const currentDomain = window.location.hostname;
+
+      // To prevent xss vulnerabilities, we only allow spa routing on links that
+      // navigate to the same domain.
+      // note: sub-domains are purposely excluded because some hosting providers
+      // use sub-domains for each different website. E.g. GitHub Pages uses a
+      // different sub-domain for each user.
+      for (const element of linkElements) {
+        if (element.hostname !== currentDomain) {
+          continue;
+        }
+
+        bootstrapLink(element);
+      }
+    }
+
+    document.addEventListener("load", () => {
+      bootstrap();
+    });
+  })();
+</script>
+
+<router-outlet *innerHtml="$pageContent"></router-outlet>
