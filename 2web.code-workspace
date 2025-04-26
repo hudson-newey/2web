@@ -1,8 +1,9 @@
 {
   "folders": [
     {
-      "path": ".",
-    },
+      "name": "2web",
+      "path": "."
+    }
   ],
   "settings": {
     "files.insertFinalNewline": true,
