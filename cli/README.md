@@ -6,3 +6,5 @@ A basic utility tool that can be used to create 2web projects
 
 - `2web new <project_name>`
   - `2web n <project_name>`
+- `2web component <component_name>`
+  - `2web c <component_name>`

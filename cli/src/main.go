@@ -26,5 +26,17 @@ func main() {
 
 		projectName := os.Args[2]
 		templates.NewTemplate(projectName)
+
+		return
+	}
+
+	if command == "component" || command == "c" {
+		if argsLen < 3 {
+			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <component_name>", programName, command)
+			panic(errorMsg)
+		}
+
+		componentName := os.Args[2]
+		templates.ComponentTemplate(componentName)
 	}
 }
