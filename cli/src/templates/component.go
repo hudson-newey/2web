@@ -8,7 +8,7 @@ import (
 )
 
 func ComponentTemplate(componentName string) {
-	componentsPath := fmt.Sprintf("src/components/%s/", componentName)
+	componentPath := fmt.Sprintf("src/components/%s/", componentName)
 
 	// ignore errors from this because we expect this to fail (because the
 	// directory) already exists
@@ -16,17 +16,17 @@ func ComponentTemplate(componentName string) {
 
 	templateFiles := []files.File{
 		{
-			Path:        componentsPath,
+			Path:        componentPath,
 			IsDirectory: true,
 			Children: []files.File{
 				{
-					Path:        componentsPath + componentName + ".component.html",
+					Path:        componentPath + componentName + ".component.html",
 					Content:     createComponentContent(componentName),
 					IsDirectory: false,
 				},
 				{
-					Path:        componentsPath + componentName + ".component.spec.js",
-					Content:     createTestContent(componentName),
+					Path:        componentPath + componentName + ".component.spec.js",
+					Content:     createComponentTestContent(componentName),
 					IsDirectory: false,
 				},
 			},
@@ -45,7 +45,7 @@ $ message = "%s works!";
 `, name)
 }
 
-func createTestContent(name string) string {
+func createComponentTestContent(name string) string {
 	return fmt.Sprintf(`describe("%s", () => {
 });
 `, name)

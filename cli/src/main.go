@@ -39,4 +39,14 @@ func main() {
 		componentName := os.Args[2]
 		templates.ComponentTemplate(componentName)
 	}
+
+	if command == "service" || command == "s" {
+		if argsLen < 3 {
+			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <service_name>", programName, command)
+			panic(errorMsg)
+		}
+
+		serviceName := os.Args[2]
+		templates.ServiceTemplate(serviceName)
+	}
 }
