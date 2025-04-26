@@ -10,8 +10,6 @@ const directoryPerms os.FileMode = os.ModePerm
 const filePerms os.FileMode = 0644
 
 func WriteFiles(files []File) {
-	fmt.Println()
-
 	for _, file := range files {
 		recursiveWriteFile(file)
 	}

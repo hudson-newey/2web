@@ -1,4 +1,4 @@
-# 2Web Compiler
+# 2Web ClI
 
 A basic utility tool that can be used to create 2web projects
 
