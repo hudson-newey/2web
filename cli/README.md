@@ -1,4 +1,4 @@
-# 2Web ClI
+# 2Web CLI
 
 A basic utility tool that can be used to create 2web projects
 
