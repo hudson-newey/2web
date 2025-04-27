@@ -48,6 +48,16 @@ func main() {
 			templates.ComponentTemplate(templateName)
 		} else if template == "service" || template == "s" {
 			templates.ServiceTemplate(templateName)
+		} else if template == "model" || template == "m" {
+			templates.ModelTemplate(templateName)
+		} else {
+			errorMsg := fmt.Errorf("unrecognized generate template: '%s'", template)
+			panic(errorMsg)
 		}
+
+		return
 	}
+
+	errorMsg := fmt.Errorf("unrecognized command: '%s'", command)
+	panic(errorMsg)
 }
