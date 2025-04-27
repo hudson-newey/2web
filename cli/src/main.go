@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/hudson-newey/2web-cli/src/install"
 	"github.com/hudson-newey/2web-cli/src/templates"
 )
 
@@ -54,6 +55,18 @@ func main() {
 			errorMsg := fmt.Errorf("unrecognized generate template: '%s'", template)
 			panic(errorMsg)
 		}
+
+		return
+	}
+
+	if command == "install" || command == "i" {
+		if argsLen < 3 {
+			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <package_name>", programName, command)
+			panic(errorMsg)
+		}
+
+		packageName := os.Args[2]
+		install.InstallPackage(packageName)
 
 		return
 	}
