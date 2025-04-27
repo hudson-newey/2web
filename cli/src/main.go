@@ -30,23 +30,24 @@ func main() {
 		return
 	}
 
-	if command == "component" || command == "c" {
+	if command == "generate" || command == "g" {
 		if argsLen < 3 {
-			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <component_name>", programName, command)
+			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <template> <template_name>", programName, command)
 			panic(errorMsg)
 		}
 
-		componentName := os.Args[2]
-		templates.ComponentTemplate(componentName)
-	}
-
-	if command == "service" || command == "s" {
-		if argsLen < 3 {
-			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <service_name>", programName, command)
+		template := os.Args[2]
+		if argsLen < 4 {
+			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s %s <template_name>", programName, command, template)
 			panic(errorMsg)
 		}
 
-		serviceName := os.Args[2]
-		templates.ServiceTemplate(serviceName)
+		templateName := os.Args[3]
+
+		if template == "component" || template == "c" {
+			templates.ComponentTemplate(templateName)
+		} else if template == "service" || template == "s" {
+			templates.ServiceTemplate(templateName)
+		}
 	}
 }
