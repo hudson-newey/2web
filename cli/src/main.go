@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/hudson-newey/2web-cli/src/deploy"
 	"github.com/hudson-newey/2web-cli/src/install"
 	"github.com/hudson-newey/2web-cli/src/templates"
 )
@@ -68,6 +69,11 @@ func main() {
 		packageName := os.Args[2]
 		install.InstallPackage(packageName)
 
+		return
+	}
+
+	if command == "deploy" {
+		deploy.DeployProject()
 		return
 	}
 

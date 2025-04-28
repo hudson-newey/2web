@@ -1,8 +1,7 @@
 {
-  "name": "pre-fetcher",
-  "private": true,
+  "name": "2web-kit",
   "version": "0.1.0",
-  "description": "",
+  "description": "A collection of packages to enhance your 2web application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

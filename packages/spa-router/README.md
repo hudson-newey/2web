@@ -20,7 +20,7 @@ be.
       </nav>
     </header>
 
-    {% include node_modules/@hudson-newey/2web-spa-router/spa-router.html %}
+    {% include node_modules/@hudson-newey/2web-kit/spa-router.html %}
   </body>
 </html>
 ```

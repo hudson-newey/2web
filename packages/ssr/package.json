@@ -1,7 +1,6 @@
 {
-  "name": "pre-fetcher",
-  "private": true,
-  "version": "0.1.0",
+  "name": "ssr",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
