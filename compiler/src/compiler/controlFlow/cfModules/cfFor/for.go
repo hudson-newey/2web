@@ -1,4 +1,4 @@
-package modules
+package cfFor
 
 import "strings"
 
@@ -8,7 +8,7 @@ import "strings"
 const listSeparatorToken = ","
 const replacementToken = "{{&value}}"
 
-func ForSsgContent(rawValues string, contentTemplate string) string {
+func ForLoopContent(rawValues string, contentTemplate string) string {
 	values := strings.Split(rawValues, listSeparatorToken)
 
 	templateResult := ""

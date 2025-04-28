@@ -2,7 +2,7 @@ package ssg
 
 import (
 	"hudson-newey/2web/src/lexer"
-	"hudson-newey/2web/src/ssg/modules"
+	"hudson-newey/2web/src/ssg/ssgModules"
 	"strings"
 )
 
@@ -10,7 +10,7 @@ type isStable = bool
 
 // TODO: remove the token[0] hacks below
 func ProcessStaticSite(filePath string, content string) (string, isStable) {
-	ssgContent := lexer.FindNodes[lexer.SsgNode](content, ssgStartToken, ssgEndToken)
+	ssgContent := lexer.FindNodes[lexer.SsgNode](content, SsgStartToken, SsgEndToken)
 	ssgResult := content
 
 	for _, node := range ssgContent {
@@ -21,9 +21,7 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 
 			switch ssgKeyword {
 			case includeToken[0]:
-				selectorContent = modules.IncludeSsgContent(node.Tokens[1], filePath)
-			case forToken[0]:
-				selectorContent = modules.ForSsgContent(node.Tokens[1], node.Tokens[2])
+				selectorContent = ssgModules.IncludeSsgContent(node.Tokens[1], filePath)
 			}
 		}
 
@@ -32,7 +30,7 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 
 	// by comparing the original content with the result, we can determine if
 	// the content is stable
-	unstable := strings.Contains(ssgResult, ssgStartToken[0]) && strings.Contains(ssgResult, ssgEndToken[0])
+	unstable := strings.Contains(ssgResult, SsgStartToken[0]) && strings.Contains(ssgResult, SsgEndToken[0])
 
 	return ssgResult, !unstable
 }

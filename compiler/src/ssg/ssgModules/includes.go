@@ -1,4 +1,4 @@
-package modules
+package ssgModules
 
 import (
 	"fmt"

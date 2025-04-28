@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/compiler"
+	"hudson-newey/2web/src/compiler/controlFlow"
 	"hudson-newey/2web/src/document/devtools"
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/models"
@@ -60,7 +61,9 @@ func compileAndWriteFile(
 
 	log.Println("\t-", inputPath)
 
-	ssgSource := string(data)
+	controlFlowResult := controlFlow.ProcessControlFlow(inputPath, string(data))
+
+	ssgSource := controlFlowResult
 	stable := false
 	for {
 		ssgSource, stable = ssg.ProcessStaticSite(inputPath, ssgSource)

@@ -1,4 +1,4 @@
-package modules_test
+package cfIf_test
 
 import "testing"
 

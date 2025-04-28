@@ -131,12 +131,13 @@ const (
 )
 
 type ReactiveVariable struct {
-	Name         string
-	InitialValue string
-	Props        []*ReactiveProperty
-	Events       []*ReactiveEvent
-	Node         *lexer.LexNode[lexer.VarNode]
-	Reactive     bool
+	Name               string
+	InitialValue       string
+	Props              []*ReactiveProperty
+	Events             []*ReactiveEvent
+	Node               *lexer.LexNode[lexer.VarNode]
+	Reactive           bool
+	DependentVariables []*ReactiveVariable
 }
 
 func (model *ReactiveVariable) AddProp(property *ReactiveProperty) {
