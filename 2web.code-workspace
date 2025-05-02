@@ -20,13 +20,19 @@
     "cSpell.words": ["vite"],
     "cSpell.flagWords": ["yuo"],
     "cSpell.ignorePaths": ["**/node_modules/**", "2web.code-workspace"],
-    "[go]": {
-      "editor.defaultFormatter": "golang.go",
-    },
     "search.exclude": {
       "dist/": true,
       "build/": true,
       "tmp/": true,
+    },
+    "[go]": {
+      "editor.defaultFormatter": "golang.go",
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
   },
   "extensions": {

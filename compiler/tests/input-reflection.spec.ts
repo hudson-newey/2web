@@ -3,6 +3,6 @@ import { assertNoErrors } from "./helpers/assertions";
 import { navigateToPage } from "./helpers/fixture";
 
 test("should load", () => {
-  const document = navigateToPage("compiled-property.html");
+  const document = navigateToPage("input-reflection.html");
   assertNoErrors(document);
 });

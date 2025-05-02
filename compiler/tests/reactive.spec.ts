@@ -1,6 +1,8 @@
-import { test } from './helpers/fixture';
-import { navigateToPage } from './helpers/server';
+import { test } from "vitest";
+import { assertNoErrors } from "./helpers/assertions";
+import { navigateToPage } from "./helpers/fixture";
 
-test("should load", async ({ page }) => {
-  await navigateToPage(page, "/static-includes.html");
+test("should load", () => {
+  const document = navigateToPage("reactive.html");
+  assertNoErrors(document);
 });
