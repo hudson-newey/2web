@@ -17,7 +17,7 @@ I am to make all reactivity compiled so that there is zero runtime overhead.
 $ count = 0;
 </script>
 
-<h1 *innerText="$count"></h1>
+<h1>{{ $count }}</h1>
 
 <button @click="$count = $count + 1">Increment</button>
 <button @click="$count = $count - 1">Decrement</button>
