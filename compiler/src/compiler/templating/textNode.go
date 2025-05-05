@@ -14,8 +14,6 @@ func ExpandTextNodes(content string) string {
 	textNodes := lexer.FindNodes[lexer.TextNode](content, textStartToken, textEndToken)
 
 	for _, node := range textNodes {
-		println(node.Selector)
-
 		// text nodes can have reducers if they modify the content of the
 		// inner reactive variable
 		// E.g. {{ $count * 2 }}

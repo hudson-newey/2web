@@ -8,8 +8,27 @@ import (
 	"strings"
 )
 
+// Warning: static prop variables E.g. *value="$count" is typically an escape
+// hatch out of 2web reactivity and optimization.
+// It will literally create code to set the underlying property using JavaScript
+// as soon as the website is loaded.
+// You should always ask if it is possible to complete your task without the
+// star prefix.
+// E.g. value="$count" will ONLY be evaluated at compile time and results in an
+// SSG site without any runtime overhead.
 func compileStaticPropVar(content string, varNode *models.ReactiveVariable) string {
 	for _, propNode := range varNode.Props {
+		// Some of the properties can be evaluated at compile time to prevent
+		// creating runtime JavaScript.
+		// This is a part of my goal to aggressively optimize for SSG.
+		if propNode.PropName == "innerText" {
+			returnedContent, err := replaceStaticTextProp(content, varNode, propNode)
+			if err == nil {
+				content = returnedContent
+				continue
+			}
+		}
+
 		elementSelector := javascript.CreateJsElementName()
 
 		// preserve the original node selector so that other reactivity classes can
@@ -33,4 +52,80 @@ func compileStaticPropVar(content string, varNode *models.ReactiveVariable) stri
 	}
 
 	return content
+}
+
+// If a node has an *innerText attribute and the underlying variable is static,
+// then the *innerText can be evaluated at compile time instead of creating
+// runtime javascript.
+//
+// E.g.
+//
+// <script compiled>
+// $ message = "Hello World!";
+// </script>
+// <h1 *innerText="$message"></h1>
+//
+// In this example, the $message variable is never changed, and we can therefore
+// evaluate the innerText at compile time.
+// This allows transparent SSG without the programmer having to specify what
+// type of rendering they want for the "$message" variable.
+func replaceStaticTextProp(
+	content string,
+	varNode *models.ReactiveVariable,
+	propNode *models.ReactiveProperty,
+) (string, error) {
+	selectorIndex := strings.Index(content, propNode.Node.Selector)
+	if selectorIndex == -1 {
+		return content, fmt.Errorf("unknown")
+	}
+
+	maxLen := len(content)
+	openingBracketIndex := selectorIndex
+
+	for openingBracketIndex < maxLen {
+		searchChar := content[openingBracketIndex]
+		openingBracketIndex++
+
+		if searchChar == '>' {
+			break
+		} else if searchChar == '/' {
+			// We cannot evaluate the innerText at runtime because the element is a
+			// self-closing tag.
+			// Therefore, we fallback to setting the underlying innerText property
+			// and let the custom-element / DOM handle the behavior
+			return content, fmt.Errorf("attempted to inline self-closing tag")
+		}
+	}
+
+	closingBracketIndex := openingBracketIndex
+	for closingBracketIndex < maxLen-1 {
+		searchString := content[closingBracketIndex : closingBracketIndex+2]
+		if searchString == "</" {
+			break
+		} else if searchString[0] == '<' {
+			// We have multiple nested children under this element, and I don't want
+			// to code out the cases to handle this condition. Fallback to runtime
+			// assignment
+			// TODO: handle this edge case
+			return content, fmt.Errorf("innerText element has children")
+		}
+
+		closingBracketIndex++
+	}
+
+	initialTextValue := strings.TrimPrefix(varNode.InitialValue, "\"")
+	initialTextValue = strings.TrimSuffix(initialTextValue, "\"")
+	initialTextValue = strings.TrimPrefix(initialTextValue, "'")
+	initialTextValue = strings.TrimSuffix(initialTextValue, "'")
+
+	// Replace the inner text of the element with the variables initial value
+	// we do not have to worry about cleaning up the attribute because it will
+	// be handled later final step of the compiler.
+	content = replaceBetween(content, openingBracketIndex, closingBracketIndex, initialTextValue)
+
+	return content, nil
+}
+
+func replaceBetween(s string, start int, end int, replacement string) string {
+	return s[:start] + replacement + s[end:]
 }
