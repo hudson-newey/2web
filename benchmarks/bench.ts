@@ -55,6 +55,7 @@ async function getDirectorySize(dirPath: string): Promise<Kilobyte> {
 async function runBenchmark() {
   const testedFrameworks = [
     "2web",
+    "svelte",
     "preact",
     "vue",
   ] as const satisfies FrameworkName[];
