@@ -8,12 +8,14 @@ import "strings"
 const listSeparatorToken = ","
 const replacementToken = "{{&value}}"
 
-func ForLoopContent(rawValues string, contentTemplate string) string {
+func ForLoopContent(rawValues string, contentTokens []string) string {
 	values := strings.Split(rawValues, listSeparatorToken)
+
+	joinedContent := strings.Join(contentTokens, " ")
 
 	templateResult := ""
 	for _, value := range values {
-		templateResult += strings.ReplaceAll(contentTemplate, replacementToken, value)
+		templateResult += strings.ReplaceAll(joinedContent, replacementToken, value)
 	}
 
 	return templateResult

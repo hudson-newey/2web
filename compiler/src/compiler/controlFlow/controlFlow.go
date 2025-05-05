@@ -27,9 +27,9 @@ func ProcessControlFlow(filePath string, content string) string {
 			// ssg at compile time until the template is stable.
 			switch ssgKeyword {
 			case forToken[0]:
-				selectorContent = cfFor.ForLoopContent(node.Tokens[1], node.Tokens[2])
+				selectorContent = cfFor.ForLoopContent(node.Tokens[1], node.Tokens[2:len(node.Tokens)])
 			case ifToken[0]:
-				selectorContent = cfIf.IfConditionContent(node.Tokens[1], node.Tokens[2])
+				selectorContent = cfIf.IfConditionContent(node.Tokens[1], node.Tokens[2:len(node.Tokens)])
 			default:
 				continue
 			}

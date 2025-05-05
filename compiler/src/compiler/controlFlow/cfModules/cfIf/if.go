@@ -1,10 +1,13 @@
 package cfIf
 
-import "slices"
+import (
+	"slices"
+	"strings"
+)
 
 // TODO: if conditions do not currently support reactive variables of other
 // javascript code like iife expressions
-func IfConditionContent(condition string, conditionalContent string) string {
+func IfConditionContent(condition string, contentTokens []string) string {
 	// We follow the "C like" if statements, where there are clearly defined
 	// "falsy" values (0 in C), and any other value is counted as a "truthy"
 	// value.
@@ -20,5 +23,5 @@ func IfConditionContent(condition string, conditionalContent string) string {
 		return ""
 	}
 
-	return conditionalContent
+	return strings.Join(contentTokens, " ")
 }
