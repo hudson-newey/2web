@@ -31,3 +31,4 @@ with real browsers to test the speed of each framework.
 | Svelte    | 20.122          |
 | Preact    | 25.064          |
 | Vue       | 58.705          |
+| React     | 186.673         |

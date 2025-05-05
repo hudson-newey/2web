@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd ./implementations/vue
+cd ./implementations/vue/
 
 export NODE_ENV="production"
 

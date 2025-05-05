@@ -58,6 +58,7 @@ async function runBenchmark() {
     "svelte",
     "preact",
     "vue",
+    "react",
   ] as const satisfies FrameworkName[];
 
   const results = Promise.all(
