@@ -1,5 +1,5 @@
 type FrameworkName = string;
-type Megabyte = number;
+type Kilobyte = number;
 
 const reportsDirectory = "reports/";
 
@@ -27,7 +27,7 @@ async function buildImplementation(name: string) {
 // This is also AI generated code which is why the code quality is so awful
 //
 // TODO: I should improve this benchmark test
-async function getDirectorySize(dirPath: string): Promise<Megabyte> {
+async function getDirectorySize(dirPath: string): Promise<Kilobyte> {
   let totalSize = 0;
 
   try {
@@ -37,7 +37,7 @@ async function getDirectorySize(dirPath: string): Promise<Megabyte> {
       if (entry.isFile) {
         const stat = await Deno.stat(path);
 
-        // divide by 1000 here because we want to report the size back in MB
+        // divide by 1000 here because we want to report the size back in KB
         // not the Deno default Bytes
         totalSize += stat.size / 1_000;
       } else if (entry.isDirectory) {
@@ -56,6 +56,7 @@ async function runBenchmark() {
   const testedFrameworks = [
     "2web",
     "preact",
+    "vue",
   ] as const satisfies FrameworkName[];
 
   const results = Promise.all(
@@ -80,7 +81,7 @@ async function runBenchmark() {
   // I write to a csv so that I can do some cool graphs in the future and so
   // that loading into excel is easy
   const assetSizeFileName = reportsDirectory + "assetSize.csv";
-  await Deno.writeTextFile(assetSizeFileName, "Framework,size (MB)\n", {
+  await Deno.writeTextFile(assetSizeFileName, "Framework,size (KB)\n", {
     append: true,
   });
 

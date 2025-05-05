@@ -53,7 +53,9 @@
       "esbenp.prettier-vscode",
       "zignd.html-css-class-completion",
       "dbaeumer.vscode-eslint",
-      "ms-playwright.playwright",
+      "vitest.explorer",
+
+      "liuji-jim.vue",
     ],
   },
 }

@@ -16,7 +16,7 @@ The implementations `dist/` directory will be used for benchmarking.
 To run the benchmark script, simply run
 
 ```sh
-$ deno --allow-run --allow-read --allow-read bench.ts
+$ deno --allow-run --allow-read --allow-write --allow-read bench.ts
 >
 ```
 
