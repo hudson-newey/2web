@@ -48,14 +48,28 @@ func compileReactiveVar(
 		reactiveReducer := strings.ReplaceAll(event.Reducer, varNode.Name, variableName)
 
 		// e.g. <button onclick="count = count + 1; updateCount(count)">Increment</button>
-		eventBindingAttribute := fmt.Sprintf(
-			"on%s='%s = %s; %s(%s)'",
-			event.EventName,
-			variableName,
-			reactiveReducer,
-			callbackName,
-			variableName,
-		)
+		eventBindingAttribute := ""
+		if useDoubleQuotes(event.Reducer) {
+			eventBindingAttribute =
+				fmt.Sprintf(
+					"on%s=\"%s = %s; %s(%s)\"",
+					event.EventName,
+					variableName,
+					reactiveReducer,
+					callbackName,
+					variableName,
+				)
+		} else {
+			eventBindingAttribute =
+				fmt.Sprintf(
+					"on%s='%s = %s; %s(%s)'",
+					event.EventName,
+					variableName,
+					reactiveReducer,
+					callbackName,
+					variableName,
+				)
+		}
 
 		content = strings.ReplaceAll(content, event.Node.Selector, eventBindingAttribute)
 	}

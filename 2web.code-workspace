@@ -55,7 +55,8 @@
       "dbaeumer.vscode-eslint",
       "vitest.explorer",
 
-      "liuji-jim.vue",
+      "vue.volar",
+      "svelte.svelte-vscode"
     ],
   },
 }

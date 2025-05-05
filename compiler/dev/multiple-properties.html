@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiple Properties</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <script compiled>
+      $ message = "Messages: word";
+    </script>
+
+    <h1 *innerText="$message"></h1>
+
+    <button @click="$message = $message + 'word'">Add Word</button>
+
+    <p>
+      This page binds one reactive variable to multiple properties.
+    </p>
+  </body>
+</html>

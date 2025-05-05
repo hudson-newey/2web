@@ -20,11 +20,11 @@ func compileStaticPropVar(content string, varNode *models.ReactiveVariable) stri
 		// cannot be acceded with a period
 		htmlSource := fmt.Sprintf(`
       <script>
-          document.querySelector("[%s]")["%s"] = {{.Variable.InitialValue}};
+          document.querySelector("[%s]")["%s"] = %s;
       </script>
-    `, elementSelector, propNode.PropName)
+    `, elementSelector, propNode.PropName, propNode.Variable.InitialValue)
 
-		injectableTemplate, err := document.BuildTemplate(htmlSource, *propNode)
+		injectableTemplate, err := document.BuildTemplate(htmlSource, nil)
 		if err != nil {
 			panic(err)
 		}

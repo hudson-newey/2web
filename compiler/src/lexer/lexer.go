@@ -125,11 +125,11 @@ func FindNodes[T voidNode](
 				hasQuotePrefix := strings.HasPrefix(token, "\"") || strings.HasPrefix(token, "'")
 				hasQuoteSuffix := strings.HasSuffix(token, "\"") || strings.HasSuffix(token, "'")
 
-				token = strings.TrimPrefix(token, "\"")
-				token = strings.TrimPrefix(token, "'")
+				// token = strings.TrimPrefix(token, "\"")
+				// token = strings.TrimPrefix(token, "'")
 
-				token = strings.TrimSuffix(token, "\"")
-				token = strings.TrimSuffix(token, "'")
+				// token = strings.TrimSuffix(token, "\"")
+				// token = strings.TrimSuffix(token, "'")
 
 				if hasQuotePrefix && !hasQuoteSuffix {
 					tokenBuffer += token + " "

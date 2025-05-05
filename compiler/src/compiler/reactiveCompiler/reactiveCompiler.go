@@ -2,6 +2,7 @@ package reactiveCompiler
 
 import (
 	"hudson-newey/2web/src/models"
+	"strings"
 )
 
 func CompileReactivity(
@@ -47,6 +48,12 @@ func CompileReactivity(
 		// e.g. <input type="range" value="$value"></input>
 		if varNode.Type() >= models.StaticProperty {
 			content = compileStaticPropVar(content, varNode)
+		}
+
+		// after this point, all of the reactive properties have been processed
+		// so therefore we can strip them from the result content
+		for _, reactiveProp := range varNode.Props {
+			content = strings.ReplaceAll(content, reactiveProp.Node.Selector, "")
 		}
 
 		content = compileStatic(content, varNode)
