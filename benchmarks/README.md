@@ -25,5 +25,8 @@ with real browsers to test the speed of each framework.
 
 ## Currently Benchmarked Frameworks
 
-- 2Web
-- Preact
+| Framework | Build Size (KB) |
+| --------- | --------------- |
+| 2Web      | 0.749           |
+| Preact    | 25.064          |
+| Vue       | 58.705          |
