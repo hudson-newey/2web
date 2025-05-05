@@ -3,25 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TextNode Reactive Variables</title>
+    <title>Reactive Variables</title>
     <link rel="stylesheet" href="dev-styles.css" />
   </head>
 
   <body>
-    <p>Click on the button to increment the number</p>
-
     <script compiled>
-      $ count = 0;
+      $ mouseX = 0;
     </script>
 
-    <button @click="$count = $count + 1">{{ $count }}</button>
+    <p>x: {{ $mouseX }}</p>
+
+    <div class="canvas" @mousemove="$mouseX = event.offsetX"></div>
 
     <style>
-      button {
-        font-size: 1.2rem;
-        padding: 0.5rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
+      .canvas {
+        position: relative;
+        width: 100%;
+        height: 80dvh;
+
+        background-color: rgb(20, 80, 10);
       }
     </style>
   </body>
