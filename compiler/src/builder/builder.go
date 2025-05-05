@@ -12,6 +12,7 @@ import (
 	"hudson-newey/2web/src/ssg"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func Build(args models.CliArguments) {
@@ -86,5 +87,6 @@ func compileAndWriteFile(
 		finalResult = optimizer.OptimizeContent(finalResult)
 	}
 
+	os.MkdirAll(filepath.Dir(outputPath), os.ModePerm)
 	os.WriteFile(outputPath, []byte(finalResult), 0644)
 }
