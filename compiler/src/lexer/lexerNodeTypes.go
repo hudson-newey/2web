@@ -12,6 +12,9 @@ type PropNode LexNodeType[PropNode]
 // @eventName $varName = value@
 type EventNode LexNodeType[EventNode]
 
+// {{ $variable }}
+type TextNode LexNodeType[TextNode]
+
 // {% ssgModule arguments %}
 type SsgNode LexNodeType[SsgNode]
 

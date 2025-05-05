@@ -7,9 +7,6 @@ var compilerEndToken lexer.LexerToken = []string{"</script>"}
 
 var variableToken lexer.LexerToken = []string{"$"}
 
-var mustacheStartToken lexer.LexerToken = []string{"{{ "}
-var mustacheEndToken lexer.LexerToken = []string{" }}"}
-
 var statementEndToken lexer.LexerToken = []string{";"}
 var variableAssignmentToken lexer.LexerToken = []string{"="}
 

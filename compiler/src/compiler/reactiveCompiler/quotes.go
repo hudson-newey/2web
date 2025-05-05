@@ -2,7 +2,8 @@ package reactiveCompiler
 
 import "strings"
 
-func useDoubleQuotes(content string) bool {
+// TODO: this should not be exported
+func UseDoubleQuotes(content string) bool {
 	// we want to find out if we have to use single or double quotes
 	// depending on what quote type the reducer uses
 	firstDoubleQuoteLocation := strings.Index(content, "\"")

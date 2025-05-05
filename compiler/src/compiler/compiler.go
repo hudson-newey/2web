@@ -3,6 +3,7 @@ package compiler
 import (
 	"fmt"
 	"hudson-newey/2web/src/compiler/reactiveCompiler"
+	"hudson-newey/2web/src/compiler/templating"
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/lexer"
 	"hudson-newey/2web/src/models"
@@ -12,6 +13,12 @@ import (
 )
 
 func Compile(filePath string, content string) string {
+	// "Mustache like" expressions e.g. {{ $count }} are a shorthand for an
+	// element with only innerText.
+	// Therefore, we expand all of the mustache expressions before finding
+	// reactive property tokens
+	content = templating.ExpandTextNodes(content)
+
 	reactiveVariables := []*models.ReactiveVariable{}
 
 	// find all <script compiled></script> content

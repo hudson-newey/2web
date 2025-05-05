@@ -41,7 +41,7 @@ func compileAssignmentVar(content string, varNode *models.ReactiveVariable) stri
 
 	for _, event := range varNode.Events {
 		eventBindingAttribute := ""
-		if useDoubleQuotes(event.Reducer) {
+		if UseDoubleQuotes(event.Reducer) {
 			eventBindingAttribute = fmt.Sprintf("on%s=\"%s(%s)\"", event.EventName, callbackName, event.Reducer)
 		} else {
 			eventBindingAttribute = fmt.Sprintf("on%s='%s(%s)'", event.EventName, callbackName, event.Reducer)

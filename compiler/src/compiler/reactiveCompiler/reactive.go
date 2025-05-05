@@ -49,7 +49,7 @@ func compileReactiveVar(
 
 		// e.g. <button onclick="count = count + 1; updateCount(count)">Increment</button>
 		eventBindingAttribute := ""
-		if useDoubleQuotes(event.Reducer) {
+		if UseDoubleQuotes(event.Reducer) {
 			eventBindingAttribute =
 				fmt.Sprintf(
 					"on%s=\"%s = %s; %s(%s)\"",
