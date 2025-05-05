@@ -27,8 +27,8 @@ with real browsers to test the speed of each framework.
 
 | Framework | Build Size (KB) | Build Time (MS) \* |
 | --------- | --------------- | ------------------ |
-| 2Web      | 0.682           | 7              |
-| Svelte    | 20.122          | 1480              |
+| 2Web      | 0.667           | 7                  |
+| Svelte    | 20.122          | 1480               |
 | Preact    | 25.064          | 1577               |
 | Vue       | 58.705          | 2988               |
 | React     | 186.673         | 1733               |
