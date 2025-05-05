@@ -1,5 +1,6 @@
 type FrameworkName = string;
 type Kilobyte = number;
+type Milliseconds = number;
 
 const reportsDirectory = "reports/";
 
@@ -7,7 +8,16 @@ function implementationPath<T extends FrameworkName>(name: T) {
   return `implementations/${name}` as const;
 }
 
-async function buildImplementation(name: string) {
+/**
+ * @returns
+ * The amount of time (in milliseconds) that the build took.
+ * Limitation: This includes the time that it takes Deno to call bash, run the
+ * script, etc...
+ * Build times are therefore not very scientific, but a good smoke test to
+ * see if there are any build time outliers.
+ */
+async function buildImplementation(name: string): Promise<Milliseconds> {
+  const t0 = performance.now();
   const command = new Deno.Command("bash", {
     args: [`${implementationPath(name)}/build.sh`],
   });
@@ -17,8 +27,13 @@ async function buildImplementation(name: string) {
   //   console.log("Error:", code);
   //   throw new Error(String.fromCharCode(...stderr));
   // }
+  const t1 = performance.now();
 
   console.debug(String.fromCharCode(...stdout));
+
+  // see the jsdoc above This is no where near a good benchmark, but it exists
+  // to catch outliers in build time.
+  return t1 - t0;
 }
 
 // warning: this test is "bad" because it doesn't track the bundle size but
@@ -62,10 +77,18 @@ async function runBenchmark() {
   ] as const satisfies FrameworkName[];
 
   const results = Promise.all(
-    testedFrameworks.map((name) => buildImplementation(name)),
+    testedFrameworks.map((name) => ({
+      name: name,
+      buildTime: buildImplementation(name),
+    })),
   );
 
-  await results;
+  const buildOutputs = await results;
+
+  const buildTimes: Partial<Record<keyof typeof testedFrameworks, Milliseconds>> = {};
+  for (const build of buildOutputs) {
+    buildTimes[build.name] = build.buildTime;
+  }
 
   // we delete the original reports/ directory and create a new one because
   // I didn't want to code up partial report generation
@@ -83,7 +106,7 @@ async function runBenchmark() {
   // I write to a csv so that I can do some cool graphs in the future and so
   // that loading into excel is easy
   const assetSizeFileName = reportsDirectory + "assetSize.csv";
-  await Deno.writeTextFile(assetSizeFileName, "Framework,size (KB)\n", {
+  await Deno.writeTextFile(assetSizeFileName, "Framework,size (KB),Build Time (ms)\n", {
     append: true,
   });
 
@@ -91,10 +114,11 @@ async function runBenchmark() {
   for (const implementation of testedFrameworks) {
     const distPath = implementationPath(implementation) + "/dist/";
     const distSize = await getDirectorySize(distPath);
+    const buildTime = await buildTimes[implementation];
 
     await Deno.writeTextFile(
       assetSizeFileName,
-      `${implementation},${distSize}\n`,
+      `${implementation},${distSize},${buildTime}\n`,
       { append: true },
     );
   }
