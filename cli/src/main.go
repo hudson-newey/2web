@@ -52,6 +52,8 @@ func main() {
 			templates.ServiceTemplate(templateName)
 		} else if template == "model" || template == "m" {
 			templates.ModelTemplate(templateName)
+		} else if template == "aspect" || template == "a" {
+			templates.AspectTemplate(templateName)
 		} else {
 			errorMsg := fmt.Errorf("unrecognized generate template: '%s'", template)
 			panic(errorMsg)

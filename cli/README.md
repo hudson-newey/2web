@@ -14,4 +14,5 @@ A basic utility tool that can be used to create 2web projects
 | --------- | ----- | --------------------------------- |
 | component | c     | Add a component to a 2web project |
 | service   | s     | Add a service to a 2web project   |
+| Aspect    | a     | Add an aspect to a 2web project   |
 | model     | m     | Add a model to a 2web project     |
