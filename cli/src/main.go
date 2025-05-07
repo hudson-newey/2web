@@ -54,6 +54,8 @@ func main() {
 			templates.ModelTemplate(templateName)
 		} else if template == "aspect" || template == "a" {
 			templates.AspectTemplate(templateName)
+		} else if template == "interceptor" || template == "i" {
+			templates.InterceptorTemplate(templateName)
 		} else {
 			errorMsg := fmt.Errorf("unrecognized generate template: '%s'", template)
 			panic(errorMsg)
