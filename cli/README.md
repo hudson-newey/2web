@@ -17,3 +17,4 @@ A basic utility tool that can be used to create 2web projects
 | model       | m     | Add a model to a 2web project        |
 | aspect      | a     | Add an aspect to a 2web project      |
 | interceptor | i     | Add an interceptor to a 2web project |
+| page        | p     | Add a page to a 2web project         |
