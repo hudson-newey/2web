@@ -1,15 +1,6 @@
 version: "3"
 
 tasks:
-  dev:
-    cmds:
-      - air
-
-  test:
-    cmds:
-      - go test ./src/...
-      - pnpm test
-
   build:
     cmds:
       - go build -o ./build/2web ./src/main.go

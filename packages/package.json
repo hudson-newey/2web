@@ -1,11 +1,16 @@
 {
-  "name": "2web-kit",
-  "version": "0.1.0",
+  "name": "@two-web/kit",
+  "version": "0.0.1",
   "description": "A collection of packages to enhance your 2web application",
-  "main": "index.js",
+  "author": "hudson-newey",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "hudson-newey",
+  "exports": {
+    "dom-ranges": "./dom-ranges/main.js",
+    "pre-fetcher": "./pre-fetcher/main.js",
+    "spa-router": "./spa-router/main.js",
+    "ssr": "./ssr/main.js"
+  },
   "packageManager": "pnpm@10.8.0"
 }

@@ -5,7 +5,6 @@
     "newLine": "lf",
     "module": "ESNext",
     "types": ["vite/client", "./types/twoWeb"],
-    // Bundler mode
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
