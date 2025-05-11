@@ -9,21 +9,19 @@
 
   <body>
     <script compiled>
-      $ message = "Hello World!";
+      $ value = "Hello World!";
     </script>
 
-    <h1 *innerText="$message">This text should be overwritten at compile time</h1>
+    <input *value="$value" />
 
     <p>
-      You should see a "Hello World!" header on this page because the message
-      variable is being assigned to the headers innerText property.
+      You should see a bit of javascript on this page to set the initial "value"
+      property of the input box to the initial value of the reactive variable.
     </p>
 
     <p>
-      The compiler should also be able to statically evaluate that the variable
-      assigned to innerText is not changed during the runtime of the
-      application, and that it can therefore evaluate the innerText at compile
-      time. Meaning that this page should have no JavaScript.
+      However, because the reactive variables value is never changed at runtime
+      there should be no even listeners, functions, or anything else.
     </p>
   </body>
 </html>
