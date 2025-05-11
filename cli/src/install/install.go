@@ -2,6 +2,8 @@ package install
 
 import (
 	"os"
+
+	"github.com/hudson-newey/2web-cli/src/cli"
 )
 
 type packageManager = int
@@ -39,7 +41,8 @@ func determinePackageManager() packageManager {
 		return bun
 	}
 
-	panic("could not determine package manager")
+	cli.PrintError(2, "could not determine package manager")
+	panic("")
 }
 
 func fileExists(filename string) bool {

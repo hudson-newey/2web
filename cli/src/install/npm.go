@@ -3,6 +3,8 @@ package install
 import (
 	"fmt"
 	"os/exec"
+
+	"github.com/hudson-newey/2web-cli/src/cli"
 )
 
 func installNpmPackage(name string) {
@@ -10,8 +12,8 @@ func installNpmPackage(name string) {
 	stdout, err := cmd.Output()
 
 	if err != nil {
-		errorMsg := fmt.Errorf("failed to install package '%s': %s", name, err)
-		panic(errorMsg)
+		errorMsg := fmt.Sprintf("failed to install package '%s': %s", name, err)
+		cli.PrintError(2, errorMsg)
 	}
 
 	fmt.Println(string(stdout))

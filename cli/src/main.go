@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/deploy"
 	"github.com/hudson-newey/2web-cli/src/install"
 	"github.com/hudson-newey/2web-cli/src/templates"
@@ -14,16 +15,16 @@ func main() {
 	argsLen := len(os.Args)
 
 	if argsLen < 2 {
-		errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s <command> [arguments]", programName)
-		panic(errorMsg)
+		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s <command> [arguments]", programName)
+		cli.PrintError(1, errorMsg)
 	}
 
 	command := os.Args[1]
 
 	if command == "new" || command == "n" {
 		if argsLen < 3 {
-			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <project_name>", programName, command)
-			panic(errorMsg)
+			errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <project_name>", programName, command)
+			cli.PrintError(1, errorMsg)
 		}
 
 		projectName := os.Args[2]
@@ -34,14 +35,14 @@ func main() {
 
 	if command == "generate" || command == "g" {
 		if argsLen < 3 {
-			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <template> <template_name>", programName, command)
-			panic(errorMsg)
+			errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <template> <template_name>", programName, command)
+			cli.PrintError(1, errorMsg)
 		}
 
 		template := os.Args[2]
 		if argsLen < 4 {
-			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s %s <template_name>", programName, command, template)
-			panic(errorMsg)
+			errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s %s <template_name>", programName, command, template)
+			cli.PrintError(1, errorMsg)
 		}
 
 		templateName := os.Args[3]
@@ -59,8 +60,8 @@ func main() {
 		} else if template == "page" || template == "p" {
 			templates.PageTemplate(templateName)
 		} else {
-			errorMsg := fmt.Errorf("unrecognized generate template: '%s'", template)
-			panic(errorMsg)
+			errorMsg := fmt.Sprintf("unrecognized generate template: '%s'", template)
+			cli.PrintError(1, errorMsg)
 		}
 
 		return
@@ -68,8 +69,8 @@ func main() {
 
 	if command == "install" || command == "i" {
 		if argsLen < 3 {
-			errorMsg := fmt.Errorf("invalid arguments:\n\texpected: %s %s <package_name>", programName, command)
-			panic(errorMsg)
+			errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <package_name>", programName, command)
+			cli.PrintError(1, errorMsg)
 		}
 
 		packageName := os.Args[2]
@@ -83,6 +84,6 @@ func main() {
 		return
 	}
 
-	errorMsg := fmt.Errorf("unrecognized command: '%s'", command)
-	panic(errorMsg)
+	errorMsg := fmt.Sprintf("unrecognized command: '%s'", command)
+	cli.PrintError(1, errorMsg)
 }
