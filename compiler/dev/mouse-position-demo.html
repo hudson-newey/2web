@@ -10,11 +10,19 @@
   <body>
     <script compiled>
       $ mouseX = 0;
+      $ mouseY = 0;
     </script>
 
     <p>x: {{ $mouseX }}</p>
+    <p>y: {{ $mouseY }}</p>
 
-    <div class="canvas" @mousemove="$mouseX = event.offsetX"></div>
+    <!--
+      TODO: The compiler needs to get better to get rid of this double event
+      listener hack.
+    -->
+    <div @mousemove="$mouseY = event.offsetY">
+      <div class="canvas" @mousemove="$mouseX = event.offsetX"></div>
+    </div>
 
     <style>
       .canvas {

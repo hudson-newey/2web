@@ -20,7 +20,7 @@ const indexHtmlContent = `
     <main>
       <h1>My New 2Web Website</h1>
 
-      <span *innerText="$count"></span>
+      <span>{{ $count }}</span>
 
       <button @click="$count = $count + 1">+1</button>
       <button @click="$count = $count - 1">-1</button>
