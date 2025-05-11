@@ -2,8 +2,9 @@
   "name": "@two-web/compiler",
   "version": "0.0.1",
   "description": "A compiler-based web framework",
-  "private": true,
+  "author": "hudson-newey",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "dev": "vite ./dist/",
     "format": "prettier --write ./dev/",
@@ -14,8 +15,6 @@
     "framework",
     "compiler"
   ],
-  "author": "hudson-newey",
-  "license": "MIT",
   "packageManager": "pnpm@10.6.5",
   "devDependencies": {
     "@types/jsdom": "^21.1.7",

@@ -2,6 +2,7 @@ packages:
   - cli
   - compiler
   - packages
+  - "benchmarks/implementations/*"
 
 onlyBuiltDependencies:
   - esbuild
