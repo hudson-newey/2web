@@ -4,7 +4,7 @@ set -euo pipefail
 cd ./implementations/2web/
 
 mkdir -p dist/
-../../../compiler/build/2web -i counter.html -o dist/counter.html --production
+../../../compiler/build/2webc -i counter.html -o dist/counter.html --production
 
 # TODO: Implement release build implementation
 

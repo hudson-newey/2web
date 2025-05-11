@@ -1,0 +1,7 @@
+version: "3"
+
+tasks:
+  install-dev:
+    cmds:
+      - sudo cp ./compiler/build/2webc /usr/local/bin/2webc
+      - sudo cp ./cli/build/2web /usr/local/bin/2web
