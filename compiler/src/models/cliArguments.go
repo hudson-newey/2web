@@ -5,4 +5,5 @@ type CliArguments struct {
 	OutputPath *string
 	IsDev      *bool
 	IsProd     *bool
+	ToStdout   *bool
 }

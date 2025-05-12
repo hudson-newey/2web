@@ -87,6 +87,14 @@ func compileAndWriteFile(
 		finalResult = optimizer.OptimizeContent(finalResult)
 	}
 
-	os.MkdirAll(filepath.Dir(outputPath), os.ModePerm)
-	os.WriteFile(outputPath, []byte(finalResult), 0644)
+	writeOutput(finalResult, outputPath, args)
+}
+
+func writeOutput(content string, outputPath string, args *models.CliArguments) {
+	if *args.ToStdout {
+		fmt.Println(content)
+	} else {
+		os.MkdirAll(filepath.Dir(outputPath), os.ModePerm)
+		os.WriteFile(outputPath, []byte(content), 0644)
+	}
 }
