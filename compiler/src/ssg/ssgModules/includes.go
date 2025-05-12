@@ -5,15 +5,12 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/models"
-	"log"
 	"os"
 	"strings"
 )
 
 func IncludeSsgContent(value string, filePath string) string {
-	if !*cli.GetArgs().IsSilent {
-		log.Println("\t\t-", filePath)
-	}
+	cli.PrintBuildLog("\t\t- " + filePath)
 
 	hostDirectoryEnd := strings.LastIndex(filePath, "/")
 	hostDirectory := filePath[:hostDirectoryEnd]

@@ -10,7 +10,6 @@ import (
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/optimizer"
 	"hudson-newey/2web/src/ssg"
-	"log"
 	"os"
 	"path/filepath"
 )
@@ -22,9 +21,7 @@ func Build() {
 		cli.PrintWarning("'--dev-tools' is being used with '--production'")
 	}
 
-	if !*args.IsSilent {
-		log.Println(*args.InputPath)
-	}
+	cli.PrintBuildLog(*args.InputPath)
 
 	inputPath, err := os.Stat(*args.InputPath)
 	if err != nil {
@@ -62,9 +59,7 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 		})
 	}
 
-	if !*args.IsSilent {
-		log.Println("\t-", inputPath)
-	}
+	cli.PrintBuildLog("\t- " + inputPath)
 
 	controlFlowResult := controlFlow.ProcessControlFlow(inputPath, string(data))
 
