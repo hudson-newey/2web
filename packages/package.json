@@ -3,15 +3,31 @@
   "version": "0.0.1",
   "description": "A collection of packages to enhance your 2web application",
   "author": "hudson-newey",
+  "license": "MIT",
+  "types": "@types/",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vite build ."
   },
+  "files": [
+    "dist/",
+    "@types/"
+  ],
   "exports": {
-    "dom-ranges": "./dom-ranges/main.js",
-    "pre-fetcher": "./pre-fetcher/main.js",
-    "spa-router": "./spa-router/main.js",
-    "ssr": "./ssr/main.js",
-    "signals": "./signals/dist/index.js"
+    "database": "./dist/database/main.js",
+    "dom-ranges": "./dist/dom-ranges/main.js",
+    "edge": "./dist/edge/main.js",
+    "pre-fetcher": "./dist/pre-fetcher/main.js",
+    "spa-router": "./dist/spa-router/main.js",
+    "ssr": "./dist/ssr/main.js",
+    "vite-plugin": "./dist/vite-plugin/main.js",
+    "signals": "./dist/signals/index.js"
+  },
+  "devDependencies": {
+    "@total-typescript/tsconfig": "^1.0.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.4",
+    "vite-plugin-dts": "^4.5.3"
   },
   "packageManager": "pnpm@10.8.0"
 }

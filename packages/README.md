@@ -2,18 +2,26 @@
 
 A collection of packages to enhance your 2web application
 
-| Package     | Description |
-| ----------- | ----------- |
-| ssr         |             |
-| spa-router  |             |
-| pre-fetcher |             |
+| Package     | Description | State |
+| ----------- | ----------- | ----- |
+| database    |             | ❌    |
+| dom-ranges  |             | ❌    |
+| edge        |             | ❌    |
+| ssr         |             | ❌    |
+| pre-fetcher |             | ❌    |
+| signals     |             | 🔧    |
+| spa-router  |             | ❌    |
+| ssr         |             | ❌    |
+| vite-plugin |             | ❌    |
+
+❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
 
 ## Usage
 
 You can install these packages into your project using your package manager.
 
 ```sh
-$ npm install @hudson-newey/2web-kit
+$ npm install @two-web/kit
 >
 ```
 
@@ -23,7 +31,7 @@ esm module.
 E.g. For JavaScript imports
 
 ```js
-import { Router } from "@hudson-newey/2web-kit/spa-router";
+import { Router } from "@two-web/kit/spa-router";
 ```
 
 Or for 2web ssg imports

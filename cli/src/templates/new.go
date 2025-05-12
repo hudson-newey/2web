@@ -39,8 +39,12 @@ const packageJsonContent = `{
   },
   "author": "your-name",
   "license": "your-license",
+  "dependencies": {
+	"@two-web/kit": "^0.0.1"
+  },
   "devDependencies": {
-    "vite": "^6.2.6"
+    "vite": "^6.2.6",
+	"@two-web/compiler": "^0.0.1"
   }
 }
 `
