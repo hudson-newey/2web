@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import dts from 'vite-plugin-dts'
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   plugins: [dts()],
@@ -7,6 +7,7 @@ export default defineConfig({
     outDir: "./dist",
     copyPublicDir: false,
     lib: {
+      // prettier-ignore
       entry: {
         // Note: there is no barrel file to import all two-web/kit packages
         "database": "./database/index.ts",

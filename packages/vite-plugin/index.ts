@@ -1,7 +1,8 @@
 import { spawn } from "node:child_process";
 import { resolve } from "node:path";
+import { type Plugin } from "vite";
 
-export default function twoWeb() {
+export default function twoWeb(): Plugin {
   return {
     name: "vite-plugin-2web-compiler",
     enforce: "pre",

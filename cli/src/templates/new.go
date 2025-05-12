@@ -52,10 +52,11 @@ const packageJsonContent = `{
 
 const viteConfigContent = `
 import { defineConfig } from "vite";
+import twoWeb from "@two-web/kit/vite-plugin";
 
 export default defineConfig({
   appType: "mpa",
-  base: "",
+  plugins: [twoWeb()],
 });
 `
 
