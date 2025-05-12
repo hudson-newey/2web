@@ -143,6 +143,9 @@ importers:
       '@total-typescript/tsconfig':
         specifier: ^1.0.4
         version: 1.0.4
+      '@types/node':
+        specifier: ^22.14.1
+        version: 22.15.17
       typescript:
         specifier: ^5.8.3
         version: 5.8.3

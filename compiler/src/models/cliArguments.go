@@ -6,5 +6,6 @@ type CliArguments struct {
 	IsDev      *bool
 	IsProd     *bool
 	IsSilent   *bool
+	FromStdin  *bool
 	ToStdout   *bool
 }

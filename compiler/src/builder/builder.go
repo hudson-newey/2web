@@ -10,6 +10,7 @@ import (
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/optimizer"
 	"hudson-newey/2web/src/ssg"
+	"io"
 	"os"
 	"path/filepath"
 )
@@ -50,7 +51,7 @@ func Build() {
 func compileAndWriteFile(inputPath string, outputPath string) {
 	args := cli.GetArgs()
 
-	data, err := os.ReadFile(inputPath)
+	data, err := getInputContent(inputPath)
 	if err != nil {
 		data = []byte{}
 		documentErrors.AddError(models.Error{
@@ -96,4 +97,16 @@ func writeOutput(content string, outputPath string) {
 		os.MkdirAll(filepath.Dir(outputPath), os.ModePerm)
 		os.WriteFile(outputPath, []byte(content), 0644)
 	}
+}
+
+func getInputContent(inputPath string) ([]byte, error) {
+	if !*cli.GetArgs().FromStdin {
+		return os.ReadFile(inputPath)
+	}
+
+	if !*cli.GetArgs().IsSilent {
+		fmt.Println("Prompting STDIN for file:", inputPath)
+	}
+
+	return io.ReadAll(os.Stdin)
 }

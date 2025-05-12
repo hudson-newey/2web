@@ -13,6 +13,7 @@ func ParseArguments() models.CliArguments {
 	isDev := flag.Bool("dev-tools", false, "Include dev tools in the build")
 	isProd := flag.Bool("production", false, "Optimize code at the cost of readability")
 	isSilent := flag.Bool("silent", false, "Do not output log information")
+	fromStdin := flag.Bool("stdin", false, "Read from stdin")
 	toStdout := flag.Bool("stdout", false, "Output the build file to stdout instead of to a file location")
 
 	flag.Parse()
@@ -23,6 +24,7 @@ func ParseArguments() models.CliArguments {
 		IsDev:      isDev,
 		IsProd:     isProd,
 		IsSilent:   isSilent,
+		FromStdin:  fromStdin,
 		ToStdout:   toStdout,
 	}
 

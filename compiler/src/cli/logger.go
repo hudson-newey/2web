@@ -6,6 +6,10 @@ import (
 )
 
 func PrintWarning(message string) {
+	if *GetArgs().IsSilent {
+		return
+	}
+
 	// add a double new line (because this is also inside a println) so that the
 	// warning message is emphasized in the compiler logs
 	fmt.Println()
