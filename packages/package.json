@@ -10,7 +10,8 @@
     "dom-ranges": "./dom-ranges/main.js",
     "pre-fetcher": "./pre-fetcher/main.js",
     "spa-router": "./spa-router/main.js",
-    "ssr": "./ssr/main.js"
+    "ssr": "./ssr/main.js",
+    "signals": "./signals/dist/index.js"
   },
   "packageManager": "pnpm@10.8.0"
 }

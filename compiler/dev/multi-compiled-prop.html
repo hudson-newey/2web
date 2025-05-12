@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi Compiled Property</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <script compiled>
+      $ value = "Hello World!";
+    </script>
+
+    <input *value="$value" />
+    <input *value="$value" />
+    <input *placeholder="$value" />
+    <p>Initial Value: {{ $value }}</p>
+
+    <p>
+      You should see a bit of javascript on this page to set the initial "value"
+      property of the input box to the initial value of the reactive variable.
+    </p>
+
+    <p>
+      However, because the reactive variables value is never changed at runtime
+      there should be no even listeners, functions, or anything else.
+    </p>
+  </body>
+</html>
