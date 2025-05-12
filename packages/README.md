@@ -40,6 +40,12 @@ Or for 2web ssg imports
 {% include "@two-web/kit/spa-router/spa-router.html" %}
 ```
 
+Or if you want to use Deno with [JSR](https://jsr.io/)
+
+```js
+import { Router } from "https://jsr.io/@two-web/kit/spa-router";
+```
+
 ## More Information
 
 [GitHub](https://github.com/hudson-newey/2web)
