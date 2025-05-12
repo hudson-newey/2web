@@ -20,7 +20,9 @@ func Build(args models.CliArguments) {
 		cli.PrintWarning("'--dev-tools' is being used with '--production'")
 	}
 
-	log.Println(*args.InputPath)
+	if !*args.IsSilent {
+		log.Println(*args.InputPath)
+	}
 
 	inputPath, err := os.Stat(*args.InputPath)
 	if err != nil {
@@ -60,14 +62,16 @@ func compileAndWriteFile(
 		})
 	}
 
-	log.Println("\t-", inputPath)
+	if !*args.IsSilent {
+		log.Println("\t-", inputPath)
+	}
 
 	controlFlowResult := controlFlow.ProcessControlFlow(inputPath, string(data))
 
 	ssgSource := controlFlowResult
 	stable := false
 	for {
-		ssgSource, stable = ssg.ProcessStaticSite(inputPath, ssgSource)
+		ssgSource, stable = ssg.ProcessStaticSite(inputPath, ssgSource, args)
 
 		if stable {
 			break

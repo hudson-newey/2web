@@ -9,8 +9,10 @@ import (
 	"strings"
 )
 
-func IncludeSsgContent(value string, filePath string) string {
-	log.Println("\t\t-", filePath)
+func IncludeSsgContent(value string, filePath string, args *models.CliArguments) string {
+	if !*args.IsSilent {
+		log.Println("\t\t-", filePath)
+	}
 
 	hostDirectoryEnd := strings.LastIndex(filePath, "/")
 	hostDirectory := filePath[:hostDirectoryEnd]

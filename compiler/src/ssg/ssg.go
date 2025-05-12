@@ -2,6 +2,7 @@ package ssg
 
 import (
 	"hudson-newey/2web/src/lexer"
+	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/ssg/ssgModules"
 	"strings"
 )
@@ -9,7 +10,7 @@ import (
 type isStable = bool
 
 // TODO: remove the token[0] hacks below
-func ProcessStaticSite(filePath string, content string) (string, isStable) {
+func ProcessStaticSite(filePath string, content string, args *models.CliArguments) (string, isStable) {
 	ssgContent := lexer.FindNodes[lexer.SsgNode](content, SsgStartToken, SsgEndToken)
 	ssgResult := content
 
@@ -21,7 +22,7 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 
 			switch ssgKeyword {
 			case includeToken[0]:
-				selectorContent = ssgModules.IncludeSsgContent(node.Tokens[1], filePath)
+				selectorContent = ssgModules.IncludeSsgContent(node.Tokens[1], filePath, args)
 			}
 		}
 
