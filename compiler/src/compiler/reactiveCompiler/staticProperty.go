@@ -17,7 +17,12 @@ import (
 // E.g. value="$count" will ONLY be evaluated at compile time and results in an
 // SSG site without any runtime overhead.
 func compileStaticPropVar(content string, varNode *models.ReactiveVariable) string {
-	for _, propNode := range varNode.Props {
+	propNodes := []*models.ReactiveProperty{}
+	propNodes = append(propNodes, varNode.Props...)
+
+	uniquePropSelectors := getUniqueSelectors(propNodes)
+
+	for _, propNode := range uniquePropSelectors {
 		// Some of the properties can be evaluated at compile time to prevent
 		// creating runtime JavaScript.
 		// This is a part of my goal to aggressively optimize for SSG.
@@ -31,17 +36,34 @@ func compileStaticPropVar(content string, varNode *models.ReactiveVariable) stri
 
 		elementSelector := javascript.CreateJsElementName()
 
-		// preserve the original node selector so that other reactivity classes can
+		// Preserve the original node selector so that other reactivity classes can
 		// target this element.
 		content = strings.ReplaceAll(content, propNode.Node.Selector, propNode.Node.Selector+" "+elementSelector)
 
-		// we use the square brackets here because some properties have dashes which
-		// cannot be acceded with a period
-		htmlSource := fmt.Sprintf(`
-      <script>
-          document.querySelector("[%s]")["%s"] = %s;
-      </script>
-    `, elementSelector, propNode.PropName, propNode.Variable.InitialValue)
+		// If there are multiple instances of the same reactive property
+		// selector, we can combine the assignment into one querySelectorAll
+		// this means that we don't have to do multiple properties to update
+		// elements that have the same selector.
+		htmlSource := ""
+		selectorCount := strings.Count(content, propNode.Node.Selector)
+		if selectorCount > 1 {
+			// We use forEach here instead of map() so that the JavaScript
+			// JIT doesn't have to keep track of a return value.
+			//
+			// We use the square brackets here because some properties have dashes which
+			// cannot be acceded with a period.
+			htmlSource = fmt.Sprintf(`
+				<script>
+					document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);
+				</script>
+			`, elementSelector, propNode.PropName, propNode.Variable.InitialValue)
+		} else {
+			htmlSource = fmt.Sprintf(`
+				<script>
+					document.querySelector("[%s]")["%s"] = %s;
+				</script>
+			`, elementSelector, propNode.PropName, propNode.Variable.InitialValue)
+		}
 
 		injectableTemplate, err := document.BuildTemplate(htmlSource, nil)
 		if err != nil {
