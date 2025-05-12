@@ -22,3 +22,19 @@ $ count = 0;
 <button @click="$count = $count + 1">Increment</button>
 <button @click="$count = $count - 1">Decrement</button>
 ```
+
+## Quick Start
+
+Install the 2web cli.
+
+```sh
+$ npm install -g @two-web/cli
+>
+```
+
+Generate a new 2web project.
+
+```sh
+$ 2web new <project_name>
+>
+```

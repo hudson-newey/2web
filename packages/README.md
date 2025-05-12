@@ -37,5 +37,9 @@ import { Router } from "@two-web/kit/spa-router";
 Or for 2web ssg imports
 
 ```html
-{% include "@hudson-newey/2web/spa-router/spa-router.html" %}
+{% include "@two-web/kit/spa-router/spa-router.html" %}
 ```
+
+## More Information
+
+[GitHub](https://github.com/hudson-newey/2web)

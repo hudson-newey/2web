@@ -1,21 +1,30 @@
 {
   "name": "@two-web/compiler",
-  "version": "0.0.1",
+  "version": "0.0.1-rc.1",
   "description": "A compiler-based web framework",
+  "keywords": [
+    "frontend",
+    "framework",
+    "compiler"
+  ],
   "author": "hudson-newey",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "dev": "vite ./dist/",
     "format": "prettier --write ./dev/",
-    "test": "vitest"
+    "test": "vitest",
+    "build": "task build"
   },
-  "keywords": [
-    "frontend",
-    "framework",
-    "compiler"
+  "bin": {
+    "2webc": "bin/2webc"
+  },
+  "files": [
+    "bin/",
+    "package.json",
+    "README.md",
+    "LICENSE"
   ],
-  "packageManager": "pnpm@10.6.5",
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.14.1",
@@ -24,5 +33,6 @@
     "prettier": "^3.5.3",
     "vite": "^6.3.4",
     "vitest": "^3.1.2"
-  }
+  },
+  "packageManager": "pnpm@10.6.5"
 }

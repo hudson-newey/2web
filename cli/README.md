@@ -2,6 +2,18 @@
 
 A basic utility tool that can be used to create 2web projects
 
+## Installation (system wide)
+
+The easiest way to get started with the 2Web cli is to install it as a global
+npm package.
+
+```sh
+$ npm install -g @two-web/cli
+>
+```
+
+Once installed, you will have access to the `2web` command.
+
 ## Commands
 
 - `2web new <project_name>` (alias: n)
@@ -18,3 +30,7 @@ A basic utility tool that can be used to create 2web projects
 | aspect      | a     | Add an aspect to a 2web project      |
 | interceptor | i     | Add an interceptor to a 2web project |
 | page        | p     | Add a page to a 2web project         |
+
+## More Information
+
+[GitHub](https://github.com/hudson-newey/2web)

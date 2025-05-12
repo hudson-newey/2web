@@ -44,7 +44,8 @@ const packageJsonContent = `{
   },
   "devDependencies": {
     "vite": "^6.2.6",
-	"@two-web/compiler": "^0.0.1"
+	"@two-web/compiler": "^0.0.1",
+	"@two-web/cli": "^0.0.1"
   }
 }
 `

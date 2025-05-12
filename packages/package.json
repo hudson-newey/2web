@@ -1,18 +1,14 @@
 {
   "name": "@two-web/kit",
-  "version": "0.0.1",
+  "version": "0.0.1-rc.1",
   "description": "A collection of packages to enhance your 2web application",
   "author": "hudson-newey",
   "license": "MIT",
-  "types": "@types/",
   "type": "module",
   "scripts": {
     "build": "vite build ."
   },
-  "files": [
-    "dist/",
-    "@types/"
-  ],
+  "files": ["dist/"],
   "exports": {
     "database": "./dist/database/main.js",
     "dom-ranges": "./dist/dom-ranges/main.js",
