@@ -5,6 +5,8 @@ import (
 	"hudson-newey/2web/src/models"
 )
 
+var parsedArgs models.CliArguments
+
 func ParseArguments() models.CliArguments {
 	inputPath := flag.String("i", "index.html", "Input file path")
 	outputPath := flag.String("o", "./dist/index.html", "Output file path")
@@ -15,7 +17,7 @@ func ParseArguments() models.CliArguments {
 
 	flag.Parse()
 
-	return models.CliArguments{
+	parsedArgs = models.CliArguments{
 		InputPath:  inputPath,
 		OutputPath: outputPath,
 		IsDev:      isDev,
@@ -23,4 +25,10 @@ func ParseArguments() models.CliArguments {
 		IsSilent:   isSilent,
 		ToStdout:   toStdout,
 	}
+
+	return GetArgs()
+}
+
+func GetArgs() models.CliArguments {
+	return parsedArgs
 }

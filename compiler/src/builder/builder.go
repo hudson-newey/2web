@@ -15,7 +15,9 @@ import (
 	"path/filepath"
 )
 
-func Build(args models.CliArguments) {
+func Build() {
+	args := cli.GetArgs()
+
 	if *args.IsDev && *args.IsProd {
 		cli.PrintWarning("'--dev-tools' is being used with '--production'")
 	}
@@ -41,18 +43,16 @@ func Build(args models.CliArguments) {
 				continue
 			}
 
-			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+file.Name(), &args)
+			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+file.Name())
 		}
 	} else {
-		compileAndWriteFile(*args.InputPath, *args.OutputPath, &args)
+		compileAndWriteFile(*args.InputPath, *args.OutputPath)
 	}
 }
 
-func compileAndWriteFile(
-	inputPath string,
-	outputPath string,
-	args *models.CliArguments,
-) {
+func compileAndWriteFile(inputPath string, outputPath string) {
+	args := cli.GetArgs()
+
 	data, err := os.ReadFile(inputPath)
 	if err != nil {
 		data = []byte{}
@@ -71,7 +71,7 @@ func compileAndWriteFile(
 	ssgSource := controlFlowResult
 	stable := false
 	for {
-		ssgSource, stable = ssg.ProcessStaticSite(inputPath, ssgSource, args)
+		ssgSource, stable = ssg.ProcessStaticSite(inputPath, ssgSource)
 
 		if stable {
 			break
@@ -91,11 +91,11 @@ func compileAndWriteFile(
 		finalResult = optimizer.OptimizeContent(finalResult)
 	}
 
-	writeOutput(finalResult, outputPath, args)
+	writeOutput(finalResult, outputPath)
 }
 
-func writeOutput(content string, outputPath string, args *models.CliArguments) {
-	if *args.ToStdout {
+func writeOutput(content string, outputPath string) {
+	if *cli.GetArgs().ToStdout {
 		fmt.Println(content)
 	} else {
 		os.MkdirAll(filepath.Dir(outputPath), os.ModePerm)

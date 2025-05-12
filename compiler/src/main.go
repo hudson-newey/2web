@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	args := cli.ParseArguments()
-	builder.Build(args)
+	cli.ParseArguments()
+	builder.Build()
 }

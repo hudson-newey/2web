@@ -2,6 +2,7 @@ package ssgModules
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"log"
@@ -9,8 +10,8 @@ import (
 	"strings"
 )
 
-func IncludeSsgContent(value string, filePath string, args *models.CliArguments) string {
-	if !*args.IsSilent {
+func IncludeSsgContent(value string, filePath string) string {
+	if !*cli.GetArgs().IsSilent {
 		log.Println("\t\t-", filePath)
 	}
 
