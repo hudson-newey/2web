@@ -14,14 +14,14 @@
   },
   "files": ["dist/"],
   "exports": {
-    "database": "./dist/database/main.js",
-    "dom-ranges": "./dist/dom-ranges/main.js",
-    "edge": "./dist/edge/main.js",
-    "pre-fetcher": "./dist/pre-fetcher/main.js",
-    "spa-router": "./dist/spa-router/main.js",
-    "ssr": "./dist/ssr/main.js",
-    "vite-plugin": "./dist/vite-plugin/main.js",
-    "signals": "./dist/signals/index.js"
+    "database": "./dist/database.js",
+    "dom-ranges": "./dist/dom-ranges.js",
+    "edge": "./dist/edge.js",
+    "pre-fetcher": "./dist/pre-fetcher.js",
+    "spa-router": "./dist/spa-router.js",
+    "ssr": "./dist/ssr.js",
+    "vite-plugin": "./dist/vite-plugin.js",
+    "signals": "./dist/signals.js"
   },
   "devDependencies": {
     "@total-typescript/tsconfig": "^1.0.4",

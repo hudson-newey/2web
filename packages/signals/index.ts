@@ -1,2 +1,2 @@
-export * from "./signal";
-export * from "./effect";
+export * from "./signal.ts";
+export * from "./effect.ts";

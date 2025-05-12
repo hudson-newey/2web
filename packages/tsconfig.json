@@ -5,9 +5,12 @@
     "dom-ranges/",
     "edge/",
     "pre-fetcher/",
-    "signals",
-    "spa-router",
-    "ssr",
-    "vite-plugin"
-  ]
+    "signals/",
+    "spa-router/",
+    "ssr/",
+    "vite-plugin/"
+  ],
+  "compilerOptions": {
+    "allowImportingTsExtensions": true
+  }
 }
