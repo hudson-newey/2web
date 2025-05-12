@@ -4,6 +4,10 @@
   "description": "A collection of packages to enhance your 2web application",
   "author": "hudson-newey",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hudson-newey/2web.git"
+  },
   "type": "module",
   "scripts": {
     "build": "vite build ."

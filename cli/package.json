@@ -4,6 +4,10 @@
   "description": "CLI for building 2web apps",
   "author": "hudson-newey",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hudson-newey/2web.git"
+  },
   "scripts": {
     "build": "task build"
   },

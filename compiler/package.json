@@ -10,6 +10,10 @@
   "author": "hudson-newey",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hudson-newey/2web.git"
+  },
   "scripts": {
     "dev": "vite ./dist/",
     "format": "prettier --write ./dev/",
