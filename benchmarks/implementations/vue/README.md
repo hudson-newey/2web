@@ -1,4 +1,4 @@
-# vue-vapor
+# vue
 
 A basic example of a Vue app used for benchmarking.
 
