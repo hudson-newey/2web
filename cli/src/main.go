@@ -45,6 +45,11 @@ func main() {
 		return
 	}
 
+	if command == "build" {
+		commands.Build()
+		return
+	}
+
 	errorMsg := fmt.Sprintf("unrecognized command: '%s'", command)
 	cli.PrintError(1, errorMsg)
 }
