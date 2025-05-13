@@ -5,14 +5,13 @@ import (
 	"os"
 
 	"github.com/hudson-newey/2web-cli/src/cli"
-	"github.com/hudson-newey/2web-cli/src/deploy"
-	"github.com/hudson-newey/2web-cli/src/install"
-	"github.com/hudson-newey/2web-cli/src/templates"
+	"github.com/hudson-newey/2web-cli/src/commands"
 )
 
 func main() {
-	programName := os.Args[0]
-	argsLen := len(os.Args)
+	argArray := os.Args
+	programName := argArray[0]
+	argsLen := len(argArray)
 
 	if argsLen < 2 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s <command> [arguments]", programName)
@@ -22,65 +21,27 @@ func main() {
 	command := os.Args[1]
 
 	if command == "new" || command == "n" {
-		if argsLen < 3 {
-			errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <project_name>", programName, command)
-			cli.PrintError(1, errorMsg)
-		}
-
-		projectName := os.Args[2]
-		templates.NewTemplate(projectName)
-
+		commands.New(programName, command, argArray)
 		return
 	}
 
 	if command == "generate" || command == "g" {
-		if argsLen < 3 {
-			errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <template> <template_name>", programName, command)
-			cli.PrintError(1, errorMsg)
-		}
-
-		template := os.Args[2]
-		if argsLen < 4 {
-			errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s %s <template_name>", programName, command, template)
-			cli.PrintError(1, errorMsg)
-		}
-
-		templateName := os.Args[3]
-
-		if template == "component" || template == "c" {
-			templates.ComponentTemplate(templateName)
-		} else if template == "service" || template == "s" {
-			templates.ServiceTemplate(templateName)
-		} else if template == "model" || template == "m" {
-			templates.ModelTemplate(templateName)
-		} else if template == "aspect" || template == "a" {
-			templates.AspectTemplate(templateName)
-		} else if template == "interceptor" || template == "i" {
-			templates.InterceptorTemplate(templateName)
-		} else if template == "page" || template == "p" {
-			templates.PageTemplate(templateName)
-		} else {
-			errorMsg := fmt.Sprintf("unrecognized generate template: '%s'", template)
-			cli.PrintError(1, errorMsg)
-		}
-
+		commands.Generate(programName, command, argArray)
 		return
 	}
 
 	if command == "install" || command == "i" {
-		if argsLen < 3 {
-			errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <package_name>", programName, command)
-			cli.PrintError(1, errorMsg)
-		}
-
-		packageName := os.Args[2]
-		install.InstallPackage(packageName)
-
+		commands.Install(programName, command, argArray)
 		return
 	}
 
 	if command == "deploy" {
-		deploy.DeployProject()
+		commands.Deploy()
+		return
+	}
+
+	if command == "serve" {
+		commands.Serve()
 		return
 	}
 

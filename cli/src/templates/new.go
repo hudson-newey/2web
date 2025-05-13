@@ -35,52 +35,38 @@ const packageJsonContent = `{
   "description": "Add your description",
   "type": "module",
   "scripts": {
-    "dev": "vite ./dist/"
+    "dev": "2web serve",
+    "build": "2web build"
   },
   "author": "your-name",
   "license": "your-license",
   "dependencies": {
-	"@two-web/kit": "^0.0.1"
+		"@two-web/kit": "^0.0.1"
   },
   "devDependencies": {
     "vite": "^6.2.6",
-	"@two-web/compiler": "^0.0.1",
-	"@two-web/cli": "^0.0.1"
+		"@two-web/compiler": "^0.0.1",
+		"@two-web/cli": "^0.0.1"
   }
 }
 `
 
-const viteConfigContent = `
-import { defineConfig } from "vite";
-import twoWeb from "@two-web/kit/vite-plugin";
-
-export default defineConfig({
-  appType: "mpa",
-  plugins: [twoWeb()],
-});
-`
-
 const readmeContent = `# 2Web Example Project
 
-## Setting up your development environment
-
-You can build your 2web project by simply running the 2web compiler over the
-src/ directory.
-
-An example can be seen below.
+## Starting your project
 
 ` + "```sh" + `
-$ 2web -i src/ -o dist/
+$ 2web serve
 >
 ` + "```" + `
 
 Since this environment uses Vite for the development server, reload speeds
 should be extremely fast and have support for  hot module replacement (HMR).
 
-You can start the vite dev server with the following command.
+## Building your project
 
 ` + "```sh" + `
-$ npm run dev
+$ 2web build
 >
 ` + "```" + `
 `
@@ -104,11 +90,6 @@ func NewTemplate(path string) {
 				{
 					Path:        path + "/package.json",
 					Content:     packageJsonContent,
-					IsDirectory: false,
-				},
-				{
-					Path:        path + "/vite.config.js",
-					Content:     viteConfigContent,
 					IsDirectory: false,
 				},
 				{

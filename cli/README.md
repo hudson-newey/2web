@@ -1,6 +1,10 @@
 # 2Web CLI
 
-A basic utility tool that can be used to create 2web projects
+A basic utility tool that can be used to create 2web projects.
+
+This cli tool takes inspiration from the [Ember](https://cli.emberjs.com) and
+[Angular](https://angular.dev/tools/cli) cli tools that emphasize configuration
+over composition.
 
 ## Installation (system wide)
 
@@ -16,6 +20,7 @@ Once installed, you will have access to the `2web` command.
 
 ## Commands
 
+- `2web serve`
 - `2web new <project_name>` (alias: n)
 - `2web generate <template> <template_name>` (alias: g)
 - `2web install <package_name>` (alias: i)

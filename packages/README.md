@@ -12,7 +12,7 @@ A collection of packages to enhance your 2web application
 | signals     |             | 🔧    |
 | spa-router  |             | ❌    |
 | ssr         |             | ❌    |
-| vite-plugin |             | ❌    |
+| vite-plugin |             | 🔧    |
 
 ❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
 

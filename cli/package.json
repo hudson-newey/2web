@@ -16,9 +16,13 @@
   },
   "files": [
     "bin/",
+    "sdk/",
     "package.json",
     "README.md",
     "LICENSE"
   ],
+  "exports": {
+    "sdk/*": "./sdk/*"
+  },
   "packageManager": "pnpm@10.8.0"
 }
