@@ -21,6 +21,7 @@ Once installed, you will have access to the `2web` command.
 ## Commands
 
 - `2web serve`
+- `2web build`
 - `2web new <project_name>` (alias: n)
 - `2web generate <template> <template_name>` (alias: g)
 - `2web install <package_name>` (alias: i)
