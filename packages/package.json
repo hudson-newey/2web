@@ -10,8 +10,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "vite build .",
-    "publish": "deno publish && npm publish --access public"
+    "build": "vite build ."
   },
   "files": [
     "dist/"
