@@ -1,4 +1,4 @@
-package compiler
+package templating
 
 // TODO: the implementation of this function is horrible
 func removeCompilerScripts(content string) string {

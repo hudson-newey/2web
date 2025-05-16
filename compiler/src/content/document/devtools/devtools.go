@@ -1,8 +1,8 @@
 package devtools
 
 import (
-	"hudson-newey/2web/src/document"
-	"hudson-newey/2web/src/document/documentErrors"
+	"hudson-newey/2web/src/content/document"
+	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
 )
 

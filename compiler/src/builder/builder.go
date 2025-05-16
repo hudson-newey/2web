@@ -3,13 +3,13 @@ package builder
 import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
-	"hudson-newey/2web/src/compiler"
-	"hudson-newey/2web/src/compiler/controlFlow"
-	"hudson-newey/2web/src/document/devtools"
-	"hudson-newey/2web/src/document/documentErrors"
+	"hudson-newey/2web/src/compiler/ssg"
+	"hudson-newey/2web/src/compiler/templating"
+	"hudson-newey/2web/src/compiler/templating/controlFlow"
+	"hudson-newey/2web/src/content/document/devtools"
+	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/optimizer"
-	"hudson-newey/2web/src/ssg"
 	"io"
 	"os"
 	"path/filepath"
@@ -74,7 +74,7 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 		}
 	}
 
-	compilerResult := compiler.Compile(inputPath, ssgSource)
+	compilerResult := templating.Compile(inputPath, ssgSource)
 
 	injectedErrorResult := documentErrors.InjectErrors(compilerResult)
 

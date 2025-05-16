@@ -1,11 +1,11 @@
-package compiler
+package templating
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/compiler/reactiveCompiler"
-	"hudson-newey/2web/src/compiler/templating"
-	"hudson-newey/2web/src/document/documentErrors"
-	"hudson-newey/2web/src/lexer"
+	"hudson-newey/2web/src/compiler/lexer"
+	"hudson-newey/2web/src/compiler/templating/reactiveCompiler"
+	"hudson-newey/2web/src/compiler/templating/textNode"
+	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/reactiveEvent"
 	"hudson-newey/2web/src/models/reactiveProperty"
@@ -17,7 +17,7 @@ func Compile(filePath string, content string) string {
 	// element with only innerText.
 	// Therefore, we expand all of the mustache expressions before finding
 	// reactive property tokens
-	content = templating.ExpandTextNodes(content)
+	content = textNode.ExpandTextNodes(content)
 
 	reactiveVariables := []*models.ReactiveVariable{}
 

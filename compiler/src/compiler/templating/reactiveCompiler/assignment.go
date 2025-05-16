@@ -2,18 +2,14 @@ package reactiveCompiler
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/document"
-	"hudson-newey/2web/src/javascript"
+	"hudson-newey/2web/src/content/document"
+	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/models"
 	"strings"
 )
 
-func compileReactiveVar(
-	content string,
-	varNode *models.ReactiveVariable,
-) string {
+func compileAssignmentVar(content string, varNode *models.ReactiveVariable) string {
 	callbackName := javascript.CreateJsFunctionName()
-	variableName := javascript.CreateJsVariableName()
 	elementSelector := javascript.CreateJsElementName()
 
 	functionContent := ""
@@ -26,12 +22,11 @@ func compileReactiveVar(
 
 	updateJsSource := fmt.Sprintf(`
     <script>
-      let %s = %s;
       function %s(%s) {
         %s
       }
     </script>
-  `, variableName, varNode.InitialValue, callbackName, javascript.ValueVar, functionContent)
+  `, callbackName, javascript.ValueVar, functionContent)
 
 	injectableTemplate, err := document.BuildTemplate(updateJsSource, *varNode)
 	if err != nil {
@@ -45,30 +40,11 @@ func compileReactiveVar(
 	content = document.InjectContent(content, injectableTemplate, document.Body)
 
 	for _, event := range varNode.Events {
-		reactiveReducer := strings.ReplaceAll(event.Reducer, varNode.Name, variableName)
-
-		// e.g. <button onclick="count = count + 1; updateCount(count)">Increment</button>
 		eventBindingAttribute := ""
 		if UseDoubleQuotes(event.Reducer) {
-			eventBindingAttribute =
-				fmt.Sprintf(
-					"on%s=\"%s = %s; %s(%s)\"",
-					event.EventName,
-					variableName,
-					reactiveReducer,
-					callbackName,
-					variableName,
-				)
+			eventBindingAttribute = fmt.Sprintf("on%s=\"%s(%s)\"", event.EventName, callbackName, event.Reducer)
 		} else {
-			eventBindingAttribute =
-				fmt.Sprintf(
-					"on%s='%s = %s; %s(%s)'",
-					event.EventName,
-					variableName,
-					reactiveReducer,
-					callbackName,
-					variableName,
-				)
+			eventBindingAttribute = fmt.Sprintf("on%s='%s(%s)'", event.EventName, callbackName, event.Reducer)
 		}
 
 		content = strings.ReplaceAll(content, event.Node.Selector, eventBindingAttribute)

@@ -1,9 +1,9 @@
-package templating
+package textNode
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/compiler/reactiveCompiler"
-	"hudson-newey/2web/src/lexer"
+	"hudson-newey/2web/src/compiler/lexer"
+	"hudson-newey/2web/src/compiler/templating/reactiveCompiler"
 	"strings"
 )
 

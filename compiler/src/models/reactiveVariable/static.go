@@ -2,7 +2,7 @@ package reactiveVariable
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/lexer"
+	"hudson-newey/2web/src/compiler/lexer"
 	"hudson-newey/2web/src/models"
 )
 

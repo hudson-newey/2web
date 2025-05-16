@@ -2,8 +2,8 @@ package reactiveCompiler
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/document"
-	"hudson-newey/2web/src/javascript"
+	"hudson-newey/2web/src/content/document"
+	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/models"
 	"strings"
 )

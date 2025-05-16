@@ -1,7 +1,7 @@
 package models
 
 import (
-	"hudson-newey/2web/src/lexer"
+	"hudson-newey/2web/src/compiler/lexer"
 )
 
 type ReactiveClass int

@@ -1,6 +1,6 @@
 package models
 
-import "hudson-newey/2web/src/lexer"
+import "hudson-newey/2web/src/compiler/lexer"
 
 type ReactiveProperty struct {
 	PropName string

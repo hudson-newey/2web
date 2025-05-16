@@ -3,7 +3,7 @@ package ssgModules
 import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
-	"hudson-newey/2web/src/document/documentErrors"
+	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"os"
 	"strings"

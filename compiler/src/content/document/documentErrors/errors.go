@@ -1,7 +1,7 @@
 package documentErrors
 
 import (
-	"hudson-newey/2web/src/document"
+	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/models"
 )
 

@@ -1,8 +1,8 @@
 package ssg
 
 import (
-	"hudson-newey/2web/src/lexer"
-	"hudson-newey/2web/src/ssg/ssgModules"
+	"hudson-newey/2web/src/compiler/lexer"
+	"hudson-newey/2web/src/compiler/ssg/ssgModules"
 	"strings"
 )
 

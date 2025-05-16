@@ -1,6 +1,6 @@
 package ssg
 
-import "hudson-newey/2web/src/lexer"
+import "hudson-newey/2web/src/compiler/lexer"
 
 // ssg start and end tokens are exported because we use the same syntax inside
 // control flow such as if conditions e.g. {% if <condition> <result> %}

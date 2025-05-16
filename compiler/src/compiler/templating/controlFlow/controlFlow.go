@@ -1,10 +1,10 @@
 package controlFlow
 
 import (
-	"hudson-newey/2web/src/compiler/controlFlow/cfModules/cfFor"
-	"hudson-newey/2web/src/compiler/controlFlow/cfModules/cfIf"
-	"hudson-newey/2web/src/lexer"
-	"hudson-newey/2web/src/ssg"
+	"hudson-newey/2web/src/compiler/lexer"
+	"hudson-newey/2web/src/compiler/ssg"
+	"hudson-newey/2web/src/compiler/templating/controlFlow/cfModules/cfFor"
+	"hudson-newey/2web/src/compiler/templating/controlFlow/cfModules/cfIf"
 	"strings"
 )
 
