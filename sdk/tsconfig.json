@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "dom", "dom.iterable"],
+    "target": "ESNext",
+    "newLine": "lf",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

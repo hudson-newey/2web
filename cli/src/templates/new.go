@@ -1,6 +1,12 @@
 package templates
 
-import "github.com/hudson-newey/2web-cli/src/files"
+import (
+	"fmt"
+
+	"github.com/hudson-newey/2web-cli/src/files"
+)
+
+const twoWebVersion = "latest"
 
 const indexHtmlContent = `
 <!DOCTYPE html>
@@ -29,7 +35,7 @@ const indexHtmlContent = `
 </html>
 `
 
-const packageJsonContent = `{
+var packageJsonContent string = fmt.Sprintf(`{
   "name": "2web-example-project",
   "version": "0.1.0",
   "description": "Add your description",
@@ -41,13 +47,20 @@ const packageJsonContent = `{
   "author": "your-name",
   "license": "your-license",
   "dependencies": {
-		"@two-web/kit": "^0.0.1"
+		"@two-web/kit": "%s"
   },
   "devDependencies": {
-    "vite": "^6.2.6",
-		"@two-web/compiler": "^0.0.1",
-		"@two-web/cli": "^0.0.1"
+		"@two-web/compiler": "%s",
+		"@two-web/cli": "%s",
+		"@two-web/sdk": "%s",
+    "vite": "^6.3.5",
+		"typescript": "^5.8.3"
   }
+}
+`, twoWebVersion, twoWebVersion, twoWebVersion, twoWebVersion)
+
+const tsconfigContent = `{
+  "extends": "@two-web/sdk/tsconfig.json",
 }
 `
 
@@ -90,6 +103,11 @@ func NewTemplate(path string) {
 				{
 					Path:        path + "/package.json",
 					Content:     packageJsonContent,
+					IsDirectory: false,
+				},
+				{
+					Path:        path + "/tsconfig.json",
+					Content:     tsconfigContent,
 					IsDirectory: false,
 				},
 				{

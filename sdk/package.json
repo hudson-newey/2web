@@ -1,0 +1,13 @@
+{
+  "name": "@two-web/sdk",
+  "version": "0.0.1-rc.1",
+  "description": "SDK for building 2web apps",
+  "author": "hudson-newey",
+  "license": "MIT",
+  "type": "module",
+  "exports": [
+    "./vite.config.ts",
+    "./tsconfig.json"
+  ],
+  "packageManager": "pnpm@10.8.0"
+}

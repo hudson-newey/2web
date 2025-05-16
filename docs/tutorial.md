@@ -99,3 +99,7 @@ would be able to create reactivity without the `__2_var_0` runtime variable.
 
 While it would be possible to remove this runtime variable and boast about a
 zero variable runtime, it would greatly hurt performance.
+
+## "Mustache like" templates
+
+Text templating is a common
