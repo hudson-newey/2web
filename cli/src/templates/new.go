@@ -54,7 +54,8 @@ var packageJsonContent string = fmt.Sprintf(`{
 		"@two-web/cli": "%s",
 		"@two-web/sdk": "%s",
     "vite": "^6.3.5",
-		"typescript": "^5.8.3"
+		"typescript": "^5.8.3",
+		"eslint": "^9.27.0"
   }
 }
 `, twoWebVersion, twoWebVersion, twoWebVersion, twoWebVersion)

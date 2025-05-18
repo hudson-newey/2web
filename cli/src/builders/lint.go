@@ -5,6 +5,11 @@ import (
 	"github.com/hudson-newey/2web-cli/src/packages"
 )
 
-func ServeSolution() {
-	packages.ExecutePackage("vite", ".", "--config", configs.ViteConfigLocation())
+func LintSolution() {
+	packages.ExecutePackage(
+		"eslint",
+		"--config",
+		configs.EslintConfigLocation(),
+		".",
+	)
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/commands"
+	"github.com/hudson-newey/2web-cli/src/packages"
 )
 
 func main() {
@@ -22,6 +23,12 @@ func main() {
 
 	if command == "new" || command == "n" {
 		commands.New(programName, command, argArray)
+		return
+	}
+
+	// all commands below this point must be run in an npm project
+	if !packages.HasPackageJson() {
+		cli.PrintError(2, "the 2web cli must be run in a directory with a package.json")
 		return
 	}
 
@@ -47,6 +54,11 @@ func main() {
 
 	if command == "build" {
 		commands.Build()
+		return
+	}
+
+	if command == "lint" {
+		commands.Lint()
 		return
 	}
 
