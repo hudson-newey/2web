@@ -26,6 +26,16 @@ func main() {
 		return
 	}
 
+	if command == "help" || command == "--help" {
+		commands.PrintHelpDocs()
+		return
+	}
+
+	if command == "version" || command == "--version" {
+		commands.PrintVersion()
+		return
+	}
+
 	// all commands below this point must be run in an npm project
 	if !packages.HasPackageJson() {
 		cli.PrintError(2, "the 2web cli must be run in a directory with a package.json")
