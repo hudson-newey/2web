@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reactive Variables</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <p>
+      In this dev test, a reactive variable has a variable assigned to it.
+      Meaning tha we should see the change reflected in the document.
+    </p>
+
+    <p>
+      Unlike some other reactivity methods, this reactivity type does not
+      require a runtime variable to keep track of state because the state is not
+      dependent on the previous state of the same reactive variable.
+    </p>
+
+    <script compiled>
+      $ count = 0;
+    </script>
+
+    <h1 *innerText="$count"></h1>
+
+    <div>
+      <button @click="$count = $count + 1">Increment</button>
+      <button @click="$count = $count - 1">Decrement</button>
+    </div>
+
+    <div style="margin-top: 1rem">
+      <button @click="$count = ++$count">+1 (alternative)</button>
+      <button @click="$count = --$count">-1 (alternative)</button>
+    </div>
+  </body>
+</html>
