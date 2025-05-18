@@ -6,7 +6,7 @@ func errorHtmlSource() string {
 	currentTime := time.Now().Format(time.DateTime)
 
 	return `
-        <div>
+        <div class="__2_error_overlay">
             <div class="__2_error_container">
             	<div class="__2_error_header">
                     <h1 class="__2_error_title">
@@ -19,7 +19,7 @@ func errorHtmlSource() string {
                     <ul>
                         <li>{{ len . }} Errors</li>
                         <li>0 Warnings</li>
-                    <ul>
+                    </ul>
                 </div>
 
                 <div class="__2_error_list">
@@ -33,9 +33,10 @@ func errorHtmlSource() string {
             </div>
 
             <style>
-                /* make the rest of the page a dark opaque color */
-                html {
-                    background-color: rgba(0, 0, 0, 0.5);
+                .__2_error_overlay {
+                    position: fixed;
+                    inset: 0 0;
+                    background-color: rgba(100, 100, 100, 0.5);
                 }
 
                 .__2_error_container {
