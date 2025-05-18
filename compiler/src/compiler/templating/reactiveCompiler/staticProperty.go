@@ -17,10 +17,7 @@ import (
 // E.g. value="$count" will ONLY be evaluated at compile time and results in an
 // SSG site without any runtime overhead.
 func compileStaticPropVar(content string, varNode *models.ReactiveVariable) string {
-	propNodes := []*models.ReactiveProperty{}
-	propNodes = append(propNodes, varNode.Props...)
-
-	uniquePropSelectors := getUniqueSelectors(propNodes)
+	uniquePropSelectors := getUniqueSelectors(varNode.Props)
 
 	for _, propNode := range uniquePropSelectors {
 		// Some of the properties can be evaluated at compile time to prevent

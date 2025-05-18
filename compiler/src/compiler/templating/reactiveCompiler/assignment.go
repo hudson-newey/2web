@@ -10,14 +10,24 @@ import (
 
 func compileAssignmentVar(content string, varNode *models.ReactiveVariable) string {
 	callbackName := javascript.CreateJsFunctionName()
-	elementSelector := javascript.CreateJsElementName()
+
+	uniquePropSelectors := getUniqueSelectors(varNode.Props)
 
 	functionContent := ""
-	for _, propNode := range varNode.Props {
+	for _, propNode := range uniquePropSelectors {
+		elementSelector := javascript.CreateJsElementName()
 		content = strings.ReplaceAll(content, propNode.Node.Selector, propNode.Node.Selector+" "+elementSelector)
-		functionContent += fmt.Sprintf(`
-      document.querySelector("[%s]")["%s"] = %s;
-    `, elementSelector, propNode.PropName, javascript.ValueVar)
+
+		selectorCount := strings.Count(content, propNode.Node.Selector)
+		if selectorCount > 1 {
+			functionContent += fmt.Sprintf(`
+				document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);
+			`, elementSelector, propNode.PropName, javascript.ValueVar)
+		} else {
+			functionContent += fmt.Sprintf(`
+				document.querySelector("[%s]")["%s"] = %s;
+			`, elementSelector, propNode.PropName, javascript.ValueVar)
+		}
 	}
 
 	updateJsSource := fmt.Sprintf(`
