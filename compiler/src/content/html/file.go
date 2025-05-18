@@ -3,5 +3,9 @@ package html
 type htmlCode = string
 
 type HTMLFile struct {
-	Content htmlCode
+	content htmlCode
+}
+
+func (model *HTMLFile) AddContent(contentPartial htmlCode) {
+	model.content += contentPartial
 }

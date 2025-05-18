@@ -7,7 +7,22 @@ import (
 )
 
 type Page struct {
-	Html       []html.HTMLFile
-	JavaScript []javascript.JSFile
-	Css        []css.CSSFile
+	html       *html.HTMLFile
+	javaScript []*javascript.JSFile
+	css        []*css.CSSFile
+}
+
+func (model *Page) SetContent(htmlFile *html.HTMLFile) {
+	model.html = htmlFile
+}
+
+func (model *Page) AddScript(jsFile *javascript.JSFile) {
+	model.javaScript = append(model.javaScript, jsFile)
+}
+
+func (model *Page) AddStyle(cssFile *css.CSSFile) {
+	model.css = append(model.css, cssFile)
+}
+
+func (model *Page) Write(path string) {
 }

@@ -3,5 +3,9 @@ package css
 type cssCode = string
 
 type CSSFile struct {
-	Content cssCode
+	content cssCode
+}
+
+func (model *CSSFile) AddContent(contentPartial cssCode) {
+	model.content += contentPartial
 }
