@@ -3,9 +3,9 @@ package sourceMap
 type sourceMapContent = string
 
 type SourceMapFile struct {
-	content sourceMapContent
+	Content sourceMapContent
 }
 
 func (model *SourceMapFile) AddContent(partialContent sourceMapContent) {
-	model.content += partialContent
+	model.Content += partialContent
 }

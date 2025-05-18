@@ -10,7 +10,7 @@ var parsedArgs models.CliArguments
 func ParseArguments() models.CliArguments {
 	inputPath := flag.String("i", "index.html", "Input file path")
 	outputPath := flag.String("o", "./dist/index.html", "Output file path")
-	isDev := flag.Bool("dev-tools", false, "Include dev tools in the build")
+	hasDevTools := flag.Bool("dev-tools", false, "Include dev tools in the build")
 	isProd := flag.Bool("production", false, "Optimize code at the cost of readability")
 	isSilent := flag.Bool("silent", false, "Do not output log information")
 	fromStdin := flag.Bool("stdin", false, "Read from stdin")
@@ -19,13 +19,13 @@ func ParseArguments() models.CliArguments {
 	flag.Parse()
 
 	parsedArgs = models.CliArguments{
-		InputPath:  inputPath,
-		OutputPath: outputPath,
-		IsDev:      isDev,
-		IsProd:     isProd,
-		IsSilent:   isSilent,
-		FromStdin:  fromStdin,
-		ToStdout:   toStdout,
+		InputPath:   inputPath,
+		OutputPath:  outputPath,
+		HasDevTools: hasDevTools,
+		IsProd:      isProd,
+		IsSilent:    isSilent,
+		FromStdin:   fromStdin,
+		ToStdout:    toStdout,
 	}
 
 	return GetArgs()

@@ -18,7 +18,7 @@ import (
 func Build() {
 	args := cli.GetArgs()
 
-	if *args.IsDev && *args.IsProd {
+	if *args.HasDevTools && *args.IsProd {
 		cli.PrintWarning("'--dev-tools' is being used with '--production'")
 	}
 
@@ -79,7 +79,7 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 	injectedErrorResult := documentErrors.InjectErrors(compilerResult)
 
 	finalResult := injectedErrorResult
-	if *args.IsDev {
+	if *args.HasDevTools {
 		finalResult = devtools.InjectDevTools(injectedErrorResult)
 	}
 
