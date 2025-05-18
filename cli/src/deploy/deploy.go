@@ -2,7 +2,7 @@ package deploy
 
 import "github.com/hudson-newey/2web-cli/src/deploy/netlify"
 
-func DeployProject() {
+func DeploySolution() {
 	location := determineDeploymentLocation()
 
 	switch location {

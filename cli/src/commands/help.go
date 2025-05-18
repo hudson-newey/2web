@@ -6,6 +6,6 @@ import (
 	"github.com/hudson-newey/2web-cli/src/constants"
 )
 
-func PrintHelpDocs() {
+func printHelpDocs() {
 	fmt.Println(constants.HelpDocumentation)
 }

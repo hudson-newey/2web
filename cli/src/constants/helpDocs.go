@@ -1,7 +1,6 @@
 package constants
 
-const HelpDocumentation string = `
-Commands:
+const HelpDocumentation string = `Commands:
   2web new <project_name>
   2web install <package_name>
 
@@ -15,5 +14,4 @@ Commands:
     model
     aspect
     interceptor
-    page
-`
+    page`

@@ -1,4 +1,4 @@
-package install
+package installer
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"github.com/hudson-newey/2web-cli/src/cli"
 )
 
-func installNpmPackage(name string) {
-	cmd := exec.Command("npm", "install", name)
+func installYarnPackage(name string) {
+	cmd := exec.Command("yarn", "add", name)
 	stdout, err := cmd.Output()
 
 	if err != nil {

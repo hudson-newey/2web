@@ -7,7 +7,7 @@ import (
 	"github.com/hudson-newey/2web-cli/src/templates"
 )
 
-func Generate(programName string, command string, args []string) {
+func generate(programName string, command string, args []string) {
 	argsLen := len(args)
 	if argsLen < 3 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <template> <template_name>", programName, command)

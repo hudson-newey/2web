@@ -1,4 +1,4 @@
-package install
+package installer
 
 import "github.com/hudson-newey/2web-cli/src/packages"
 
