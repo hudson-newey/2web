@@ -9,11 +9,13 @@ import (
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/html"
+	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/optimizer"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func Build() {
@@ -42,7 +44,15 @@ func Build() {
 				continue
 			}
 
-			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+file.Name())
+			// If we are compiling a markdown file, we want to replace the .md suffix
+			// with .html
+			// This is because we compile markdown to html files.
+			adjustedFileName := file.Name()
+			if markdown.IsMarkdownFile(file.Name()) {
+				adjustedFileName = strings.TrimSuffix(adjustedFileName, ".md") + ".html"
+			}
+
+			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+adjustedFileName)
 		}
 	} else {
 		compileAndWriteFile(*args.InputPath, *args.OutputPath)
@@ -63,13 +73,24 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 
 	cli.PrintBuildLog("\t- " + inputPath)
 
-	// 2Web supports partial content, meaning that pages don't need and doctype,
-	// html, head, meta, or body tags.
-	// The user can just start writing the pages content, and the compiler can
-	// figure out what should be in the body vs head.
 	fullDocumentContent := ""
 	if html.IsHtmlFile(inputPath) {
+		// 2Web supports partial content, meaning that pages don't need and doctype,
+		// html, head, meta, or body tags.
+		// The user can just start writing the pages content, and the compiler can
+		// figure out what should be in the body vs head.
 		fullDocumentContent = html.ExpandPartial(string(data))
+	} else if markdown.IsMarkdownFile(inputPath) {
+		markdownFile := markdown.MarkdownFile{
+			Content: string(data),
+		}
+		fullDocumentContent = markdownFile.ToHtml().Content
+
+		// Markdown files are typically compiled as html partials. Developers
+		// typically (and shouldn't) declare a doctype, header, etc...
+		// therefore, we also expand html partials once the html document has been
+		// created.
+		fullDocumentContent = html.ExpandPartial(fullDocumentContent)
 	} else {
 		fullDocumentContent = string(data)
 	}
