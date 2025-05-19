@@ -1,24 +1,15 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Input Reflection</title>
-    <link rel="stylesheet" href="dev-styles.css" />
-  </head>
+<title>Input Reflection</title>
+<link rel="stylesheet" href="dev-styles.css" />
 
-  <body>
-    <p>
-      This dev page should not have any runtime variables or state storage
-      because the state changes do not depend on the previous value.
-    </p>
+<p>
+  This dev page should not have any runtime variables or state storage because
+  the state changes do not depend on the previous value.
+</p>
 
-    <script compiled>
-      $ value = "";
-    </script>
+<script compiled>
+$ value = "";
+</script>
 
-    <h1 *innerText="$value"></h1>
+<h1 *innerText="$value"></h1>
 
-    <input @input="$value = event.target.value" />
-  </body>
-</html>
+<input @input="$value = event.target.value" />

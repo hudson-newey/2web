@@ -1,31 +1,22 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Multi Assignment</title>
-    <link rel="stylesheet" href="dev-styles.css" />
-  </head>
+<title>Multi Assignment</title>
+<link rel="stylesheet" href="dev-styles.css" />
 
-  <body>
-    <script compiled>
-      $ message = "World!";
-    </script>
+<script compiled>
+$ message = "World!";
+</script>
 
-    <p>Current message: {{ $message }}</p>
-    <input *value="$message" />
-    <input *value="$message" />
-    <input *placeholder="$message" />
+<p>Current message: {{ $message }}</p>
+<input *value="$message" />
+<input *value="$message" />
+<input *placeholder="$message" />
 
-    <div>
-      <button @click="$message = 'World'">World</button>
-      <button @click="$message = 'Me'">Me</button>
-      <button @click="$message = 'Everyone'">Everyone!</button>
-    </div>
+<div>
+  <button @click="$message = 'World'">World</button>
+  <button @click="$message = 'Me'">Me</button>
+  <button @click="$message = 'Everyone'">Everyone!</button>
+</div>
 
-    <p>
-      When updating reactive variable, you should see that the both outlets are
-      updated.
-    </p>
-  </body>
-</html>
+<p>
+  When updating reactive variable, you should see that the both outlets are
+  updated.
+</p>

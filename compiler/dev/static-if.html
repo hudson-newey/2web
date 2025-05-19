@@ -1,25 +1,16 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Static SSG if condition</title>
-    <link rel="stylesheet" href="dev-styles.css" />
-  </head>
+<title>Static SSG if condition</title>
+<link rel="stylesheet" href="dev-styles.css" />
 
-  <body>
-    {% if true <h1>Hello World!</h1> %}
+{% if true <h1>Hello World!</h1> %}
 
-    {% if false <h1>Hidden</h1> %}
+{% if false <h1>Hidden</h1> %}
 
-    <p>
-      Note that none of the if conditions on this page use any sort of reactive
-      data.
-    </p>
+<p>
+  Note that none of the if conditions on this page use any sort of reactive
+  data.
+</p>
 
-    <p>
-      This is a dev page to assert if conditions can work in ssg with zero
-      runtime overhead.
-    </p>
-  </body>
-</html>
+<p>
+  This is a dev page to assert if conditions can work in ssg with zero
+  runtime overhead.
+</p>

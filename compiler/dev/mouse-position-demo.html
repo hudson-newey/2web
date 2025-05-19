@@ -1,37 +1,28 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reactive Variables</title>
-    <link rel="stylesheet" href="dev-styles.css" />
-  </head>
+<title>Reactive Variables</title>
+<link rel="stylesheet" href="dev-styles.css" />
 
-  <body>
-    <script compiled>
-      $ mouseX = 0;
-      $ mouseY = 0;
-    </script>
+<script compiled>
+$ mouseX = 0;
+$ mouseY = 0;
+</script>
 
-    <p>x: {{ $mouseX }}</p>
-    <p>y: {{ $mouseY }}</p>
+<p>x: {{ $mouseX }}</p>
+<p>y: {{ $mouseY }}</p>
 
-    <!--
+<!--
       TODO: The compiler needs to get better to get rid of this double event
       listener hack.
     -->
-    <div @mousemove="$mouseY = event.offsetY">
-      <div class="canvas" @mousemove="$mouseX = event.offsetX"></div>
-    </div>
+<div @mousemove="$mouseY = event.offsetY">
+  <div class="canvas" @mousemove="$mouseX = event.offsetX"></div>
+</div>
 
-    <style>
-      .canvas {
-        position: relative;
-        width: 100%;
-        height: 80dvh;
+<style>
+  .canvas {
+    position: relative;
+    width: 100%;
+    height: 80dvh;
 
-        background-color: rgb(20, 80, 10);
-      }
-    </style>
-  </body>
-</html>
+    background-color: rgb(20, 80, 10);
+  }
+</style>

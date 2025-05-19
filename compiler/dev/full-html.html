@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Full HTML</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <script compiled>
+    $ value = 0;
+    </script>
+
+    <h1>{{ $value }}</h1>
+
+    <button @click="$value = $value + 1">Increment</button>
+    <button @click="$value = $value - 1">Decrement</button>
+
+    <p>
+      2Web supports generating a page from a page partial, meaning that this
+      page has doctype, html, head, meta, and body tags.
+    </p>
+
+    <p>You should check that this content is not declared twice.</p>
+  </body>
+</html>

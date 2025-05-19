@@ -1,29 +1,20 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Compiled Property</title>
-    <link rel="stylesheet" href="dev-styles.css" />
-  </head>
+<title>Compiled Property</title>
+<link rel="stylesheet" href="dev-styles.css" />
 
-  <body>
-    <script compiled>
-      $ message = "Hello World!";
-    </script>
+<script compiled>
+  $ message = "Hello World!";
+</script>
 
-    <h1 *innerText="$message">This text should be overwritten at compile time</h1>
+<h1 *innerText="$message">This text should be overwritten at compile time</h1>
 
-    <p>
-      You should see a "Hello World!" header on this page because the message
-      variable is being assigned to the headers innerText property.
-    </p>
+<p>
+  You should see a "Hello World!" header on this page because the message
+  variable is being assigned to the headers innerText property.
+</p>
 
-    <p>
-      The compiler should also be able to statically evaluate that the variable
-      assigned to innerText is not changed during the runtime of the
-      application, and that it can therefore evaluate the innerText at compile
-      time. Meaning that this page should have no JavaScript.
-    </p>
-  </body>
-</html>
+<p>
+  The compiler should also be able to statically evaluate that the variable
+  assigned to innerText is not changed during the runtime of the application,
+  and that it can therefore evaluate the innerText at compile time. Meaning that
+  this page should have no JavaScript.
+</p>

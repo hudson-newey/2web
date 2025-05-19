@@ -8,6 +8,7 @@ import (
 	"hudson-newey/2web/src/compiler/templating/controlFlow"
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/optimizer"
 	"io"
@@ -62,7 +63,18 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 
 	cli.PrintBuildLog("\t- " + inputPath)
 
-	controlFlowResult := controlFlow.ProcessControlFlow(inputPath, string(data))
+	// 2Web supports partial content, meaning that pages don't need and doctype,
+	// html, head, meta, or body tags.
+	// The user can just start writing the pages content, and the compiler can
+	// figure out what should be in the body vs head.
+	fullDocumentContent := ""
+	if html.IsHtmlFile(inputPath) {
+		fullDocumentContent = html.ExpandPartial(string(data))
+	} else {
+		fullDocumentContent = string(data)
+	}
+
+	controlFlowResult := controlFlow.ProcessControlFlow(inputPath, fullDocumentContent)
 
 	ssgSource := controlFlowResult
 	stable := false
