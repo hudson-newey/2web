@@ -8,8 +8,7 @@ import (
 
 const twoWebVersion = "latest"
 
-const indexHtmlContent = `
-<!DOCTYPE html>
+const indexHtmlContent = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
