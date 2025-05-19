@@ -1,0 +1,41 @@
+<title>Reactive Variables</title>
+<link rel="stylesheet" href="dev-styles.css" />
+
+<h1 #outputElement>No Content</h1>
+
+<input #inputElement type="text" />
+
+<script>
+  inputElement.addEventListener("keyup", (event) => {
+    outputElement.innerText = event.target.value;
+  });
+</script>
+
+<p>
+  If you type in the input box, you should see that the value is reflected into
+  a h1 element.
+</p>
+
+<p>
+  This reactivity is not done through the 2web reactivity system but uses the
+  fact that elements with an "id" attribute creates a variable on the global
+  scope to refer to the element.
+</p>
+
+<p>
+  You'll see that even though we're compiling this page with the 2web compiler,
+  there is no overhead, and we have not injected any content or JavaScript that
+  you didn't write.
+</p>
+
+<p>
+  This demonstrates that using 2web is still very useful without the reactivity
+  use-cases:
+</p>
+
+<ol>
+  <li>You can use document partials, so you don't have to write out html boilerplate</li>
+  <li>You can use the "element ref" shorthand</li>
+  <li>You get to use the 2web ssg module system</li>
+  <li>You get an extremely fast compiler</li>
+</ol>

@@ -18,4 +18,7 @@ type TextNode LexNodeType[TextNode]
 // {% ssgModule arguments %}
 type SsgNode LexNodeType[SsgNode]
 
+// #elementRef
+type RefNode LexNodeType[RefNode]
+
 type voidNode LexNodeType[struct{}]

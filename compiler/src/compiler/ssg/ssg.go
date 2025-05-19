@@ -3,6 +3,7 @@ package ssg
 import (
 	"hudson-newey/2web/src/compiler/lexer"
 	"hudson-newey/2web/src/compiler/ssg/ssgModules"
+	"hudson-newey/2web/src/content/html"
 	"strings"
 )
 
@@ -26,6 +27,10 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 		}
 
 		ssgResult = strings.Replace(ssgResult, node.Selector, selectorContent, 1)
+	}
+
+	if html.IsHtmlFile(filePath) {
+		ssgResult = ssgModules.ExpandElementRefs(ssgResult)
 	}
 
 	// by comparing the original content with the result, we can determine if
