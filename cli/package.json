@@ -1,6 +1,6 @@
 {
   "name": "@two-web/cli",
-  "version": "0.0.1-rc.1",
+  "version": "0.0.1-rc.2",
   "description": "CLI for building 2web apps",
   "author": "hudson-newey",
   "license": "MIT",

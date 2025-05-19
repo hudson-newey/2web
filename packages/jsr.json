@@ -1,6 +1,6 @@
 {
   "name": "@two-web/kit",
-  "version": "0.0.1-rc.1",
+  "version": "0.0.1-rc.2",
   "license": "MIT",
   "exports": {
     "./database": "./database/index.ts",

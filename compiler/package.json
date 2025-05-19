@@ -1,6 +1,6 @@
 {
   "name": "@two-web/compiler",
-  "version": "0.0.1-rc.1",
+  "version": "0.0.1-rc.2",
   "description": "A compiler-based web framework",
   "keywords": [
     "frontend",
