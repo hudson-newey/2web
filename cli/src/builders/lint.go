@@ -10,6 +10,6 @@ func LintSolution() {
 		"eslint",
 		"--config",
 		configs.EslintConfigLocation(),
-		".",
+		"./src/",
 	)
 }

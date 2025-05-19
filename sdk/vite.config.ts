@@ -12,7 +12,7 @@ export default defineConfig({
   base: "",
   plugins: [twoWeb()],
   build: {
-    outDir: "./dist",
+    outDir: "../dist",
     copyPublicDir: true,
   },
 });

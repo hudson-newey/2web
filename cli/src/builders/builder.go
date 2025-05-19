@@ -6,17 +6,14 @@ import (
 )
 
 func BuildSolution() {
-	// Even though a package manager might change the command syntax to execute
-	// installed package binaries, at the time of writing, all of the supported
-	// package managers use the same format.
-	// I have therefore reasoned that it is likely that the package manager
-	// maintainers will not attempt to break this convention, and if they do end
-	// up changing the format, they will provide enough time for me to adjust
-	// the shell command.
-	packages.ExecutePackage(
-		"vite",
-		"build",
-		"--config",
-		configs.ViteConfigLocation(),
-	)
+	viteConfig, err := configs.ViteConfigLocation()
+
+	if err == nil {
+		packages.ExecutePackage("vite", "build", "./src/", "--config", viteConfig)
+	} else {
+		// If there is no Vite config, in the current project, we call Vite without
+		// the --config parameter, meaning that it should use the default Vite
+		// config.
+		packages.ExecutePackage("vite", "build", "./src/")
+	}
 }
