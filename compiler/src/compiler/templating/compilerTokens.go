@@ -15,3 +15,7 @@ var eventPrefix lexer.LexerPropPrefix = []string{"@"}
 
 // e.g. *innerText="$count"
 var propertyPrefix lexer.LexerPropPrefix = []string{"*"}
+
+// Import suffixes use the "statementEndToken"
+// This means that all imports MUST have trailing semi-columns
+var importPrefix lexer.LexerToken = []string{"import"}
