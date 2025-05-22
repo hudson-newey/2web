@@ -40,6 +40,9 @@ func (model *Page) Write(fileName string) {
 	}
 }
 
+func (model *Page) AsComponent() {
+}
+
 func writeFile(content string, outputPath string) {
 	if *cli.GetArgs().ToStdout {
 		fmt.Println(content)

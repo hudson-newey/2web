@@ -3,6 +3,7 @@ package templating
 import (
 	"fmt"
 	"hudson-newey/2web/src/compiler/lexer"
+	"hudson-newey/2web/src/compiler/templating/imports"
 	"hudson-newey/2web/src/compiler/templating/reactiveCompiler"
 	"hudson-newey/2web/src/compiler/templating/textNode"
 	"hudson-newey/2web/src/content/document/documentErrors"
@@ -19,6 +20,7 @@ func Compile(filePath string, content string) string {
 	// reactive property tokens
 	content = textNode.ExpandTextNodes(content)
 
+	importNodes := []lexer.LexNode[lexer.ImportNode]{}
 	reactiveVariables := []*models.ReactiveVariable{}
 
 	// find all <script compiled></script> content
@@ -42,6 +44,9 @@ func Compile(filePath string, content string) string {
 
 			reactiveVariables = append(reactiveVariables, &variableModel)
 		}
+
+		newImportNodes := lexer.FindNodes[lexer.ImportNode](node.Content, importPrefix, statementEndToken)
+		importNodes = append(importNodes, newImportNodes...)
 	}
 
 	for _, node := range propertyNodes {
@@ -106,6 +111,9 @@ func Compile(filePath string, content string) string {
 	}
 
 	content = removeCompilerScripts(content)
+
+	content = imports.EvaluateImports(filePath, content, importNodes)
+
 	content = reactiveCompiler.CompileReactivity(filePath, content, reactiveVariables)
 
 	return content
