@@ -5,8 +5,11 @@ import "hudson-newey/2web/src/compiler/lexer"
 var compilerScriptStartToken lexer.LexerToken = []string{"<script compiled>"}
 var compilerScriptEndToken lexer.LexerToken = []string{"</script>"}
 
-var compilerStyleStartToken lexer.LexerToken = []string{"<style compiled>"}
-var compilerStyleEndToken lexer.LexerToken = []string{"</style>"}
+var runtimeScriptStartToken lexer.LexerToken = []string{"<script>"}
+var runtimeScriptEndToken lexer.LexerToken = []string{"</script>"}
+
+var styleStartToken lexer.LexerToken = []string{"<style>"}
+var styleEndToken lexer.LexerToken = []string{"</style>"}
 
 var variableToken lexer.LexerToken = []string{"$"}
 
