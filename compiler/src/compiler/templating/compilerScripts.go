@@ -2,8 +2,8 @@ package templating
 
 // TODO: the implementation of this function is horrible
 func removeCompilerScripts(content string) string {
-	startToken := compilerStartToken[0]
-	endToken := compilerEndToken[0]
+	startToken := compilerScriptStartToken[0]
+	endToken := compilerScriptEndToken[0]
 
 	// If someone creates a really small document, there is no way that it
 	// contains any start or end tokens.

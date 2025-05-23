@@ -24,7 +24,7 @@ func Compile(filePath string, content string) string {
 	reactiveVariables := []*models.ReactiveVariable{}
 
 	// find all <script compiled></script> content
-	compilerNodes := lexer.FindNodes[lexer.CompNode](content, compilerStartToken, compilerEndToken)
+	compilerNodes := lexer.FindNodes[lexer.CompNode](content, compilerScriptStartToken, compilerScriptEndToken)
 
 	propertyNodes := lexer.FindPropNodes[lexer.PropNode](content, propertyPrefix)
 	eventNodes := lexer.FindPropNodes[lexer.EventNode](content, eventPrefix)

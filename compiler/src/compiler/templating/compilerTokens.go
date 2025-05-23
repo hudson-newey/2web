@@ -2,13 +2,15 @@ package templating
 
 import "hudson-newey/2web/src/compiler/lexer"
 
-var compilerStartToken lexer.LexerToken = []string{"<script compiled>"}
-var compilerEndToken lexer.LexerToken = []string{"</script>"}
+var compilerScriptStartToken lexer.LexerToken = []string{"<script compiled>"}
+var compilerScriptEndToken lexer.LexerToken = []string{"</script>"}
+
+var compilerStyleStartToken lexer.LexerToken = []string{"<style compiled>"}
+var compilerStyleEndToken lexer.LexerToken = []string{"</style>"}
 
 var variableToken lexer.LexerToken = []string{"$"}
 
 var statementEndToken lexer.LexerToken = []string{";"}
-var variableAssignmentToken lexer.LexerToken = []string{"="}
 
 // e.g. @click="$count = $count + 1"
 var eventPrefix lexer.LexerPropPrefix = []string{"@"}
