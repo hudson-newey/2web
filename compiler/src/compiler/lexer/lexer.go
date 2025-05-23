@@ -92,8 +92,14 @@ func FindNodes[T voidNode](
 	inNode := false
 
 	for i := range content {
-		if i+len(startToken) > len(content) {
-			break
+		if inNode {
+			if i+len(endToken) > len(content) {
+				break
+			}
+		} else {
+			if i+len(startToken) > len(content) {
+				break
+			}
 		}
 
 		if !inNode && content[i:i+len(startToken)] == startToken {
