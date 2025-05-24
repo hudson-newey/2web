@@ -1,15 +1,25 @@
 <title>Code blocks</title>
 <link rel="stylesheet" href="dev-styles.css" />
 
+<p>This dev page is intended to stretch code blocks to their limits.</p>
+
+<p>
+  Code blocks should be emitted as text, and not processed as JavaScript/CSS
+  content.
+</p>
+
 <section>
-    <pre>
+  <pre>
     This is a
     test for pre
     123
-    </pre>
+    </pre
+  >
 </section>
 
 <code><script></script></code>
+
+<code><script compiled></script></code>
 
 <pre><code class="language-html"><script>
 $ count = 0;
@@ -18,3 +28,36 @@ $ count = 0;
 <h1>{{ $count }}</h1>
 <h2>{{ $nonExistent }}</h2>
 </code></pre>
+
+<pre><code class="language-javascript">
+$ message = "Hello World!";
+</code></pre>
+
+<pre><code class="language-html"><script compiled>
+$ greeting = "Hello";
+</script>
+
+<h1>{{ $greeting }}</h1>
+</code></pre>
+
+<code></code>
+
+<hr />
+
+<code><style></style></code>
+
+<span class="unstyled-element">
+  This element should not be effected by styling
+</span>
+
+<code>
+  <style>
+    .unstyledElement {
+      color: red;
+    }
+  </style>
+</code>
+
+<code>
+    <h1>{{ $count }}</h1>
+</code>

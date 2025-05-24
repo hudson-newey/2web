@@ -17,6 +17,10 @@ func FindNodes[T voidNode](
 	nodeBufferContent := ""
 	inNode := false
 
+	codeBlockStart := []string{"<code"}
+	codeBlockEnd := []string{"</code>"}
+	inCodeBlock := false
+
 	for i := range content {
 		if inNode {
 			if i+len(endToken) > len(content) {
@@ -26,6 +30,32 @@ func FindNodes[T voidNode](
 			if i+len(startToken) > len(content) {
 				break
 			}
+		}
+
+		for _, startTag := range codeBlockStart {
+			if i+len(startTag) > len(content) {
+				continue
+			}
+
+			if content[i:i+len(startTag)] == startTag {
+				inCodeBlock = true
+				break
+			}
+		}
+
+		for _, endTag := range codeBlockEnd {
+			if i-len(endTag) < 0 {
+				continue
+			}
+
+			if content[i-len(endTag):i] == endTag {
+				inCodeBlock = false
+				break
+			}
+		}
+
+		if inCodeBlock {
+			continue
 		}
 
 		if !inNode && content[i:i+len(startToken)] == startToken {

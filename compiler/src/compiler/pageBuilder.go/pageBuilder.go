@@ -19,6 +19,13 @@ func BuildPage(content string) page.Page {
 	nonHtmlStartTags := []string{"<script", "<style"}
 	nonHtmlEndTags := []string{"</script>", "</style>"}
 
+	codeBlockStart := []string{"<code"}
+	codeBlockEnd := []string{"</code>"}
+
+	// When we are inside a code block, we want to emit style and script tag
+	// content as if it was typed as text.
+	inCodeBlock := false
+
 	currentNodeType := htmlNode
 	htmlContent := ""
 	jsContent := ""
@@ -38,17 +45,41 @@ func BuildPage(content string) page.Page {
 			}
 		}
 
-		for _, startTag := range nonHtmlStartTags {
+		for _, startTag := range codeBlockStart {
 			if i+len(startTag) > len(content) {
 				continue
 			}
 
 			if content[i:i+len(startTag)] == startTag {
-				switch startTag {
-				case "<script":
-					currentNodeType = jsNode
-				case "<style":
-					currentNodeType = cssNode
+				inCodeBlock = true
+				break
+			}
+		}
+
+		for _, endTag := range codeBlockEnd {
+			if i-len(endTag) < 0 {
+				continue
+			}
+
+			if content[i-len(endTag):i] == endTag {
+				inCodeBlock = false
+				break
+			}
+		}
+
+		if !inCodeBlock {
+			for _, startTag := range nonHtmlStartTags {
+				if i+len(startTag) > len(content) {
+					continue
+				}
+
+				if content[i:i+len(startTag)] == startTag {
+					switch startTag {
+					case "<script":
+						currentNodeType = jsNode
+					case "<style":
+						currentNodeType = cssNode
+					}
 				}
 			}
 		}
