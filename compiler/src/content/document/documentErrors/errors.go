@@ -1,6 +1,7 @@
 package documentErrors
 
 import (
+	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/models"
 )
@@ -19,6 +20,12 @@ func InjectErrors(pageContent string) string {
 	errorTemplateResult := createErrorTemplate(errorList)
 
 	return document.InjectContent(pageContent, errorTemplateResult, document.Body)
+}
+
+func PrintDocumentErrors() {
+	for _, errorModel := range errorList {
+		cli.PrintError(errorModel)
+	}
 }
 
 // creates a HTML error template that can be used to display errors

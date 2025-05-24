@@ -63,6 +63,11 @@ func Build() {
 	} else {
 		compileAndWriteFile(*args.InputPath, *args.OutputPath)
 	}
+
+	// We only print document errors once the entire project has been compiled so
+	// that all of the errors are located in the same section, and are the most
+	// recent output when compilation finishes.
+	documentErrors.PrintDocumentErrors()
 }
 
 func compileAndWriteFile(inputPath string, outputPath string) {

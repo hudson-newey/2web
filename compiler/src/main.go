@@ -13,5 +13,7 @@ func main() {
 	cli.ParseArguments()
 	builder.Build()
 
-	fmt.Println("\nCompile time:", time.Since(startTime))
+	if !*cli.GetArgs().IsSilent {
+		fmt.Println("\nCompile time:", time.Since(startTime))
+	}
 }
