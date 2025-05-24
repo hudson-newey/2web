@@ -3,6 +3,7 @@ package builder
 import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
+	"hudson-newey/2web/src/compiler/pageBuilder.go"
 	"hudson-newey/2web/src/compiler/ssg"
 	"hudson-newey/2web/src/compiler/templating"
 	"hudson-newey/2web/src/compiler/templating/controlFlow"
@@ -14,7 +15,6 @@ import (
 	"hudson-newey/2web/src/optimizer"
 	"io"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -30,6 +30,12 @@ func Build() {
 	inputPath, err := os.Stat(*args.InputPath)
 	if err != nil {
 		panic(err)
+	}
+
+	// If the output path already exists, delete the output path so that there
+	// are no stale files.
+	if _, err := os.Stat(*args.OutputPath); err != os.ErrNotExist {
+		os.RemoveAll(*args.OutputPath)
 	}
 
 	if inputPath.IsDir() {
@@ -95,41 +101,35 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 		fullDocumentContent = string(data)
 	}
 
-	controlFlowResult := controlFlow.ProcessControlFlow(inputPath, fullDocumentContent)
+	pageModel := pageBuilder.BuildPage(fullDocumentContent)
 
-	ssgSource := controlFlowResult
+	pageModel.Html.Content = controlFlow.ProcessControlFlow(inputPath, pageModel.Html.Content)
+
+	ssgResult := pageModel.Html.Content
 	stable := false
 	for {
-		ssgSource, stable = ssg.ProcessStaticSite(inputPath, ssgSource)
+		ssgResult, stable = ssg.ProcessStaticSite(inputPath, ssgResult)
 
 		if stable {
 			break
 		}
 	}
 
-	compilerResult := templating.Compile(inputPath, ssgSource)
+	pageModel.Html.Content = ssgResult
 
-	injectedErrorResult := documentErrors.InjectErrors(compilerResult)
+	compiledPage := templating.Compile(inputPath, pageModel)
 
-	finalResult := injectedErrorResult
+	compiledPage.Html.Content = documentErrors.InjectErrors(compiledPage.Html.Content)
+
 	if *args.HasDevTools {
-		finalResult = devtools.InjectDevTools(injectedErrorResult)
+		compiledPage.Html.Content = devtools.InjectDevTools(compiledPage.Html.Content)
 	}
 
 	if *args.IsProd {
-		finalResult = optimizer.OptimizeContent(finalResult)
+		compiledPage = optimizer.OptimizePage(compiledPage)
 	}
 
-	writeOutput(finalResult, outputPath)
-}
-
-func writeOutput(content string, outputPath string) {
-	if *cli.GetArgs().ToStdout {
-		fmt.Println(content)
-	} else {
-		os.MkdirAll(filepath.Dir(outputPath), os.ModePerm)
-		os.WriteFile(outputPath, []byte(content), 0644)
-	}
+	compiledPage.Write(outputPath)
 }
 
 func getInputContent(inputPath string) ([]byte, error) {

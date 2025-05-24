@@ -7,29 +7,32 @@ import (
 	"hudson-newey/2web/src/compiler/templating/reactiveCompiler"
 	"hudson-newey/2web/src/compiler/templating/textNode"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/reactiveEvent"
 	"hudson-newey/2web/src/models/reactiveProperty"
 	"hudson-newey/2web/src/models/reactiveVariable"
 )
 
-func Compile(filePath string, content string) string {
+func Compile(filePath string, pageModel page.Page) page.Page {
 	// "Mustache like" expressions e.g. {{ $count }} are a shorthand for an
 	// element with only innerText.
 	// Therefore, we expand all of the mustache expressions before finding
 	// reactive property tokens
-	content = textNode.ExpandTextNodes(content)
+	pageModel.Html.Content = textNode.ExpandTextNodes(pageModel.Html.Content)
 
 	importNodes := []lexer.LexNode[lexer.ImportNode]{}
 	reactiveVariables := []*models.ReactiveVariable{}
 
-	// find all <script compiled></script> content
-	compilerNodes := lexer.FindNodes[lexer.CompNode](content, compilerScriptStartToken, compilerScriptEndToken)
+	propertyNodes := lexer.FindPropNodes[lexer.PropNode](pageModel.Html.Content, propertyPrefix)
+	eventNodes := lexer.FindPropNodes[lexer.EventNode](pageModel.Html.Content, eventPrefix)
 
-	propertyNodes := lexer.FindPropNodes[lexer.PropNode](content, propertyPrefix)
-	eventNodes := lexer.FindPropNodes[lexer.EventNode](content, eventPrefix)
+	for _, node := range pageModel.JavaScript {
+		// At the moment, we do not support mixing compiler and runtime scripts
+		if !node.IsCompilerOnly() {
+			continue
+		}
 
-	for _, node := range compilerNodes {
 		variableNodes := lexer.FindNodes[lexer.VarNode](node.Content, variableToken, statementEndToken)
 
 		for _, variableNode := range variableNodes {
@@ -110,11 +113,9 @@ func Compile(filePath string, content string) string {
 		}
 	}
 
-	content = removeCompilerScripts(content)
+	pageModel.Html.Content = imports.EvaluateImports(filePath, pageModel.Html.Content, importNodes)
 
-	content = imports.EvaluateImports(filePath, content, importNodes)
+	pageModel = reactiveCompiler.CompileReactivity(filePath, pageModel, reactiveVariables)
 
-	content = reactiveCompiler.CompileReactivity(filePath, content, reactiveVariables)
-
-	return content
+	return pageModel
 }

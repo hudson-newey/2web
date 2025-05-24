@@ -12,8 +12,6 @@ func FindPropNodes[T voidNode](
 	content string,
 	prefix LexerPropPrefix,
 ) []LexNode[T] {
-	htmlContent := isolateHtmlContent(content)
-
 	resultContent := []LexNode[T]{}
 
 	queryPrefix := prefix[0]
@@ -22,21 +20,21 @@ func FindPropNodes[T voidNode](
 	inNode := false
 	inQuote := false
 
-	for i := range htmlContent {
-		if !inNode && htmlContent[i:i+len(queryPrefix)] == queryPrefix {
+	for i := range content {
+		if !inNode && content[i:i+len(queryPrefix)] == queryPrefix {
 			inNode = true
 			nodeBufferContent = ""
 			continue
 		}
 
 		if inNode {
-			if htmlContent[i] == '"' {
+			if content[i] == '"' {
 				inQuote = !inQuote
 			}
 
 			if !inQuote {
 				for _, endToken := range attributeEndToken {
-					if htmlContent[i:i+len(endToken)] == endToken {
+					if content[i:i+len(endToken)] == endToken {
 						refinedContent := strings.TrimSpace(nodeBufferContent)
 
 						// remember that attributes look like
@@ -74,7 +72,7 @@ func FindPropNodes[T voidNode](
 		}
 
 		if inNode {
-			nodeBufferContent += string(htmlContent[i])
+			nodeBufferContent += string(content[i])
 		}
 	}
 
@@ -87,43 +85,4 @@ func trimLast(s string) string {
 		return s
 	}
 	return s[:len(s)-1]
-}
-
-func isolateHtmlContent(content string) string {
-	nonHtmlStartTags := []string{"<script", "<style", "<math"}
-	nonHtmlEndTags := []string{"</script>", "</style>", "</math>"}
-
-	inHtml := true
-	resultContent := ""
-
-	for i := range content {
-		if !inHtml {
-			for _, endTag := range nonHtmlEndTags {
-				if i-len(endTag) < 0 {
-					continue
-				}
-
-				if content[i-len(endTag):i] == endTag {
-					inHtml = true
-					break
-				}
-			}
-		}
-
-		for _, startTag := range nonHtmlStartTags {
-			if i+len(startTag) > len(content) {
-				continue
-			}
-
-			if content[i:i+len(startTag)] == startTag {
-				inHtml = false
-			}
-		}
-
-		if inHtml {
-			resultContent += string(content[i])
-		}
-	}
-
-	return resultContent
 }

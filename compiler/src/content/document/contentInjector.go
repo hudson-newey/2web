@@ -1,6 +1,8 @@
 package document
 
-import "strings"
+import (
+	"strings"
+)
 
 type InjectableLevel int
 

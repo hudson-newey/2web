@@ -5,12 +5,24 @@ import (
 	"encoding/hex"
 	"fmt"
 	"hudson-newey/2web/src/cli"
+	"strings"
 )
 
 type javascriptCode = string
 
 type JSFile struct {
-	Content javascriptCode
+	Content          javascriptCode
+	memoisedFileName string
+}
+
+func (model *JSFile) RawContent() string {
+	result := model.Content
+
+	result = strings.ReplaceAll(result, "<script>", "")
+	result = strings.ReplaceAll(result, "<script compiled>", "")
+	result = strings.ReplaceAll(result, "</script>", "")
+
+	return result
 }
 
 func (model *JSFile) AddContent(partialContent string) {
@@ -26,23 +38,42 @@ func (model *JSFile) IsLazy() bool {
 	return true
 }
 
+func (model *JSFile) IsCompilerOnly() bool {
+	// If the script is compiled, you should use the "<script compiled>" selector
+	return strings.Contains(model.Content, "compiled>")
+}
+
 // A js file index that can be used for development builds.
 // This should not be used during production builds as it may lead to stale data
 // being served from a cdn or browser cache.
 var jsFileIndex int = 0
 
+func (model *JSFile) OutputPath() string {
+	outPath := *cli.GetArgs().OutputPath
+	return fmt.Sprintf("%s/%s", outPath, model.FileName())
+}
+
 // The file hash can be used to uniquely import this file.
 // Warning: If the content of this file is changed, the file name will also
 // change.
 func (model *JSFile) FileName() string {
+	if model.memoisedFileName != "" {
+		return model.memoisedFileName
+	}
+
 	// If we are in development mode, we want to optimize for build times.
 	// We therefore do not compute the md5 hash of the file (which is
 	// computationally expensive), and instead just use an incrementing number.
 	// This is less efficient for the CDN's and browser cache, but provides a
 	// quicker development environment.
-	if !*cli.GetArgs().IsProd {
+	//
+	// TODO: remove this && false and fix browser caching
+	if !*cli.GetArgs().IsProd && false {
 		jsFileIndex++
-		return fmt.Sprint(jsFileIndex)
+		result := fmt.Sprintf("%d.js", jsFileIndex)
+
+		model.memoisedFileName = result
+		return result
 	}
 
 	hash := md5.Sum([]byte(model.Content))
@@ -50,5 +81,9 @@ func (model *JSFile) FileName() string {
 	// Only return the first 8 characters to prevent overly long file names.
 	// Warning: This greatly increases the probability of a hash collision.
 	// TODO: Keep track of all the used hashes
-	return hex.EncodeToString(hash[:8])
+	fileHash := hex.EncodeToString(hash[:8])
+	result := fmt.Sprintf("%s.js", fileHash)
+
+	model.memoisedFileName = result
+	return result
 }

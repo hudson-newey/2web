@@ -1,15 +1,16 @@
 package reactiveCompiler
 
 import (
+	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"strings"
 )
 
 func CompileReactivity(
 	filePath string,
-	content string,
+	pageModel page.Page,
 	varNodes []*models.ReactiveVariable,
-) string {
+) page.Page {
 	for _, varNode := range varNodes {
 		// Ideally, slower reactive types would only target properties and events
 		// that are effected.
@@ -24,11 +25,11 @@ func CompileReactivity(
 		// TODO: I might be able to combine selectors for the same element that has
 		// different property targets.
 		if varNode.Type() >= models.Reactive {
-			content = compileReactiveVar(content, varNode)
+			pageModel.Html.Content = compileReactiveVar(pageModel.Html.Content, varNode)
 		} else if varNode.Type() >= models.Assignment {
 			// TODO: explore if reactive and assignment reactivity are mutually
 			// exclusive for variables, events, or props
-			content = compileAssignmentVar(content, varNode)
+			pageModel.Html.Content = compileAssignmentVar(pageModel.Html.Content, varNode)
 		}
 
 		// static props differ from truly static variables because static props
@@ -47,17 +48,17 @@ func CompileReactivity(
 		//
 		// e.g. <input type="range" value="$value"></input>
 		if varNode.Type() >= models.StaticProperty {
-			content = compileStaticPropVar(content, varNode)
+			pageModel.Html.Content = compileStaticPropVar(pageModel.Html.Content, varNode)
 		}
 
 		// after this point, all of the reactive properties have been processed
 		// so therefore we can strip them from the result content
 		for _, reactiveProp := range varNode.Props {
-			content = strings.ReplaceAll(content, reactiveProp.Node.Selector, "")
+			pageModel.Html.Content = strings.ReplaceAll(pageModel.Html.Content, reactiveProp.Node.Selector, "")
 		}
 
-		content = compileStatic(content, varNode)
+		pageModel.Html.Content = compileStatic(pageModel.Html.Content, varNode)
 	}
 
-	return content
+	return pageModel
 }

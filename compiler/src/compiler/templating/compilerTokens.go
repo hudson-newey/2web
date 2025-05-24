@@ -2,9 +2,6 @@ package templating
 
 import "hudson-newey/2web/src/compiler/lexer"
 
-var compilerScriptStartToken lexer.LexerToken = []string{"<script compiled>"}
-var compilerScriptEndToken lexer.LexerToken = []string{"</script>"}
-
 var runtimeScriptStartToken lexer.LexerToken = []string{"<script>"}
 var runtimeScriptEndToken lexer.LexerToken = []string{"</script>"}
 

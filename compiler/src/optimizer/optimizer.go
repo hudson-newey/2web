@@ -1,6 +1,20 @@
 package optimizer
 
-func OptimizeContent(content string) string {
-	minifiedHtml := minifyHtml(content)
-	return minifiedHtml
+import (
+	"hudson-newey/2web/src/content/page"
+	"hudson-newey/2web/src/optimizer/minify"
+)
+
+func OptimizePage(pageModel page.Page) page.Page {
+	pageModel.Html.Content = minify.MinifyHtml(pageModel.Html.Content)
+
+	for _, cssModel := range pageModel.Css {
+		cssModel.Content = minify.MinifyCss(cssModel.Content)
+	}
+
+	for _, jsModel := range pageModel.JavaScript {
+		jsModel.Content = minify.MinifyJs(jsModel.Content)
+	}
+
+	return pageModel
 }
