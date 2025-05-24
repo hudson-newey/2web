@@ -6,7 +6,7 @@
 <input #inputElement type="text" />
 
 <script>
-  inputElement.addEventListener("keyup", (event) => {
+  inputElement.addEventListener("keyup", (event: Event) => {
     outputElement.innerText = event.target.value;
   });
 </script>

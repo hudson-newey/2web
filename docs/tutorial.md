@@ -267,3 +267,58 @@ that the component is imported as by changing the default export name.
 
 Additionally, all components do not need an associated closing tag, and can be
 terminated by simply adding a `/>` at the end of the element.
+
+## Code splitting
+
+You may have noticed that sometimes the 2Web compiler does not always output a
+single file.
+This is an implementation detail that you should not have to worry about as I
+believe that different rendering strategies should be deiced by the compiler
+instead of the programmer, and that all code should be the same regardless of
+the rendering strategy.
+
+However, understanding code splitting in 2Web is an important optimization that
+is automatically performed.
+
+During code-splitting, the compiler has the following goals:
+
+- The browser should only have to parse one file on initial page load.
+  - This means that content on the critical rendering path should all be
+  contained within the single `.html` file served to the user.
+- Reactivity hydration should **not** change the information on the page.
+  - When we hydrate the page with reactivity. E.g. "when I click this button xyz
+  should occur" nothing about the page content should change.
+- Loading reactivity should be non-blocking, and the page should be navigable
+  before reactivity is loaded. Similar to [qwik](https://qwik.dev/), reactivity
+  should be lazy loaded. This is beneficial because typical users will not
+  immediately start interacting with content once it is visible. They will
+  typically have to visually find the button they want to click, and move their
+  meaty hands to click the mouse button. By delaying reactivity hydration, the
+  user can visually scan the page to find the button they want to click, and by
+  the time that they have found the button/element they want, reactivity should
+  have loaded.
+- Styling should be visible on first load so that there is no flash of unstyled
+  content.
+
+## TypeScript
+
+Similar to most modern frameworks, we support creating websites with TypeScript.
+By default, all `<script>` tags are TypeScript-enabled, meaning that you don't
+have to set up a build pipeline, set up any configuration, or worry about
+increasing the complexity.
+
+Since TypeScript is a superset of JavaScript, if you don't want to write
+TypeScript code, you can simply not.
+If you want to use [JsDoc](https://jsdoc.app/) types, you can as well.
+By default, JsDoc comments will be removed when the `--production` flag is
+used.
+
+By default, we use [esbuild](https://esbuild.github.io/) for lightning fast
+TypeScript builds, meaning that we don't provide any type checking.
+Type checking is considered a development environment operation, and should not
+be performed at compile time.
+
+## Page/Component Styling
+
+We support styling your components through normal css.
+If you wish to use a component / styling framework, you can use one if you wish.

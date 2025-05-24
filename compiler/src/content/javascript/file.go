@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
 	"strings"
+
+	"github.com/evanw/esbuild/pkg/api"
 )
 
 type javascriptCode = string
@@ -22,7 +24,21 @@ func (model *JSFile) RawContent() string {
 	result = strings.ReplaceAll(result, "<script compiled>", "")
 	result = strings.ReplaceAll(result, "</script>", "")
 
-	return result
+	esbuildOutput := api.Build(api.BuildOptions{
+		Stdin: &api.StdinOptions{
+			Contents:   result,
+			Loader:     api.LoaderTS,
+			ResolveDir: ".",
+		},
+		Bundle: true,
+	})
+
+	bundledContent := ""
+	for _, outputFile := range esbuildOutput.OutputFiles {
+		bundledContent += string(outputFile.Contents)
+	}
+
+	return bundledContent
 }
 
 func (model *JSFile) AddContent(partialContent string) {
