@@ -13,10 +13,11 @@ scripts which must output to a local `dist/` directory under the implementation.
 
 The implementations `dist/` directory will be used for benchmarking.
 
-To run the benchmark script, simply run
+To run the benchmark script, simply run the following command with
+[Deno](https://deno.com/) installed.
 
 ```sh
-$ deno --allow-run --allow-read --allow-write --allow-read bench.ts
+$ ./bench.ts
 >
 ```
 
@@ -27,7 +28,7 @@ with real browsers to test the speed of each framework.
 
 | Framework | Build Size (KB) | Build Time (MS) \* |
 | --------- | --------------- | ------------------ |
-| 2Web      | 0.481           | 8                  |
+| 2Web      | 0.473           | 9                  |
 | Svelte    | 20.122          | 1480               |
 | Preact    | 25.064          | 1577               |
 | Vue       | 58.705          | 2988               |

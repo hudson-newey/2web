@@ -1,3 +1,4 @@
+#!/usr/bin/env -S deno run --allow-run --allow-read --allow-write --allow-read
 type FrameworkName = string;
 type Kilobyte = number;
 type Milliseconds = number;
@@ -22,11 +23,7 @@ async function buildImplementation(name: string): Promise<Milliseconds> {
     args: [`${implementationPath(name)}/build.sh`],
   });
 
-  const { code, stdout, stderr } = await command.output();
-  // if (code !== 0) {
-  //   console.log("Error:", code);
-  //   throw new Error(String.fromCharCode(...stderr));
-  // }
+  const { stdout } = await command.output();
   const t1 = performance.now();
 
   console.debug(String.fromCharCode(...stdout));
@@ -105,7 +102,7 @@ async function runBenchmark() {
 
   // I write to a csv so that I can do some cool graphs in the future and so
   // that loading into excel is easy
-  const assetSizeFileName = reportsDirectory + "assetSize.csv";
+  const assetSizeFileName = reportsDirectory + "report.csv";
   await Deno.writeTextFile(assetSizeFileName, "Framework,size (KB),Build Time (ms)\n", {
     append: true,
   });

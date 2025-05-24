@@ -9,7 +9,7 @@ func MinifyJs(content string) string {
 	m := minify.New()
 	m.AddFunc("application/javascript", js.Minify)
 
-	minifiedContent, err := m.String("text/css", content)
+	minifiedContent, err := m.String("application/javascript", content)
 	if err != nil {
 		panic(err)
 	}

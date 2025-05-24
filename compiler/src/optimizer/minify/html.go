@@ -31,8 +31,25 @@ func MinifyHtml(content string) string {
 		KeepDocumentTags: true,
 	})
 	m.AddFunc("text/css", css.Minify)
-	m.AddFunc("application/javascript", js.Minify)
 	m.AddFunc("image/svg+xml", svg.Minify)
+
+	// For some reason, the minification library that I am using doesn't like
+	// <code> blocks inside of html.
+	// It incorrectly tries to format <script> tags inside of <code> blocks as if
+	// it was real JavaScript code.
+	//
+	// However, code inside of <code> example blocks are user provided and we
+	// should not be minifying them.
+	// TODO: find out if this is my fault for including a plugin that minifies
+	// <code> blocks.
+	//
+	// Additionally, the minifier will throw errors if the code inside the fake
+	// <script> blocks contain invalid JavaScript.
+	// This is slightly annoying because I believe that code examples can contain
+	// invalid JavaScript code.
+	if !strings.Contains(content, "</code>") {
+		m.AddFunc("application/javascript", js.Minify)
+	}
 
 	minifiedContent, err := m.String("text/html", content)
 	if err != nil {
