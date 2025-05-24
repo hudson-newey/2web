@@ -318,7 +318,15 @@ TypeScript builds, meaning that we don't provide any type checking.
 Type checking is considered a development environment operation, and should not
 be performed at compile time.
 
-## Page/Component Styling
+## Page/Component styling
 
 We support styling your components through normal css.
 If you wish to use a component / styling framework, you can use one if you wish.
+
+## Compiler errors
+
+Compiler errors are useful.
+During compile time, the 2Web compiler will perform basic checks to ensure that
+your code is valid.
+If you perform an invalid operation such as referencing a variable that does not
+exist, the compiler will yell at you, telling you that it does not exist.
