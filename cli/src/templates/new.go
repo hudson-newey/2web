@@ -9,29 +9,19 @@ import (
 const twoWebVersion = "latest"
 
 const indexHtmlContent = `<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My New Website!</title>
-    <link rel="stylesheet" href="styles/home.css" />
-  </head>
+<title>My New Website!</title>
+<link rel="stylesheet" href="styles/home.css" />
 
-  <body>
-    <script compiled>
-    $ count = 0;
-    </script>
+<script compiled>
+$ count = 0;
+</script>
 
-    <main>
-      <h1>My New 2Web Website</h1>
+<h1>My New 2Web Website</h1>
 
-      <span>{{ $count }}</span>
+<span>{{ $count }}</span>
 
-      <button @click="$count = $count + 1">+1</button>
-      <button @click="$count = $count - 1">-1</button>
-    </main>
-  </body>
-</html>
+<button @click="$count = $count + 1">+1</button>
+<button @click="$count = $count - 1">-1</button>
 `
 
 var packageJsonContent string = fmt.Sprintf(`{
@@ -84,6 +74,18 @@ $ 2web build
 ` + "```" + `
 `
 
+const gitignoreContent = `dist/
+node_modules/
+
+vite.config.ts.timestamp-*.mjs
+
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+`
+
 func NewTemplate(path string) {
 	templateFiles := []files.File{
 		{
@@ -108,6 +110,11 @@ func NewTemplate(path string) {
 				{
 					Path:        path + "/tsconfig.json",
 					Content:     tsconfigContent,
+					IsDirectory: false,
+				},
+				{
+					Path:        path + "/.gitignore",
+					Content:     gitignoreContent,
 					IsDirectory: false,
 				},
 				{
