@@ -1,6 +1,9 @@
 package installer
 
-import "github.com/hudson-newey/2web-cli/src/packages"
+import (
+	"github.com/hudson-newey/2web-cli/src/cli"
+	"github.com/hudson-newey/2web-cli/src/packages"
+)
 
 func InstallPackage(packageName string) {
 	installationMethod := packages.DeterminePackageManager()
@@ -15,4 +18,6 @@ func InstallPackage(packageName string) {
 	case packages.Bun:
 		installBunPackage(packageName)
 	}
+
+	cli.PrintError(1, "could not determine package manager")
 }

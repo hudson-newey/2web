@@ -6,10 +6,16 @@ import (
 )
 
 func LintSolution() {
-	packages.ExecutePackage(
-		"eslint",
-		"--config",
-		configs.EslintConfigLocation(),
-		"./src/",
-	)
+	eslintConfig, err := configs.EslintConfigLocation()
+
+	if err == nil {
+		packages.ExecutePackage(
+			"eslint",
+			"--config",
+			eslintConfig,
+			"./src/",
+		)
+	} else {
+		packages.ExecutePackage("eslint", "./src/")
+	}
 }

@@ -18,6 +18,11 @@ import "github.com/hudson-newey/2web-cli/src/shell"
 func ExecutePackage(args ...string) {
 	packageManager := DeterminePackageManager()
 
+	if packageManager == None {
+		executeNpx(args...)
+		return
+	}
+
 	binaryPath := ""
 	switch packageManager {
 	case Npm:
@@ -31,6 +36,21 @@ func ExecutePackage(args ...string) {
 	}
 
 	shellCommand := []string{binaryPath, "exec"}
+	shellCommand = append(shellCommand, args...)
+
+	shell.ExecuteCommand(shellCommand...)
+}
+
+// If no local package manager is installed, we can run most commands using the
+// "npm dlx" command.
+// This will temporarily download the package to run the command.
+// This is not recommended because it can result in unpredictable environments.
+//
+// Although, supporting this use case makes the 2web cli useful for mocking up
+// projects outside of the 2web framework, making the cli more framework
+// agnostic.
+func executeNpx(args ...string) {
+	shellCommand := []string{"npx"}
 	shellCommand = append(shellCommand, args...)
 
 	shell.ExecuteCommand(shellCommand...)

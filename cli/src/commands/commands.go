@@ -38,8 +38,7 @@ func ProcessInvocation(args []string) {
 
 	// all commands below this point must be run in an npm project
 	if !packages.HasPackageJson() {
-		cli.PrintError(2, "the 2web cli must be run in a directory with a package.json")
-		return
+		cli.PrintWarning("you are running the 2web cli in a directory that does not have a package.json. This may result in unpredictable state.")
 	}
 
 	if command == "generate" || command == "g" {
@@ -69,6 +68,11 @@ func ProcessInvocation(args []string) {
 
 	if command == "lint" {
 		builders.LintSolution()
+		return
+	}
+
+	if command == "deploy" {
+		deploy.DeploySolution()
 		return
 	}
 

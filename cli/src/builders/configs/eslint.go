@@ -5,11 +5,16 @@ import (
 	"os"
 )
 
-func EslintConfigLocation() string {
+func EslintConfigLocation() (string, error) {
 	overridePath := "eslintrc.js"
-	if _, err := os.Stat(overridePath); errors.Is(err, os.ErrNotExist) {
-		return "node_modules/@two-web/sdk/eslintrc.js"
+	if _, err := os.Stat(overridePath); err == nil {
+		return overridePath, nil
 	}
 
-	return overridePath
+	sdkPath := "node_modules/@two-web/sdk/eslintrc.js"
+	if _, err := os.Stat(sdkPath); err == nil {
+		return sdkPath, nil
+	}
+
+	return "", errors.New("could not find eslint config")
 }

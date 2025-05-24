@@ -2,8 +2,6 @@ package packages
 
 import (
 	"os"
-
-	"github.com/hudson-newey/2web-cli/src/cli"
 )
 
 type PackageManager = int
@@ -13,6 +11,7 @@ const (
 	Pnpm
 	Yarn
 	Bun
+	None
 )
 
 func DeterminePackageManager() PackageManager {
@@ -26,8 +25,7 @@ func DeterminePackageManager() PackageManager {
 		return Bun
 	}
 
-	cli.PrintError(2, "could not determine package manager")
-	panic("")
+	return None
 }
 
 func fileExists(filename string) bool {
