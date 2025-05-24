@@ -5,15 +5,16 @@ import (
 	"github.com/hudson-newey/2web-cli/src/packages"
 )
 
-func BuildSolution() {
+func BuildSolution(args []string) {
 	viteConfig, err := configs.ViteConfigLocation()
+	pathTarget := entryTarget(args)
 
 	if err == nil {
-		packages.ExecutePackage("vite", "build", "./src/", "--config", viteConfig)
+		packages.ExecutePackage("vite", "build", pathTarget, "--config", viteConfig)
 	} else {
 		// If there is no Vite config, in the current project, we call Vite without
 		// the --config parameter, meaning that it should use the default Vite
 		// config.
-		packages.ExecutePackage("vite", "build", "./src/")
+		packages.ExecutePackage("vite", "build", pathTarget)
 	}
 }

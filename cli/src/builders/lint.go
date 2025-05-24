@@ -5,15 +5,16 @@ import (
 	"github.com/hudson-newey/2web-cli/src/packages"
 )
 
-func LintSolution() {
+func LintSolution(args []string) {
 	eslintConfig, err := configs.EslintConfigLocation()
+	pathTarget := entryTarget(args)
 
 	if err == nil {
 		packages.ExecutePackage(
 			"eslint",
 			"--config",
 			eslintConfig,
-			"./src/",
+			pathTarget,
 		)
 	} else {
 		packages.ExecutePackage("eslint", "./src/")

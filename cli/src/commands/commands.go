@@ -51,23 +51,21 @@ func ProcessInvocation(args []string) {
 		return
 	}
 
-	if command == "deploy" {
-		deploy.DeploySolution()
-		return
-	}
-
+	// We pass the commands into the "serve" builder because we support specifying
+	// a path to serve as the third optional argument.
+	// If not specified, the "./src/" directory will be the target.
 	if command == "serve" {
-		builders.ServeSolution()
+		builders.ServeSolution(args)
 		return
 	}
 
 	if command == "build" {
-		builders.BuildSolution()
+		builders.BuildSolution(args)
 		return
 	}
 
 	if command == "lint" {
-		builders.LintSolution()
+		builders.LintSolution(args)
 		return
 	}
 

@@ -76,6 +76,8 @@ $ 2web build
 
 const gitignoreContent = `dist/
 node_modules/
+tmp/
+.vite/
 
 vite.config.ts.timestamp-*.mjs
 
