@@ -71,6 +71,10 @@ func (model *Page) Write(filePath string) {
 	}
 
 	for _, file := range model.JavaScript {
+		if file.IsCompilerOnly() {
+			continue
+		}
+
 		writeFile(file.RawContent(), file.OutputPath())
 	}
 }
