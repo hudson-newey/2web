@@ -6,24 +6,35 @@ import (
 	"hudson-newey/2web/src/models"
 )
 
-var errorList []models.Error
+var pageErrors []models.Error
+var totalErrors []models.Error
 
 func AddError(errorModel models.Error) {
-	errorList = append(errorList, errorModel)
+	pageErrors = append(pageErrors, errorModel)
+	totalErrors = append(totalErrors, errorModel)
+}
+
+// TODO: errors should be attached to the page model instead of here
+func ResetPageErrors() {
+	pageErrors = []models.Error{}
+}
+
+func IsErrorFree() bool {
+	return len(totalErrors) == 0
 }
 
 func InjectErrors(pageContent string) string {
-	if len(errorList) == 0 {
+	if len(pageErrors) == 0 {
 		return pageContent
 	}
 
-	errorTemplateResult := createErrorTemplate(errorList)
+	errorTemplateResult := createErrorTemplate(pageErrors)
 
 	return document.InjectContent(pageContent, errorTemplateResult, document.Body)
 }
 
 func PrintDocumentErrors() {
-	for _, errorModel := range errorList {
+	for _, errorModel := range totalErrors {
 		cli.PrintError(errorModel)
 	}
 }

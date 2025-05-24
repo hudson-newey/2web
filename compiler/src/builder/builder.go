@@ -18,7 +18,7 @@ import (
 	"strings"
 )
 
-func Build() {
+func Build() bool {
 	args := cli.GetArgs()
 
 	if *args.HasDevTools && *args.IsProd {
@@ -68,6 +68,8 @@ func Build() {
 	// that all of the errors are located in the same section, and are the most
 	// recent output when compilation finishes.
 	documentErrors.PrintDocumentErrors()
+
+	return documentErrors.IsErrorFree()
 }
 
 func compileAndWriteFile(inputPath string, outputPath string) {
@@ -125,6 +127,7 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 	compiledPage := templating.Compile(inputPath, pageModel)
 
 	compiledPage.Html.Content = documentErrors.InjectErrors(compiledPage.Html.Content)
+	documentErrors.ResetPageErrors()
 
 	if *args.HasDevTools {
 		compiledPage.Html.Content = devtools.InjectDevTools(compiledPage.Html.Content)
