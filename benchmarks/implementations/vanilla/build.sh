@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-true
+cd ./implementations/vanilla/
+
+mkdir -p dist/
+
+cp ./index.html ./dist/index.html

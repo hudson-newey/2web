@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-run --allow-read --allow-write --allow-read
+#!/usr/bin/env -S deno run --allow-run --allow-write --allow-read
 type FrameworkName = string;
 type Kilobyte = number;
 type Milliseconds = number;
