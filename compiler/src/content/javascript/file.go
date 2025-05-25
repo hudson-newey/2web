@@ -30,6 +30,7 @@ func (model *JSFile) RawContent() string {
 			Loader:     api.LoaderTS,
 			ResolveDir: ".",
 		},
+		Format: api.FormatESModule,
 		Bundle: true,
 	})
 
