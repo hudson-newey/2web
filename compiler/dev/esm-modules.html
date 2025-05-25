@@ -9,6 +9,8 @@
 
 <h1 #greetingOutput></h1>
 
+<h2>{{ $compiledGreeting }}</h2>
+
 <script>
   import { sayHello } from "./scripts/esm-test.ts";
 
@@ -20,4 +22,8 @@
   const greeting = sayHello(username);
 
   greetingOutput.innerText = greeting;
+</script>
+
+<script compiled>
+  $ compiledGreeting = "This is a compiled greeting";
 </script>
