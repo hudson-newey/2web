@@ -33,6 +33,10 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 	// using the "async" keyword.
 	// Note that this will delay the initial page load times because all of the
 	// JavaScript will be blocking.
+	//
+	// Note that we include new line character after every import to make them
+	// easier to read in a development environment.
+	// These new line characters will be removed when building for production.
 	injectedContent := ""
 	if jsFile.IsLazy() {
 		// type="module" is automatically deferred, but we also add the "async"
@@ -40,7 +44,7 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 		// loading when the main thread is free.
 		// This will allow the user to start reading/navigating on the page before
 		// the reactive content has loaded.
-		injectedContent = fmt.Sprintf(`<script async type="module" src="%s"></script>`, jsFile.FileName())
+		injectedContent = fmt.Sprintf(`<script async type="module" src="%s"></script>%s`, jsFile.FileName(), "\n")
 	} else {
 		// Note that the script is still deferred because it is using type="module"
 		// I have purposely done this so that the programmer doesn't have to deal
@@ -49,7 +53,7 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 		// programmer.
 		// This also allows the user to reference DOM elements in their scripts
 		// without any iife or any other related hackery.
-		injectedContent = fmt.Sprintf(`<script type="module" src="%s"></script>`, jsFile.FileName())
+		injectedContent = fmt.Sprintf(`<script type="module" src="%s"></script>%s`, jsFile.FileName(), "\n")
 	}
 
 	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, document.Head)

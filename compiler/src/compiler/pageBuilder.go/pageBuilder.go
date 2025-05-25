@@ -27,9 +27,10 @@ func BuildPage(content string) page.Page {
 	inCodeBlock := false
 
 	currentNodeType := htmlNode
-	htmlContent := ""
-	jsContent := ""
-	cssContent := ""
+	bufferedContent := ""
+
+	pageModel := page.Page{}
+	pageModel.Html = &html.HTMLFile{}
 
 	for i := range content {
 		if currentNodeType != htmlNode {
@@ -39,7 +40,22 @@ func BuildPage(content string) page.Page {
 				}
 
 				if content[i-len(endTag):i] == endTag {
+					if bufferedContent != "" {
+						if currentNodeType == jsNode {
+							newJsNode := javascript.JSFile{}
+							newJsNode.AddContent(bufferedContent)
+
+							pageModel.AddScript(&newJsNode)
+						} else if currentNodeType == cssNode {
+							newCssNode := css.CSSFile{}
+							newCssNode.AddContent(bufferedContent)
+
+							pageModel.AddStyle(&newCssNode)
+						}
+					}
+
 					currentNodeType = htmlNode
+					bufferedContent = ""
 					break
 				}
 			}
@@ -88,30 +104,12 @@ func BuildPage(content string) page.Page {
 		// included in the production build.
 		switch currentNodeType {
 		case htmlNode:
-			htmlContent += string(content[i])
+			pageModel.Html.AddContent(string(content[i]))
 		case jsNode:
-			jsContent += string(content[i])
+			bufferedContent += string(content[i])
 		case cssNode:
-			cssContent += string(content[i])
+			bufferedContent += string(content[i])
 		}
-	}
-
-	pageModel := page.Page{}
-
-	htmlModel := html.HTMLFile{}
-	htmlModel.AddContent(htmlContent)
-	pageModel.SetContent(&htmlModel)
-
-	jsModel := javascript.JSFile{}
-	if jsContent != "" {
-		jsModel.AddContent(jsContent)
-		pageModel.AddScript(&jsModel)
-	}
-
-	cssModel := css.CSSFile{}
-	if cssContent != "" {
-		cssModel.AddContent(cssContent)
-		pageModel.AddStyle(&cssModel)
 	}
 
 	return pageModel

@@ -1,0 +1,45 @@
+<title>Script Tags</title>
+<link rel="stylesheet" href="dev-styles.css" />
+
+<p>
+  This page tests having multiple script and style tags on the same page. You
+  should see that variables are not shared between the different script blocks
+  and that each script tag is separated into their own lazy loaded module.
+</p>
+
+<p>
+  Note that this actually breaks compatibility with normal HTML behavior, but I
+  deeded that this behavior is actually more useful.
+</p>
+
+<p>
+  This page uses the console output for debugging, so you should check the
+  browser console.
+</p>
+
+<script>
+  const one = 1;
+  console.log(one);
+</script>
+
+<script>
+  const two = 2;
+  console.log(two);
+</script>
+
+<script>
+  const three = 3;
+  console.log(three);
+</script>
+
+<script>
+  // This console log should throw an error because each script tag is scoped
+  // meaning that it should not have access to any of the variables outside this
+  // code block.
+  console.log({ one, two, three, four });
+</script>
+
+<script>
+  const four = 4;
+  console.log(four);
+</script>
