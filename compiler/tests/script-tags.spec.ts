@@ -1,8 +1,13 @@
-import { test } from "vitest";
+import { beforeEach, test } from "vitest";
 import { assertNoErrors } from "./helpers/assertions";
 import { navigateToPage } from "./helpers/fixture";
 
+let document: Document;
+
+beforeEach(() => {
+  document = navigateToPage("script-tags.html");
+});
+
 test("should load", () => {
-  const document = navigateToPage("script-tags.html");
   assertNoErrors(document);
 });
