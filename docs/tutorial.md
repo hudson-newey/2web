@@ -318,10 +318,18 @@ TypeScript builds, meaning that we don't provide any type checking.
 Type checking is considered a development environment operation, and should not
 be performed at compile time.
 
+By default, all `<script>` tags are compiled to
+[ecma script modules](https://webpack.js.org/guides/ecma-script-modules/) (esm).
+This means that you can import any third party libraries that export JavaScript
+or TypeScript as ESM.
+
 ## Page/Component styling
 
 We support styling your components through normal css.
 If you wish to use a component / styling framework, you can use one if you wish.
+
+Note that we also support styling through
+[CSS Modules](https://github.com/css-modules/css-modules).
 
 ## Compiler errors
 

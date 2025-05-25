@@ -1,0 +1,23 @@
+<title>ESM Modules</title>
+<link rel="stylesheet" href="dev-styles.css" />
+
+<p>
+  This page tests importing ESM modules that are written in TypeScript. Because
+  we use esbuild under the hood, you should see that these TypeScript files can
+  be imported and used as if they were regular ESM imports.
+</p>
+
+<h1 #greetingOutput></h1>
+
+<script>
+  import { sayHello } from "./dev/scripts/esm-test.ts";
+
+  const name = "2Web Programmer";
+
+  // Notice that this variable name conflicts with a variable name inside the
+  // "sayHello" function.
+  // We expect that EsBuild can successfully correct this name collision.
+  const greeting = sayHello(name);
+
+  greetingOutput.innerText = greeting;
+</script>

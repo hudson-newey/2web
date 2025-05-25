@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"hudson-newey/2web/src/cli"
+	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/models"
 	"strings"
 
 	"github.com/evanw/esbuild/pkg/api"
@@ -30,13 +32,23 @@ func (model *JSFile) RawContent() string {
 			Loader:     api.LoaderTS,
 			ResolveDir: ".",
 		},
-		Format: api.FormatESModule,
-		Bundle: true,
+		Format:    api.FormatESModule,
+		Sourcemap: api.SourceMapNone,
+		Bundle:    true,
 	})
 
 	bundledContent := ""
 	for _, outputFile := range esbuildOutput.OutputFiles {
 		bundledContent += string(outputFile.Contents)
+	}
+
+	for _, buildError := range esbuildOutput.Errors {
+		errorModel := models.Error{
+			Message:  buildError.Text,
+			FilePath: model.FileName(),
+		}
+
+		documentErrors.AddError(errorModel)
 	}
 
 	return bundledContent
