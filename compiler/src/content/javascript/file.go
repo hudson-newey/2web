@@ -7,6 +7,7 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
+	"path/filepath"
 	"strings"
 
 	"github.com/evanw/esbuild/pkg/api"
@@ -26,15 +27,18 @@ func (model *JSFile) RawContent() string {
 	result = strings.ReplaceAll(result, "<script compiled>", "")
 	result = strings.ReplaceAll(result, "</script>", "")
 
+	workingDir, _ := filepath.Abs(*cli.GetArgs().InputPath)
+
 	esbuildOutput := api.Build(api.BuildOptions{
 		Stdin: &api.StdinOptions{
 			Contents:   result,
 			Loader:     api.LoaderTS,
 			ResolveDir: ".",
 		},
-		Format:    api.FormatESModule,
-		Sourcemap: api.SourceMapNone,
-		Bundle:    true,
+		Format:        api.FormatESModule,
+		AbsWorkingDir: workingDir,
+		Sourcemap:     api.SourceMapNone,
+		Bundle:        true,
 	})
 
 	bundledContent := ""

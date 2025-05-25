@@ -10,14 +10,14 @@
 <h1 #greetingOutput></h1>
 
 <script>
-  import { sayHello } from "./dev/scripts/esm-test.ts";
+  import { sayHello } from "./scripts/esm-test.ts";
 
-  const name = "2Web Programmer";
+  const username = "2Web Programmer";
 
   // Notice that this variable name conflicts with a variable name inside the
   // "sayHello" function.
   // We expect that EsBuild can successfully correct this name collision.
-  const greeting = sayHello(name);
+  const greeting = sayHello(username);
 
   greetingOutput.innerText = greeting;
 </script>
