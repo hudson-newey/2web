@@ -13,14 +13,19 @@
 </p>
 
 <script compiled>
-$ count = 0;
+  $ count = 0;
 </script>
 
-<h1 *innerText="$count"></h1>
+<h1 *innerText="$count" data-testid="count-output"></h1>
 
 <div>
-  <button @click="$count = $count + 1">Increment</button>
-  <button @click="$count = $count - 1">Decrement</button>
+  <button @click="$count = $count + 1" data-testid="increment-button">
+    Increment
+  </button>
+
+  <button @click="$count = $count - 1" data-testid="decrement-button">
+    Decrement
+  </button>
 </div>
 
 <div style="margin-top: 1rem">

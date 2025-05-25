@@ -35,7 +35,8 @@ func Build() bool {
 	// If the output path already exists, delete the output path so that there
 	// are no stale files.
 	if _, err := os.Stat(*args.OutputPath); err != os.ErrNotExist {
-		os.RemoveAll(*args.OutputPath)
+		// TODO: This has been disabled because it doesn't work with Vite HMR
+		// os.RemoveAll(*args.OutputPath)
 	}
 
 	if inputPath.IsDir() {
