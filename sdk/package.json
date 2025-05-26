@@ -6,9 +6,10 @@
   "license": "MIT",
   "type": "module",
   "exports": [
-    "./vite.config.ts",
+    "./.eslintrc.js",
     "./tsconfig.json",
-    "./.eslintrc.js"
+    "./vite.config.ts",
+    "./web-test-runner.config.mjs"
   ],
   "packageManager": "pnpm@10.8.0"
 }
