@@ -18,6 +18,7 @@
     "dev": "vite ./dist/",
     "format": "prettier --write ./dev/",
     "test": "vitest",
+    "test:report": "vite preview --outDir html-report",
     "build": "task build"
   },
   "bin": {
