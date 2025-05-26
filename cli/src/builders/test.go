@@ -10,13 +10,13 @@ func TestSolution(args []string) {
 	pathTarget := entryTarget(args)
 
 	if err == nil {
-		packages.ExecutePackage(
+		packages.ExecuteWithoutFallback(
 			"wtr",
 			"--config",
 			wtrConfig,
 			pathTarget,
 		)
 	} else {
-		packages.ExecutePackage("wtr", "./src/")
+		packages.ExecuteWithoutFallback("wtr", "./src/")
 	}
 }

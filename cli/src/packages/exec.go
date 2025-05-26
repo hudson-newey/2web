@@ -1,12 +1,15 @@
 package packages
 
-import "github.com/hudson-newey/2web-cli/src/shell"
+import (
+	"github.com/hudson-newey/2web-cli/src/cli"
+	"github.com/hudson-newey/2web-cli/src/shell"
+)
 
 // Allows you to run a package managers "exec" command.
 // This function will automatically determine the package manager used in the
 // current solution, and use it.
 // If no package manager is found or the dependency isn't a dependency of the
-// current solution, the "npm dlx" command will be run instead.
+// current solution, the "npx" command will be run instead.
 //
 // Even though a package manager might change the command syntax to execute
 // installed package binaries, at the time of writing, all of the supported
@@ -16,10 +19,29 @@ import "github.com/hudson-newey/2web-cli/src/shell"
 // up changing the format, they will provide enough time for me to adjust
 // the shell command.
 func ExecutePackage(args ...string) {
+	internalExecute(args, true)
+}
+
+// This behaves the same as the "ExecutePackage" command except that if the
+// package doesn't exist locally, we don't execute the "npx" command.
+// This should be used if the package name and the executable do not match.
+// E.g. "web-test-runner" is exported by the @web/test-runner package, but is
+// invoked through the "wtr" command.
+// In this case, if we downloaded and invoked the "wtr" package, we would
+// download a random package from npm and execute it.
+func ExecuteWithoutFallback(args ...string) {
+	internalExecute(args, false)
+}
+
+func internalExecute(args []string, allowFallback bool) {
 	packageManager := DeterminePackageManager()
 
 	if packageManager == None {
-		executeNpx(args...)
+		if allowFallback {
+			executeNpx(args)
+		} else {
+			cli.PrintError(1, "could not find 'web-test-runner'.")
+		}
 		return
 	}
 
@@ -49,7 +71,7 @@ func ExecutePackage(args ...string) {
 // Although, supporting this use case makes the 2web cli useful for mocking up
 // projects outside of the 2web framework, making the cli more framework
 // agnostic.
-func executeNpx(args ...string) {
+func executeNpx(args []string) {
 	shellCommand := []string{"npx"}
 	shellCommand = append(shellCommand, args...)
 
