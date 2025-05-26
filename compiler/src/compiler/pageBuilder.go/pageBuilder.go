@@ -49,7 +49,7 @@ func BuildPage(content string) page.Page {
 						} else if currentNodeType == codeNode {
 							contentToPrepend := strings.TrimPrefix(bufferedContent, "<code>")
 
-							escapedContent := escapeHtml(contentToPrepend)
+							escapedContent := html.EscapeHtml(contentToPrepend)
 							escapedContent = "<code>" + escapedContent
 
 							pageModel.Html.AddContent(escapedContent)
@@ -100,20 +100,4 @@ func BuildPage(content string) page.Page {
 	}
 
 	return pageModel
-}
-
-func escapeHtml(htmlFragment string) string {
-	replacementTable := map[string]string{
-		"{": "&#x7B;",
-		"}": "&#x7D;",
-		"<": "&lt;",
-		">": "&gt;",
-	}
-
-	result := htmlFragment
-	for key, value := range replacementTable {
-		result = strings.ReplaceAll(result, key, value)
-	}
-
-	return result
 }
