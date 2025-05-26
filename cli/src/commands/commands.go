@@ -69,6 +69,10 @@ func ProcessInvocation(args []string) {
 		return
 	}
 
+	if command == "test" {
+		builders.TestSolution(args)
+	}
+
 	if command == "deploy" {
 		deploy.DeploySolution()
 		return
