@@ -5,8 +5,8 @@ export default defineConfig([
     files: ["**/*.js", "**/*.ts"],
     extends: ["js/recommended"],
     rules: {
-			"no-console": "error",
-      "camelcase": "error",
+      "no-console": "error",
+      camelcase: "error",
       "capitalized-comments": "error",
       "no-eval": "error",
 
