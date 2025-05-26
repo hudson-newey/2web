@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
+	"strings"
 )
 
 type nodeType = int
@@ -13,18 +14,12 @@ const (
 	htmlNode nodeType = iota
 	jsNode
 	cssNode
+	codeNode
 )
 
 func BuildPage(content string) page.Page {
-	nonHtmlStartTags := []string{"<script", "<style"}
-	nonHtmlEndTags := []string{"</script>", "</style>"}
-
-	codeBlockStart := []string{"<code"}
-	codeBlockEnd := []string{"</code>"}
-
-	// When we are inside a code block, we want to emit style and script tag
-	// content as if it was typed as text.
-	inCodeBlock := false
+	nonHtmlStartTags := []string{"<script", "<style", "<code"}
+	nonHtmlEndTags := []string{"</script>", "</style>", "</code>"}
 
 	currentNodeType := htmlNode
 	bufferedContent := ""
@@ -51,6 +46,13 @@ func BuildPage(content string) page.Page {
 							newCssNode.AddContent(bufferedContent)
 
 							pageModel.AddStyle(&newCssNode)
+						} else if currentNodeType == codeNode {
+							contentToPrepend := strings.TrimPrefix(bufferedContent, "<code>")
+
+							escapedContent := escapeHtml(contentToPrepend)
+							escapedContent = "<code>" + escapedContent
+
+							pageModel.Html.AddContent(escapedContent)
 						}
 					}
 
@@ -61,29 +63,10 @@ func BuildPage(content string) page.Page {
 			}
 		}
 
-		for _, startTag := range codeBlockStart {
-			if i+len(startTag) > len(content) {
-				continue
-			}
-
-			if content[i:i+len(startTag)] == startTag {
-				inCodeBlock = true
-				break
-			}
-		}
-
-		for _, endTag := range codeBlockEnd {
-			if i-len(endTag) < 0 {
-				continue
-			}
-
-			if content[i-len(endTag):i] == endTag {
-				inCodeBlock = false
-				break
-			}
-		}
-
-		if !inCodeBlock {
+		// We do not allow transitioning to other tag types if we are in a code node
+		// so that you can write script and style tags inside of the code block.
+		// We escape all of the tags in a later stage.
+		if currentNodeType != codeNode {
 			for _, startTag := range nonHtmlStartTags {
 				if i+len(startTag) > len(content) {
 					continue
@@ -95,6 +78,8 @@ func BuildPage(content string) page.Page {
 						currentNodeType = jsNode
 					case "<style":
 						currentNodeType = cssNode
+					case "<code":
+						currentNodeType = codeNode
 					}
 				}
 			}
@@ -109,8 +94,26 @@ func BuildPage(content string) page.Page {
 			bufferedContent += string(content[i])
 		case cssNode:
 			bufferedContent += string(content[i])
+		case codeNode:
+			bufferedContent += string(content[i])
 		}
 	}
 
 	return pageModel
+}
+
+func escapeHtml(htmlFragment string) string {
+	replacementTable := map[string]string{
+		"{": "&#x7B;",
+		"}": "&#x7D;",
+		"<": "&lt;",
+		">": "&gt;",
+	}
+
+	result := htmlFragment
+	for key, value := range replacementTable {
+		result = strings.ReplaceAll(result, key, value)
+	}
+
+	return result
 }

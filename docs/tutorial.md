@@ -162,7 +162,7 @@ Therefore, the code above compiles into the following code:
   </head>
 
   <body>
-    <h1 >Current Count: <span data-__2_element_0>0</span></h1>
+    <h1>Current Count: <span data-__2_element_0>0</span></h1>
     <button onclick="__2_func_0(++__2_var__0)">Increment</button>
 
     <script>
@@ -284,10 +284,10 @@ During code-splitting, the compiler has the following goals:
 
 - The browser should only have to parse one file on initial page load.
   - This means that content on the critical rendering path should all be
-  contained within the single `.html` file served to the user.
+    contained within the single `.html` file served to the user.
 - Reactivity hydration should **not** change the information on the page.
   - When we hydrate the page with reactivity. E.g. "when I click this button xyz
-  should occur" nothing about the page content should change.
+    should occur" nothing about the page content should change.
 - Loading reactivity should be non-blocking, and the page should be navigable
   before reactivity is loaded. Similar to [qwik](https://qwik.dev/), reactivity
   should be lazy loaded. This is beneficial because typical users will not
@@ -338,3 +338,50 @@ During compile time, the 2Web compiler will perform basic checks to ensure that
 your code is valid.
 If you perform an invalid operation such as referencing a variable that does not
 exist, the compiler will yell at you, telling you that it does not exist.
+
+## Breaking changes (from HTML)
+
+I have made some minor changes to the HTML format that should not effect you if
+you are writing good/proper HTML.
+
+## Code blocks
+
+`<script>`, and `<style>` tags inside of html `<code>` blocks no longer
+execute code.
+This was done so that you don't have to use `gt;` and `lt;` escape codes inside
+of HTML `<code>` blocks.
+
+This allows us to write plain code inside of `<code>` blocks without having to
+worry about escape characters.
+
+E.g.
+
+```html
+<pre><code>
+<h1>My Heading</h1>
+
+<script>
+  console.log("Hello World!");
+</script>
+</code></pre>
+```
+
+Running in a normal browser, the inline `<script>` tag would still be executed.
+However, I think that this is a horrible developer experience as I just want to
+be able to write code inside of `<code>` blocks without having to worry about
+html escaping.
+Additionally, the subset of developers who are using this is very small, and
+I do not expect developers to be writing `<script>` tags that they want to be
+executed inside of `<code>` tags.
+
+Therefore, the code above will be compiled to the following HTML.
+
+```html
+<pre><code>
+&lt;h1&gt;My Heading&lt;/h1&gt;
+
+&lt;script&gt;
+  console.log("Hello World!");
+&lt;/script&gt;
+</pre></code>
+```

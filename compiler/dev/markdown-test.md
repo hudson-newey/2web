@@ -13,3 +13,12 @@ Notice that this file does not have have html tags.
 This is because I do not believe in HTML inside of Markdown.
 
 Note that you can still use all ssg functions.
+
+```html
+<script>
+  $ count = 0;
+</script>
+
+<h1>{{ $count }}</h1>
+<h2>{{ $nonExistent }}</h2>
+```
