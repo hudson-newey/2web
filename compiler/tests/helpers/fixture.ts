@@ -13,8 +13,8 @@ export async function navigateToPage(location: string) {
   });
   const page = browser.newPage();
 
-  // Navigates page
-  await page.goto("http://localhost:5173/" + location);
+  page.url = "http://localhost:5173/" + location;
+  page.content = html;
 
   const document = page.mainFrame.document;
 
