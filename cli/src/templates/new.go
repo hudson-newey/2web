@@ -36,15 +36,16 @@ var packageJsonContent string = fmt.Sprintf(`{
   "author": "your-name",
   "license": "your-license",
   "dependencies": {
-		"@two-web/kit": "%s"
+    "@two-web/kit": "%s"
   },
   "devDependencies": {
-		"@two-web/compiler": "%s",
-		"@two-web/cli": "%s",
-		"@two-web/sdk": "%s",
+    "@two-web/compiler": "%s",
+    "@two-web/cli": "%s",
+    "@two-web/sdk": "%s",
+    "@web/test-runner": "^0.20.2",
     "vite": "^6.3.5",
-		"typescript": "^5.8.3",
-		"eslint": "^9.27.0"
+    "typescript": "^5.8.3",
+    "eslint": "^9.27.0"
   }
 }
 `, twoWebVersion, twoWebVersion, twoWebVersion, twoWebVersion)
@@ -70,6 +71,13 @@ should be extremely fast and have support for  hot module replacement (HMR).
 
 ` + "```sh" + `
 $ 2web build
+>
+` + "```" + `
+
+## Testing your project
+
+` + "```" + `
+$ 2web test
 >
 ` + "```" + `
 `
