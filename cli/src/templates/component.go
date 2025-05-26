@@ -25,7 +25,7 @@ func ComponentTemplate(componentName string) {
 					IsDirectory: false,
 				},
 				{
-					Path:        componentPath + componentName + ".component.spec.js",
+					Path:        componentPath + componentName + ".component.spec.ts",
 					Content:     createComponentTestContent(componentName),
 					IsDirectory: false,
 				},

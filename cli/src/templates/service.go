@@ -21,11 +21,11 @@ func ServiceTemplate(serviceName string) {
 			IsDirectory: true,
 			Children: []files.File{
 				{
-					Path:    servicePath + serviceName + ".service.js",
+					Path:    servicePath + serviceName + ".service.ts",
 					Content: createServiceContent(serviceName),
 				},
 				{
-					Path:    servicePath + serviceName + ".service.spec.js",
+					Path:    servicePath + serviceName + ".service.spec.ts",
 					Content: createServiceTestContent(serviceName),
 				},
 			},
@@ -38,16 +38,16 @@ func ServiceTemplate(serviceName string) {
 func createServiceContent(name string) string {
 	camelServiceName := capitalizeFirst(name)
 
-	return fmt.Sprintf(`function create%s() {
+	return fmt.Sprintf(`export function create%s() {
 }
 
-function get%s() {
+export function get%s() {
 }
 
-function update%s() {
+export function update%s() {
 }
 
-function delete%s() {
+export function delete%s() {
 }
 `, camelServiceName, camelServiceName, camelServiceName, camelServiceName)
 }

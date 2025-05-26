@@ -20,11 +20,11 @@ func ModelTemplate(modelName string) {
 			IsDirectory: true,
 			Children: []files.File{
 				{
-					Path:    servicePath + modelName + ".model.js",
+					Path:    servicePath + modelName + ".model.ts",
 					Content: createModelContent(modelName),
 				},
 				{
-					Path:    servicePath + modelName + ".model.spec.js",
+					Path:    servicePath + modelName + ".model.spec.ts",
 					Content: createModelTestContent(modelName),
 				},
 			},

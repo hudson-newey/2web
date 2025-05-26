@@ -20,11 +20,11 @@ func AspectTemplate(name string) {
 			IsDirectory: true,
 			Children: []files.File{
 				{
-					Path:    dirPath + name + ".aspect.js",
+					Path:    dirPath + name + ".aspect.ts",
 					Content: createAspectContent(name),
 				},
 				{
-					Path:    dirPath + name + ".aspect.spec.js",
+					Path:    dirPath + name + ".aspect.spec.ts",
 					Content: createAspectTestContent(name),
 				},
 			},
@@ -37,7 +37,7 @@ func AspectTemplate(name string) {
 func createAspectContent(name string) string {
 	camelAspectName := capitalizeFirst(name)
 
-	return fmt.Sprintf(`class %s {
+	return fmt.Sprintf(`export class %s {
 }
 `, camelAspectName)
 }

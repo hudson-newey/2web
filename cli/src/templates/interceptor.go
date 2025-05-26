@@ -20,11 +20,11 @@ func InterceptorTemplate(name string) {
 			IsDirectory: true,
 			Children: []files.File{
 				{
-					Path:    dirPath + name + ".interceptor.js",
+					Path:    dirPath + name + ".interceptor.ts",
 					Content: createInterceptorContent(name),
 				},
 				{
-					Path:    dirPath + name + ".interceptor.spec.js",
+					Path:    dirPath + name + ".interceptor.spec.ts",
 					Content: createInterceptorTestContent(name),
 				},
 			},
