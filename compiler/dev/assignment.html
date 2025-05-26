@@ -13,10 +13,10 @@
 </p>
 
 <script compiled>
-$ message = "Hello";
+  $ message = "Hello";
 </script>
 
-<h1 *innerText="$message"></h1>
+<h1 *innerText="$message" data-testid="output-element"></h1>
 
 <button @click="$message = 'World'">World</button>
 <button @click="$message = 'Me'">Me</button>

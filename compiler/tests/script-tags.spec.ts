@@ -1,11 +1,12 @@
 import { beforeEach, test } from "vitest";
 import { assertNoErrors } from "./helpers/assertions";
 import { navigateToPage } from "./helpers/fixture";
+import { Document } from "happy-dom";
 
 let document: Document;
 
-beforeEach(() => {
-  document = navigateToPage("script-tags.html");
+beforeEach(async () => {
+  document = await navigateToPage("script-tags.html");
 });
 
 test("should load", () => {

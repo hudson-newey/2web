@@ -9,7 +9,7 @@ export default defineConfig({
     outputFile: {
       html: "./html-report/index.html",
     },
-    environment: "jsdom",
+    environment: "happy-dom",
   },
   server: {
     port: 3000,
