@@ -385,3 +385,8 @@ Therefore, the code above will be compiled to the following HTML.
 &lt;/script&gt;
 </pre></code>
 ```
+
+### Script tags have default "module" type
+
+All inline `<script>` tags will automatically support esm imports and will be
+lazy-loaded.

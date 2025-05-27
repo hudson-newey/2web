@@ -2,17 +2,19 @@
 
 A collection of packages to enhance your 2web application
 
-| Package     | Description | State |
-| ----------- | ----------- | ----- |
-| database    |             | ❌    |
-| dom-ranges  |             | ❌    |
-| edge        |             | ❌    |
-| ssr         |             | ❌    |
-| pre-fetcher |             | ❌    |
-| signals     |             | 🔧    |
-| spa-router  |             | ❌    |
-| ssr         |             | ❌    |
-| vite-plugin |             | 🔧    |
+| Package      | State |
+| ------------ | ----- |
+| context      | ❌    |
+| database     | ❌    |
+| dom-ranges   | ❌    |
+| edge         | ❌    |
+| ssr          | ❌    |
+| pre-fetcher  | ❌    |
+| route-guards | ❌    |
+| signals      | 🔧    |
+| spa-router   | ❌    |
+| ssr          | ❌    |
+| vite-plugin  | 🔧    |
 
 ❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
 

@@ -16,10 +16,12 @@
     "dist/"
   ],
   "exports": {
+    "context": "./dist/context.js",
     "database": "./dist/database.js",
     "dom-ranges": "./dist/dom-ranges.js",
     "edge": "./dist/edge.js",
     "pre-fetcher": "./dist/pre-fetcher.js",
+    "route-guards": "./dist/route-guards.js",
     "spa-router": "./dist/spa-router.js",
     "ssr": "./dist/ssr.js",
     "vite-plugin": "./dist/vite-plugin.js",

@@ -90,11 +90,7 @@ func BuildPage(content string) page.Page {
 		switch currentNodeType {
 		case htmlNode:
 			pageModel.Html.AddContent(string(content[i]))
-		case jsNode:
-			bufferedContent += string(content[i])
-		case cssNode:
-			bufferedContent += string(content[i])
-		case codeNode:
+		case jsNode, cssNode, codeNode:
 			bufferedContent += string(content[i])
 		}
 	}

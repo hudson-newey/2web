@@ -1,0 +1,4 @@
+package art
+
+func PrintAsciiArt() {
+}

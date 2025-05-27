@@ -22,20 +22,23 @@ func generate(programName string, command string, args []string) {
 
 	templateName := args[3]
 
-	if template == "component" || template == "c" {
+	switch template {
+	case "component", "c":
 		templates.ComponentTemplate(templateName)
-	} else if template == "service" || template == "s" {
+	case "service", "s":
 		templates.ServiceTemplate(templateName)
-	} else if template == "model" || template == "m" {
+	case "model", "m":
 		templates.ModelTemplate(templateName)
-	} else if template == "aspect" || template == "a" {
+	case "aspect", "a":
 		templates.AspectTemplate(templateName)
-	} else if template == "interceptor" || template == "i" {
+	case "interceptor", "i":
 		templates.InterceptorTemplate(templateName)
-	} else if template == "page" || template == "p" {
+	case "page", "p":
 		templates.PageTemplate(templateName)
-	} else {
-		errorMsg := fmt.Sprintf("unrecognized generate template: '%s'", template)
-		cli.PrintError(1, errorMsg)
+	// Templates below this point require @two-web/kit
+	case "guard", "g":
+		templates.GuardTemplate(templateName)
+	default:
+		cli.PrintError(1, fmt.Sprintf("unrecognized generate template: '%s'", template))
 	}
 }
