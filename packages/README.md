@@ -8,7 +8,7 @@ A collection of packages to enhance your 2web application
 | database     | ❌    |
 | dom-ranges   | ❌    |
 | edge         | ❌    |
-| pre-fetcher  | ❌    |
+| pre-fetcher  | 🔧    |
 | route-guards | 🔧    |
 | signals      | 🔧    |
 | spa-router   | ❌    |
