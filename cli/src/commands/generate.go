@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/hudson-newey/2web-cli/src/cli"
-	"github.com/hudson-newey/2web-cli/src/templates"
+	"github.com/hudson-newey/2web-cli/src/generators"
 )
 
 func generate(programName string, command string, args []string) {
@@ -24,20 +24,20 @@ func generate(programName string, command string, args []string) {
 
 	switch template {
 	case "component", "c":
-		templates.ComponentTemplate(templateName)
+		generators.ComponentGenerator(templateName)
 	case "service", "s":
-		templates.ServiceTemplate(templateName)
+		generators.ServiceGenerator(templateName)
 	case "model", "m":
-		templates.ModelTemplate(templateName)
+		generators.ModelGenerator(templateName)
 	case "aspect", "a":
-		templates.AspectTemplate(templateName)
+		generators.AspectGenerator(templateName)
 	case "interceptor", "i":
-		templates.InterceptorTemplate(templateName)
+		generators.InterceptorGenerator(templateName)
 	case "page", "p":
-		templates.PageTemplate(templateName)
-	// Templates below this point require @two-web/kit
+		generators.PageGenerator(templateName)
+	// generators below this point require @two-web/kit
 	case "guard", "g":
-		templates.GuardTemplate(templateName)
+		generators.GuardGenerator(templateName)
 	default:
 		cli.PrintError(1, fmt.Sprintf("unrecognized generate template: '%s'", template))
 	}

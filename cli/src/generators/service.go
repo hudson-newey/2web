@@ -1,4 +1,4 @@
-package templates
+package generators
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/hudson-newey/2web-cli/src/files"
 )
 
-func ServiceTemplate(serviceName string) {
+func ServiceGenerator(serviceName string) {
 	servicePath := fmt.Sprintf("src/services/%s/", serviceName)
 
 	// ignore errors from this because we expect this to fail (because the

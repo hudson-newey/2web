@@ -1,4 +1,4 @@
-package templates
+package generators
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/hudson-newey/2web-cli/src/files"
 )
 
-func PageTemplate(name string) {
+func PageGenerator(name string) {
 	dirPath := "src/"
 
 	// ignore errors from this because we expect this to fail (because the

@@ -1,4 +1,4 @@
-package templates
+package generators
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/hudson-newey/2web-cli/src/files"
 )
 
-func GuardTemplate(guardName string) {
+func GuardGenerator(guardName string) {
 	guardPath := fmt.Sprintf("src/guards/%s/", guardName)
 
 	// ignore errors from this because we expect this to fail (because the
@@ -44,7 +44,7 @@ func createGuardContent(name string) string {
 		return false;
 	}
 
-	const %s = () => {
+	export const %s: RouteGuard = () => {
 		if (failCondition()) {
 		  // redirect to the login page
 			return "/login";
