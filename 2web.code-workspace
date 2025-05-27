@@ -17,23 +17,23 @@
     "editor.insertSpaces": true,
     "explorer.compactFolders": false,
     "cSpell.caseSensitive": false,
-    "cSpell.words": ["vite"],
+    "cSpell.words": ["vite", "prefetcher"],
     "cSpell.flagWords": ["yuo"],
     "cSpell.ignorePaths": ["**/node_modules/**", "2web.code-workspace"],
     "search.exclude": {
       "dist/": true,
       "build/": true,
-      "tmp/": true,
+      "tmp/": true
     },
     "[go]": {
-      "editor.defaultFormatter": "golang.go",
+      "editor.defaultFormatter": "golang.go"
     },
     "[typescript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[html]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
+    }
   },
   "extensions": {
     "recommendations": [
@@ -57,6 +57,6 @@
 
       "vue.volar",
       "svelte.svelte-vscode"
-    ],
-  },
+    ]
+  }
 }
