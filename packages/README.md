@@ -5,9 +5,7 @@ A collection of packages to enhance your 2web application
 | Package      | State |
 | ------------ | ----- |
 | context      | ❌    |
-| database     | ❌    |
 | dom-ranges   | ❌    |
-| edge         | ❌    |
 | pre-fetcher  | 🔧    |
 | route-guards | 🔧    |
 | signals      | 🔧    |

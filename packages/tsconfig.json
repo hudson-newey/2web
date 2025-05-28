@@ -1,10 +1,10 @@
 {
   "extends": "@total-typescript/tsconfig/bundler/dom/library",
   "include": [
-    "database/",
+    "context/",
     "dom-ranges/",
-    "edge/",
     "pre-fetcher/",
+    "route-guards/",
     "signals/",
     "spa-router/",
     "ssr/",

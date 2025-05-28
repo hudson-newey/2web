@@ -1,1 +1,0 @@
-# 2Web Edge functions
