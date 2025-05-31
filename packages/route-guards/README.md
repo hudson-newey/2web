@@ -1,4 +1,4 @@
-# Client Side route guards
+# 2Web Kit - Client Side Route Guards
 
 Note that these route guards do not prevent users finding the page or extracting
 content/data from the page.

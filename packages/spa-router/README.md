@@ -1,4 +1,4 @@
-# 2Web Router
+# 2Web Kit - Router
 
 A simple router for the 2Web framework that can turn an MPA app into an ssg app.
 

@@ -1,4 +1,4 @@
-# 2Web Vite Plugin
+# 2Web Kit - Vite Plugin
 
 A [Vite](https://vite.dev/) plugin to make 2Web development painless.
 

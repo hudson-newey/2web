@@ -1,4 +1,4 @@
-# 2Web Signals
+# 2Web Kit - Signals
 
 Lightweight framework agnostic signals that provides **runtime** state tracking.
 
@@ -6,13 +6,13 @@ Lightweight framework agnostic signals that provides **runtime** state tracking.
 
 ```html
 <script>
-import { Signal, effect } from "@two-web/kit/signals";
+  import { Signal, effect } from "@two-web/kit/signals";
 
-const count = new Signal(0);
+  const count = new Signal(0);
 
-effect(() => {
-  console.log("New value is ${count.value}");
-}, [count]);
+  effect(() => {
+    console.log("New value is ${count.value}");
+  }, [count]);
 </script>
 
 <button onclick="count.set(count.value + 1)">Increment</button>

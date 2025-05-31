@@ -1,6 +1,6 @@
-# 2Web SSR
+# 2Web Kit - SSR
 
-Basic SSR functionality for 2web / vanilla web applications.
+Basic server side rendering (SSR) functionality for 2web/html web applications.
 
 ## Usage
 
