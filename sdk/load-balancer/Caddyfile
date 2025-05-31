@@ -1,0 +1,13 @@
+# This is your sites address. If you change it to your domain, Caddy will
+# be able to automatically generate HTTP certificates for you domain.
+
+# These are the ports that your website is running on.
+# Be sure that only ports that you want users to access are listed here.
+localhost:80, localhost:443 {
+	# By specifying "encode", caddy will automatically compress the files sent
+	encode
+
+	file_server {
+		root /srv
+	}
+}
