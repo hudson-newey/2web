@@ -1,0 +1,7 @@
+services:
+  database:
+    image: mongo:latest
+    container_name: 2web-database
+    restart: unless-stopped
+    ports:
+      - "27017:27017"

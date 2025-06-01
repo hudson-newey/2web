@@ -1,7 +1,7 @@
 services:
   load-balancer:
     image: caddy:latest
-    container_name: "2web-load-balancer"
+    container_name: 2web-load-balancer
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
