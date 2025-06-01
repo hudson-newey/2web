@@ -82,6 +82,9 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 		documentErrors.AddError(models.Error{
 			FilePath: inputPath,
 			Message:  fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
+			Position: models.Position{
+				LineNumber: 1,
+			},
 		})
 	}
 

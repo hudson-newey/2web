@@ -45,7 +45,7 @@ func createErrorTemplate(errors []models.Error) string {
 	errorHtml, err := document.BuildTemplate(errorHtmlSource(), errors)
 	if err != nil {
 		// Handle the error, maybe add it to errorList
-		AddError(models.Error{Message: "Failed to render error template: " + err.Error()})
+		AddError(models.Error{Message: "failed to render error template: " + err.Error()})
 	}
 
 	return errorHtml

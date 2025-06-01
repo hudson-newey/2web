@@ -15,8 +15,17 @@ func PrintError(errorModel models.Error) {
 	// I add a tab character after every new line.
 	formattedErrorMessage := strings.ReplaceAll(errorModel.Message, "\n", "\n\t")
 
-	// Add a double new line so that the error message is emphasized in the
-	// compiler logs.
-	fmt.Printf("\n\033[31m[Error]\033[0m \033[36m%s\033[0m\n", errorModel.FilePath)
+	formattedLineNumber := ""
+	if errorModel.Position.LineNumber != 0 {
+		formattedLineNumber = fmt.Sprintf(
+			" (ln: %d, col: %d)",
+			errorModel.Position.LineNumber,
+			errorModel.Position.CharNumber,
+		)
+	}
+
+	// Add a double new line at the start so that the error message is
+	// emphasized in the compiler logs.
+	fmt.Printf("\n\033[31m[Error] \033[36m%s\033[33m%s\033[0m\n", errorModel.FilePath, formattedLineNumber)
 	fmt.Printf("\t%s\n", formattedErrorMessage)
 }
