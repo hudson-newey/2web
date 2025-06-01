@@ -1,5 +1,7 @@
 package builders
 
+import "os"
+
 // Extracts the directory/file location that builders (vite, eslint, etc...)
 // should target.
 // This is done by passing a third argument to the builder commands.
@@ -14,4 +16,9 @@ func entryTarget(args []string) string {
 	}
 
 	return defaultEntryTarget
+}
+
+func hasSsrTarget() bool {
+	_, err := os.Stat("./server/ssr.ts")
+	return err == nil
 }

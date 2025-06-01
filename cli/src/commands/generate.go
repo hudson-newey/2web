@@ -10,19 +10,19 @@ import (
 func generate(programName string, command string, args []string) {
 	argsLen := len(args)
 	if argsLen < 3 {
-		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <template> <template_name>", programName, command)
+		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <generator> <name>", programName, command)
 		cli.PrintError(1, errorMsg)
 	}
 
-	template := args[2]
+	generator := args[2]
 	if argsLen < 4 {
-		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s %s <template_name>", programName, command, template)
+		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s %s <name>", programName, command, generator)
 		cli.PrintError(1, errorMsg)
 	}
 
 	templateName := args[3]
 
-	switch template {
+	switch generator {
 	case "component", "c":
 		generators.ComponentGenerator(templateName)
 	case "service", "s":
@@ -39,6 +39,6 @@ func generate(programName string, command string, args []string) {
 	case "guard", "g":
 		generators.GuardGenerator(templateName)
 	default:
-		cli.PrintError(1, fmt.Sprintf("unrecognized generate template: '%s'", template))
+		cli.PrintError(1, fmt.Sprintf("unrecognized generate template: '%s'", generator))
 	}
 }

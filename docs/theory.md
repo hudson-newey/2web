@@ -1,5 +1,9 @@
 # Theory
 
+## This page is now outdated. See tutorial.md for more up-to-date documentation
+
+---
+
 With 2Web, you get what you write, if you write the following code
 
 ```html

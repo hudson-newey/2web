@@ -46,6 +46,11 @@ func ProcessInvocation(args []string) {
 		return
 	}
 
+	if command == "template" || command == "t" {
+		template(programName, command, args)
+		return
+	}
+
 	if command == "install" || command == "i" {
 		install(programName, command, args)
 		return

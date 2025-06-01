@@ -10,13 +10,27 @@ func LintSolution(args []string) {
 	pathTarget := entryTarget(args)
 
 	if err == nil {
-		packages.ExecutePackage(
-			"eslint",
-			"--config",
-			eslintConfig,
-			pathTarget,
-		)
+		if hasSsrTarget() {
+			packages.ExecutePackage(
+				"eslint",
+				"--config",
+				eslintConfig,
+				pathTarget,
+			)
+		} else {
+			packages.ExecutePackage(
+				"eslint",
+				"--config",
+				eslintConfig,
+				pathTarget,
+				"./server/",
+			)
+		}
 	} else {
-		packages.ExecutePackage("eslint", "./src/")
+		if hasSsrTarget() {
+			packages.ExecutePackage("eslint", "./src/", "./server/")
+		} else {
+			packages.ExecutePackage("eslint", "./src/")
+		}
 	}
 }

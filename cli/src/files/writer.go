@@ -43,7 +43,3 @@ func createFile(fileModel File) {
 		return
 	}
 }
-
-func logCreation(model File) {
-	fmt.Printf("\033[36mCreate\033[0m (\033[32mSuccess\033[0m):\t%s\n", model.Path)
-}

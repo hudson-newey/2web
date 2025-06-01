@@ -21,8 +21,8 @@ Once installed, you will have access to the `2web` command.
 ## Commands
 
 - `2web new <project_name>` (alias: n)
-- `2web generate <generator> [name]` (alias: g)
-<!-- - `2web template <template>` (alias: t) -->
+- `2web generate <generator> <name>` (alias: g)
+- `2web template <template>` (alias: t)
 - `2web install <package_name>` (alias: i)
 - `2web serve [path]`
 - `2web build [path]`
@@ -40,14 +40,14 @@ Once installed, you will have access to the `2web` command.
 | page        | p     | Add a page to a 2web project         |
 | guard       | g     | Adds a route guard to a 2web project |
 
-<!-- ### Template Command
+### Template Command
 
 Template commands differ from the "generate" command as they can only be run
 once, and do not take a name as an argument.
 
 | Command | Description               |
 | ------- | ------------------------- |
-| ssr     | Add ssr to a 2web project | -->
+| ssr     | Add ssr to a 2web project |
 
 ## More Information
 
