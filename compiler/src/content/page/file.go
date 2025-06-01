@@ -2,13 +2,10 @@ package page
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
-	"os"
-	"path/filepath"
 )
 
 type Page struct {
@@ -65,29 +62,4 @@ func (model *Page) AddStyle(cssFile *css.CSSFile) {
 	// Adds a "<link>" tag to the html document to load the css file
 	injectedContent := fmt.Sprintf(`<link rel="stylesheet" href="%s" />`, cssFile.FileName())
 	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, document.Head)
-}
-
-func (model *Page) Write(filePath string) {
-	writeFile(model.Html.Content, filePath)
-
-	for _, file := range model.Css {
-		writeFile(file.RawContent(), file.OutputPath())
-	}
-
-	for _, file := range model.JavaScript {
-		if file.IsCompilerOnly() {
-			continue
-		}
-
-		writeFile(file.RawContent(), file.OutputPath())
-	}
-}
-
-func writeFile(content string, outputPath string) {
-	if *cli.GetArgs().ToStdout {
-		fmt.Println(content)
-	} else {
-		os.MkdirAll(filepath.Dir(outputPath), os.ModePerm)
-		os.WriteFile(outputPath, []byte(content), 0644)
-	}
 }

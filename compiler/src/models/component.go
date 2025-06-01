@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"hudson-newey/2web/src/compiler/lexer"
 	"os"
 	"strings"
@@ -14,7 +15,7 @@ type Component struct {
 	Node        *lexer.LexNode[lexer.ImportNode]
 }
 
-func (model *Component) HtmlContent(workingPath string) string {
+func (model *Component) HtmlContent(workingPath string) (string, error) {
 	hostDirectoryEnd := strings.LastIndex(workingPath, "/")
 	hostDirectory := workingPath[:hostDirectoryEnd]
 
@@ -22,8 +23,8 @@ func (model *Component) HtmlContent(workingPath string) string {
 
 	data, err := os.ReadFile(componentPath)
 	if err != nil {
-		panic("could not resolve import " + componentPath)
+		return "", errors.New("could not resolve import " + componentPath)
 	}
 
-	return string(data)
+	return string(data), nil
 }

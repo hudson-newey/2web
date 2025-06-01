@@ -3,7 +3,7 @@ package builder
 import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
-	"hudson-newey/2web/src/compiler/pageBuilder.go"
+	"hudson-newey/2web/src/compiler/pageBuilder"
 	"hudson-newey/2web/src/compiler/ssg"
 	"hudson-newey/2web/src/compiler/templating"
 	"hudson-newey/2web/src/compiler/templating/controlFlow"
