@@ -5,8 +5,6 @@ import (
 	"strings"
 )
 
-type EventClass int
-
 type ReactiveEvent struct {
 	EventName string
 	VarName   string

@@ -24,4 +24,10 @@ type RefNode LexNodeType[RefNode]
 // import Component from "components/footer.component.html"
 type ImportNode LexNode[ImportNode]
 
+// A comment starting with "//"
+type LineCommentNode LexNode[LineCommentNode]
+
+// A comment with start /* and end */ delimiters
+type BlockCommentNode LexNode[BlockCommentNode]
+
 type voidNode LexNodeType[struct{}]
