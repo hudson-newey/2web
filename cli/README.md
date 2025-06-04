@@ -24,6 +24,7 @@ Once installed, you will have access to the `2web` command.
 - `2web generate <generator> <name>` (alias: g)
 - `2web template <template>` (alias: t)
 - `2web install <package_name>` (alias: i)
+- `2web db <sub_command>`
 - `2web serve [path]`
 - `2web build [path]`
 - `2web lint [path]`
@@ -45,9 +46,20 @@ Once installed, you will have access to the `2web` command.
 Template commands differ from the "generate" command as they can only be run
 once, and do not take a name as an argument.
 
-| Command | Description               |
-| ------- | ------------------------- |
-| ssr     | Add ssr to a 2web project |
+| Command               | Alias | Description                           |
+| --------------------- | ----- | ------------------------------------- |
+| server-side-rendering | ssr   | Add ssr to a 2web project             |
+| database              | db    | Add a database to a 2web project      |
+| load-balancer         | lb    | Add a load balancer to a 2web project |
+
+### Database Command
+
+For the database to work correctly, you must have the `@two-web/sdk` installed
+in your project.
+
+| Command | Description                |
+| ------- | -------------------------- |
+| init    | Initialize a 2web database |
 
 ## More Information
 

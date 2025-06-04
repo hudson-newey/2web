@@ -7,14 +7,14 @@ I am to make all reactivity compiled so that there is minimal runtime overhead.
 
 ## Resources
 
-- [Tutorial (beta)](./docs/tutorial.md)
+- [Tutorial (beta)](./docs/index.md)
 - [Theory](./docs/theory.md)
 
 ## Basic Counter Example
 
 ```html
 <script compiled>
-$ count = 0;
+  $ count = 0;
 </script>
 
 <h1>{{ $count }}</h1>
