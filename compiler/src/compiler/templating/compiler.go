@@ -15,6 +15,8 @@ import (
 	"strings"
 )
 
+// TODO: Pages / component models should have their reactive models as
+// model properties.
 func Compile(filePath string, pageModel page.Page) page.Page {
 	// "Mustache like" expressions e.g. {{ $count }} are a shorthand for an
 	// element with only innerText.
@@ -34,13 +36,22 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 			continue
 		}
 
-		commentNodes := lexer.FindNodes[lexer.LineCommentNode](node.Content, lineCommentStartToken, newLineToken)
-		commentLessContent := node.Content
-		for _, commentNode := range commentNodes {
-			commentLessContent = strings.ReplaceAll(commentLessContent, commentNode.Selector, "")
+		lineCommentNodes := lexer.FindNodes[lexer.LineCommentNode](node.Content, lineCommentStartToken, newLineToken)
+		lineCommentRemoved := node.Content
+		for _, commentNode := range lineCommentNodes {
+			lineCommentRemoved = strings.ReplaceAll(lineCommentRemoved, commentNode.Selector, "")
 		}
 
-		variableNodes := lexer.FindNodes[lexer.VarNode](commentLessContent, variableToken, statementEndToken)
+		// We cannot do this the same time as line comments because someone might
+		// decide to put line comments inside of a block comment (or vice versa).
+		// Meaning that the selectors would no longer match.
+		blockCommentNodes := lexer.FindNodes[lexer.BlockCommentNode](lineCommentRemoved, blockCommentStartToken, blockCommentEndToken)
+		noCommentsContent := lineCommentRemoved
+		for _, commentNode := range blockCommentNodes {
+			noCommentsContent = strings.ReplaceAll(noCommentsContent, commentNode.Selector, "")
+		}
+
+		variableNodes := lexer.FindNodes[lexer.VarNode](noCommentsContent, variableToken, statementEndToken)
 
 		for _, variableNode := range variableNodes {
 			variableModel, err := reactiveVariable.FromNode(variableNode)

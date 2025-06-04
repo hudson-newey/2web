@@ -2,7 +2,18 @@
 <link rel="stylesheet" href="dev-styles.css" />
 
 <script compiled>
+  /*
+    By setting the $message variable, you should see that the text below is
+    overwritten at compiled time.
+    This page should have no runtime overhead.
+    Comments below are for debugging block comment support.
+
+    $ message = invalid value
+    $ message = "aaaaa";
+    $ count = "";
+  */
   $ message = "Hello World!";
+  /* $ message = "Trailing single line block comment"; */
 </script>
 
 <h1 *innerText="$message">This text should be overwritten at compile time</h1>
