@@ -31,7 +31,8 @@ var packageJsonContent string = fmt.Sprintf(`{
   "type": "module",
   "scripts": {
     "dev": "2web serve",
-    "build": "2web build"
+    "build": "2web build",
+    "lint": "2web lint"
   },
   "author": "your-name",
   "license": "your-license",

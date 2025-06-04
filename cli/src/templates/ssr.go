@@ -14,7 +14,7 @@ runServer();
 func SsrTemplate() {
 	// ignore errors from this because we expect this to fail (because the
 	// directory) already exists
-	os.Mkdir("src/server/", os.ModePerm)
+	os.Mkdir("server/", os.ModePerm)
 
 	templateFiles := []files.File{
 		{

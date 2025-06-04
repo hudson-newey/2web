@@ -19,5 +19,5 @@ func InstallPackage(packageName string) {
 		installBunPackage(packageName)
 	}
 
-	cli.PrintError(1, "could not determine package manager")
+	cli.PrintError("could not determine package manager")
 }

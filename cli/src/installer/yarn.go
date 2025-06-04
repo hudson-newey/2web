@@ -13,7 +13,7 @@ func installYarnPackage(name string) {
 
 	if err != nil {
 		errorMsg := fmt.Sprintf("failed to install package '%s': %s", name, err)
-		cli.PrintError(2, errorMsg)
+		cli.PrintError(errorMsg)
 	}
 
 	fmt.Println(string(stdout))

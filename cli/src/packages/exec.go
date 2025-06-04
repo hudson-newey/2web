@@ -40,7 +40,7 @@ func internalExecute(args []string, allowFallback bool) {
 		if allowFallback {
 			executeNpx(args)
 		} else {
-			cli.PrintError(1, "could not find 'web-test-runner'.")
+			cli.PrintError("could not find 'web-test-runner'.")
 		}
 		return
 	}

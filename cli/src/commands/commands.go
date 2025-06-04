@@ -16,7 +16,7 @@ func ProcessInvocation(args []string) {
 
 	if argsLen < 2 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s <command> [arguments]", programName)
-		cli.PrintError(1, errorMsg)
+		cli.PrintError(errorMsg)
 	}
 
 	command := os.Args[1]
@@ -84,5 +84,5 @@ func ProcessInvocation(args []string) {
 	}
 
 	errorMsg := fmt.Sprintf("unrecognized command: '%s'", command)
-	cli.PrintError(1, errorMsg)
+	cli.PrintError(errorMsg)
 }

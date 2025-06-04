@@ -11,13 +11,13 @@ func generate(programName string, command string, args []string) {
 	argsLen := len(args)
 	if argsLen < 3 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <generator> <name>", programName, command)
-		cli.PrintError(1, errorMsg)
+		cli.PrintError(errorMsg)
 	}
 
 	generator := args[2]
 	if argsLen < 4 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s %s <name>", programName, command, generator)
-		cli.PrintError(1, errorMsg)
+		cli.PrintError(errorMsg)
 	}
 
 	templateName := args[3]
@@ -39,6 +39,6 @@ func generate(programName string, command string, args []string) {
 	case "guard", "g":
 		generators.GuardGenerator(templateName)
 	default:
-		cli.PrintError(1, fmt.Sprintf("unrecognized generate template: '%s'", generator))
+		cli.PrintError(fmt.Sprintf("unrecognized generate template: '%s'", generator))
 	}
 }

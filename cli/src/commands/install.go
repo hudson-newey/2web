@@ -10,7 +10,7 @@ import (
 func install(programName string, command string, args []string) {
 	if len(args) < 3 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <package_name>", programName, command)
-		cli.PrintError(1, errorMsg)
+		cli.PrintError(errorMsg)
 	}
 
 	packageName := args[2]
