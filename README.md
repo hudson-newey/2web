@@ -8,7 +8,7 @@ I am to make all reactivity compiled so that there is minimal runtime overhead.
 ## Resources
 
 - [Tutorial (beta)](./docs/index.md)
-- [Theory](./docs/theory.md)
+- [CLI Documentation](./cli/README.md)
 
 ## Basic Counter Example
 
