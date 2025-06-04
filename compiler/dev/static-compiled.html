@@ -2,10 +2,13 @@
 <link rel="stylesheet" href="dev-styles.css" />
 
 <script compiled>
-$ pageTitle = "This is a page title";
-$ pageDescription = "This is a page description";
-$ publishedTime = "1970-01-01";
-$ fontColor = green;
+  $ pageTitle = "This is a page title";
+  $ pageDescription = "This is a page description";
+
+  // I have added a comment below to check that line comments can be appended
+  // after a valid statement
+  $ publishedTime = "1970-01-01"; // $fontColor = blue;
+  $ fontColor = green; // $fontColor = blue;
 </script>
 
 <h1 style="color: $fontColor">{{ $pageTitle }}</h1>

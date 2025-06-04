@@ -12,6 +12,7 @@ import (
 	"hudson-newey/2web/src/models/reactiveEvent"
 	"hudson-newey/2web/src/models/reactiveProperty"
 	"hudson-newey/2web/src/models/reactiveVariable"
+	"strings"
 )
 
 func Compile(filePath string, pageModel page.Page) page.Page {
@@ -33,7 +34,13 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 			continue
 		}
 
-		variableNodes := lexer.FindNodes[lexer.VarNode](node.Content, variableToken, statementEndToken)
+		commentNodes := lexer.FindNodes[lexer.LineCommentNode](node.Content, lineCommentStartToken, newLineToken)
+		commentLessContent := node.Content
+		for _, commentNode := range commentNodes {
+			commentLessContent = strings.ReplaceAll(commentLessContent, commentNode.Selector, "")
+		}
+
+		variableNodes := lexer.FindNodes[lexer.VarNode](commentLessContent, variableToken, statementEndToken)
 
 		for _, variableNode := range variableNodes {
 			variableModel, err := reactiveVariable.FromNode(variableNode)
