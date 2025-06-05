@@ -41,26 +41,21 @@ func Build() bool {
 	}
 
 	if inputPath.IsDir() {
-		// find all direct children of the input directory
-		files, err := os.ReadDir(*args.InputPath)
-		if err != nil {
-			panic(err)
-		}
+		// recursively find all children of the input directory
+		indexedPages := indexPages(*args.InputPath)
 
-		for _, file := range files {
-			if file.IsDir() {
-				continue
-			}
-
+		for _, file := range indexedPages {
 			// If we are compiling a markdown file, we want to replace the .md suffix
 			// with .html
 			// This is because we compile markdown to html files.
-			adjustedFileName := file.Name()
-			if markdown.IsMarkdownFile(file.Name()) {
+			adjustedFileName := file
+			if markdown.IsMarkdownFile(file) {
 				adjustedFileName = strings.TrimSuffix(adjustedFileName, ".md") + ".html"
 			}
 
-			compileAndWriteFile(*args.InputPath+"/"+file.Name(), *args.OutputPath+"/"+adjustedFileName)
+			adjustedFileName = adjustedFileName[len(*args.InputPath):]
+
+			compileAndWriteFile(file, *args.OutputPath+"/"+adjustedFileName)
 		}
 	} else {
 		compileAndWriteFile(*args.InputPath, *args.OutputPath)
