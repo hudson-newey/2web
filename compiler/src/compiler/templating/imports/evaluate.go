@@ -20,7 +20,7 @@ func EvaluateImports(
 	componentImports := []*models.Component{}
 
 	for _, importNode := range importNodes {
-		componentModel, err := component.FromNode(importNode)
+		componentModel, err := component.FromNode(importNode, filePath)
 		if err != nil {
 			documentErrors.AddError(models.Error{
 				FilePath: filePath,

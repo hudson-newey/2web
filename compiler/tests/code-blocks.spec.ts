@@ -1,23 +1,20 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { assertNoErrors } from "./helpers/assertions";
 import { navigateToPage } from "./helpers/fixture";
-import { BrowserWindow, Document } from "happy-dom";
+import { BrowserFrame, BrowserWindow, Document } from "happy-dom";
 import { getByTestId } from "@testing-library/dom";
 
-let document: Document;
-let window: BrowserWindow;
+let browser: BrowserFrame;
 
 const getElement = (testId: string) =>
-  getByTestId(document.body as any, testId);
+  getByTestId(browser.document.body as any, testId);
 
 beforeEach(async () => {
-  const browserFrame = await navigateToPage("code-blocks.html");
-  document = browserFrame.document;
-  window = browserFrame.window;
+  browser = await navigateToPage("code-blocks.html");
 });
 
 test("should load", () => {
-  assertNoErrors(document);
+  assertNoErrors(browser.document);
 });
 
 test("empty code block", () => {

@@ -10,11 +10,16 @@ const (
 	Html InjectableLevel = iota
 	Head
 	Body
+	Trailing
 )
 
 // injects content into the bottom of the document while maintaining correct
 // HTML structure
 func InjectContent(content string, injectable string, level InjectableLevel) string {
+	if level == Trailing {
+		return content + injectable
+	}
+
 	targetSelector := ""
 	switch level {
 	case Html:

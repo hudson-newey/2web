@@ -7,7 +7,11 @@ import (
 	"strings"
 )
 
-func FromNode(node lexer.LexNode[lexer.ImportNode]) (models.Component, error) {
+// An incrementing id that can be used to uniquely identify the component.
+// Note that if used, it will be compressed into a base 32 DOM selector.
+var nextNodeId uint64 = 0
+
+func FromNode(node lexer.LexNode[lexer.ImportNode], importedFrom string) (models.Component, error) {
 	if len(node.Tokens) != 3 {
 		errorMessage := fmt.Errorf("malformed import statement:\n\tExpected: import ComponentName from \"path/to/asset.html\";\n\tFound: %s", node.Selector)
 		return models.Component{}, errorMessage
@@ -23,9 +27,13 @@ func FromNode(node lexer.LexNode[lexer.ImportNode]) (models.Component, error) {
 	importPath, _ = strings.CutPrefix(importPath, "\"")
 
 	componentModel := models.Component{
-		DomSelector: domSelector,
-		ImportPath:  importPath,
+		DomSelector:  domSelector,
+		Identifier:   nextNodeId,
+		ImportPath:   importPath,
+		ImportedFrom: importedFrom,
 	}
+
+	nextNodeId += 1
 
 	return componentModel, nil
 }

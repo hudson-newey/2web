@@ -11,6 +11,7 @@ import (
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
+	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/optimizer"
 	"io"
@@ -73,7 +74,7 @@ func Build() bool {
 	return documentErrors.IsErrorFree()
 }
 
-func compileAndWriteFile(inputPath string, outputPath string) {
+func buildToPage(inputPath string) page.Page {
 	args := cli.GetArgs()
 
 	data, err := getInputContent(inputPath)
@@ -141,6 +142,11 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 		compiledPage = optimizer.OptimizePage(compiledPage)
 	}
 
+	return compiledPage
+}
+
+func compileAndWriteFile(inputPath string, outputPath string) {
+	compiledPage := buildToPage(inputPath)
 	compiledPage.Write(outputPath)
 }
 

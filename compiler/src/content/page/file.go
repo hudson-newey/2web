@@ -6,6 +6,7 @@ import (
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	"strings"
 )
 
 type Page struct {
@@ -23,6 +24,15 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 
 	if jsFile.IsCompilerOnly() {
 		return
+	}
+
+	// If we have a full document, we want to inject the script into the <head>
+	// element.
+	// However, if there is no <head> element (e.g. for a component that is not a
+	// page), we want to append it to the end.
+	injectLevel := document.Trailing
+	if strings.Contains(model.Html.Content, "<head>") {
+		injectLevel = document.Head
 	}
 
 	// Adds a "<script src=></script>" tag to the html document to load the js file
@@ -53,13 +63,22 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 		injectedContent = fmt.Sprintf(`<script type="module" src="%s"></script>%s`, jsFile.FileName(), "\n")
 	}
 
-	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, document.Head)
+	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, injectLevel)
 }
 
 func (model *Page) AddStyle(cssFile *css.CSSFile) {
 	model.Css = append(model.Css, cssFile)
 
+	// If we have a full document, we want to inject the styles into the <head>
+	// element.
+	// However, if there is no <head> element (e.g. for a component that is not a
+	// page), we want to append it to the end.
+	injectLevel := document.Trailing
+	if strings.Contains(model.Html.Content, "<head>") {
+		injectLevel = document.Head
+	}
+
 	// Adds a "<link>" tag to the html document to load the css file
 	injectedContent := fmt.Sprintf(`<link rel="stylesheet" href="%s" />`, cssFile.FileName())
-	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, document.Head)
+	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, injectLevel)
 }

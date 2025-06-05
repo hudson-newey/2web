@@ -38,7 +38,10 @@
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[html]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      // Explicitly disable prettier on html files because prettier wants to
+      // convert <PascalCase /> elements into lowercase, which is not compatible
+      // with the 2web module system.
+      "editor.defaultFormatter": null
     }
   },
   "extensions": {

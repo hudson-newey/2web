@@ -3,7 +3,7 @@ import { getByTestId, getByText } from "@testing-library/dom";
 import { navigateToPage } from "./helpers/fixture";
 import userEvent from "@testing-library/user-event";
 import { assertNoErrors } from "./helpers/assertions";
-import { Document } from "happy-dom";
+import { BrowserFrame, Document } from "happy-dom";
 
 let document: Document;
 
@@ -17,7 +17,7 @@ beforeEach(async () => {
 });
 
 test("should load", () => {
-  assertNoErrors(document as any);
+  assertNoErrors(document);
 });
 
 test("should have the correct initial value", () => {
