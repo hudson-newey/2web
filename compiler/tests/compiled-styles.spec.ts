@@ -6,7 +6,7 @@ import { Document } from "happy-dom";
 let document: Document;
 
 beforeEach(async () => {
-  document = await navigateToPage("compiled-styles.html");
+  document = (await navigateToPage("compiled-styles.html")).document;
 });
 
 test("should load", () => {

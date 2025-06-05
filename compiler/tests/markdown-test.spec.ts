@@ -6,7 +6,7 @@ import { Document } from "happy-dom";
 let document: Document;
 
 beforeEach(async () => {
-  document = await navigateToPage("markdown-test.html");
+  document = (await navigateToPage("markdown-test.html")).document;
 });
 
 test("should load", () => {

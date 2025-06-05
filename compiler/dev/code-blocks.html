@@ -17,11 +17,13 @@
   >
 </section>
 
-<code><script></script></code>
+<code data-testid="empty-code"></code>
 
-<code><script compiled></script></code>
+<code data-testid="empty-script"><script></script></code>
 
-<pre><code class="language-html"><script>
+<code data-testid="empty-compiled-script"><script compiled></script></code>
+
+<pre data-testid="html-code"><code class="language-html"><script>
 $ count = 0;
 </script>
 
@@ -29,35 +31,39 @@ $ count = 0;
 <h2>{{ $nonExistent }}</h2>
 </code></pre>
 
-<pre><code class="language-javascript">
+<pre data-testid="javascript-code"><code class="language-javascript">
 $ message = "Hello World!";
 </code></pre>
 
-<pre><code class="language-html"><script compiled>
+<pre data-testid="compiled-pre"><code class="language-html"><script compiled>
 $ greeting = "Hello";
 </script>
 
 <h1>{{ $greeting }}</h1>
 </code></pre>
 
-<code></code>
-
 <hr />
 
-<code><style></style></code>
+<code data-testid="empty-style"><style></style></code>
 
-<span class="unstyled-element">
+<!--
+  Note that I add a default color so that it is consistent across browsers for
+  automated testing.
+  However, below, I have overwritten the text color to red and used !important
+  so that if the style element is incorrectly applied, the text will be red.
+ -->
+<span class="unstyled-element" style="color: #000">
   This element should not be effected by styling
 </span>
 
-<pre><code>
+<pre data-testid="css-code"><code>
   <style>
     .unstyledElement {
-      color: red;
+      color: red !important;
     }
   </style>
 </code></pre>
 
-<code>
+<code data-testid="text-nodes">
   <h1>{{ $count }}</h1>
 </code>

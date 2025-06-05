@@ -6,7 +6,7 @@ import { Document } from "happy-dom";
 let document: Document;
 
 beforeEach(async () => {
-  document = await navigateToPage("string-reducers.html");
+  document = (await navigateToPage("string-reducers.html")).document;
 });
 
 test("should load", () => {

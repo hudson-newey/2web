@@ -7,6 +7,12 @@
   ],
   "settings": {
     "files.insertFinalNewline": true,
+    "files.exclude": {
+      "**/tmp/": true,
+      "**/bin/": true,
+      "**/node_modules/": true,
+      "**/html-report/": true
+    },
     "workbench.iconTheme": "material-icon-theme",
     "editor.inlineSuggest.enabled": true,
     "editor.renderWhitespace": "trailing",

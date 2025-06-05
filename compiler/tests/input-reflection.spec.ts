@@ -6,7 +6,7 @@ import { Document } from "happy-dom";
 let document: Document;
 
 beforeEach(async () => {
-  document = await navigateToPage("input-reflection.html");
+  document = (await navigateToPage("input-reflection.html")).document;
 });
 
 test("should load", () => {

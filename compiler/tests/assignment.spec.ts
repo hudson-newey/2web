@@ -13,7 +13,7 @@ const everyoneButton = () => getByText(document.body as any, "Everyone!");
 const outputElement = () => getByTestId(document.body as any, "output-element");
 
 beforeEach(async () => {
-  document = await navigateToPage("assignment.html");
+  document = (await navigateToPage("assignment.html")).document;
 });
 
 test("should load", () => {

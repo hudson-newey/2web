@@ -15,8 +15,8 @@ import (
 	"strings"
 )
 
-// TODO: Pages / component models should have their reactive models as
-// model properties.
+// TODO: Page/component models should have their associated reactive models as
+// properties.
 func Compile(filePath string, pageModel page.Page) page.Page {
 	// "Mustache like" expressions e.g. {{ $count }} are a shorthand for an
 	// element with only innerText.

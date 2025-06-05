@@ -13,7 +13,7 @@ const decrementButton = () => getByText(document.body as any, "Decrement");
 const countOutput = () => getByTestId(document.body as any, "count-output");
 
 beforeEach(async () => {
-  document = await navigateToPage("reactive.html");
+  document = (await navigateToPage("reactive.html")).document;
 });
 
 test("should load", () => {

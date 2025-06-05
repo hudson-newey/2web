@@ -6,7 +6,7 @@ import { Document } from "happy-dom";
 let document: Document;
 
 beforeEach(async () => {
-  document = await navigateToPage("textnode-reactivity.html");
+  document = (await navigateToPage("textnode-reactivity.html")).document;
 });
 
 test("should load", () => {

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
-import { Browser, BrowserErrorCaptureEnum } from "happy-dom";
+import { Browser, BrowserErrorCaptureEnum, BrowserFrame } from "happy-dom";
 
-export async function navigateToPage(location: string) {
+export async function navigateToPage(location: string): Promise<BrowserFrame> {
   const compiledLocation = `dist/${location}`;
   const html = readFileSync(compiledLocation, "utf-8");
 
@@ -16,7 +16,5 @@ export async function navigateToPage(location: string) {
   page.url = "http://localhost:5173/" + location;
   page.content = html;
 
-  const document = page.mainFrame.document;
-
-  return document;
+  return page.mainFrame;
 }

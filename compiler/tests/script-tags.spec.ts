@@ -6,7 +6,7 @@ import { Document } from "happy-dom";
 let document: Document;
 
 beforeEach(async () => {
-  document = await navigateToPage("script-tags.html");
+  document = (await navigateToPage("script-tags.html")).document;
 });
 
 test("should load", () => {

@@ -6,7 +6,7 @@ import { Document } from "happy-dom";
 let document: Document;
 
 beforeEach(async () => {
-  document = await navigateToPage("mouse-position-demo.html");
+  document = (await navigateToPage("mouse-position-demo.html")).document;
 });
 
 test("should load", () => {
