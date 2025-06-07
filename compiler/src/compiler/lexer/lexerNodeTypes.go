@@ -30,4 +30,7 @@ type LineCommentNode LexNode[LineCommentNode]
 // A comment with start /* and end */ delimiters
 type BlockCommentNode LexNode[BlockCommentNode]
 
+// A comment with <!-- and end --> delimiters
+type MarkupCommentNode LexNode[MarkupCommentNode]
+
 type voidNode LexNodeType[struct{}]

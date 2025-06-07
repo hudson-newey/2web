@@ -27,3 +27,6 @@ var lineCommentStartToken lexer.LexerToken = []string{"//"}
 
 var blockCommentStartToken lexer.LexerToken = []string{"/*"}
 var blockCommentEndToken lexer.LexerToken = []string{"*/"}
+
+var markupCommentStartToken lexer.LexerToken = []string{"<!--"}
+var markupCommentEndToken lexer.LexerToken = []string{"-->"}
