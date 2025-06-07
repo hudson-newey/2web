@@ -5,11 +5,6 @@
   "author": "hudson-newey",
   "license": "MIT",
   "type": "module",
-  "exports": [
-    "./.eslintrc.js",
-    "./tsconfig.json",
-    "./vite.config.ts",
-    "./web-test-runner.config.mjs"
-  ],
+  "exports": [ "**/*"],
   "packageManager": "pnpm@10.8.0"
 }
