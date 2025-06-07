@@ -11,6 +11,7 @@ export default defineConfig({
       entry: {
         // Note: there is no barrel file to import all two-web/kit packages
         "context": "./context/index.ts",
+        "database": "./database/index.ts",
         "dom-ranges": "./dom-ranges/index.ts",
         "pre-fetcher": "./pre-fetcher/index.ts",
         "route-guards": "./route-guards/index.ts",
