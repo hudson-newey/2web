@@ -4,13 +4,11 @@ A collection of packages to enhance your 2web application
 
 | Package                                | State |
 | -------------------------------------- | ----- |
-| [context](context/README.md)           | ❌    |
-| [database](database/README.md)           | ❌    |
+| [database](database/README.md)         | ❌    |
 | [dom-ranges](dom-ranges/README.md)     | ❌    |
 | [pre-fetcher](pre-fetcher/README.md)   | 🔧    |
 | [route-guards](route-guards/README.md) | 🔧    |
 | [signals](signals/README.md)           | 🔧    |
-| [spa-router](spa-router/README.md)     | ❌    |
 | [ssr](ssr/README.md)                   | 🔧    |
 | [vite-plugin](vite-plugin/README.md)   | 🔧    |
 
