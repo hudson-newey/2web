@@ -40,6 +40,8 @@ func generate(programName string, command string, args []string) {
 		generators.ModelGenerator(templateName)
 	case "enum", "e":
 		generators.EnumGenerator(templateName)
+	case "interface":
+		generators.InterfaceGenerator(templateName)
 	default:
 		cli.PrintError(fmt.Sprintf("unrecognized generate template: '%s'", generator))
 	}
