@@ -27,8 +27,6 @@ func generate(programName string, command string, args []string) {
 		generators.ComponentGenerator(templateName)
 	case "service", "s":
 		generators.ServiceGenerator(templateName)
-	case "model", "m":
-		generators.ModelGenerator(templateName)
 	case "aspect", "a":
 		generators.AspectGenerator(templateName)
 	case "interceptor", "i":
@@ -38,6 +36,10 @@ func generate(programName string, command string, args []string) {
 	// generators below this point require @two-web/kit
 	case "guard", "g":
 		generators.GuardGenerator(templateName)
+	case "model", "m":
+		generators.ModelGenerator(templateName)
+	case "enum", "e":
+		generators.EnumGenerator(templateName)
 	default:
 		cli.PrintError(fmt.Sprintf("unrecognized generate template: '%s'", generator))
 	}
