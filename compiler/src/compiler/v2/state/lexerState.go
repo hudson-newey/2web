@@ -1,6 +1,18 @@
 package lexerV2State
 
+import (
+	lexerV2Errors "hudson-newey/2web/src/compiler/v2/errors"
+	lexerV2Tokens "hudson-newey/2web/src/compiler/v2/tokens"
+)
+
 type State = int
+type NestingLevel = int
+type ParsePauseState = bool
+type ReturnState = State
+
+type NextInputCharacter = rune
+
+type HandlerReturn = func(char NextInputCharacter, nesting NestingLevel) (State, *ReturnState, lexerV2Tokens.LexNodeToken, *lexerV2Errors.ParseError)
 
 // https://html.spec.whatwg.org/multipage/parsing.html#tokenization
 const (
