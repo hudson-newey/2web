@@ -17,6 +17,7 @@ Placeholder (not fully implemented)
 ### Production Builds
 
 - Performs code minification
+- Performs a handful of runtime [optimizations](../docs/README.md)
 
 ## More Information
 

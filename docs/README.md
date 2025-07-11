@@ -12,3 +12,10 @@ There are quite a few known bugs.
 7. [TypeScript](./typescript.md)
 8. [Page/Component Styling](./styling.md)
 9. [Breaking HTML Changes](./breaking-html.md)
+
+## Understanding the Compiler
+
+1. [2Web Rendering Optimizations](./optimizations/rendering.md)
+2. [Resource pre-fetching](./optimizations/prefetching.md)
+3. [Resource lazy loading](./optimizations/lazy-loading.md)
+4. [DOM Ranges](./optimizations/dom-ranges.md)

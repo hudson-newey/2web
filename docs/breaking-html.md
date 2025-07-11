@@ -45,7 +45,14 @@ Therefore, the code above will be compiled to the following HTML.
 </pre></code>
 ```
 
-## Script tags have default "module" type
+## Breaking Script Changes
+
+### Script tags have default "module" type
 
 All inline `<script>` tags will automatically support esm imports and will be
 lazy-loaded.
+
+### Scripts default to "use strict"
+
+All scripts are run in "strict" mode to encourage good programming practices and
+so the browser can make improved performance optimizations.
