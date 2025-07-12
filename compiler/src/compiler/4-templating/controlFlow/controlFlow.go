@@ -3,8 +3,8 @@ package controlFlow
 import (
 	preprocessor "hudson-newey/2web/src/compiler/1-preprocessor"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/compiler/3-templating/controlFlow/cfModules/cfFor"
-	"hudson-newey/2web/src/compiler/3-templating/controlFlow/cfModules/cfIf"
+	"hudson-newey/2web/src/compiler/4-templating/controlFlow/cfModules/cfFor"
+	"hudson-newey/2web/src/compiler/4-templating/controlFlow/cfModules/cfIf"
 	"strings"
 )
 

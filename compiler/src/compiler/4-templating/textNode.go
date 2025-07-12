@@ -3,7 +3,7 @@ package templating
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/compiler/3-templating/reactiveCompiler"
+	"hudson-newey/2web/src/compiler/4-templating/reactiveCompiler"
 	"strings"
 )
 

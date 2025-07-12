@@ -14,7 +14,7 @@ func includeSsgContent(value string, filePath string) string {
 
 	data, err := os.ReadFile(hostDirectory + value)
 	if err != nil {
-		documentErrors.AddError(models.Error{
+		documentErrors.AddErrors(models.Error{
 			FilePath: filePath,
 			Message:  fmt.Sprintf("Failed to include file: %s\n%s", value, err.Error()),
 		})

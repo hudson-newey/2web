@@ -15,7 +15,7 @@ func createDevtoolsTemplate() string {
 	devtoolsHtml, err := document.BuildTemplate(devtoolsHtmlSource(), nil)
 	if err != nil {
 		// Handle the error, maybe add it to errorList
-		documentErrors.AddError(models.Error{Message: "Failed to inject devtools template: " + err.Error()})
+		documentErrors.AddErrors(models.Error{Message: "Failed to inject devtools template: " + err.Error()})
 	}
 
 	return devtoolsHtml

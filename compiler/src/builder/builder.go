@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
 	preprocessor "hudson-newey/2web/src/compiler/1-preprocessor"
-	templating "hudson-newey/2web/src/compiler/3-templating"
-	"hudson-newey/2web/src/compiler/3-templating/controlFlow"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	validator "hudson-newey/2web/src/compiler/3-validator"
+	templating "hudson-newey/2web/src/compiler/4-templating"
+	"hudson-newey/2web/src/compiler/4-templating/controlFlow"
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/html"
@@ -74,7 +76,7 @@ func buildToPage(inputPath string) page.Page {
 	data, err := getInputContent(inputPath)
 	if err != nil {
 		data = []byte{}
-		documentErrors.AddError(models.Error{
+		documentErrors.AddErrors(models.Error{
 			FilePath: inputPath,
 			Message:  fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
 			Position: models.Position{
@@ -124,6 +126,11 @@ func buildToPage(inputPath string) page.Page {
 	pageModel.Html.Content = ssgResult
 
 	compiledPage := templating.Compile(inputPath, pageModel)
+
+	isValid, compilerErrors := validator.IsValid(lexer.LexerRepresentation{})
+	if !isValid {
+		documentErrors.AddErrors(compilerErrors...)
+	}
 
 	compiledPage.Html.Content = documentErrors.InjectErrors(compiledPage.Html.Content)
 	documentErrors.ResetPageErrors()

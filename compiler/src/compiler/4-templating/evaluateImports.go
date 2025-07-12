@@ -22,7 +22,7 @@ func evaluateImports(
 	for _, importNode := range importNodes {
 		componentModel, err := component.FromNode(importNode, filePath)
 		if err != nil {
-			documentErrors.AddError(models.Error{
+			documentErrors.AddErrors(models.Error{
 				FilePath: filePath,
 				Message:  err.Error(),
 			})

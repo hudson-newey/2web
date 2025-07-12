@@ -3,7 +3,7 @@ package templating
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/compiler/3-templating/reactiveCompiler"
+	"hudson-newey/2web/src/compiler/4-templating/reactiveCompiler"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
@@ -54,7 +54,7 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 		for _, variableNode := range variableNodes {
 			variableModel, err := reactiveVariable.FromNode(variableNode)
 			if err != nil {
-				documentErrors.AddError(models.Error{
+				documentErrors.AddErrors(models.Error{
 					FilePath: filePath,
 					Message:  err.Error(),
 				})
@@ -71,7 +71,7 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 	for _, node := range propertyNodes {
 		property, err := reactiveProperty.FromNode(node)
 		if err != nil {
-			documentErrors.AddError(models.Error{
+			documentErrors.AddErrors(models.Error{
 				FilePath: filePath,
 				Message:  err.Error(),
 			})
@@ -91,7 +91,7 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 
 		if !foundAssociatedProperty {
 			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for property %s", property.VarName, property.Node.Selector)
-			documentErrors.AddError(models.Error{
+			documentErrors.AddErrors(models.Error{
 				FilePath: filePath,
 				Message:  errorMessage,
 			})
@@ -102,7 +102,7 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 	for _, node := range eventNodes {
 		event, err := reactiveEvent.FromNode(node)
 		if err != nil {
-			documentErrors.AddError(models.Error{
+			documentErrors.AddErrors(models.Error{
 				FilePath: filePath,
 				Message:  err.Error(),
 			})
@@ -121,7 +121,7 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 
 		if !foundAssociatedProperty {
 			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for event %s", event.VarName, event.Node.Selector)
-			documentErrors.AddError(models.Error{
+			documentErrors.AddErrors(models.Error{
 				FilePath: filePath,
 				Message:  errorMessage,
 			})

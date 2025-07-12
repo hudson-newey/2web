@@ -9,9 +9,11 @@ import (
 var pageErrors []models.Error
 var totalErrors []models.Error
 
-func AddError(errorModel models.Error) {
-	pageErrors = append(pageErrors, errorModel)
-	totalErrors = append(totalErrors, errorModel)
+func AddErrors(errorModels ...models.Error) {
+	for _, err := range errorModels {
+		pageErrors = append(pageErrors, err)
+		totalErrors = append(totalErrors, err)
+	}
 }
 
 // TODO: errors should be attached to the page model instead of here
@@ -45,7 +47,7 @@ func createErrorTemplate(errors []models.Error) string {
 	errorHtml, err := document.BuildTemplate(errorHtmlSource(), errors)
 	if err != nil {
 		// Handle the error, maybe add it to errorList
-		AddError(models.Error{Message: "failed to render error template: " + err.Error()})
+		AddErrors(models.Error{Message: "failed to render error template: " + err.Error()})
 	}
 
 	return errorHtml

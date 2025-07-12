@@ -31,7 +31,7 @@ func expandImport(
 ) string {
 	pageModel, err := buildComponent(component)
 	if err != nil {
-		documentErrors.AddError(models.Error{
+		documentErrors.AddErrors(models.Error{
 			FilePath: workingPath,
 			Message:  err.Error(),
 		})

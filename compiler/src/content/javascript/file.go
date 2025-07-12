@@ -52,7 +52,7 @@ func (model *JSFile) RawContent() string {
 			FilePath: model.FileName(),
 		}
 
-		documentErrors.AddError(errorModel)
+		documentErrors.AddErrors(errorModel)
 	}
 
 	return bundledContent

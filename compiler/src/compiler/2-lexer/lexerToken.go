@@ -26,3 +26,5 @@ package lexer
 type LexerToken = []string
 
 type LexerPropPrefix = LexerToken
+
+type LexerRepresentation = []LexerToken
