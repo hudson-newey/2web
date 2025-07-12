@@ -19,10 +19,8 @@ type Component struct {
 }
 
 func (model *Component) ComponentPath() (string, error) {
-	// Because trailing slashes are removed from filepath.Dir, we have to re-add
-	// it when computing the imported files path.
 	hostDirectory := filepath.Dir(model.ImportedFrom)
-	componentPath := hostDirectory + "/" + model.ImportPath
+	componentPath := filepath.Join(hostDirectory, model.ImportPath)
 
 	if _, err := os.Stat(componentPath); err == os.ErrNotExist {
 		return "", errors.New("could not resolve import " + componentPath)
