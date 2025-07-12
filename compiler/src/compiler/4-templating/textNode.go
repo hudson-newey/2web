@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-var textStartToken lexer.LexerToken = []string{"{{"}
-var textEndToken lexer.LexerToken = []string{"}}"}
+var textStartToken lexer.LexerSelector = []string{"{{"}
+var textEndToken lexer.LexerSelector = []string{"}}"}
 
 func expandTextNodes(content string) string {
 	textNodes := lexer.FindNodes[lexer.TextNode](content, textStartToken, textEndToken)

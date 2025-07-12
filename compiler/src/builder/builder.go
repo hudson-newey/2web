@@ -80,7 +80,7 @@ func buildToPage(inputPath string) page.Page {
 			FilePath: inputPath,
 			Message:  fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
 			Position: models.Position{
-				LineNumber: 1,
+				Line: 1,
 			},
 		})
 	}
@@ -125,12 +125,15 @@ func buildToPage(inputPath string) page.Page {
 
 	pageModel.Html.Content = ssgResult
 
-	compiledPage := templating.Compile(inputPath, pageModel)
+	lexInstance := lexer.NewLexer(pageModel.Html.Reader())
+	lexRepresentation := lexInstance.Execute()
 
-	isValid, compilerErrors := validator.IsValid(lexer.LexerRepresentation{})
+	isValid, compilerErrors := validator.IsValid(lexRepresentation)
 	if !isValid {
 		documentErrors.AddErrors(compilerErrors...)
 	}
+
+	compiledPage := templating.Compile(inputPath, pageModel)
 
 	compiledPage.Html.Content = documentErrors.InjectErrors(compiledPage.Html.Content)
 	documentErrors.ResetPageErrors()

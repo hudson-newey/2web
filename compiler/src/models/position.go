@@ -1,6 +1,6 @@
 package models
 
 type Position struct {
-	LineNumber int
-	CharNumber int
+	Line   int
+	Column int
 }

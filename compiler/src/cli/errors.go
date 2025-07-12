@@ -16,11 +16,11 @@ func PrintError(errorModel models.Error) {
 	formattedErrorMessage := strings.ReplaceAll(errorModel.Message, "\n", "\n\t")
 
 	formattedLineNumber := ""
-	if errorModel.Position.LineNumber != 0 {
+	if errorModel.Position.Line != 0 {
 		formattedLineNumber = fmt.Sprintf(
 			" (ln: %d, col: %d)",
-			errorModel.Position.LineNumber,
-			errorModel.Position.CharNumber,
+			errorModel.Position.Line,
+			errorModel.Position.Column,
 		)
 	}
 

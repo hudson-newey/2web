@@ -6,8 +6,8 @@ import (
 
 func FindNodes[T voidNode](
 	content string,
-	candidateStartTokens LexerToken,
-	candidateEndTokens LexerToken,
+	candidateStartTokens LexerSelector,
+	candidateEndTokens LexerSelector,
 ) []LexNode[T] {
 	resultContent := []LexNode[T]{}
 

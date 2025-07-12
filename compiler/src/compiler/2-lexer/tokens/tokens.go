@@ -1,0 +1,62 @@
+package lexerTokens
+
+type LexToken int
+
+const (
+	// EOF
+	EOF LexToken = iota
+
+	// <
+	LessAngle
+
+	// >
+	GreaterAngle
+
+	// /
+	Slash
+
+	// =
+	Equals
+
+	// '
+	QuoteSingle
+
+	// "
+	QuoteDouble
+
+	// <!--
+	CommentStart
+
+	// -->
+	CommentEnd
+
+	// All tokens below are custom tokens to 2web
+
+	// @
+	AtSymbol
+
+	// *
+	Star
+
+	Text
+
+	// JS Tokens
+
+	// import
+	KeywordImport
+
+	// $
+	DollarSign
+
+	// ;
+	SemiColon
+
+	// //
+	LineCommentStart
+
+	// /*
+	BlockCommentStart
+
+	// */
+	BlockCommentEnd
+)

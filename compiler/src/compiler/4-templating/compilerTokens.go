@@ -2,31 +2,31 @@ package templating
 
 import lexer "hudson-newey/2web/src/compiler/2-lexer"
 
-var runtimeScriptStartToken lexer.LexerToken = []string{"<script>"}
-var runtimeScriptEndToken lexer.LexerToken = []string{"</script>"}
+var runtimeScriptStartToken = lexer.LexerSelector{"<script>"}
+var runtimeScriptEndToken = lexer.LexerSelector{"</script>"}
 
-var styleStartToken lexer.LexerToken = []string{"<style>"}
-var styleEndToken lexer.LexerToken = []string{"</style>"}
+var styleStartToken = lexer.LexerSelector{"<style>"}
+var styleEndToken = lexer.LexerSelector{"</style>"}
 
-var variableToken lexer.LexerToken = []string{"$"}
+var variableToken = lexer.LexerSelector{"$"}
 
-var statementEndToken lexer.LexerToken = []string{";"}
-var newLineToken lexer.LexerToken = []string{"\n"}
+var statementEndToken = lexer.LexerSelector{";"}
+var newLineToken = lexer.LexerSelector{"\n"}
 
 // e.g. @click="$count = $count + 1"
-var eventPrefix lexer.LexerPropPrefix = []string{"@"}
+var eventPrefix = lexer.LexerSelector{"@"}
 
 // e.g. *innerText="$count"
-var propertyPrefix lexer.LexerPropPrefix = []string{"*"}
+var propertyPrefix = lexer.LexerSelector{"*"}
 
 // Import suffixes use the "statementEndToken"
 // This means that all imports MUST have trailing semi-columns
-var importPrefix lexer.LexerToken = []string{"import"}
+var importPrefix = lexer.LexerSelector{"import"}
 
-var lineCommentStartToken lexer.LexerToken = []string{"//"}
+var lineCommentStartToken = lexer.LexerSelector{"//"}
 
-var blockCommentStartToken lexer.LexerToken = []string{"/*"}
-var blockCommentEndToken lexer.LexerToken = []string{"*/"}
+var blockCommentStartToken = lexer.LexerSelector{"/*"}
+var blockCommentEndToken = lexer.LexerSelector{"*/"}
 
-var markupCommentStartToken lexer.LexerToken = []string{"<!--"}
-var markupCommentEndToken lexer.LexerToken = []string{"-->"}
+var markupCommentStartToken = lexer.LexerSelector{"<!--"}
+var markupCommentEndToken = lexer.LexerSelector{"-->"}

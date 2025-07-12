@@ -2,6 +2,8 @@ package markdown
 
 import (
 	"hudson-newey/2web/src/content/html"
+	"io"
+	"strings"
 
 	"github.com/gomarkdown/markdown"
 	markdownHtml "github.com/gomarkdown/markdown/html"
@@ -30,4 +32,8 @@ func (model *MarkdownFile) ToHtml() html.HTMLFile {
 	file.AddContent(string(htmlBytes))
 
 	return file
+}
+
+func (model *MarkdownFile) Reader() io.Reader {
+	return strings.NewReader(model.Content)
 }

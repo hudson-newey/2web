@@ -4,13 +4,13 @@ import (
 	"strings"
 )
 
-var attributeEndToken LexerToken = []string{">", " ", "\n", "/"}
+var attributeEndToken LexerSelector = []string{">", " ", "\n", "/"}
 
 // A specialized lexer designed and optimized to extract attribute nodes from
 // html content.
 func FindPropNodes[T voidNode](
 	content string,
-	prefix LexerPropPrefix,
+	prefix LexerSelector,
 ) []LexNode[T] {
 	resultContent := []LexNode[T]{}
 

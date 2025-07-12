@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var elementRefToken lexer.LexerToken = []string{"#"}
+var elementRefToken lexer.LexerSelector = []string{"#"}
 
 // Element ref's are literally just aliases for an "id" attribute that is
 // tracked by the reactive compiler.

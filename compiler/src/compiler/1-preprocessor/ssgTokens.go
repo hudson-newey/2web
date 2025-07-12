@@ -10,8 +10,8 @@ import lexer "hudson-newey/2web/src/compiler/2-lexer"
 // doesn't have to deal with.
 // The compiler should be able to automatically pick the most efficient
 // rendering method depending on the circumstances.
-var SsgStartToken lexer.LexerToken = []string{"{%"}
-var SsgEndToken lexer.LexerToken = []string{"%}"}
+var SsgStartToken lexer.LexerSelector = []string{"{%"}
+var SsgEndToken lexer.LexerSelector = []string{"%}"}
 
 // each function will have a keyword that can be used inside ssg contexts
-var includeToken lexer.LexerToken = []string{"include"}
+var includeToken lexer.LexerSelector = []string{"include"}
