@@ -9,13 +9,17 @@
 
   <body>
     <script compiled>
-    $ value = 0;
+      import Footer from "components/footer.component.html";
+
+      $ value = 0;
     </script>
 
     <h1>{{ $value }}</h1>
 
     <button @click="$value = $value + 1">Increment</button>
     <button @click="$value = $value - 1">Decrement</button>
+
+    <Footer />
 
     <p>
       2Web supports generating a page from a page partial, meaning that this

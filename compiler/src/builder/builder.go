@@ -4,6 +4,7 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/markdown"
+	"hudson-newey/2web/src/models"
 	"os"
 	"strings"
 )
@@ -19,7 +20,13 @@ func Build() bool {
 
 	inputPath, err := os.Stat(*args.InputPath)
 	if err != nil {
-		panic(err)
+		documentErrors.AddErrors(models.Error{
+			FilePath: *args.InputPath,
+			Message:  err.Error(),
+		})
+
+		documentErrors.PrintDocumentErrors()
+		return false
 	}
 
 	// If the output path already exists, delete the output path so that there
