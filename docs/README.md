@@ -8,10 +8,11 @@ There are quite a few known bugs.
 3. [Templating](./templating.md)
 4. [Document Partials](./document-partials.md)
 5. [Components](./components.md)
-6. [Code Splitting](./code-splitting.md)
-7. [TypeScript](./typescript.md)
-8. [Page/Component Styling](./styling.md)
-9. [Breaking HTML Changes](./breaking-html.md)
+6. [Template Control Flow](./control-flow.md)
+7. [Code Splitting](./code-splitting.md)
+8. [TypeScript](./typescript.md)
+9. [Page/Component Styling](./styling.md)
+10. [Breaking HTML Changes](./breaking-html.md)
 
 ## Understanding the Compiler
 

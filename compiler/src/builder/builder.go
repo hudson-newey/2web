@@ -7,7 +7,6 @@ import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	validator "hudson-newey/2web/src/compiler/3-validator"
 	templating "hudson-newey/2web/src/compiler/5-templating"
-	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/markdown"
@@ -89,8 +88,6 @@ func buildToPage(inputPath string) page.Page {
 	ssgResult := preprocessor.ProcessStaticSite(inputPath, string(rawData))
 
 	pageModel := templating.BuildPage(ssgResult)
-
-	pageModel.Html.Content = controlFlow.ProcessControlFlow(inputPath, pageModel.Html.Content)
 
 	lexInstance := lexer.NewLexer(pageModel.Html.Reader())
 	lexRepresentation := lexInstance.Execute()

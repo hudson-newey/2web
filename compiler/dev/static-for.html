@@ -4,3 +4,15 @@
 <ul>
   {% for 1,2,3 <li>item: {{&value}}</li> %}
 </ul>
+
+<p>
+  This page should have no runtime overhead because the "for" control flow can
+  be evaluated at compile time.
+</p>
+
+<p>
+  The compiler should be able to infer that the data used in the loop is
+  immutable.
+  This behavior should be fully transparent to the programmer, so that there is
+  a single format for a runtime and compile time "for loop".
+</p>
