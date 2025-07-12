@@ -5,9 +5,7 @@ import (
 	"hudson-newey/2web/src/content/markdown"
 )
 
-type isStable = bool
-
-func ProcessStaticSite(filePath string, content string) (string, isStable) {
+func ProcessStaticSite(filePath string, content string) string {
 	ssgResult := content
 
 	if html.IsHtmlFile(filePath) {
@@ -29,5 +27,5 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 		ssgResult = html.ExpandPartial(ssgResult)
 	}
 
-	return ssgResult, true
+	return ssgResult
 }

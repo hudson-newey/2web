@@ -86,15 +86,7 @@ func buildToPage(inputPath string) page.Page {
 
 	cli.PrintBuildLog("\t- " + inputPath)
 
-	ssgResult := string(rawData)
-	ssgStable := false
-	for {
-		ssgResult, ssgStable = preprocessor.ProcessStaticSite(inputPath, ssgResult)
-
-		if ssgStable {
-			break
-		}
-	}
+	ssgResult := preprocessor.ProcessStaticSite(inputPath, string(rawData))
 
 	pageModel := templating.BuildPage(ssgResult)
 
