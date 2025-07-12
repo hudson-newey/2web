@@ -5,6 +5,7 @@ import (
 	preprocessor "hudson-newey/2web/src/compiler/1-preprocessor"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	validator "hudson-newey/2web/src/compiler/3-validator"
+	parser "hudson-newey/2web/src/compiler/4-parser"
 	templating "hudson-newey/2web/src/compiler/5-templating"
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
@@ -24,16 +25,19 @@ func buildToPage(inputPath string) page.Page {
 
 	// 2. Lex
 	lexInstance := lexer.NewLexer(pageModel.Html.Reader())
-	lexRepresentation := lexInstance.Execute()
+	lexStructure := lexInstance.Execute()
 
 	// 3. Validate
-	isValid, compilerErrors := validator.IsValid(lexRepresentation)
+	isValid, compilerErrors := validator.IsValid(lexStructure)
 	if !isValid {
 		documentErrors.AddErrors(compilerErrors...)
 	}
 
-	// 4. Template
-	compiledPage := templating.Compile(inputPath, pageModel)
+	// 4. Create AST (parser)
+	ast := parser.CreateAst(lexStructure)
+
+	// 5. Template (write result)
+	compiledPage := templating.Compile(inputPath, pageModel, ast)
 
 	compiledPage.Html.Content = documentErrors.InjectErrors(compiledPage.Html.Content)
 	documentErrors.ResetPageErrors()

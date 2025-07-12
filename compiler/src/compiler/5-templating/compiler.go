@@ -3,6 +3,7 @@ package templating
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	parser "hudson-newey/2web/src/compiler/4-parser"
 	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
 	"hudson-newey/2web/src/content/document/documentErrors"
@@ -17,7 +18,7 @@ import (
 
 // TODO: Page/component models should have their associated reactive models as
 // properties.
-func Compile(filePath string, pageModel page.Page) page.Page {
+func Compile(filePath string, pageModel page.Page, ast []parser.Node) page.Page {
 	pageModel.Html.Content = controlFlow.ProcessControlFlow(filePath, pageModel.Html.Content)
 
 	if html.IsHtmlFile(filePath) {
