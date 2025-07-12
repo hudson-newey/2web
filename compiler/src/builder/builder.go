@@ -10,7 +10,6 @@ import (
 	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
-	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
@@ -73,9 +72,9 @@ func Build() bool {
 func buildToPage(inputPath string) page.Page {
 	args := cli.GetArgs()
 
-	data, err := getInputContent(inputPath)
+	rawData, err := getInputContent(inputPath)
 	if err != nil {
-		data = []byte{}
+		rawData = []byte{}
 		documentErrors.AddErrors(models.Error{
 			FilePath: inputPath,
 			Message:  fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
@@ -87,43 +86,19 @@ func buildToPage(inputPath string) page.Page {
 
 	cli.PrintBuildLog("\t- " + inputPath)
 
-	fullDocumentContent := ""
-	if html.IsHtmlFile(inputPath) {
-		// 2Web supports partial content, meaning that pages don't need and doctype,
-		// html, head, meta, or body tags.
-		// The user can just start writing the pages content, and the compiler can
-		// figure out what should be in the body vs head.
-		fullDocumentContent = html.ExpandPartial(string(data))
-	} else if markdown.IsMarkdownFile(inputPath) {
-		markdownFile := markdown.MarkdownFile{
-			Content: string(data),
-		}
-		fullDocumentContent = markdownFile.ToHtml().Content
-
-		// Markdown files are typically compiled as html partials. Developers
-		// typically (and shouldn't) declare a doctype, header, etc...
-		// therefore, we also expand html partials once the html document has been
-		// created.
-		fullDocumentContent = html.ExpandPartial(fullDocumentContent)
-	} else {
-		fullDocumentContent = string(data)
-	}
-
-	pageModel := templating.BuildPage(fullDocumentContent)
-
-	pageModel.Html.Content = controlFlow.ProcessControlFlow(inputPath, pageModel.Html.Content)
-
-	ssgResult := pageModel.Html.Content
-	stable := false
+	ssgResult := string(rawData)
+	ssgStable := false
 	for {
-		ssgResult, stable = preprocessor.ProcessStaticSite(inputPath, ssgResult)
+		ssgResult, ssgStable = preprocessor.ProcessStaticSite(inputPath, ssgResult)
 
-		if stable {
+		if ssgStable {
 			break
 		}
 	}
 
-	pageModel.Html.Content = ssgResult
+	pageModel := templating.BuildPage(ssgResult)
+
+	pageModel.Html.Content = controlFlow.ProcessControlFlow(inputPath, pageModel.Html.Content)
 
 	lexInstance := lexer.NewLexer(pageModel.Html.Reader())
 	lexRepresentation := lexInstance.Execute()
