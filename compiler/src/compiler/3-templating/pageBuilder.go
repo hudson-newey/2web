@@ -1,4 +1,4 @@
-package pageBuilder
+package templating
 
 import (
 	"hudson-newey/2web/src/content/css"
@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-type nodeType = int
+type languageState = int
 
 const (
-	htmlNode nodeType = iota
+	htmlNode languageState = iota
 	jsNode
 	cssNode
 	codeNode

@@ -2,7 +2,7 @@ package models
 
 import (
 	"errors"
-	"hudson-newey/2web/src/compiler/lexer"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"os"
 	"strconv"
 	"strings"

@@ -3,10 +3,9 @@ package builder
 import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
-	"hudson-newey/2web/src/compiler/pageBuilder"
-	"hudson-newey/2web/src/compiler/ssg"
-	"hudson-newey/2web/src/compiler/templating"
-	"hudson-newey/2web/src/compiler/templating/controlFlow"
+	preprocessor "hudson-newey/2web/src/compiler/1-preprocessor"
+	templating "hudson-newey/2web/src/compiler/3-templating"
+	"hudson-newey/2web/src/compiler/3-templating/controlFlow"
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/html"
@@ -108,14 +107,14 @@ func buildToPage(inputPath string) page.Page {
 		fullDocumentContent = string(data)
 	}
 
-	pageModel := pageBuilder.BuildPage(fullDocumentContent)
+	pageModel := templating.BuildPage(fullDocumentContent)
 
 	pageModel.Html.Content = controlFlow.ProcessControlFlow(inputPath, pageModel.Html.Content)
 
 	ssgResult := pageModel.Html.Content
 	stable := false
 	for {
-		ssgResult, stable = ssg.ProcessStaticSite(inputPath, ssgResult)
+		ssgResult, stable = preprocessor.ProcessStaticSite(inputPath, ssgResult)
 
 		if stable {
 			break

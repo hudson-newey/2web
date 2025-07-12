@@ -1,6 +1,6 @@
 package models
 
-import "hudson-newey/2web/src/compiler/lexer"
+import lexer "hudson-newey/2web/src/compiler/2-lexer"
 
 // Markup comments can be used within html, svg, MathML, markdown and other
 // browser-based markup languages.

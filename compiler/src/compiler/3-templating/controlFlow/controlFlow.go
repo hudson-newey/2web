@@ -1,15 +1,15 @@
 package controlFlow
 
 import (
-	"hudson-newey/2web/src/compiler/lexer"
-	"hudson-newey/2web/src/compiler/ssg"
-	"hudson-newey/2web/src/compiler/templating/controlFlow/cfModules/cfFor"
-	"hudson-newey/2web/src/compiler/templating/controlFlow/cfModules/cfIf"
+	preprocessor "hudson-newey/2web/src/compiler/1-preprocessor"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	"hudson-newey/2web/src/compiler/3-templating/controlFlow/cfModules/cfFor"
+	"hudson-newey/2web/src/compiler/3-templating/controlFlow/cfModules/cfIf"
 	"strings"
 )
 
 func ProcessControlFlow(filePath string, content string) string {
-	ssgContent := lexer.FindNodes[lexer.SsgNode](content, ssg.SsgStartToken, ssg.SsgEndToken)
+	ssgContent := lexer.FindNodes[lexer.SsgNode](content, preprocessor.SsgStartToken, preprocessor.SsgEndToken)
 	result := content
 
 	for _, node := range ssgContent {

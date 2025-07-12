@@ -1,4 +1,4 @@
-package ssgModules
+package preprocessor
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func IncludeSsgContent(value string, filePath string) string {
+func includeSsgContent(value string, filePath string) string {
 	hostDirectoryEnd := strings.LastIndex(filePath, "/")
 	hostDirectory := filePath[:hostDirectoryEnd]
 

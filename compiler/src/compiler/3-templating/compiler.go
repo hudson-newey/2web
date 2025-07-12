@@ -2,10 +2,8 @@ package templating
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/compiler/lexer"
-	"hudson-newey/2web/src/compiler/templating/imports"
-	"hudson-newey/2web/src/compiler/templating/reactiveCompiler"
-	"hudson-newey/2web/src/compiler/templating/textNode"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	"hudson-newey/2web/src/compiler/3-templating/reactiveCompiler"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
@@ -22,7 +20,7 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 	// element with only innerText.
 	// Therefore, we expand all of the mustache expressions before finding
 	// reactive property tokens
-	pageModel.Html.Content = textNode.ExpandTextNodes(pageModel.Html.Content)
+	pageModel.Html.Content = expandTextNodes(pageModel.Html.Content)
 
 	importNodes := []lexer.LexNode[lexer.ImportNode]{}
 	reactiveVariables := []*models.ReactiveVariable{}
@@ -131,7 +129,7 @@ func Compile(filePath string, pageModel page.Page) page.Page {
 		}
 	}
 
-	pageModel.Html.Content = imports.EvaluateImports(filePath, pageModel.Html.Content, importNodes)
+	pageModel.Html.Content = evaluateImports(filePath, pageModel.Html.Content, importNodes)
 
 	pageModel = reactiveCompiler.CompileReactivity(filePath, pageModel, reactiveVariables)
 

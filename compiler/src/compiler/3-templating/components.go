@@ -1,8 +1,7 @@
-package imports
+package templating
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/compiler/pageBuilder"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
@@ -78,7 +77,7 @@ func buildComponent(component *models.Component) (page.Page, error) {
 		fullDocumentContent = string(data)
 	}
 
-	pageModel := pageBuilder.BuildPage(fullDocumentContent)
+	pageModel := BuildPage(fullDocumentContent)
 
 	return pageModel, nil
 }

@@ -1,16 +1,16 @@
-package textNode
+package templating
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/compiler/lexer"
-	"hudson-newey/2web/src/compiler/templating/reactiveCompiler"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	"hudson-newey/2web/src/compiler/3-templating/reactiveCompiler"
 	"strings"
 )
 
 var textStartToken lexer.LexerToken = []string{"{{"}
 var textEndToken lexer.LexerToken = []string{"}}"}
 
-func ExpandTextNodes(content string) string {
+func expandTextNodes(content string) string {
 	textNodes := lexer.FindNodes[lexer.TextNode](content, textStartToken, textEndToken)
 
 	for _, node := range textNodes {

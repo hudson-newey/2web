@@ -1,8 +1,7 @@
-package ssg
+package preprocessor
 
 import (
-	"hudson-newey/2web/src/compiler/lexer"
-	"hudson-newey/2web/src/compiler/ssg/ssgModules"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/html"
 	"strings"
 )
@@ -22,7 +21,7 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 
 			switch ssgKeyword {
 			case includeToken[0]:
-				selectorContent = ssgModules.IncludeSsgContent(node.Tokens[1], filePath)
+				selectorContent = includeSsgContent(node.Tokens[1], filePath)
 			}
 		}
 
@@ -30,7 +29,7 @@ func ProcessStaticSite(filePath string, content string) (string, isStable) {
 	}
 
 	if html.IsHtmlFile(filePath) {
-		ssgResult = ssgModules.ExpandElementRefs(ssgResult)
+		ssgResult = expandElementRefs(ssgResult)
 	}
 
 	// by comparing the original content with the result, we can determine if

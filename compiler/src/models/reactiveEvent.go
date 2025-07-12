@@ -1,7 +1,7 @@
 package models
 
 import (
-	"hudson-newey/2web/src/compiler/lexer"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"strings"
 )
 

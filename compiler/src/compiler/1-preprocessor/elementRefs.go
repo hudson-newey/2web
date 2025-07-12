@@ -1,8 +1,8 @@
-package ssgModules
+package preprocessor
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/compiler/lexer"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"strings"
 )
 
@@ -12,7 +12,7 @@ var elementRefToken lexer.LexerToken = []string{"#"}
 // tracked by the reactive compiler.
 // Warning: This means that element ref's cannot be used if an element has an
 // "id" attribute.
-func ExpandElementRefs(content string) string {
+func expandElementRefs(content string) string {
 	refNodes := lexer.FindPropNodes[lexer.RefNode](content, elementRefToken)
 
 	for _, node := range refNodes {
