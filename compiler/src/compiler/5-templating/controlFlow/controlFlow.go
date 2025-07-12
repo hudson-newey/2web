@@ -1,15 +1,25 @@
 package controlFlow
 
 import (
-	preprocessor "hudson-newey/2web/src/compiler/1-preprocessor"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/compiler/4-templating/controlFlow/cfModules/cfFor"
-	"hudson-newey/2web/src/compiler/4-templating/controlFlow/cfModules/cfIf"
+	"hudson-newey/2web/src/compiler/5-templating/controlFlow/cfModules/cfFor"
+	"hudson-newey/2web/src/compiler/5-templating/controlFlow/cfModules/cfIf"
 	"strings"
 )
 
+// ssg start and end tokens are exported because we use the same syntax inside
+// control flow such as if conditions e.g. {% if <condition> <result> %}
+// I have chosen to use the same if start and end tokens for ssg and control
+// flow because one of the goals of this project is to make the difference
+// between ssg, ssr, isr, and csr an implementation detail that the user
+// doesn't have to deal with.
+// The compiler should be able to automatically pick the most efficient
+// rendering method depending on the circumstances.
+var cfStartSelector lexer.LexerSelector = []string{"{%"}
+var cfEndSelector lexer.LexerSelector = []string{"%}"}
+
 func ProcessControlFlow(filePath string, content string) string {
-	ssgContent := lexer.FindNodes[lexer.SsgNode](content, preprocessor.SsgStartToken, preprocessor.SsgEndToken)
+	ssgContent := lexer.FindNodes[lexer.SsgNode](content, cfStartSelector, cfEndSelector)
 	result := content
 
 	for _, node := range ssgContent {

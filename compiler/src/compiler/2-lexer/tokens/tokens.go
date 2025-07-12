@@ -38,6 +38,9 @@ const (
 	// *
 	Star
 
+	// #
+	Hash
+
 	Text
 
 	// JS Tokens

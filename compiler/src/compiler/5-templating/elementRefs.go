@@ -1,12 +1,10 @@
-package preprocessor
+package templating
 
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"strings"
 )
-
-var elementRefToken lexer.LexerSelector = []string{"#"}
 
 // Element ref's are literally just aliases for an "id" attribute that is
 // tracked by the reactive compiler.

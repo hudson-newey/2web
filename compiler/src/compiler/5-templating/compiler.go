@@ -3,8 +3,9 @@ package templating
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/compiler/4-templating/reactiveCompiler"
+	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/reactiveEvent"
@@ -16,6 +17,10 @@ import (
 // TODO: Page/component models should have their associated reactive models as
 // properties.
 func Compile(filePath string, pageModel page.Page) page.Page {
+	if html.IsHtmlFile(filePath) {
+		pageModel.Html.Content = expandElementRefs(pageModel.Html.Content)
+	}
+
 	// "Mustache like" expressions e.g. {{ $count }} are a shorthand for an
 	// element with only innerText.
 	// Therefore, we expand all of the mustache expressions before finding

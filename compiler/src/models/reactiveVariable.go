@@ -2,7 +2,7 @@ package models
 
 import lexer "hudson-newey/2web/src/compiler/2-lexer"
 
-type ReactiveClass int
+type ReactivityLevel int
 
 /*
 Reactive types progressively get less performant as you go down this list.
@@ -114,7 +114,7 @@ In this example, out compiled code will look **something** (not exact) like this
 */
 const (
 	// does not require any JavaScript. Can be inlined at compile time.
-	Static ReactiveClass = iota
+	Static ReactivityLevel = iota
 
 	// Requires JavaScript to modify the DOM on initial render.
 	StaticProperty
@@ -148,7 +148,7 @@ func (model *ReactiveVariable) AddEvent(event *ReactiveEvent) {
 
 // TODO: expand this out to reactive types
 // TODO: this should probably cache the type for faster compile times
-func (model *ReactiveVariable) Type() ReactiveClass {
+func (model *ReactiveVariable) Type() ReactivityLevel {
 	// If a variable is being modified in an event, it is reasonable to assume
 	// that there is an associated prop. Because why would you want a reactive
 	// variable that never modifies the ODM?

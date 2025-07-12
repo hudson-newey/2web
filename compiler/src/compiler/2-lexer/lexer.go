@@ -75,6 +75,8 @@ func (model *Lexer) lex() V2LexNode {
 			return V2LexNode{Pos: model.pos, Token: lexerTokens.AtSymbol, Content: "@"}
 		case '*':
 			return V2LexNode{Pos: model.pos, Token: lexerTokens.Star, Content: "*"}
+		case '#':
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Hash, Content: "#"}
 		default:
 			if unicode.IsSpace(readerChar) {
 				continue

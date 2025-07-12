@@ -30,3 +30,5 @@ var blockCommentEndToken = lexer.LexerSelector{"*/"}
 
 var markupCommentStartToken = lexer.LexerSelector{"<!--"}
 var markupCommentEndToken = lexer.LexerSelector{"-->"}
+
+var elementRefToken lexer.LexerSelector = []string{"#"}
