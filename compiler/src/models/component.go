@@ -4,8 +4,8 @@ import (
 	"errors"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"os"
+	"path/filepath"
 	"strconv"
-	"strings"
 )
 
 type Component struct {
@@ -19,10 +19,10 @@ type Component struct {
 }
 
 func (model *Component) ComponentPath() (string, error) {
-	hostDirectoryEnd := strings.LastIndex(model.ImportedFrom, "/")
-	hostDirectory := model.ImportedFrom[:hostDirectoryEnd]
-
-	componentPath := hostDirectory + model.ImportPath
+	// Because trailing slashes are removed from filepath.Dir, we have to re-add
+	// it when computing the imported files path.
+	hostDirectory := filepath.Dir(model.ImportedFrom)
+	componentPath := hostDirectory + "/" + model.ImportPath
 
 	if _, err := os.Stat(componentPath); err == os.ErrNotExist {
 		return "", errors.New("could not resolve import " + componentPath)

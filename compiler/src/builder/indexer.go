@@ -7,6 +7,7 @@ import (
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/svg"
 	"os"
+	"strings"
 )
 
 func indexPages(inputPath string) []string {
@@ -16,6 +17,11 @@ func indexPages(inputPath string) []string {
 	}
 
 	if inputFile.IsDir() {
+		dirInputPath := inputPath
+		if !strings.HasSuffix(inputPath, string(os.PathSeparator)) {
+			dirInputPath += string(os.PathSeparator)
+		}
+
 		totalFiles := []string{}
 		currentDirFiles, err := os.ReadDir(inputPath)
 		if err != nil {
@@ -23,7 +29,7 @@ func indexPages(inputPath string) []string {
 		}
 
 		for _, file := range currentDirFiles {
-			pages := indexPages(inputPath + "/" + file.Name())
+			pages := indexPages(dirInputPath + file.Name())
 
 			for _, page := range pages {
 				// TODO: Don't include assets in page indexing. They should instead be
