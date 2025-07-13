@@ -18,6 +18,8 @@ func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 		}
 
 		switch readerChar {
+		case '\n':
+			model.lineFeed()
 		case '/':
 			return V2LexNode{Pos: model.pos, Token: lexerTokens.Slash, Content: "/"}, textLexer
 		case '\'':
