@@ -6,6 +6,7 @@ import (
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/models"
 	"os"
+	"path"
 	"strings"
 )
 
@@ -41,20 +42,10 @@ func Build() bool {
 		indexedPages := indexPages(*args.InputPath)
 
 		for _, file := range indexedPages {
-			// If we are compiling a markdown file, we want to replace the .md suffix
-			// with .html
-			// This is because we compile markdown to html files.
-			adjustedFileName := file
-			if markdown.IsMarkdownFile(file) {
-				adjustedFileName = strings.TrimSuffix(adjustedFileName, ".md") + ".html"
-			}
-
-			adjustedFileName = adjustedFileName[len(*args.InputPath):]
-
-			compileAndWriteFile(file, *args.OutputPath+"/"+adjustedFileName)
+			compileAndWriteFile(file, outputFileName(*args.InputPath, *args.OutputPath, file))
 		}
 	} else {
-		compileAndWriteFile(*args.InputPath, *args.OutputPath)
+		compileAndWriteFile(*args.InputPath, outputFileName(*args.InputPath, *args.OutputPath, *args.InputPath))
 	}
 
 	// We only print document errors once the entire project has been compiled so
@@ -63,4 +54,28 @@ func Build() bool {
 	documentErrors.PrintDocumentErrors()
 
 	return documentErrors.IsErrorFree()
+}
+
+func outputFileName(inputPath string, outputPath string, fileName string) string {
+	isInDir := strings.HasSuffix(inputPath, string(os.PathSeparator))
+	isOutDir := strings.HasSuffix(outputPath, string(os.PathSeparator))
+
+	// If we are passed in a file, but a directory as the output, append the
+	// file name to the output directory
+	if !isInDir && isOutDir {
+		fileName = outputPath + fileName
+	}
+
+	// If we are compiling a markdown file, we want to replace the .md suffix
+	// with .html
+	// This is because we compile markdown to html files.
+	adjustedFileName := fileName
+	if markdown.IsMarkdownFile(fileName) {
+		adjustedFileName = strings.TrimSuffix(adjustedFileName, ".md") + ".html"
+	}
+
+	adjustedFileName = path.Base(adjustedFileName)
+	adjustedPath := path.Join(path.Dir(outputPath), adjustedFileName)
+
+	return adjustedPath
 }
