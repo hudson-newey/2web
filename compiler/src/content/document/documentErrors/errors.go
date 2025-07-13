@@ -25,6 +25,11 @@ func IsErrorFree() bool {
 	return len(totalErrors) == 0
 }
 
+// TODO: This function is very hacky
+func IsPageErrorFree() bool {
+	return len(pageErrors) == 0
+}
+
 func InjectErrors(pageContent string) string {
 	if len(pageErrors) == 0 {
 		return pageContent

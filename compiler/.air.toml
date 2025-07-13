@@ -4,7 +4,10 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "./tmp/main -i dev/ -o dist/"
+  # The cache works over the modified time of input files.
+  # However, during builds, the binary might change without the input files
+  # changing
+  bin = "./tmp/main -i dev/ -o dist/ --no-cache"
   # bin = "./tmp/main -i dev/ -o dist/ --production"
   cmd = "go build -o ./tmp/main ./src"
   delay = 1

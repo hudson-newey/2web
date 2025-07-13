@@ -13,11 +13,10 @@ import (
 	"hudson-newey/2web/src/optimizer"
 )
 
-func buildToPage(inputPath string) page.Page {
+func buildToPage(inputPath string) (page.Page, bool) {
 	args := cli.GetArgs()
 
 	data := getContent(inputPath)
-	cli.PrintBuildLog("\t- " + inputPath)
 
 	// 1. Preprocess
 	ssgResult := preprocessor.ProcessStaticSite(inputPath, data)
@@ -39,8 +38,11 @@ func buildToPage(inputPath string) page.Page {
 	// 5. Template (write result)
 	compiledPage := templating.Compile(inputPath, pageModel, ast)
 
-	compiledPage.Html.Content = documentErrors.InjectErrors(compiledPage.Html.Content)
-	documentErrors.ResetPageErrors()
+	isErrorFree := documentErrors.IsPageErrorFree()
+	if !isErrorFree {
+		compiledPage.Html.Content = documentErrors.InjectErrors(compiledPage.Html.Content)
+		documentErrors.ResetPageErrors()
+	}
 
 	if *args.HasDevTools {
 		compiledPage.Html.Content = devtools.InjectDevTools(compiledPage.Html.Content)
@@ -51,5 +53,5 @@ func buildToPage(inputPath string) page.Page {
 		compiledPage = optimizer.OptimizePage(compiledPage)
 	}
 
-	return compiledPage
+	return compiledPage, isErrorFree
 }

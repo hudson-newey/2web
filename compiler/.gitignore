@@ -1,6 +1,7 @@
 dist/
 bin/
 build/
+.cache/
 
 tmp/
 testdata/
