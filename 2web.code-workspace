@@ -23,7 +23,7 @@
     "editor.insertSpaces": true,
     "explorer.compactFolders": false,
     "cSpell.caseSensitive": false,
-    "cSpell.words": ["vite", "prefetcher"],
+    "cSpell.words": ["architectured", "prefetcher", "vite"],
     "cSpell.flagWords": ["yuo"],
     "cSpell.ignorePaths": ["**/node_modules/**", "2web.code-workspace"],
     "search.exclude": {

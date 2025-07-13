@@ -1,3 +1,3 @@
 package lexer
 
-type LexFunc func(*Lexer) LexFunc
+type LexFunc func(*Lexer) (V2LexNode, LexFunc)

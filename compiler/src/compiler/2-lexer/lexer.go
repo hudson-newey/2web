@@ -7,11 +7,6 @@ import (
 	"unicode"
 )
 
-type Position struct {
-	Row int
-	Col int
-}
-
 type Lexer struct {
 	pos    Position
 	reader *bufio.Reader
@@ -19,16 +14,11 @@ type Lexer struct {
 	State LexFunc
 }
 
-type V2LexNode struct {
-	Pos     Position
-	Token   lexerTokens.LexToken
-	Content string
-}
-
 func NewLexer(reader io.Reader) *Lexer {
 	return &Lexer{
 		pos:    Position{Row: 1, Col: 0},
 		reader: bufio.NewReader(reader),
+		State:  textLexer,
 	}
 }
 
@@ -48,11 +38,19 @@ func (model *Lexer) Execute() []V2LexNode {
 // This lexer is heavily inspired by arron raff's blog post
 // https://www.aaronraff.dev/blog/how-to-write-a-lexer-in-go
 func (model *Lexer) lex() V2LexNode {
+	node, state := model.State(model)
+
+	model.State = state
+
+	return node
+}
+
+func textLexer(model *Lexer) (V2LexNode, LexFunc) {
 	for {
 		readerChar, _, err := model.reader.ReadRune()
 		if err != nil {
 			if err == io.EOF {
-				return V2LexNode{Pos: model.pos, Token: lexerTokens.EOF, Content: ""}
+				return V2LexNode{Pos: model.pos, Token: lexerTokens.EOF, Content: ""}, textLexer
 			}
 
 			panic(err)
@@ -62,21 +60,21 @@ func (model *Lexer) lex() V2LexNode {
 		case '\n':
 			model.lineFeed()
 		case '<':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.LessAngle, Content: "<"}
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.LessAngle, Content: "<"}, textLexer
 		case '>':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.GreaterAngle, Content: ">"}
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.GreaterAngle, Content: ">"}, textLexer
 		case '/':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Slash, Content: "/"}
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Slash, Content: "/"}, textLexer
 		case '\'':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteSingle, Content: "'"}
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteSingle, Content: "'"}, textLexer
 		case '"':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteDouble, Content: "\""}
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteDouble, Content: "\""}, textLexer
 		case '@':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.AtSymbol, Content: "@"}
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.AtSymbol, Content: "@"}, textLexer
 		case '*':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Star, Content: "*"}
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Star, Content: "*"}, textLexer
 		case '#':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Hash, Content: "#"}
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Hash, Content: "#"}, textLexer
 		default:
 			if unicode.IsSpace(readerChar) {
 				continue
@@ -84,7 +82,7 @@ func (model *Lexer) lex() V2LexNode {
 				startPos := model.pos
 				model.backup()
 				text := model.lexText()
-				return V2LexNode{Pos: startPos, Token: lexerTokens.Text, Content: string(text)}
+				return V2LexNode{Pos: startPos, Token: lexerTokens.Text, Content: string(text)}, textLexer
 			}
 		}
 	}
