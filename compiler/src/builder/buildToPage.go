@@ -25,6 +25,9 @@ func buildToPage(inputPath string) (page.Page, bool) {
 	// 2. Lex
 	lexInstance := lexer.NewLexer(pageModel.Html.Reader())
 	lexStructure := lexInstance.Execute()
+	if *args.VerboseLexer {
+		lexer.PrintVerboseLexer(lexStructure)
+	}
 
 	// 3. Validate
 	isValid, compilerErrors := validator.IsValid(lexStructure)
@@ -34,6 +37,9 @@ func buildToPage(inputPath string) (page.Page, bool) {
 
 	// 4. Create AST (parser)
 	ast := parser.CreateAst(lexStructure)
+	if *args.VerboseAst {
+		parser.PrintVerboseParser(ast)
+	}
 
 	// 5. Template (write result)
 	compiledPage := templating.Compile(inputPath, pageModel, ast)

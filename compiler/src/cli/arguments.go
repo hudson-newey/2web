@@ -17,6 +17,10 @@ func ParseArguments() models.CliArguments {
 	fromStdin := flag.Bool("stdin", false, "Read from stdin")
 	toStdout := flag.Bool("stdout", false, "Output the build file to stdout instead of to a file location")
 
+	verbose := flag.Bool("verbose", false, "Print extra debug information to the console")
+	verboseLexer := flag.Bool("verbose-lexer", false, "Logs the lexer output to the console")
+	verboseAst := flag.Bool("verbose-ast", false, "Logs the ast output to the console")
+
 	flag.Parse()
 
 	parsedArgs = models.CliArguments{
@@ -28,6 +32,10 @@ func ParseArguments() models.CliArguments {
 		DisableCache: disableCache,
 		FromStdin:    fromStdin,
 		ToStdout:     toStdout,
+
+		Verbose:      verbose,
+		VerboseLexer: verboseLexer,
+		VerboseAst:   verboseAst,
 	}
 
 	return GetArgs()
