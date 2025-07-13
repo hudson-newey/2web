@@ -36,8 +36,12 @@ func InjectErrors(pageContent string) string {
 }
 
 func PrintDocumentErrors() {
+	if *cli.GetArgs().IsSilent {
+		return
+	}
+
 	for _, errorModel := range totalErrors {
-		cli.PrintError(errorModel)
+		errorModel.PrintError()
 	}
 }
 
