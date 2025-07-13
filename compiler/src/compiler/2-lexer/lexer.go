@@ -45,49 +45,6 @@ func (model *Lexer) lex() V2LexNode {
 	return node
 }
 
-func textLexer(model *Lexer) (V2LexNode, LexFunc) {
-	for {
-		readerChar, _, err := model.reader.ReadRune()
-		if err != nil {
-			if err == io.EOF {
-				return V2LexNode{Pos: model.pos, Token: lexerTokens.EOF, Content: ""}, textLexer
-			}
-
-			panic(err)
-		}
-
-		switch readerChar {
-		case '\n':
-			model.lineFeed()
-		case '<':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.LessAngle, Content: "<"}, textLexer
-		case '>':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.GreaterAngle, Content: ">"}, textLexer
-		case '/':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Slash, Content: "/"}, textLexer
-		case '\'':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteSingle, Content: "'"}, textLexer
-		case '"':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteDouble, Content: "\""}, textLexer
-		case '@':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.AtSymbol, Content: "@"}, textLexer
-		case '*':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Star, Content: "*"}, textLexer
-		case '#':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Hash, Content: "#"}, textLexer
-		default:
-			if unicode.IsSpace(readerChar) {
-				continue
-			} else if unicode.IsLetter(readerChar) {
-				startPos := model.pos
-				model.backup()
-				text := model.lexText()
-				return V2LexNode{Pos: startPos, Token: lexerTokens.Text, Content: string(text)}, textLexer
-			}
-		}
-	}
-}
-
 // Returns the column position to the start and increments the line number
 func (model *Lexer) lineFeed() {
 	model.pos.Row++
@@ -116,7 +73,7 @@ func (l *Lexer) lexText() string {
 		}
 
 		l.pos.Col++
-		if unicode.IsLetter(r) {
+		if unicode.IsLetter(r) || unicode.IsSpace(r) {
 			lit = lit + string(r)
 		} else {
 			// scanned something not in the identifier
