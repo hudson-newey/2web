@@ -27,6 +27,9 @@ func BuildPage(content string) page.Page {
 	pageModel := page.Page{}
 	pageModel.Html = &html.HTMLFile{}
 
+	cssFiles := []*css.CSSFile{}
+	jsFiles := []*javascript.JSFile{}
+
 	for i := range content {
 		if currentNodeType != htmlNode {
 			for _, endTag := range nonHtmlEndTags {
@@ -40,12 +43,12 @@ func BuildPage(content string) page.Page {
 							newJsNode := javascript.JSFile{}
 							newJsNode.AddContent(bufferedContent)
 
-							pageModel.AddScript(&newJsNode)
+							jsFiles = append(jsFiles, &newJsNode)
 						} else if currentNodeType == cssNode {
 							newCssNode := css.CSSFile{}
 							newCssNode.AddContent(bufferedContent)
 
-							pageModel.AddStyle(&newCssNode)
+							cssFiles = append(cssFiles, &newCssNode)
 						} else if currentNodeType == codeNode {
 							contentToPrepend := strings.TrimPrefix(bufferedContent, "<code>")
 
@@ -93,6 +96,16 @@ func BuildPage(content string) page.Page {
 		case jsNode, cssNode, codeNode:
 			bufferedContent += string(content[i])
 		}
+	}
+
+	// Inject external content after the page model has been created so that we
+	// can directly inject into semi-final <head> and </html> locations
+	for _, file := range cssFiles {
+		pageModel.AddStyle(file)
+	}
+
+	for _, file := range jsFiles {
+		pageModel.AddScript(file)
 	}
 
 	return pageModel

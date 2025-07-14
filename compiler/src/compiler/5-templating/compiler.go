@@ -138,7 +138,7 @@ func Compile(filePath string, pageModel page.Page, ast []parser.Node) page.Page 
 		}
 	}
 
-	pageModel.Html.Content = evaluateImports(filePath, pageModel.Html.Content, importNodes)
+	pageModel = evaluateImports(filePath, pageModel, importNodes)
 
 	pageModel = reactiveCompiler.CompileReactivity(filePath, pageModel, reactiveVariables)
 

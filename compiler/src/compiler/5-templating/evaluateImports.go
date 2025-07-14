@@ -3,6 +3,7 @@ package templating
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/component"
 )
@@ -14,9 +15,9 @@ import (
 // this function instead of the compiler.
 func evaluateImports(
 	filePath string,
-	content string,
+	page page.Page,
 	importNodes []lexer.LexNode[lexer.ImportNode],
-) string {
+) page.Page {
 	componentImports := []*models.Component{}
 
 	for _, importNode := range importNodes {
@@ -32,7 +33,5 @@ func evaluateImports(
 		componentImports = append(componentImports, &componentModel)
 	}
 
-	content = ExpandComponentImports(filePath, content, componentImports)
-
-	return content
+	return ExpandComponentImports(filePath, page, componentImports)
 }

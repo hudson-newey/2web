@@ -37,7 +37,7 @@ func InjectErrors(pageContent string) string {
 
 	errorTemplateResult := createErrorTemplate(pageErrors)
 
-	return document.InjectContent(pageContent, errorTemplateResult, document.Body)
+	return document.InjectContent(pageContent, errorTemplateResult, document.BodyTop)
 }
 
 func PrintDocumentErrors() {

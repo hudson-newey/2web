@@ -7,7 +7,7 @@ tmp_dir = "tmp"
   # The cache works over the modified time of input files.
   # However, during builds, the binary might change without the input files
   # changing
-  bin = "./tmp/main -i dev/small-file.html -o dist/ --no-cache --verbose-lexer"
+  bin = "./tmp/main -i dev/ -o dist/ --no-cache"
   # bin = "./tmp/main -i dev/ -o dist/ --production"
   cmd = "go build -o ./tmp/main ./src"
   delay = 1

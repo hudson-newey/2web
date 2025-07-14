@@ -52,7 +52,7 @@ func compileReactiveVar(
 	// on the static compiler to make element references
 	injectableTemplate = strings.ReplaceAll(injectableTemplate, "\\u0022", "\"")
 
-	content = document.InjectContent(content, injectableTemplate, document.Body)
+	content = document.InjectContent(content, injectableTemplate, document.BodyTop)
 
 	for _, event := range varNode.Events {
 		reactiveReducer := strings.ReplaceAll(event.Reducer, varNode.Name, variableName)

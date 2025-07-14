@@ -8,7 +8,7 @@ import (
 
 func InjectDevTools(pageContent string) string {
 	devtoolsTemplateResult := createDevtoolsTemplate()
-	return document.InjectContent(pageContent, devtoolsTemplateResult, document.Body)
+	return document.InjectContent(pageContent, devtoolsTemplateResult, document.BodyTop)
 }
 
 func createDevtoolsTemplate() string {

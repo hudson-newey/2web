@@ -12,9 +12,9 @@ import (
 
 func ExpandComponentImports(
 	workingPath string,
-	content string,
+	content page.Page,
 	components []*models.Component,
-) string {
+) page.Page {
 	result := content
 
 	for _, component := range components {
@@ -26,10 +26,10 @@ func ExpandComponentImports(
 
 func expandImport(
 	workingPath string,
-	content string,
+	page page.Page,
 	component *models.Component,
-) string {
-	pageModel, err := buildComponent(component)
+) page.Page {
+	componentModel, err := buildComponent(component)
 	if err != nil {
 		documentErrors.AddErrors(models.Error{
 			FilePath: workingPath,
@@ -39,20 +39,34 @@ func expandImport(
 		// We return the input content without modification in the hopes that the
 		// page will be semi-functional and assist in debugging how the error
 		// occurred.
-		return content
+		return page
 	}
 
 	templateSelector := fmt.Sprintf("<%s />", component.DomSelector)
-	result := strings.ReplaceAll(content, templateSelector, pageModel.Html.Content)
+	page.Html.Content = strings.ReplaceAll(
+		page.Html.Content,
+		templateSelector,
+		componentModel.Html.Content,
+	)
+
+	// Notice that for each component, its styles and scripts are only added to
+	// the page once.
+	for _, cssFile := range componentModel.Css {
+		page.AddStyle(cssFile)
+	}
+
+	for _, jsFile := range componentModel.JavaScript {
+		page.AddScript(jsFile)
+	}
 
 	// The HTML model might contain links to lazy loaded assets like CSS and
 	// JavaScript.
 	// By writing the assets, these separate lazy loaded files will be written.
 	// For simplicity sake, you can think of this writing the JavaScript and CSS
 	// for the component, but not writing an associated .html file.
-	pageModel.WriteAssets()
+	componentModel.WriteAssets()
 
-	return result
+	return page
 }
 
 func buildComponent(component *models.Component) (page.Page, error) {

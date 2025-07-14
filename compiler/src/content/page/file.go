@@ -6,7 +6,6 @@ import (
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
-	"strings"
 )
 
 type Page struct {
@@ -24,15 +23,6 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 
 	if jsFile.IsCompilerOnly() {
 		return
-	}
-
-	// If we have a full document, we want to inject the script into the <head>
-	// element.
-	// However, if there is no <head> element (e.g. for a component that is not a
-	// page), we want to append it to the end.
-	injectLevel := document.Trailing
-	if strings.Contains(model.Html.Content, "<head>") {
-		injectLevel = document.Head
 	}
 
 	// Adds a "<script src=></script>" tag to the html document to load the js file
@@ -63,22 +53,21 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 		injectedContent = fmt.Sprintf(`<script type="module" src="%s"></script>%s`, jsFile.FileName(), "\n")
 	}
 
-	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, injectLevel)
+	// While normal (non-module type) scripts block DOM AST construction, because
+	// 2Web uses async + module type scripts, execution is deferred until the DOM
+	// has been constructed.
+	// Meaning that it is actually more beneficial to inject scripts into the top
+	// of the head, so that they can be discovered and start fetching sooner.
+	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, document.HeadTop)
 }
 
 func (model *Page) AddStyle(cssFile *css.CSSFile) {
 	model.Css = append(model.Css, cssFile)
 
-	// If we have a full document, we want to inject the styles into the <head>
-	// element.
-	// However, if there is no <head> element (e.g. for a component that is not a
-	// page), we want to append it to the end.
-	injectLevel := document.Trailing
-	if strings.Contains(model.Html.Content, "<head>") {
-		injectLevel = document.Head
-	}
-
 	// Adds a "<link>" tag to the html document to load the css file
-	injectedContent := fmt.Sprintf(`<link rel="stylesheet" href="%s" />`, cssFile.FileName())
-	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, injectLevel)
+	injectedContent := fmt.Sprintf(`<link rel="stylesheet" href="%s" />%s`, cssFile.FileName(), "\n")
+
+	// Always inject css styles into the top of the head element so that they can
+	// be discovered as soon as possible, to begin parsing
+	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, document.HeadTop)
 }

@@ -67,7 +67,7 @@ func compileStaticPropVar(content string, varNode *models.ReactiveVariable) stri
 			panic(err)
 		}
 
-		content = document.InjectContent(content, injectableTemplate, document.Body)
+		content = document.InjectContent(content, injectableTemplate, document.BodyTop)
 	}
 
 	return content
