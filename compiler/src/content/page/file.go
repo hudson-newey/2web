@@ -36,12 +36,8 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 	// These new line characters will be removed when building for production.
 	injectedContent := ""
 	if jsFile.IsLazy() {
-		// type="module" is automatically deferred, but we also add the "async"
-		// attribute to the script tag so that the reactive javascript only starts
-		// loading when the main thread is free.
-		// This will allow the user to start reading/navigating on the page before
-		// the reactive content has loaded.
-		injectedContent = fmt.Sprintf(`<script async type="module" src="%s"></script>%s`, jsFile.FileName(), "\n")
+		// type="module" is automatically deferred.
+		injectedContent = fmt.Sprintf(`<script type="module" src="%s"></script>%s`, jsFile.FileName(), "\n")
 	} else {
 		// Note that the script is still deferred because it is using type="module"
 		// I have purposely done this so that the programmer doesn't have to deal
