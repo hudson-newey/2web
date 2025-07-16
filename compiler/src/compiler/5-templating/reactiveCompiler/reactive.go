@@ -35,9 +35,9 @@ func compileReactiveVar(
 	}
 
 	updateJsSource := fmt.Sprintf(`
-    <script>
-      let %s = %s;
-      function %s(%s) {
+    <script type="module">
+      globalThis.%s = %s;
+      globalThis.%s = (%s) => {
         %s
       }
     </script>

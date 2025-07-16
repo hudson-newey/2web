@@ -11,6 +11,7 @@ func ParseArguments() models.CliArguments {
 	inputPath := flag.String("i", "index.html", "Input file path")
 	outputPath := flag.String("o", "./dist/index.html", "Output file path")
 	hasDevTools := flag.Bool("dev-tools", false, "Include dev tools in the build")
+	noRuntimeOptimizations := flag.Bool("skip-rasterization-optimizations", false, "Slightly reduces bundle size, but makes page (e.g. scrolling) less responsive")
 	isProd := flag.Bool("production", false, "Optimize code at the cost of readability")
 	isSilent := flag.Bool("silent", false, "Do not output log information")
 	disableCache := flag.Bool("no-cache", false, "Do not use a build cache")
@@ -24,14 +25,15 @@ func ParseArguments() models.CliArguments {
 	flag.Parse()
 
 	parsedArgs = models.CliArguments{
-		InputPath:    inputPath,
-		OutputPath:   outputPath,
-		HasDevTools:  hasDevTools,
-		IsProd:       isProd,
-		IsSilent:     isSilent,
-		DisableCache: disableCache,
-		FromStdin:    fromStdin,
-		ToStdout:     toStdout,
+		InputPath:              inputPath,
+		OutputPath:             outputPath,
+		HasDevTools:            hasDevTools,
+		NoRuntimeOptimizations: noRuntimeOptimizations,
+		IsProd:                 isProd,
+		IsSilent:               isSilent,
+		DisableCache:           disableCache,
+		FromStdin:              fromStdin,
+		ToStdout:               toStdout,
 
 		Verbose:      verbose,
 		VerboseLexer: verboseLexer,

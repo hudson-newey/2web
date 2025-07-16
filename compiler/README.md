@@ -11,6 +11,7 @@
 - `--stdin` (default: false) Read from STDIN instead from the input_path
 - `--stdout` (default: false) Write to STDOUT instead of writing to the output_path
 - `--verbose` (default: false) Print extra debug information to the console
+- `--no-runtime-optimizations` (default: false) Do not ship additional runtime optimizations
 
 ## Environment Variables
 

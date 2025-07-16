@@ -10,6 +10,7 @@ import (
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/page"
+	"hudson-newey/2web/src/content/page/runtimeOptimizer"
 	"hudson-newey/2web/src/optimizer"
 )
 
@@ -52,6 +53,10 @@ func buildToPage(inputPath string) (page.Page, bool) {
 
 	if *args.HasDevTools {
 		compiledPage.Html.Content = devtools.InjectDevTools(compiledPage.Html.Content)
+	}
+
+	if !(*args.NoRuntimeOptimizations) {
+		compiledPage = runtimeOptimizer.InjectRuntimeOptimizations(compiledPage)
 	}
 
 	// We always optimize last so that even the injected content is optimized.

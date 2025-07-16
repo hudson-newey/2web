@@ -31,8 +31,8 @@ func compileAssignmentVar(content string, varNode *models.ReactiveVariable) stri
 	}
 
 	updateJsSource := fmt.Sprintf(`
-    <script>
-      function %s(%s) {
+    <script type="module">
+      globalThis.%s = (%s) => {
         %s
       }
     </script>
