@@ -2,6 +2,7 @@ package runtimeOptimizer
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/constants"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/javascript"
@@ -10,6 +11,8 @@ import (
 )
 
 func InjectRuntimeOptimizations(page page.Page) page.Page {
+	args := cli.GetArgs()
+
 	// TODO: Remove the hack: We have a space before the JS element namespace so
 	// that only elements match the replacement target, and not javascript code
 	// that uses the selector.
@@ -24,7 +27,15 @@ func InjectRuntimeOptimizations(page page.Page) page.Page {
 	//
 	// However, this very small increase in bundle size is justified because it
 	// improves the responsiveness of the page.
+	//
+	// During development builds, we give this container a human-readable name
+	// "isolated-container".
+	// However, if we are in a production build, we shorten the css class name.
 	isolatedContainerClassName := fmt.Sprintf("%sisolated-container", constants.CompilerNamespace)
+	if *args.IsProd {
+		isolatedContainerClassName = fmt.Sprintf("%so0", constants.CompilerNamespace)
+	}
+
 	runtimeStyles := fmt.Sprintf(`
 		.%s{
 			contain: content;
