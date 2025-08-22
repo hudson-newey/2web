@@ -31,17 +31,18 @@ Once installed, you will have access to the `2web` command.
 
 ### Generate Command
 
-| Command     | Alias | Description                                  |
-| ----------- | ----- | -------------------------------------------- |
-| component   | c     | Add a component to a 2web project            |
-| service     | s     | Add a service to a 2web project              |
-| aspect      | a     | Add an aspect to a 2web project              |
-| interceptor | i     | Add an interceptor to a 2web project         |
-| page        | p     | Add a page to a 2web project                 |
-| guard       | g     | Adds a route guard to a 2web project         |
-| model       | m     | Add a model to a 2web project                |
-| enum        | e     | Add a **global** enum to a 2web project      |
-| interface   |       | Add a **global** interface to a 2web project |
+| Command     | Alias | Description                                     |
+| ----------- | ----- | ----------------------------------------------- |
+| component   | c     | Add a component to a 2web project               |
+| directive   | d     | Add a web-component directive to a 2web project |
+| service     | s     | Add a service to a 2web project                 |
+| aspect      | a     | Add an aspect to a 2web project                 |
+| interceptor | i     | Add an interceptor to a 2web project            |
+| page        | p     | Add a page to a 2web project                    |
+| guard       | g     | Adds a route guard to a 2web project            |
+| model       | m     | Add a model to a 2web project                   |
+| enum        | e     | Add a **global** enum to a 2web project         |
+| interface   |       | Add a **global** interface to a 2web project    |
 
 ### Template Command
 

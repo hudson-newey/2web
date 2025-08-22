@@ -25,6 +25,8 @@ func generate(programName string, command string, args []string) {
 	switch generator {
 	case "component", "c":
 		generators.ComponentGenerator(templateName)
+	case "directive", "d":
+		generators.DirectiveGenerator(templateName)
 	case "service", "s":
 		generators.ServiceGenerator(templateName)
 	case "aspect", "a":
