@@ -16,15 +16,12 @@
     "dist/"
   ],
   "exports": {
-    "context": "./dist/context.js",
     "database": "./dist/database.js",
-    "dom-ranges": "./dist/dom-ranges.js",
     "pre-fetcher": "./dist/pre-fetcher.js",
     "route-guards": "./dist/route-guards.js",
-    "spa-router": "./dist/spa-router.js",
+    "signals": "./dist/signals.js",
     "ssr": "./dist/ssr.js",
-    "vite-plugin": "./dist/vite-plugin.js",
-    "signals": "./dist/signals.js"
+    "vite-plugin": "./dist/vite-plugin.js"
   },
   "devDependencies": {
     "@total-typescript/tsconfig": "^1.0.4",
@@ -34,9 +31,14 @@
     "vite": "^6.3.4",
     "vite-plugin-dts": "^4.5.3"
   },
-  "packageManager": "pnpm@10.8.0",
   "dependencies": {
     "express": "^5.1.0",
     "happy-dom": "17.4.7"
-  }
+  },
+  "peerDependencies": {
+    "express": "^5.1.0",
+    "happy-dom": "17.4.7",
+    "vite": "^6.3.4"
+  },
+  "packageManager": "pnpm@10.8.0"
 }
