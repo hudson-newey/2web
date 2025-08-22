@@ -5,7 +5,7 @@ Lightweight framework agnostic signals that provides **runtime** state tracking.
 ## Usage
 
 ```html
-<script>
+<script type="module">
   import { Signal, effect } from "@two-web/kit/signals";
 
   const count = new Signal(0);
