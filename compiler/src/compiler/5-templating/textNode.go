@@ -11,7 +11,7 @@ var textStartToken lexer.LexerSelector = []string{"{{"}
 var textEndToken lexer.LexerSelector = []string{"}}"}
 
 func expandTextNodes(content string) string {
-	textNodes := lexer.FindNodes[lexer.TextNode](content, textStartToken, textEndToken)
+	textNodes := lexer.FindNodes[lexer.TextOutputNode](content, textStartToken, textEndToken)
 
 	for _, node := range textNodes {
 		// text nodes can have reducers if they modify the content of the

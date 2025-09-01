@@ -10,11 +10,11 @@ package lexer
 //
 //	<button @click="$count++">+1</button>
 //
-//	<button @click="$count++" title="increment">+1</button>
+//	<button title="increment" @click="$count++">+1</button>
 //
 //	<button
-//	 @click="$count++"
 //	 title="increment"
+//	 @click="$count++"
 //	>
 //	 +1
 //	</button>

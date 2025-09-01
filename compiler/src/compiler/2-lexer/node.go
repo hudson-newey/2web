@@ -19,5 +19,5 @@ type V2LexNode struct {
 }
 
 func (model *V2LexNode) PrintDebug() {
-	fmt.Printf("(%d, %d) %s\n", model.Pos.Row, model.Pos.Col, model.Content)
+	fmt.Printf("(%d:%d) (%d) %s\n", model.Pos.Row, model.Pos.Col, model.Token, model.Content)
 }

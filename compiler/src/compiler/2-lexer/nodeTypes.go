@@ -1,19 +1,22 @@
 package lexer
 
+// Some text (e.g. text inside a <p> element)
+type TextNode LexNodeType[TextNode]
+
 // <script compiled>
 type CompNode LexNodeType[CompNode]
 
-// $ varName = value
+// $ varName = value;
 type VarNode LexNodeType[PropNode]
 
-// [propName $varName]
+// *propName="$varName"
 type PropNode LexNodeType[PropNode]
 
-// @eventName $varName = value@
+// @eventName="$varName = value"
 type EventNode LexNodeType[EventNode]
 
 // {{ $variable }}
-type TextNode LexNodeType[TextNode]
+type TextOutputNode LexNodeType[TextOutputNode]
 
 // {% ssgModule arguments %}
 type SsgNode LexNodeType[SsgNode]

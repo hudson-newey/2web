@@ -6,6 +6,10 @@ const (
 	// EOF
 	EOF LexToken = iota
 
+	// Used in doctypes
+	// !
+	Exclamation
+
 	// <
 	LessAngle
 

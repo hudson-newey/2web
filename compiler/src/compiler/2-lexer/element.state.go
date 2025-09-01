@@ -6,6 +6,8 @@ import (
 	"unicode"
 )
 
+// When inside the first starting angle bracket (<) and up until (and including)
+// the closing angle bracket (>).
 func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 	for {
 		readerChar, _, err := model.reader.ReadRune()
@@ -17,21 +19,28 @@ func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 			panic(err)
 		}
 
+		stringifiedChar := string(readerChar)
 		switch readerChar {
 		case '\n':
 			model.lineFeed()
 		case '/':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Slash, Content: "/"}, textLexer
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Slash, Content: stringifiedChar}, elementLexer
 		case '\'':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteSingle, Content: "'"}, textLexer
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteSingle, Content: stringifiedChar}, elementLexer
 		case '"':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteDouble, Content: "\""}, textLexer
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.QuoteDouble, Content: stringifiedChar}, elementLexer
 		case '@':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.AtSymbol, Content: "@"}, textLexer
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.AtSymbol, Content: stringifiedChar}, elementLexer
 		case '*':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Star, Content: "*"}, textLexer
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Star, Content: stringifiedChar}, elementLexer
 		case '#':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.Hash, Content: "#"}, textLexer
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Hash, Content: stringifiedChar}, elementLexer
+		case '!':
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Exclamation, Content: stringifiedChar}, elementLexer
+		case '=':
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.Equals, Content: stringifiedChar}, elementLexer
+		case '>':
+			return V2LexNode{Pos: model.pos, Token: lexerTokens.GreaterAngle, Content: stringifiedChar}, textLexer
 		default:
 			if unicode.IsSpace(readerChar) {
 				continue
@@ -39,7 +48,7 @@ func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 				startPos := model.pos
 				model.backup()
 				text := model.lexText()
-				return V2LexNode{Pos: startPos, Token: lexerTokens.Text, Content: string(text)}, textLexer
+				return V2LexNode{Pos: startPos, Token: lexerTokens.Text, Content: string(text)}, elementLexer
 			}
 		}
 	}
