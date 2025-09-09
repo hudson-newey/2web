@@ -54,16 +54,3 @@ once, and do not take a name as an argument.
 | server-side-rendering | ssr   | Add ssr to a 2web project             |
 | database              | db    | Add a database to a 2web project      |
 | load-balancer         | lb    | Add a load balancer to a 2web project |
-
-### Database Command
-
-For the database to work correctly, you must have the `@two-web/sdk` installed
-in your project.
-
-| Command | Description                |
-| ------- | -------------------------- |
-| init    | Initialize a 2web database |
-
-## More Information
-
-[GitHub](https://github.com/hudson-newey/2web)

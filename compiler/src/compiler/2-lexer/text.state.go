@@ -1,38 +1,28 @@
 package lexer
 
 import (
+	"hudson-newey/2web/src/compiler/2-lexer/states"
 	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
-	"io"
-	"unicode"
 )
 
 func textLexer(model *Lexer) (V2LexNode, LexFunc) {
-	for {
-		readerChar, _, err := model.reader.ReadRune()
-		if err != nil {
-			if err == io.EOF {
-				return V2LexNode{Pos: model.pos, Token: lexerTokens.EOF, Content: ""}, textLexer
-			}
+	cases := lexDefMap{
+		// The comment state has to always come first that it takes precedence over
+		// other matches and can omit them as source text.
+		"<!--":     {token: lexerTokens.MarkupCommentStart, next: markupCommentLexer},
+		"<script>": {token: lexerTokens.LessAngle, next: scriptLexer},
+		"<style>":  {token: lexerTokens.LessAngle, next: styleLexer},
 
-			panic(err)
-		}
+		"<":  {token: lexerTokens.LessAngle, next: elementLexer},
+		">":  {token: lexerTokens.GreaterAngle, next: textLexer},
+		"\\": {token: lexerTokens.Escape, next: textLexer},
 
-		switch readerChar {
-		case '\n':
-			model.lineFeed()
-		case '<':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.LessAngle, Content: "<"}, elementLexer
-		case '>':
-			return V2LexNode{Pos: model.pos, Token: lexerTokens.GreaterAngle, Content: ">"}, textLexer
-		default:
-			if unicode.IsSpace(readerChar) {
-				continue
-			} else if unicode.IsLetter(readerChar) {
-				startPos := model.pos
-				model.backup()
-				text := model.lexText()
-				return V2LexNode{Pos: startPos, Token: lexerTokens.Text, Content: string(text)}, textLexer
-			}
-		}
+		"{": {token: lexerTokens.TextContent, next: textLexer},
+		"}": {token: lexerTokens.TextContent, next: textLexer},
+
+		// "\n": {token: lexerTokens.NewLine, next: textLexer},
+		// "\t": {token: lexerTokens.Tab, next: textLexer},
 	}
+
+	return lexerFactory(cases, states.TextContent)(model)
 }

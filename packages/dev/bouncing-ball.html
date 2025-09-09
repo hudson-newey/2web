@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@two-web/animations</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <div class="container">
+    <div id="ball"></div>
+    <div id="ground"></div>
+  </div>
+
+  <body>
+    <script type="module">
+      import { animation, animate } from "../animations/index.ts";
+
+      const bounce = animation("bounce");
+
+      const animationTarget = document.getElementById("ball");
+
+      let progress = 0;
+      setInterval(() => {
+        // Notice that although we perform 16 calls to `animate` per frame
+        // (assuming 60fps), the animation callback is only invoked once per
+        // frame, because the values are debounced per animation identifier.
+        animate(bounce, () => {
+          const height = 400;
+          const y = Math.abs(Math.sin(progress * Math.PI)) * height;
+          animationTarget.style.transform = `translateY(-${y}px)`;
+
+          progress += 0.01;
+        });
+      }, 1);
+    </script>
+
+    <style>
+      :root {
+        --bounce-height: 400px;
+        --top-padding: 200px;
+        --ball-size: 50px;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      #ball {
+        position: absolute;
+        width: var(--ball-size);
+        height: var(--ball-size);
+
+        top: calc(var(--top-padding) + var(--bounce-height));
+        left: 50%;
+
+        background-color: red;
+        border-radius: 50%;
+
+        will-change: transform;
+        contain: strict;
+      }
+
+      #ground {
+        position: absolute;
+        width: 100%;
+        height: 100px;
+        top: calc(var(--top-padding) + var(--bounce-height) + var(--ball-size));
+
+        background-color: green;
+      }
+
+      .container {
+        position: relative;
+      }
+    </style>
+  </body>
+</html>

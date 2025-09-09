@@ -3,6 +3,7 @@
   "version": "0.0.1-rc.2",
   "description": "A collection of packages to enhance your 2web application",
   "author": "hudson-newey",
+  "main": "dist/index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,26 +11,34 @@
   },
   "type": "module",
   "scripts": {
-    "build": "vite build ."
+    "dev": "vite ./dev/",
+    "build": "vite build",
+    "test": "vitest"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "vite-plugin/"
   ],
   "exports": {
-    "database": "./dist/database.js",
-    "pre-fetcher": "./dist/pre-fetcher.js",
-    "route-guards": "./dist/route-guards.js",
-    "signals": "./dist/signals.js",
-    "ssr": "./dist/ssr.js",
-    "vite-plugin": "./dist/vite-plugin.js"
+    ".": "./dist/index.js",
+    "./animations": "./dist/animations.js",
+    "./database": "./dist/database.js",
+    "./pre-fetcher": "./dist/pre-fetcher.js",
+    "./route-guards": "./dist/route-guards.js",
+    "./signals": "./dist/signals.js",
+    "./ssr": "./dist/ssr.js",
+    "./threads": "./dist/threads.js",
+    "./vite-plugin": "./vite-plugin/index.ts"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.2.2",
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/express": "^5.0.2",
     "@types/node": "^22.14.1",
     "typescript": "^5.8.3",
     "vite": "^6.3.4",
-    "vite-plugin-dts": "^4.5.3"
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "3.1.2"
   },
   "dependencies": {
     "express": "^5.1.0",

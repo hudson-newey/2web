@@ -1,0 +1,3 @@
+package writer
+
+func Writer() {}

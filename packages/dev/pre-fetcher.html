@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@two-web/prefetcher</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <div>
+      <a href="https://www.google.com">Google (External)</a>
+    </div>
+
+    <div>
+      <a href="/signals">Signals (internal)</a>
+    </div>
+
+    <div>
+      <a href="/signals">Signals (duplicate)</a>
+    </div>
+
+    <div>
+      <a href="/signals?user_id=1234">Signals with parameters</a>
+    </div>
+
+    <div>
+      <a href="http://localhost:5173">index (explicit host)</a>
+    </div>
+
+    <script type="module">
+      import { bootstrapLinkPrefetch } from "../pre-fetcher/index.ts";
+
+      bootstrapLinkPrefetch();
+      // bootstrapLinkPrefetch({ trigger: "hover" });
+      // bootstrapLinkPrefetch({ trigger: "focus" });
+      // bootstrapLinkPrefetch({ trigger: "click" });
+    </script>
+
+    <style>
+      a {
+        display: inline-block;
+        margin-top: 0.5rem;
+
+        position: relative;
+      }
+    </style>
+  </body>
+</html>

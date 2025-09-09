@@ -1,69 +1,100 @@
 package lexerTokens
 
-type LexToken int
+type LexToken string
 
 const (
 	// EOF
-	EOF LexToken = iota
+	EOF LexToken = "EOF"
 
-	// Used in doctypes
-	// !
-	Exclamation
+	// !DOCTYPE
+	Doctype LexToken = "Doctype"
 
 	// <
-	LessAngle
+	LessAngle LexToken = "LessAngle"
 
 	// >
-	GreaterAngle
+	GreaterAngle LexToken = "GreaterAngle"
 
 	// /
-	Slash
+	Slash LexToken = "Slash"
 
 	// =
-	Equals
+	Equals LexToken = "Equals"
 
 	// '
-	QuoteSingle
+	QuoteSingle LexToken = "QuoteSingle"
 
 	// "
-	QuoteDouble
+	QuoteDouble LexToken = "QuoteDouble"
+
+	// `
+	Backtick LexToken = "Backtick"
+
+	// Space character (" ")
+	Space LexToken = "Space"
 
 	// <!--
-	CommentStart
+	MarkupCommentStart LexToken = "MarkupCommentStart"
 
 	// -->
-	CommentEnd
+	MarkupCommentEnd LexToken = "MarkupCommentEnd"
 
 	// All tokens below are custom tokens to 2web
 
 	// @
-	AtSymbol
+	AtSymbol LexToken = "AtSymbol"
 
 	// *
-	Star
+	Star LexToken = "Star"
+
+	// !
+	Exclamation LexToken = "Exclamation"
 
 	// #
-	Hash
+	Hash LexToken = "Hash"
 
-	Text
+	// Backslash used for escaping
+	// (e.g. \> in HTML so that you don't have to use the ugly &gt;)
+	// \
+	Escape LexToken = "Escape"
 
-	// JS Tokens
+	//? JS Tokens
 
 	// import
-	KeywordImport
+	KeywordImport LexToken = "KeywordImport"
 
 	// $
-	DollarSign
+	DollarSign LexToken = "DollarSign"
 
 	// ;
-	SemiColon
+	SemiColon LexToken = "SemiColon"
 
 	// //
-	LineCommentStart
+	ScriptLineCommentStart LexToken = "ScriptLineCommentStart"
+
+	// //
+	ScriptLineCommentEnd LexToken = "ScriptLineCommentEnd"
 
 	// /*
-	BlockCommentStart
+	ScriptBlockCommentStart LexToken = "ScriptBlockCommentStart"
 
 	// */
-	BlockCommentEnd
+	BlockCommentEnd LexToken = "BlockCommentEnd"
+
+	//? General
+
+	// TextContent content that is displayed on the screen
+	TextContent LexToken = "Text"
+
+	// Inside a <script> tag or in an external .js file
+	ScriptSource LexToken = "ScriptSource"
+
+	// Inside a <style> tag or in an external .css file
+	StyleSource LexToken = "StyleContent"
+
+	// Only needed within text nodes to represent a new line ("\n")
+	NewLine LexToken = "NewLine"
+
+	// Tab character ("\t")
+	Tab LexToken = "Tab"
 )

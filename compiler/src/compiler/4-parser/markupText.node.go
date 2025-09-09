@@ -14,14 +14,14 @@ func (model *MarkupTextNode) Tokens() []string {
 	return []string{model.content}
 }
 
-func (model *MarkupTextNode) HtmlContent() html.HTMLFile {
-	return html.HTMLFile{Content: model.content}
+func (model *MarkupTextNode) HtmlContent() *html.HTMLFile {
+	return &html.HTMLFile{Content: model.content}
 }
 
-func (model *MarkupTextNode) JsContent() javascript.JSFile {
-	return javascript.JSFile{Content: ""}
+func (model *MarkupTextNode) JsContent() *javascript.JSFile {
+	return &javascript.JSFile{Content: ""}
 }
 
-func (model *MarkupTextNode) CssContent() css.CSSFile {
-	return css.CSSFile{Content: ""}
+func (model *MarkupTextNode) CssContent() *css.CSSFile {
+	return &css.CSSFile{Content: ""}
 }

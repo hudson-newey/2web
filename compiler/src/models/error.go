@@ -2,13 +2,14 @@ package models
 
 import (
 	"fmt"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"strings"
 )
 
 type Error struct {
 	Message  string
 	FilePath string
-	Position Position
+	Position *lexer.Position
 }
 
 func (model *Error) PrintError() {
@@ -17,11 +18,11 @@ func (model *Error) PrintError() {
 	formattedErrorMessage := strings.ReplaceAll(model.Message, "\n", "\n\t")
 
 	formattedLineNumber := ""
-	if model.Position.Line != 0 {
+	if model.Position.Row != 0 {
 		formattedLineNumber = fmt.Sprintf(
 			" (ln: %d, col: %d)",
-			model.Position.Line,
-			model.Position.Column,
+			model.Position.Row,
+			model.Position.Col,
 		)
 	}
 

@@ -14,7 +14,7 @@ func ViteConfigLocation() (string, error) {
 		return overridePath, nil
 	}
 
-	sdkPath := "node_modules/@two-web/sdk/vite.config.ts"
+	sdkPath := "node_modules/@two-web/cli/templates/vite.config.ts"
 	if _, err := os.Stat(sdkPath); err == nil {
 		return sdkPath, nil
 	}

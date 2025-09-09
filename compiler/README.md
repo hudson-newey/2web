@@ -34,7 +34,3 @@ compiler.
 
 - `--verbose-lexer` (default: false) Logs the lexer output to the console
 - `--verbose-ast` (default: false) Logs the abstract syntax tree to the console
-
-## More Information
-
-[GitHub](https://github.com/hudson-newey/2web)

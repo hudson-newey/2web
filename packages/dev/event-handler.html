@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@two-web/signals</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <script type="module">
+      import { EventHandler, ComputedSignal } from "../signals/index.ts";
+
+      const targetButton = document.getElementById("counter-button");
+      const clickHandler = new EventHandler((event, value) => {
+        const count = value + 1;
+
+        event.target.textContent = count;
+        return count;
+      });
+
+      clickHandler.subscribe((value) => {
+        console.log("Button clicked, new count:", value);
+      });
+
+      targetButton.addEventListener("click", clickHandler);
+    </script>
+
+    <button id="counter-button">0</button>
+
+    <style>
+      #counter-button {
+        font-size: 2rem;
+        padding: 1rem 2rem;
+        cursor: pointer;
+      }
+    </style>
+  </body>
+</html>

@@ -6,8 +6,10 @@ import (
 	parser "hudson-newey/2web/src/compiler/4-parser"
 	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
+	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/html"
+	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/reactiveEvent"
@@ -18,7 +20,19 @@ import (
 
 // TODO: Page/component models should have their associated reactive models as
 // properties.
-func Compile(filePath string, pageModel page.Page, ast []parser.Node) page.Page {
+func Compile(filePath string, ast []parser.Node) page.Page {
+	pageModel := page.Page{
+		Html:       &html.HTMLFile{},
+		JavaScript: []*javascript.JSFile{},
+		Css:        []*css.CSSFile{},
+	}
+
+	for _, node := range ast {
+		pageModel.Html.AddContent(node.HtmlContent().Content)
+		pageModel.JavaScript = append(pageModel.JavaScript, node.JsContent())
+		pageModel.Css = append(pageModel.Css, node.CssContent())
+	}
+
 	pageModel.Html.Content = controlFlow.ProcessControlFlow(filePath, pageModel.Html.Content)
 
 	if html.IsHtmlFile(filePath) {

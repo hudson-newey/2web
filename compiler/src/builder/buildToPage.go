@@ -7,6 +7,7 @@ import (
 	validator "hudson-newey/2web/src/compiler/3-validator"
 	parser "hudson-newey/2web/src/compiler/4-parser"
 	templating "hudson-newey/2web/src/compiler/5-templating"
+	"hudson-newey/2web/src/compiler/io/reader"
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/page"
@@ -20,11 +21,11 @@ func buildToPage(inputPath string) (page.Page, bool) {
 	data := getContent(inputPath)
 
 	// 1. Preprocess
-	ssgResult := preprocessor.ProcessStaticSite(inputPath, data)
-	pageModel := templating.BuildPage(ssgResult)
+	preprocessorResult := preprocessor.ProcessStaticSite(inputPath, data)
 
 	// 2. Lex
-	lexInstance := lexer.NewLexer(pageModel.Html.Reader())
+	contentReader := reader.NewReader(inputPath, preprocessorResult)
+	lexInstance := lexer.NewLexer(contentReader)
 	lexStructure := lexInstance.Execute()
 	if *args.VerboseLexer {
 		lexer.PrintVerboseLexer(lexStructure)
@@ -43,7 +44,7 @@ func buildToPage(inputPath string) (page.Page, bool) {
 	}
 
 	// 5. Template (write result)
-	compiledPage := templating.Compile(inputPath, pageModel, ast)
+	compiledPage := templating.Compile(inputPath, ast)
 
 	isErrorFree := documentErrors.IsPageErrorFree()
 	if !isErrorFree {

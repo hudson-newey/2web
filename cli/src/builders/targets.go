@@ -2,7 +2,7 @@ package builders
 
 import "os"
 
-// Extracts the directory/file location that builders (vite, eslint, etc...)
+// Extracts the directory/file location that builders (vite, biome, etc...)
 // should target.
 // This is done by passing a third argument to the builder commands.
 //

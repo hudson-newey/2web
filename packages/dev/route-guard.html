@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@two-web/route-guards</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <h1>
+      You need the 'auth_token' query string parameter to access this page
+    </h1>
+
+    <script type="module">
+      import { addGuard } from "../route-guards/index.ts";
+
+      addGuard(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasAuthToken = urlParams.has("auth_token");
+        if (hasAuthToken) {
+          return;
+        }
+
+        return "http://localhost:5173/";
+      });
+    </script>
+  </body>
+</html>

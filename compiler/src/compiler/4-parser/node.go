@@ -9,7 +9,7 @@ import (
 type Node interface {
 	Tokens() []string
 
-	HtmlContent() html.HTMLFile
-	JsContent() javascript.JSFile
-	CssContent() css.CSSFile
+	HtmlContent() *html.HTMLFile
+	JsContent() *javascript.JSFile
+	CssContent() *css.CSSFile
 }

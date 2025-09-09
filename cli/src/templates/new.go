@@ -42,17 +42,16 @@ var packageJsonContent string = fmt.Sprintf(`{
   "devDependencies": {
     "@two-web/compiler": "%s",
     "@two-web/cli": "%s",
-    "@two-web/sdk": "%s",
     "@web/test-runner": "^0.20.2",
     "vite": "^6.3.5",
     "typescript": "^5.8.3",
-    "eslint": "^9.27.0"
+    "@biomejs/biome": "^2.2.2"
   }
 }
-`, twoWebVersion, twoWebVersion, twoWebVersion, twoWebVersion)
+`, twoWebVersion, twoWebVersion, twoWebVersion)
 
 const tsconfigContent = `{
-  "extends": "@two-web/sdk/tsconfig.json",
+  "extends": "@two-web/cli/templates/tsconfig.json",
 }
 `
 
