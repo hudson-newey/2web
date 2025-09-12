@@ -13,6 +13,16 @@ export class Signal<T> {
   }
 
   protected set value(newValue: T) {
+    // To prevent unnecessary updates, we check for strict equality.
+    // If the new value is the same as the current value, we do nothing.
+    //
+    // We use Object.is() instead of === to handle edge cases like NaN and
+    // -0/+0 correctly.
+    // see: https://stackoverflow.com/a/30543212/10262458
+    if (Object.is(this.value, newValue)) {
+      return;
+    }
+
     // The _value is frozen to prevent accidental mutations of objects/arrays
     // stored in signals. This ensures that updates to signals are explicit
     // through the set() or update() methods.

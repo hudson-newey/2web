@@ -22,12 +22,17 @@
   "exports": {
     ".": "./dist/index.js",
     "./animations": "./dist/animations.js",
+    "./browser-state": "./dist/browser-state.js",
+    "./event-listener": "./dist/event-listener.js",
+    "./keyboard": "./dist/keyboard.js",
     "./database": "./dist/database.js",
     "./pre-fetcher": "./dist/pre-fetcher.js",
     "./route-guards": "./dist/route-guards.js",
     "./signals": "./dist/signals.js",
     "./ssr": "./dist/ssr.js",
     "./threads": "./dist/threads.js",
+    "./typescript": "./dist/typescript.js",
+    "./view-transitions": "./view-transitions/index.ts",
     "./vite-plugin": "./vite-plugin/index.ts"
   },
   "devDependencies": {

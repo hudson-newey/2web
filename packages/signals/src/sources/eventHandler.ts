@@ -1,4 +1,4 @@
-import { ReadonlySignal } from "./readonlySignal";
+import { ReadonlySignal } from "../readonlySignal";
 
 export type EventHandlerReducer<EventType extends Event, T> = (
   event: EventType,
@@ -38,6 +38,6 @@ export class EventHandler<
   // directly to addEventListener as the event listener.
   // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback
   public handleEvent(event: EventType) {
-    this.value = this.reducer(event, this.value);
+    this.set(this.reducer(event, this.value));
   }
 }

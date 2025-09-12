@@ -2,7 +2,7 @@ import { defaultPrefetchConfig, type PrefetchConfig } from "./config";
 import { Prefetcher } from "./fetcher";
 
 export function bootstrapLinkPrefetch(config: PrefetchConfig) {
-  const mergedConfig = Object.assign({}, defaultPrefetchConfig, config);
+  const mergedConfig = Object.assign({}, config, defaultPrefetchConfig);
   const prefetcher = new Prefetcher(mergedConfig);
 
   const anchorElements = document.getElementsByTagName("a");

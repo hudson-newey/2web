@@ -109,7 +109,7 @@ func (model *Lexer) lexLiteral(exitConditions lexDefMap) string {
 		_, nextState := exitConditions.matching(model, states.SourceText)
 		if nextState != nil {
 			// We've reached an exit condition
-			// Back up on character and return the literal.
+			// Back up one character and return the literal.
 			// When the original lexer resumes, it will re-consume the character that
 			// caused the exit condition.
 			model.backup(1)

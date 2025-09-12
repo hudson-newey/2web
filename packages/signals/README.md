@@ -74,6 +74,29 @@ method that will be triggered whenever the event handlers value changes.
 <button id="counter">0</button>
 ```
 
+### Attribute & Property Bindings
+
+```html
+<script type="module">
+  import { EventHandler, ComputedSignal, attribute } from "@two-web/kit/signals";
+
+  const usernameInput = document.getElementById("username");
+  const registerButton = document.getElementById("register-button");
+
+  const username = new EventHandler((event) => event.target.value);
+  usernameInput.addEventListener("input", username);
+
+  const isUsernameInvalid = new ComputedSignal(() => {
+    username.value.length < 10,
+  }, [username]);
+
+  attribute(registerButton, "disabled", isUsernameInvalid);
+</script>
+
+<input id="username" />
+<button id="register-button" disabled>Register</button>
+```
+
 ## First Class TypeScript Support
 
 2Web signals have first class structural typing support meaning that if written

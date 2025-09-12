@@ -1,4 +1,4 @@
-import { Signal } from "./signal.ts";
+import { Signal } from "../signal.ts";
 
 type UseEffectReducer = () => unknown;
 

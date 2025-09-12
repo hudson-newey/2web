@@ -5,8 +5,9 @@ link is hovered.
 
 ## Usage
 
-```ts
-import { bootstrapLinkPrefetch } from "@two-web/kit/pre-fetcher";
-
-bootstrapLinkPrefetch();
+```html
+<script type="module">
+  import { bootstrapLinkPrefetch } from "@two-web/kit/pre-fetcher";
+  bootstrapLinkPrefetch();
+</script>
 ```

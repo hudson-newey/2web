@@ -27,9 +27,7 @@ const tasks = [
   new Task(() => { console.log("world"); }),
 ];
 
-for (const task of tasks) {
-  thread.enqueue(tasks);
-}
+thread.enqueue(...tasks);
 ```
 
 ## Thread Pools
