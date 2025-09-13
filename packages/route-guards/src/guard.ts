@@ -1,6 +1,6 @@
 import type { RouteGuard } from "./predicates";
 
-let routeGuards = new Set<RouteGuard>();
+const routeGuards = new Set<RouteGuard>();
 
 export function addGuard(predicate: RouteGuard): void {
   routeGuards.add(predicate);

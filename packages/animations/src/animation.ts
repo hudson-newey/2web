@@ -6,4 +6,3 @@ export function animation(
 ): AnimationIdentifier {
   return () => Symbol(name);
 }
-

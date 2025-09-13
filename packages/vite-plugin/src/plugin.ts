@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { resolve } from "node:path";
-import { type Plugin } from "vite";
+import type { Plugin } from "vite";
 
 export function twoWeb(): Plugin {
   return {

@@ -13,7 +13,9 @@
   "scripts": {
     "dev": "vite ./dev/",
     "build": "vite build",
-    "test": "vitest"
+    "test": "vitest",
+    "format": "biome format",
+    "lint": "biome check"
   },
   "files": [
     "dist/",
@@ -32,7 +34,7 @@
     "./ssr": "./dist/ssr.js",
     "./threads": "./dist/threads.js",
     "./typescript": "./dist/typescript.js",
-    "./view-transitions": "./view-transitions/index.ts",
+    "./view-transitions": "./dist/view-transitions/transitions/",
     "./vite-plugin": "./vite-plugin/index.ts"
   },
   "devDependencies": {
@@ -43,6 +45,7 @@
     "typescript": "^5.8.3",
     "vite": "^6.3.4",
     "vite-plugin-dts": "^4.5.3",
+    "vite-plugin-static-copy": "^3.1.2",
     "vitest": "3.1.2"
   },
   "dependencies": {

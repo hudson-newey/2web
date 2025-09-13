@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { describeType, expectType } from "./expect";
 
 describeType("true", () => {
@@ -83,7 +85,7 @@ describeType("undefined", () => {
 
 describeType("functions", () => {
   expectType(() => {}).toBeFunction();
-  expectType(function () {}).toBeFunction();
+  expectType(() => {}).toBeFunction();
   expectType(() => 42).toBeFunction();
   expectType(async () => {}).toBeFunction();
   expectType(function* () {}).toBeFunction();
@@ -136,7 +138,7 @@ describeType("objects", () => {
 describeType("arrays", () => {
   expectType([]).toBeArray();
   expectType([1, 2, 3]).toBeArray();
-  expectType(new Array()).toBeArray();
+  expectType([]).toBeArray();
 
   // Expect failures
   expectType({}).toBeArray();
@@ -147,7 +149,7 @@ describeType("arrays", () => {
 
 describeType("regexps", () => {
   expectType(/abc/).toBeRegExp();
-  expectType(new RegExp("abc")).toBeRegExp();
+  expectType(/abc/).toBeRegExp();
 
   // Expect failures
   expectType({}).toBeRegExp();

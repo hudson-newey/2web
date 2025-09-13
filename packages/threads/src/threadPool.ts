@@ -8,12 +8,12 @@ class ThreadPool {
   // Using up all of the threads does not leave any room for the main thread,
   // the operating system, or other applications to breathe.
   // Therefore, by default, we only use half of the available threads.
-  public static defaultSize = (navigator.hardwareConcurrency / 2) || 4;
+  public static defaultSize = navigator.hardwareConcurrency / 2 || 4;
 
   private readonly threads: Worker[];
 
   private constructor(size: number) {
-    this.threads = Array.from({ length: size }, () => new Worker());
+    this.threads = Array.from({ length: size }, () => new Worker(""));
   }
 
   public static setSize(size: number): ThreadPool {

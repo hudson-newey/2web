@@ -1,5 +1,7 @@
 import { ReadonlySignal } from "../readonlySignal";
 
-export function isReadonlySignal(value: any): value is ReadonlySignal<unknown> {
+export function isReadonlySignal<T>(
+  value: unknown | ReadonlySignal<T>,
+): value is ReadonlySignal<T> {
   return value instanceof ReadonlySignal;
 }

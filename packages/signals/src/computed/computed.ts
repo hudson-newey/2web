@@ -1,5 +1,5 @@
 import { ReadonlySignal } from "../readonlySignal";
-import { Signal } from "../signal";
+import type { Signal } from "../signal";
 
 export type ComputedSignalReducer<T> = () => T;
 

@@ -16,7 +16,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "editor.inlineSuggest.enabled": true,
     "editor.renderWhitespace": "trailing",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "biomejs.biome",
     "editor.formatOnSave": true,
     "editor.rulers": [80, 120],
     "editor.tabSize": 2,

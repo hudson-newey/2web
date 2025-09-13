@@ -1,21 +1,20 @@
-import { ObjectType } from "../datatypes/objects";
-import { Assert } from "./assertions";
-import { FunctionType } from "../datatypes/functions";
-import { TypeError } from "../conditions/error";
+import type { ObjectType } from "../datatypes/objects";
+import type { Assert } from "./assertions";
+import type { FunctionType } from "../datatypes/functions";
+import type { CompileError } from "../conditions/error";
 
 type AssertMethod<T, Expected, ExpectPass = true> = Assert<
   T,
   Expected
 > extends ExpectPass
   ? FunctionType<[], true>
-  : TypeError<`Assertion failed`, { expected: Expected, found: T }>;
+  : CompileError<`Assertion failed`, { expected: Expected; found: T }>;
 
 interface Modifiers<T> {
-  not: AssertionMethods<T, TypeError<"Assertion failed">>;
+  not: AssertionMethods<T, CompileError<"Assertion failed">>;
 }
 
-interface AssertionMethods<T, ExpectPass = true>
-  extends Modifiers<T> {
+interface AssertionMethods<T, ExpectPass = true> extends Modifiers<T> {
   toBeBoolean: AssertMethod<T, boolean, ExpectPass>;
   toBeTrue: AssertMethod<T, true, ExpectPass>;
   toBeFalse: AssertMethod<T, false, ExpectPass>;
@@ -27,10 +26,12 @@ interface AssertionMethods<T, ExpectPass = true>
   toBeSymbol: AssertMethod<T, symbol, ExpectPass>;
   toBeUndefined: AssertMethod<T, undefined, ExpectPass>;
   toBeNull: AssertMethod<T, null, ExpectPass>;
-  toBeFunction: AssertMethod<T, Function, ExpectPass>;
+  toBeFunction: AssertMethod<T, FunctionType, ExpectPass>;
   toBeObject: AssertMethod<T, ObjectType, ExpectPass>;
   toBeArray: AssertMethod<T, unknown[] | readonly unknown[], ExpectPass>;
   toBeRegExp: AssertMethod<T, RegExp, ExpectPass>;
+
+  toBe<Expected>(): AssertMethod<T, Expected, ExpectPass>;
 }
 
 const incorrectEnvironmentError = (() =>
@@ -118,6 +119,7 @@ export const expectType = <const T>(_value?: T): AssertionMethods<T> => {
     toBeObject: incorrectEnvironmentError,
     toBeArray: incorrectEnvironmentError,
     toBeRegExp: incorrectEnvironmentError,
+    // biome-ignore lint/suspicious/noExplicitAny: Recursive type, I set "not" below.
   } as any;
 
   assertions.not = assertions;

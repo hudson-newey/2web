@@ -5,6 +5,7 @@
  * However, this is very verbose, leads to duplicating type information, and
  * prone to a development burden if structural typing is involved.
  */
-export type FunctionType<Args extends unknown[] = unknown[], ReturnType = unknown> = (
-  ...args: Args
-) => ReturnType;
+export type FunctionType<
+  Args extends unknown[] = unknown[],
+  ReturnType = unknown,
+> = (...args: Args) => ReturnType;

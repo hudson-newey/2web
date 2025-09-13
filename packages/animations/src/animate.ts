@@ -1,6 +1,8 @@
 import type { AnimationIdentifier } from "./animation";
 
-export type AnimationCallback = (...args: any[]) => unknown;
+export type AnimationCallback = <AnimationArgs extends unknown[]>(
+  ...args: AnimationArgs
+) => void;
 
 export function animate(
   identifier: AnimationIdentifier,

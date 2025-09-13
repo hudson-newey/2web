@@ -1,4 +1,4 @@
-import { ErrorType } from "./error";
+import type { CompileError } from "./error";
 
 /**
  * @description
@@ -12,9 +12,4 @@ import { ErrorType } from "./error";
  */
 export type If<Type, ExpectedType> = Type extends ExpectedType
   ? unknown
-  : ErrorType<`Type condition failed`>;
-
-type WithToJSON<T> = If<T, { toJSON(): string }> & T;
-
-type Example1 = WithToJSON<{ toJSON(): string }>;
-type Example2 = WithToJSON<{ a: number }>;
+  : CompileError<`Type condition failed`>;

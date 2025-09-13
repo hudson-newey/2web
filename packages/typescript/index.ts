@@ -1,3 +1,5 @@
+export * from "./src/autocomplete/autocomplete.ts";
+
 export * from "./src/brands/brand.ts";
 
 export * from "./src/conditions/conditions.ts";
@@ -13,6 +15,7 @@ export * from "./src/datatypes/objects.ts";
 export * from "./src/helpers/typeFunctions.ts";
 
 export * from "./src/structural/unwrap.ts";
+export * from "./src/structural/nominal.ts";
 
 export * from "./src/testing/assertions.ts";
 export * from "./src/testing/expect.ts";
