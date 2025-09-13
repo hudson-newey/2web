@@ -1,5 +1,5 @@
-import { ErrorType } from "../conditions/error";
+import { TypeError } from "../conditions/error";
 
 export type Assert<T, Expected> = T extends Expected
   ? true
-  : ErrorType<"Assertion failed">;
+  : TypeError<"Assertion failed">;

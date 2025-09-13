@@ -11,7 +11,7 @@ import { ObjectType } from "../datatypes/objects";
  * type IsValid<T> = T extends string ? T : ErrorType<"Type is not a string">;
  * ```
  */
-export type ErrorType<
+export type TypeError<
   Message extends string,
 
   // We use an object for context instead of a string template because some
@@ -20,3 +20,10 @@ export type ErrorType<
   // objects in the type error context.
   context extends ObjectType = {},
 > = { error: Message, context: context };
+
+/**
+ * @description
+ * An error thrown at runtime that can be caught during compile time.
+ * If you do not remove the error type, you will receive a compile-time error.
+ */
+export type RuntimeError = Error;

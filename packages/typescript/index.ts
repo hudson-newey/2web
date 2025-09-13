@@ -18,3 +18,4 @@ export * from "./src/testing/assertions.ts";
 export * from "./src/testing/expect.ts";
 
 export * from "./src/validation/untrusted.ts";
+export * from "./src/validation/unstable.ts";

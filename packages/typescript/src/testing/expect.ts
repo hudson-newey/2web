@@ -1,17 +1,17 @@
 import { ObjectType } from "../datatypes/objects";
 import { Assert } from "./assertions";
 import { FunctionType } from "../datatypes/functions";
-import { ErrorType } from "../conditions/error";
+import { TypeError } from "../conditions/error";
 
 type AssertMethod<T, Expected, ExpectPass = true> = Assert<
   T,
   Expected
 > extends ExpectPass
   ? FunctionType<[], true>
-  : ErrorType<`Assertion failed`, { expected: Expected, found: T }>;
+  : TypeError<`Assertion failed`, { expected: Expected, found: T }>;
 
 interface Modifiers<T> {
-  not: AssertionMethods<T, ErrorType<"Assertion failed">>;
+  not: AssertionMethods<T, TypeError<"Assertion failed">>;
 }
 
 interface AssertionMethods<T, ExpectPass = true>

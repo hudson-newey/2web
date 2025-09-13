@@ -1,0 +1,74 @@
+/**
+ * @description
+ * A type that cannot be narrowed down using type guards.
+ * This is useful for unstable queries such as DOM queries or external data.
+ *
+ * ## Problem
+ *
+ * @example
+ * ```ts
+ * const element = document.querySelector(".my-element");
+ * if (!element) {
+ *   throw new Error("Element not found");
+ * }
+ *
+ * setTimeout(() => {
+ *   // This has the possibility to cause a runtime error because some other
+ *   // part of the program might have removed this element from the DOM.
+ *   // If you instead used the "Unstable" type, you would be forced to check
+ *   // that the element still exists before using it.
+ *   element.classList.add("active");
+ * }, 1000);
+ * ```
+ *
+ * ## Solution
+ *
+ * @example
+ * ```ts
+ * const element = Unstable<HTMLElement>(document.querySelector(".my-element"));
+ *
+ * setTimeout(() => {
+ *   // We are forced to use the "open" function to type narrow the unstable
+ *   // type to a stable type.
+ *   open(element, (stableElement) => {
+ *     if (!stableElement) {
+ *       throw new Error("Element not found");
+ *     }
+ *
+ *     stableElement.classList.add("active");
+ *   });
+ * });
+ * ```
+ */
+export type Unstable<T> = T & never;
+
+type Stable<T> = T;
+
+/**
+ * @description
+ * Unwraps a "Unstable" type into its stable counterpart without type narrowing
+ * the unstable type.
+ *
+ * @example
+ * ```ts
+ * const element = Unstable<HTMLElement>(document.querySelector(".my-element"));
+ *
+ * setTimeout(() => {
+ *   // We are forced to use the "open" function to type narrow the unstable
+ *   // type to a stable type.
+ *   open(element, (stableElement) => {
+ *     if (!stableElement) {
+ *       throw new Error("Element not found");
+ *     }
+ *
+ *     stableElement.classList.add("active");
+ *   });
+ * });
+ * ```
+ */
+export function open<T>(
+  ref: Unstable<T>,
+  action: (ref: Stable<T>) => void,
+): void {
+  action(ref);
+}
