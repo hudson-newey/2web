@@ -3,6 +3,11 @@ import { describeType, expectType } from "./expect";
 describeType("true", () => {
   expectType(true).toBeTrue();
 
+  // Not conditions
+  expectType(false).not.toBeTrue();
+  expectType(1).not.toBeTrue();
+  expectType("hello").not.toBeTrue();
+
   // Expect failures
   expectType(false).toBeTrue();
   expectType(1).toBeTrue();
@@ -10,6 +15,11 @@ describeType("true", () => {
 
 describeType("false", () => {
   expectType(false).toBeFalse();
+
+  // Not conditions
+  expectType(true).not.toBeFalse();
+  expectType(0).not.toBeFalse();
+  expectType("").not.toBeFalse();
 
   // Expect failures
   expectType(true).toBeFalse();
@@ -25,6 +35,10 @@ describeType("number", () => {
   expectType(Infinity).toBeNumber();
   expectType(NaN).toBeNumber();
 
+  // Not conditions
+  expectType("24").not.toBeNumber();
+  expectType(true).not.toBeNumber();
+
   // Expect failures
   expectType("hello").toBeNumber();
   expectType(true).toBeNumber();
@@ -33,6 +47,13 @@ describeType("number", () => {
 describeType("string", () => {
   expectType("hello").toBeString();
   expectType("").toBeString();
+  expectType(String()).toBeString();
+
+  // Not conditions
+  expectType(12).not.toBeString();
+  expectType(true).not.toBeString();
+  expectType({}).not.toBeString();
+  expectType(String).not.toBeString();
 
   // Expect failures
   expectType(12).toBeString();
@@ -50,6 +71,11 @@ describeType("null", () => {
 describeType("undefined", () => {
   expectType(undefined).toBeUndefined();
 
+  // Not conditions
+  expectType(null).not.toBeUndefined();
+  expectType(0).not.toBeUndefined();
+  expectType("").not.toBeUndefined();
+
   // Expect failures
   expectType(null).toBeUndefined();
   expectType(0).toBeUndefined();
@@ -62,6 +88,18 @@ describeType("functions", () => {
   expectType(async () => {}).toBeFunction();
   expectType(function* () {}).toBeFunction();
   expectType({}.toString).toBeFunction();
+  expectType(String).toBeFunction();
+
+  // Not conditions
+  expectType(12).not.toBeFunction();
+  expectType("hello").not.toBeFunction();
+  expectType(true).not.toBeFunction();
+  expectType({}).not.toBeFunction();
+  expectType([]).not.toBeFunction();
+  expectType(null).not.toBeFunction();
+  expectType(undefined).not.toBeFunction();
+  expectType(/abc/).not.toBeFunction();
+  expectType(new Date()).not.toBeFunction();
 
   // Expect failures
   expectType(12).toBeFunction();
@@ -77,6 +115,15 @@ describeType("objects", () => {
   expectType(/abc/).toBeObject();
   expectType([]).toBeObject();
   expectType(() => {}).toBeObject();
+
+  // Not conditions
+  expectType(null).not.toBeObject();
+  expectType(undefined).not.toBeObject();
+  expectType(12).not.toBeObject();
+  expectType("hello").not.toBeObject();
+  expectType(true).not.toBeObject();
+  expectType(Symbol()).not.toBeObject();
+  expectType(42n).not.toBeObject();
 
   // Expect failures
   expectType(null).toBeObject();

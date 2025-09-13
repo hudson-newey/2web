@@ -10,8 +10,11 @@ export * from "./src/datatypes/memory.ts";
 export * from "./src/datatypes/numbers.ts";
 export * from "./src/datatypes/objects.ts";
 
+export * from "./src/helpers/typeFunctions.ts";
+
 export * from "./src/structural/unwrap.ts";
 
 export * from "./src/testing/assertions.ts";
+export * from "./src/testing/expect.ts";
 
 export * from "./src/validation/untrusted.ts";

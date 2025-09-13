@@ -3,26 +3,34 @@ import { Assert } from "./assertions";
 import { FunctionType } from "../datatypes/functions";
 import { ErrorType } from "../conditions/error";
 
-type AssertMethod<T, Expected> = Assert<T, Expected> extends true
+type AssertMethod<T, Expected, ExpectPass = true> = Assert<
+  T,
+  Expected
+> extends ExpectPass
   ? FunctionType<[], true>
-  : ErrorType<`Assertion failed.`>;
+  : ErrorType<`Assertion failed`, { expected: Expected, found: T }>;
 
-interface AssertionMethods<T> {
-  toBeBoolean: AssertMethod<T, boolean>;
-  toBeTrue: AssertMethod<T, true>;
-  toBeFalse: AssertMethod<T, false>;
+interface Modifiers<T> {
+  not: AssertionMethods<T, ErrorType<"Assertion failed">>;
+}
 
-  toBeNumber: AssertMethod<T, number>;
-  toBeString: AssertMethod<T, string>;
-  toBeBigInt: AssertMethod<T, bigint>;
+interface AssertionMethods<T, ExpectPass = true>
+  extends Modifiers<T> {
+  toBeBoolean: AssertMethod<T, boolean, ExpectPass>;
+  toBeTrue: AssertMethod<T, true, ExpectPass>;
+  toBeFalse: AssertMethod<T, false, ExpectPass>;
 
-  toBeSymbol: AssertMethod<T, symbol>;
-  toBeUndefined: AssertMethod<T, undefined>;
-  toBeNull: AssertMethod<T, null>;
-  toBeFunction: AssertMethod<T, Function>;
-  toBeObject: AssertMethod<T, ObjectType>;
-  toBeArray: AssertMethod<T, unknown[]>;
-  toBeRegExp: AssertMethod<T, RegExp>;
+  toBeNumber: AssertMethod<T, number, ExpectPass>;
+  toBeString: AssertMethod<T, string, ExpectPass>;
+  toBeBigInt: AssertMethod<T, bigint, ExpectPass>;
+
+  toBeSymbol: AssertMethod<T, symbol, ExpectPass>;
+  toBeUndefined: AssertMethod<T, undefined, ExpectPass>;
+  toBeNull: AssertMethod<T, null, ExpectPass>;
+  toBeFunction: AssertMethod<T, Function, ExpectPass>;
+  toBeObject: AssertMethod<T, ObjectType, ExpectPass>;
+  toBeArray: AssertMethod<T, unknown[] | readonly unknown[], ExpectPass>;
+  toBeRegExp: AssertMethod<T, RegExp, ExpectPass>;
 }
 
 const incorrectEnvironmentError = (() =>
@@ -74,9 +82,27 @@ const incorrectEnvironmentError = (() =>
  * expect(myUser).not.toBe<AdminUser>();
  * // This will not cause a type error because we expect the type to fail
  * ```
+ *
+ * ## Type Guards
+ *
+ * You can also use the `expectType` function as a type guard to assert that a
+ * variable is a certain type at runtime.
+ *
+ * ```ts
+ * const value = true;
+ * if (expectType(value).toBeTrue()) {
+ *   console.log("The value is true");
+ * }
+ *
+ * // TypeScript can automatically determine that the following code block is
+ * // unreachable because `false` is not `true`.
+ * if (expectType(value).toBeFalse()) {
+ *   // This code is unreachable
+ * }
+ * ```
  */
-export const expectType = <const T>(_value: T): AssertionMethods<T> => {
-  return {
+export const expectType = <const T>(_value?: T): AssertionMethods<T> => {
+  const assertions = {
     toBeBoolean: incorrectEnvironmentError,
     toBeTrue: incorrectEnvironmentError,
     toBeFalse: incorrectEnvironmentError,
@@ -92,7 +118,11 @@ export const expectType = <const T>(_value: T): AssertionMethods<T> => {
     toBeObject: incorrectEnvironmentError,
     toBeArray: incorrectEnvironmentError,
     toBeRegExp: incorrectEnvironmentError,
-  };
+  } as any;
+
+  assertions.not = assertions;
+
+  return assertions;
 };
 
 export const describeType = <const Description extends string>(
