@@ -14,7 +14,7 @@ A collection of packages to enhance your 2web application
 | [ssr](ssr/README.md)                           | 🔧     |
 | [threads](threads/README.md)                   | ❌     |
 | [typescript](threads/README.md)                | 🔧     |
-| [vdom](view-transitions/README.md)             | ❌     |
+| [vdom](vdom/README.md)                         | 🔧     |
 | [view-transitions](view-transitions/README.md) | 🔧     |
 | [vite-plugin](vite-plugin/README.md)           | 🔧     |
 
