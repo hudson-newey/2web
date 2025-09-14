@@ -34,6 +34,7 @@
     "./ssr": "./dist/ssr.js",
     "./threads": "./dist/threads.js",
     "./typescript": "./dist/typescript.js",
+    "./vdom": "./dist/vdom.js",
     "./view-transitions": "./dist/view-transitions/transitions/",
     "./vite-plugin": "./vite-plugin/index.ts"
   },

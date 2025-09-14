@@ -33,12 +33,14 @@ export default defineConfig({
         "route-guards": "./route-guards/index.ts",
         signals: "./signals/index.ts",
         ssr: "./ssr/index.ts",
+        vdom: "./vdom/index.ts",
         threads: "./threads/index.ts",
-        // "view-transitions": "./view-transitions/index.css",
 
         // the "vite-plugin" and "typescript" packages are not compiled here
         // because they are intended to be consumed by development environments
         // instead of production environments.
+        //
+        // "view-transitions" are included as a static copy.
       },
       formats: ["es", "cjs"],
     },

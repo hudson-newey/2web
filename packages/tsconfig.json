@@ -11,6 +11,8 @@
     "signals/**/*",
     "ssr/**/*",
     "threads/**/*",
+    "vdom/**/*",
+    "view-transitions/**/*",
 
     "typescript/**/*",
     "vite-plugin/**/*"

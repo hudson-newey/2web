@@ -25,7 +25,7 @@
  *
  * @example
  * ```ts
- * const element = Unstable<HTMLElement>(document.querySelector(".my-element"));
+ * const element = unstable(document.querySelector(".my-element"));
  *
  * setTimeout(() => {
  *   // We are forced to use the "open" function to type narrow the unstable
@@ -43,6 +43,15 @@
 export type Unstable<T> = T & never;
 
 type Stable<T> = T;
+
+/**
+ * @description
+ * Marks a value as "Unstable", preventing type narrowing outside of an `open`
+ * function.
+ */
+export function unstable<T>(value: T): Unstable<T> {
+  return value as Unstable<T>;
+}
 
 /**
  * @description

@@ -13,6 +13,7 @@ export * from "./route-guards/index.ts";
 export * from "./signals/index.ts";
 export * from "./ssr/index.ts";
 export * from "./threads/index.ts";
+export * from "./vdom/index.ts";
 
 // We do not export the vite plugin here because it is not intended to be used
 // within browser environments.

@@ -1,6 +1,6 @@
 # 2Web Kit - Pre-fetcher
 
-Improves the performance of your SPA application by pre-fetching pages when a
+Improves the performance of your web application by pre-fetching pages when a
 link is hovered.
 
 ## Usage

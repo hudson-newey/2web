@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@two-web/vdom</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <script type="module">
+      import { VDomElement, render } from "../vdom/index.ts";
+
+      const counterButton = new VDomElement({
+        tagName: "button",
+        textContent: "0",
+        attributes: {
+          id: "counter",
+          "aria-label": "Increment count",
+        },
+        events: {
+          "click": () => counterButton.textContent++,
+        },
+      });
+
+      render(document.body, counterButton);
+    </script>
+
+    <style>
+      #counter {
+        font-size: 2rem;
+        padding: 1rem 2rem;
+        cursor: pointer;
+
+        margin: auto;
+      }
+    </style>
+  </body>
+</html>
