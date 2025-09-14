@@ -41,17 +41,14 @@ can import the sub-package as a an esm module.
 
 ```html
 <script type="module">
-import { EventHandler } from "@two-web/kit/signals";
+import { EventHandler, textContent } from "@two-web/kit/signals";
 
 const target = document.getElementById("counter");
-const countHandler = new EventHandler((event, value) => {
-  const count = value + 1;
 
-  event.target.textContent = count;
-  return count;
-});
-
+const countHandler = new EventHandler((event, value) => value + 1);
 target.addEventListener("click", countHandler);
+
+textContent(target, countHandler);
 </script>
 
 <button id="counter">0</button>
