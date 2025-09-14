@@ -69,6 +69,18 @@ const (
 	// ;
 	SemiColon LexToken = "SemiColon"
 
+	// <style>
+	StyleStartTag LexToken = "StyleStartTag"
+
+	// </style>
+	StyleEndTag LexToken = "StyleEndTag"
+
+	// <script>
+	ScriptStartTag LexToken = "ScriptStartTag"
+
+	// </script>
+	ScriptEndTag LexToken = "ScriptEndTag"
+
 	// //
 	ScriptLineCommentStart LexToken = "ScriptLineCommentStart"
 

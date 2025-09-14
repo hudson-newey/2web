@@ -65,6 +65,8 @@ CSS/SCSS/SASS code while also providing a "fixed" syntax of HTML.
 5. Tags inside of `<code>` blocks no longer need to use HTML escape codes.
 6. You can import `.html` files as components.
 7. New JavaScript reactive variable declaration syntax using `$` keyword.
+8. Create web pages without HTML boilerplate
+9. Create web pages using Markdown
 
 ### [2web/kit](./packages/)
 
@@ -78,3 +80,7 @@ Provides a standardized (opinionated) way to set up a project.
 The CLI also contains a lot of templates and generators that can be used to
 easily add functionality such as SSR, database, load balancers, etc... to your
 application with one command.
+
+### VsCode Extension
+
+A vscode extension to integrate with the 2web cli.

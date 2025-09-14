@@ -17,7 +17,13 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 				return matchingLexNode, nextState
 			}
 
+			// Some systems use \r\n for new lines, but because we ignore \r, it will
+			// work fine.
 			readerChar, _, err := lexerModel.nextChar()
+			if readerChar == '\n' {
+				lexerModel.lineFeed()
+			}
+
 			if err != nil {
 				if err == io.EOF {
 					position := Position{
@@ -39,12 +45,6 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 				}
 
 				panic(err)
-			}
-
-			// Some systems use \r\n for new lines, but because we ignore \r, it will
-			// work fine.
-			if readerChar == '\n' {
-				lexerModel.lineFeed()
 			}
 
 			if unicode.IsSpace(readerChar) {

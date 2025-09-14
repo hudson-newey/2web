@@ -7,7 +7,7 @@ import (
 
 func scriptLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"</script>": {token: lexerTokens.NewLine, next: textLexer},
+		"</script>": {token: lexerTokens.ScriptEndTag, next: textLexer},
 	}
 
 	cases = withStrings(cases, scriptLexer)

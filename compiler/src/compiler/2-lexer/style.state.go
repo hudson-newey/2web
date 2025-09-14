@@ -7,7 +7,7 @@ import (
 
 func styleLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"</style>": {token: lexerTokens.NewLine, next: textLexer},
+		"</style>": {token: lexerTokens.StyleEndTag, next: textLexer},
 	}
 
 	cases = withStrings(cases, styleLexer)
