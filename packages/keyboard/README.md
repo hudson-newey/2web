@@ -1,15 +1,18 @@
 # 2Web Kit - Keyboard
 
 ```ts
-import { Keyboard, ShortcutMap, ctrl, shift, optional } from "@two-web/kit/keyboard";
+import { ShortcutMap, Shortcut, shift } from "@two-web/kit/keyboard";
 
 function sayHello() {
     console.log("Hello World!");
 }
 
-const myShortcuts = new ShortcutMap({
-    [optional(ctrl), shift, "K"]: sayHello,
-});
+const myShortcuts = new ShortcutMap(
+    new Shortcut({
+        keys: [shift, "K"],
+        action: sayHello,
+    }),
+);
 
-Keyboard.addShortcuts(myShortcuts);
+myShortcuts.listen(document.body);
 ```

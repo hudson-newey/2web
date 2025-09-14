@@ -7,6 +7,7 @@ export * from "./src/conditions/error.ts";
 export * from "./src/conditions/if.ts";
 
 export * from "./src/datatypes/booleanish.ts";
+export * from "./src/datatypes/characters.ts";
 export * from "./src/datatypes/functions.ts";
 export * from "./src/datatypes/memory.ts";
 export * from "./src/datatypes/numbers.ts";
