@@ -8,6 +8,8 @@ tmp_dir = "tmp"
   # However, during builds, the binary might change without the input files
   # changing
   bin = "./tmp/main -i dev/ -o dist/ --no-cache"
+  # Using a small file is helpful for debugging the lexer and parser because
+  # there is less debug info to sift through.
   # bin = "./tmp/main -i dev/small-file.html -o dist/ --no-cache --verbose-lexer --verbose-ast"
   # bin = "./tmp/main -i dev/ -o dist/ --production"
   cmd = "go build -o ./tmp/main ./src"

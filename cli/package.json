@@ -16,7 +16,7 @@
   },
   "files": [
     "bin/",
-    "sdk/",
+    "templates/",
     "package.json",
     "README.md",
     "LICENSE"

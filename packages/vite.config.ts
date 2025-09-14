@@ -1,8 +1,21 @@
 import { defineConfig } from "vite";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [dts()],
+  appType: "mpa",
+  plugins: [
+    dts(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: "view-transitions/transitions/",
+          dest: "view-transitions/",
+        },
+      ],
+    }),
+  ],
+  assetsInclude: ["./view-transitions/transitions/fade.css"],
   build: {
     outDir: "./dist",
     copyPublicDir: false,
@@ -10,21 +23,24 @@ export default defineConfig({
       external: ["vite", "happy-dom", "express", "node", /node:/],
     },
     lib: {
-      // prettier-ignore
       entry: {
-        // Note: there is no barrel file to import all two-web/kit packages
-        // I do this so that we get improved tree shaking.
-        "database": "./database/index.ts",
+        index: "./index.ts",
+        animations: "./animations/index.ts",
+        "browser-state": "./browser-state/index.ts",
+        "event-listener": "./event-listener/index.ts",
+        keyboard: "./keyboard/index.ts",
         "pre-fetcher": "./pre-fetcher/index.ts",
         "route-guards": "./route-guards/index.ts",
-        "signals": "./signals/index.ts",
-        "ssr": "./ssr/index.ts",
-        // "vite-plugin": "./vite-plugin/index.ts",
+        signals: "./signals/index.ts",
+        ssr: "./ssr/index.ts",
+        threads: "./threads/index.ts",
+        // "view-transitions": "./view-transitions/index.css",
+
+        // the "vite-plugin" and "typescript" packages are not compiled here
+        // because they are intended to be consumed by development environments
+        // instead of production environments.
       },
-      // Since many of the packages are framework agnostic, I want to distribute
-      // the compiled JavaScript in as many formats as possible so that it can
-      // be consumed by any framework.
-      formats: ["es"],
+      formats: ["es", "cjs"],
     },
   },
 });

@@ -1,24 +1,23 @@
 package lexer
 
 import (
-	"bufio"
+	"hudson-newey/2web/src/compiler/2-lexer/states"
 	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/io/reader"
 	"io"
-	"unicode"
 )
 
 type Lexer struct {
-	pos    Position
-	reader *bufio.Reader
-
+	Pos   *Position
+	Input *reader.Reader
 	State LexFunc
 }
 
-func NewLexer(reader io.Reader) *Lexer {
+func NewLexer(reader *reader.Reader) *Lexer {
 	return &Lexer{
-		pos:    Position{Row: 1, Col: 0},
-		reader: bufio.NewReader(reader),
-		State:  textLexer,
+		Pos:   &Position{Row: 1, Col: 1},
+		Input: reader,
+		State: textLexer,
 	}
 }
 
@@ -35,6 +34,45 @@ func (model *Lexer) Execute() []V2LexNode {
 	}
 }
 
+func (model *Lexer) nextChar() (char rune, size int, err error) {
+	return model.Input.Reader.ReadRune()
+}
+
+func (model *Lexer) peek(length int) string {
+	bytes, err := model.Input.Reader.Peek(length)
+	if err != nil && err != io.EOF {
+		panic(err)
+	}
+
+	return string(bytes)
+}
+
+func (model *Lexer) skip(length int) {
+	for range length {
+		char, _, err := model.Input.Reader.ReadRune()
+		if err != nil && err != io.EOF {
+			panic(err)
+		}
+
+		if char == '\n' {
+			model.lineFeed()
+			continue
+		}
+
+		model.Pos.Col++
+	}
+}
+
+func (model *Lexer) backup(length int) {
+	for range length {
+		if err := model.Input.Reader.UnreadRune(); err != nil {
+			panic(err)
+		}
+
+		model.Pos.Col--
+	}
+}
+
 // This lexer is heavily inspired by arron raff's blog post
 // https://www.aaronraff.dev/blog/how-to-write-a-lexer-in-go
 func (model *Lexer) lex() V2LexNode {
@@ -47,38 +85,35 @@ func (model *Lexer) lex() V2LexNode {
 
 // Returns the column position to the start and increments the line number
 func (model *Lexer) lineFeed() {
-	model.pos.Row++
-	model.pos.Col = 0
-}
-
-func (model *Lexer) backup() {
-	if err := model.reader.UnreadRune(); err != nil {
-		panic(err)
-	}
-
-	model.pos.Col--
+	model.Pos.Row++
+	model.Pos.Col = 1
 }
 
 // lexIdent scans the input until the end of an identifier and then returns the
-// literal.
-func (l *Lexer) lexText() string {
-	var lit string
+// literal source that was scanned up until the first lexer exit condition.
+func (model *Lexer) lexLiteral(exitConditions lexDefMap) string {
+	var literal string
 	for {
-		r, _, err := l.reader.ReadRune()
+		r, _, err := model.Input.Reader.ReadRune()
 		if err != nil {
 			if err == io.EOF {
 				// at the end of the identifier
-				return lit
+				return literal
 			}
 		}
 
-		l.pos.Col++
-		if unicode.IsLetter(r) || unicode.IsSpace(r) {
-			lit = lit + string(r)
-		} else {
-			// scanned something not in the identifier
-			l.backup()
-			return lit
+		model.Pos.Col++
+
+		literal = literal + string(r)
+
+		_, nextState := exitConditions.matching(model, states.SourceText)
+		if nextState != nil {
+			// We've reached an exit condition
+			// Back up one character and return the literal.
+			// When the original lexer resumes, it will re-consume the character that
+			// caused the exit condition.
+			model.backup(1)
+			return literal
 		}
 	}
 }

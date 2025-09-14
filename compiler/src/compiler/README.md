@@ -32,3 +32,10 @@ correctly.
 Note that because 2web templates are a superset of html, css, and JavaScript,
 our templating is quite simple given that we don't have to do any language
 translations or use an intermediate language.
+
+## IO
+
+A generic reader that supports different IO interfaces an unifies them under
+one API that can be used within the compiler.
+
+This makes supporting different IO sources easier.

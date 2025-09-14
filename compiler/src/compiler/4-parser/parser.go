@@ -1,8 +1,17 @@
 package parser
 
-import lexer "hudson-newey/2web/src/compiler/2-lexer"
+import (
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
+)
 
-type AbstractSyntaxTree []Node
+type Parser struct {
+	Tree                 AbstractSyntaxTree
+	possibleFutureStates []lexer.V2LexNode
+}
+
+func (model *Parser) Parse(structure []lexer.V2LexNode) {
+	model.Tree = CreateAst(structure)
+}
 
 func CreateAst(structure []lexer.V2LexNode) AbstractSyntaxTree {
 	var ast AbstractSyntaxTree

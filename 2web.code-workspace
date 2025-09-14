@@ -16,7 +16,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "editor.inlineSuggest.enabled": true,
     "editor.renderWhitespace": "trailing",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "biomejs.biome",
     "editor.formatOnSave": true,
     "editor.rulers": [80, 120],
     "editor.tabSize": 2,
@@ -35,35 +35,32 @@
       "editor.defaultFormatter": "golang.go"
     },
     "[typescript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "biomejs.biome"
     },
     "[html]": {
-      // Explicitly disable prettier on html files because prettier wants to
-      // convert <PascalCase /> elements into lowercase, which is not compatible
-      // with the 2web module system.
-      "editor.defaultFormatter": null
+      "editor.defaultFormatter": "biomejs.biome"
     }
   },
   "extensions": {
     "recommendations": [
       "editorconfig.editorconfig",
+      "tamasfe.even-better-toml",
       "streetsidesoftware.code-spell-checker",
-      "esbenp.prettier-vscode",
-      "dbaeumer.vscode-eslint",
-      "pkief.material-icon-theme",
-      "aaron-bond.better-comments",
-      "zignd.html-css-class-completion",
       "yzhang.markdown-all-in-one",
       "davidanson.vscode-markdownlint",
       "visualstudioexptteam.vscodeintellicode",
-      "tamasfe.even-better-toml",
-      "golang.go",
-      "ms-vscode.vscode-typescript-next",
-      "esbenp.prettier-vscode",
-      "zignd.html-css-class-completion",
-      "dbaeumer.vscode-eslint",
-      "vitest.explorer",
+      "aaron-bond.better-comments",
+      "pkief.material-icon-theme",
 
+      "golang.go",
+      "premparihar.gotestexplorer",
+
+      "ms-vscode.vscode-typescript-next",
+      "zignd.html-css-class-completion",
+      "vitest.explorer",
+      "biomejs.biome",
+
+      // For benchmarking + islands
       "vue.volar",
       "svelte.svelte-vscode"
     ]

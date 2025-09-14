@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@two-web/keyboard</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <script type="module">
+      import { ShortcutMap, Shortcut, shift } from "../keyboard/index.ts";
+
+      function sayHello() {
+        const element = document.createElement("p");
+        element.innerText = "Hello!";
+        document.body.appendChild(element);
+      }
+
+      function sayRepeat() {
+        const element = document.createElement("p");
+        element.innerText = "Repeating!";
+        document.body.appendChild(element);
+      }
+
+      const myShortcuts = new ShortcutMap(
+          new Shortcut({ keys: [shift, "K"], action: sayHello }),
+          new Shortcut({ keys: [shift, "J"], action: sayRepeat, repeat: true }),
+      );
+
+      myShortcuts.listen(document.body);
+    </script>
+  </body>
+</html>

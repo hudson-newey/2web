@@ -6,31 +6,22 @@ import (
 )
 
 func LintSolution(args []string) {
-	eslintConfig, err := configs.EslintConfigLocation()
+	biomeConfig, err := configs.BiomeConfigLocation()
 	pathTarget := entryTarget(args)
 
+	configPathArg := "--configPath=" + biomeConfig
+
 	if err == nil {
-		if hasSsrTarget() {
-			packages.ExecutePackage(
-				"eslint",
-				"--config",
-				eslintConfig,
-				pathTarget,
-			)
-		} else {
-			packages.ExecutePackage(
-				"eslint",
-				"--config",
-				eslintConfig,
-				pathTarget,
-				"./server/",
-			)
-		}
+		packages.ExecutePackage(
+			"biome",
+			configPathArg,
+			pathTarget,
+		)
 	} else {
 		if hasSsrTarget() {
-			packages.ExecutePackage("eslint", "./src/", "./server/")
+			packages.ExecutePackage("biome", configPathArg, "./src/", "./server/")
 		} else {
-			packages.ExecutePackage("eslint", "./src/")
+			packages.ExecutePackage("biome", configPathArg, "./src/")
 		}
 	}
 }

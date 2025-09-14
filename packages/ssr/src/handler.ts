@@ -14,7 +14,10 @@ export const handleSsrRequest = async (
   const url = req.originalUrl;
 
   try {
-    let template = fs.readFileSync(path.resolve(__dirname + req.path), "utf-8");
+    const template = fs.readFileSync(
+      path.resolve(__dirname + req.path),
+      "utf-8",
+    );
 
     // If we are not serving a html file, return it without modification
     if (!req.path.endsWith(".html") && req.path.endsWith("/")) {

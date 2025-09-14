@@ -3,6 +3,7 @@ package builder
 import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"io"
@@ -16,8 +17,9 @@ func getContent(inputPath string) string {
 		documentErrors.AddErrors(models.Error{
 			FilePath: inputPath,
 			Message:  fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
-			Position: models.Position{
-				Line: 1,
+			Position: lexer.Position{
+				Row: 0,
+				Col: 0,
 			},
 		})
 	}

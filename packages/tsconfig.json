@@ -1,14 +1,19 @@
 {
   "extends": "@total-typescript/tsconfig/bundler/dom/library",
   "include": [
-    "context/",
-    "dom-ranges/",
-    "pre-fetcher/",
-    "route-guards/",
-    "signals/",
-    "spa-router/",
-    "ssr/",
-    "vite-plugin/"
+    "index.ts",
+    "animations/**/*",
+    "browser-state/**/*",
+    "event-listener/**/*",
+    "keyboard/**/*",
+    "pre-fetcher/**/*",
+    "route-guards/**/*",
+    "signals/**/*",
+    "ssr/**/*",
+    "threads/**/*",
+
+    "typescript/**/*",
+    "vite-plugin/**/*"
   ],
   "compilerOptions": {
     "allowImportingTsExtensions": true

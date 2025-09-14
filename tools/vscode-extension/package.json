@@ -1,0 +1,10 @@
+{
+  "name": "2web",
+  "displayName": "2web",
+  "description": "2Web support for VSCode",
+  "version": "0.0.1",
+  "icon": "./icons/2web.png",
+  "engines": {
+    "vscode": "^1.92.0"
+  }
+}

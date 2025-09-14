@@ -19,7 +19,7 @@ func WtrConfigLocation() (string, error) {
 		}
 	}
 
-	sdkPath := "node_modules/@two-web/sdk/web-test-runner.config.mjs"
+	sdkPath := "node_modules/@two-web/cli/templates/web-test-runner.config.mjs"
 	if _, err := os.Stat(sdkPath); err == nil {
 		return sdkPath, nil
 	}
