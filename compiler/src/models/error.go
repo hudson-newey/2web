@@ -9,7 +9,7 @@ import (
 type Error struct {
 	Message  string
 	FilePath string
-	Position *lexer.Position
+	Position lexer.Position
 }
 
 func (model *Error) PrintError() {

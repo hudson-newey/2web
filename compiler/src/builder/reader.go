@@ -17,7 +17,7 @@ func getContent(inputPath string) string {
 		documentErrors.AddErrors(models.Error{
 			FilePath: inputPath,
 			Message:  fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
-			Position: &lexer.Position{
+			Position: lexer.Position{
 				Row: 0,
 				Col: 0,
 			},
