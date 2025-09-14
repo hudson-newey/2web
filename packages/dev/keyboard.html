@@ -17,11 +17,15 @@
         document.body.appendChild(element);
       }
 
+      function sayRepeat() {
+        const element = document.createElement("p");
+        element.innerText = "Repeating!";
+        document.body.appendChild(element);
+      }
+
       const myShortcuts = new ShortcutMap(
-          new Shortcut({
-              keys: [shift, "K"],
-              action: sayHello,
-          }),
+          new Shortcut({ keys: [shift, "K"], action: sayHello }),
+          new Shortcut({ keys: [shift, "J"], action: sayRepeat, repeat: true }),
       );
 
       myShortcuts.listen(document.body);
