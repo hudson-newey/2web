@@ -1,3 +1,6 @@
+import type { FunctionType, Synchronous } from "../datatypes/functions";
+import type { Hide } from "../visibility/hide";
+
 /**
  * @description
  * A type that cannot be narrowed down using type guards.
@@ -28,9 +31,9 @@
  * const element = unstable(document.querySelector(".my-element"));
  *
  * setTimeout(() => {
- *   // We are forced to use the "open" function to type narrow the unstable
+ *   // We are forced to use the "unwrap" function to type narrow the unstable
  *   // type to a stable type.
- *   open(element, (stableElement) => {
+ *   unwrap(element, (stableElement) => {
  *     if (!stableElement) {
  *       throw new Error("Element not found");
  *     }
@@ -40,7 +43,7 @@
  * });
  * ```
  */
-export type Unstable<T> = T & never;
+export type Unstable<T> = Hide<T>;
 
 type Stable<T> = T;
 
@@ -63,9 +66,9 @@ export function unstable<T>(value: T): Unstable<T> {
  * const element = Unstable<HTMLElement>(document.querySelector(".my-element"));
  *
  * setTimeout(() => {
- *   // We are forced to use the "open" function to type narrow the unstable
+ *   // We are forced to use the "unwrap" function to type narrow the unstable
  *   // type to a stable type.
- *   open(element, (stableElement) => {
+ *   unwrap(element, (stableElement) => {
  *     if (!stableElement) {
  *       throw new Error("Element not found");
  *     }
@@ -75,9 +78,12 @@ export function unstable<T>(value: T): Unstable<T> {
  * });
  * ```
  */
-export function open<T>(
+export function unwrap<T, ReturnType>(
   ref: Unstable<T>,
-  action: (ref: Stable<T>) => void,
-): void {
-  action(ref);
+
+  // We require the action to be synchronous because as soon as we defer the
+  // task to the microtask queue, the value might have changed again.
+  action: Synchronous<FunctionType<[ref: Stable<T>], ReturnType>>,
+): ReturnType {
+  return action(ref as Stable<T>);
 }

@@ -9,3 +9,11 @@ export type FunctionType<
   Args extends unknown[] = unknown[],
   ReturnType = unknown,
 > = (...args: Args) => ReturnType;
+
+/**
+ * @description
+ * A function that CANNOT be asynchronous.
+ */
+export type Synchronous<F> = F extends (...args: any[]) => Promise<unknown>
+  ? never
+  : F;

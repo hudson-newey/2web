@@ -7,3 +7,12 @@
 export type ObjectType<Keys extends PropertyKey = string, Values = unknown> = {
   [key in Keys]: Values;
 };
+
+/**
+ * @description
+ * An empty object type that does not allow any properties.
+ *
+ * This is useful because the `{}` type in TypeScript is special because it
+ * allows any non-nullish value.
+ */
+export type EmptyObject = { [key in never]: never };

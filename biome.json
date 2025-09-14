@@ -24,7 +24,10 @@
       },
       "complexity": {
         "noUselessCatch": "off"
-      }
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
     }
   },
   "javascript": {

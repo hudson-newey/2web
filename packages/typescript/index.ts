@@ -14,6 +14,7 @@ export * from "./src/datatypes/numbers.ts";
 export * from "./src/datatypes/objects.ts";
 
 export * from "./src/helpers/typeFunctions.ts";
+export * from "./src/helpers/without.ts";
 
 export * from "./src/structural/unwrap.ts";
 export * from "./src/structural/nominal.ts";
@@ -23,3 +24,6 @@ export * from "./src/testing/expect.ts";
 
 export * from "./src/validation/untrusted.ts";
 export * from "./src/validation/unstable.ts";
+
+export * from "./src/visibility/mutable.ts";
+export type { Hide } from "./src/visibility/hide.ts";

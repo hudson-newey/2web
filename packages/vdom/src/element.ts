@@ -76,7 +76,6 @@ export class VDomElement {
     });
 
     this.properties.forEach((value, key) => {
-      // biome-ignore lint/suspicious/noExplicitAny: TODO: Better typing for properties
       (element as any)[key] = value;
     });
 
@@ -94,7 +93,6 @@ export class VDomElement {
 
   private setProperty(key: string | symbol, value: unknown) {
     if (this.ref) {
-      // biome-ignore lint/suspicious/noExplicitAny: TODO: Better typing for properties
       (this.ref as any)[key] = value;
     }
 

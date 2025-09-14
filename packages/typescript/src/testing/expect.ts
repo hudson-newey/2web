@@ -119,7 +119,6 @@ export const expectType = <const T>(_value?: T): AssertionMethods<T> => {
     toBeObject: incorrectEnvironmentError,
     toBeArray: incorrectEnvironmentError,
     toBeRegExp: incorrectEnvironmentError,
-    // biome-ignore lint/suspicious/noExplicitAny: Recursive type, I set "not" below.
   } as any;
 
   assertions.not = assertions;
