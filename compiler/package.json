@@ -16,7 +16,7 @@
   },
   "scripts": {
     "dev": "vite ./dist/",
-    "format": "prettier --write ./dev/",
+    "format": "biome --write ./dev/",
     "test": "vitest",
     "test:report": "vite preview --outDir html-report",
     "build": "task build"

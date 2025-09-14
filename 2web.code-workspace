@@ -38,10 +38,7 @@
       "editor.defaultFormatter": "biomejs.biome"
     },
     "[html]": {
-      // Explicitly disable formatting on html files because prettier wants to
-      // convert <PascalCase /> elements into lowercase, which is not compatible
-      // with the 2web module system.
-      "editor.defaultFormatter": null
+      "editor.defaultFormatter": "biomejs.biome"
     }
   },
   "extensions": {
