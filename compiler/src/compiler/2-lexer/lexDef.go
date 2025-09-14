@@ -4,6 +4,7 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/states"
 	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"maps"
+	"slices"
 	"strings"
 )
 
@@ -21,7 +22,10 @@ type lexDefMap map[LexMatcher]lexDef
 func (lexMap *lexDefMap) matching(lexerModel *Lexer, state states.LexState) (V2LexNode, LexFunc) {
 	// We use the same logic for multi-character matchers as we do for single
 	// character matchers because the peek logic is the same.
-	for matcher, definition := range *lexMap {
+	dereferencedMap := *lexMap
+	for _, matcher := range slices.Sorted(maps.Keys(dereferencedMap)) {
+		definition := dereferencedMap[matcher]
+
 		stringifiedMatcher := string(matcher)
 
 		matcherOffset := len(stringifiedMatcher)
