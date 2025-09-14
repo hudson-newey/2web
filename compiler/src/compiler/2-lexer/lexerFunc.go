@@ -4,7 +4,6 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/states"
 	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"io"
-	"unicode"
 )
 
 type LexFunc func(*Lexer) (V2LexNode, LexFunc)
@@ -22,6 +21,15 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 			readerChar, _, err := lexerModel.nextChar()
 			if readerChar == '\n' {
 				lexerModel.lineFeed()
+				return V2LexNode{
+					Pos: Position{
+						Row: lexerModel.Pos.Row - 1,
+						Col: lexerModel.Pos.Col - 1,
+					},
+					Token:   lexerTokens.NewLine,
+					State:   state,
+					Content: "\n",
+				}, lexerModel.State
 			}
 
 			if err != nil {
@@ -47,40 +55,36 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 				panic(err)
 			}
 
-			if unicode.IsSpace(readerChar) {
-				continue
-			} else if unicode.IsLetter(readerChar) || unicode.IsDigit(readerChar) {
-				startPos := lexerModel.Pos
-				lexerModel.backup(1)
-				text := lexerModel.lexLiteral(lexMap)
+			startPos := lexerModel.Pos
+			lexerModel.backup(1)
+			text := lexerModel.lexLiteral(lexMap)
 
-				// There are different types of text depending on what context we are in
-				// Sometimes it can be external source code.
-				tokenMap := map[states.LexState]lexerTokens.LexToken{
-					states.ScriptSource: lexerTokens.ScriptSource,
-					states.StyleSource:  lexerTokens.ScriptSource,
-					states.TextContent:  lexerTokens.TextContent,
-				}
-
-				token, exists := tokenMap[state]
-				if !exists {
-					token = lexerTokens.TextContent
-				}
-
-				position := Position{
-					Row: startPos.Row,
-					Col: startPos.Col,
-				}
-
-				lexNode := V2LexNode{
-					Pos:     position,
-					Token:   token,
-					State:   state,
-					Content: string(text),
-				}
-
-				return lexNode, lexerModel.State
+			// There are different types of text depending on what context we are in
+			// Sometimes it can be external source code.
+			tokenMap := map[states.LexState]lexerTokens.LexToken{
+				states.ScriptSource: lexerTokens.ScriptSource,
+				states.StyleSource:  lexerTokens.ScriptSource,
+				states.TextContent:  lexerTokens.TextContent,
 			}
+
+			token, exists := tokenMap[state]
+			if !exists {
+				token = lexerTokens.TextContent
+			}
+
+			position := Position{
+				Row: startPos.Row,
+				Col: startPos.Col,
+			}
+
+			lexNode := V2LexNode{
+				Pos:     position,
+				Token:   token,
+				State:   state,
+				Content: string(text),
+			}
+
+			return lexNode, lexerModel.State
 		}
 	}
 }

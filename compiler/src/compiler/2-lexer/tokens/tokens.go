@@ -6,6 +6,12 @@ const (
 	// EOF
 	EOF LexToken = "EOF"
 
+	// I preserve newlines as their own token because I think that having the
+	// output be as close as possible to the input is a good thing for development
+	// environments, because it makes it easier to debug.
+	// \n
+	Newline LexToken = "Newline"
+
 	// !DOCTYPE
 	Doctype LexToken = "Doctype"
 

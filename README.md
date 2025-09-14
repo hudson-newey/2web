@@ -13,7 +13,7 @@ I am to make all reactivity compiled so that there is minimal runtime overhead.
 ## Basic Counter Example
 
 ```html
-<script>
+<script compiled>
   $ count = 0;
 </script>
 
