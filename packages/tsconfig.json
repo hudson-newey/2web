@@ -6,6 +6,7 @@
     "browser-state/**/*",
     "dependency-injection/**/*",
     "event-listener/**/*",
+    "htmx-layouts/**/*",
     "keyboard/**/*",
     "pre-fetcher/**/*",
     "route-guards/**/*",

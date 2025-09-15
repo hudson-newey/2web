@@ -7,6 +7,7 @@ A collection of packages to enhance your 2web application
 | [animations](animations/README.md)               | 🔧     |
 | [browser-state](event-listener/README.md)        | ❌     |
 | [event-listener](event-listener/README.md)       | ❌     |
+| [htmx-layouts](htmx-layouts/README.md)           | ❌     |
 | [dependency-injection](event-listener/README.md) | ❌     |
 | [keyboard](keyboard/README.md)                   | 🔧     |
 | [pre-fetcher](pre-fetcher/README.md)             | 🔧     |
