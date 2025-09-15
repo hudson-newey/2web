@@ -27,6 +27,7 @@ export default defineConfig({
         index: "./index.ts",
         animations: "./animations/index.ts",
         "browser-state": "./browser-state/index.ts",
+        "dependency-injection": "./dependency-injection/index.ts",
         "event-listener": "./event-listener/index.ts",
         keyboard: "./keyboard/index.ts",
         "pre-fetcher": "./pre-fetcher/index.ts",

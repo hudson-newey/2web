@@ -6,6 +6,7 @@ console.warn(
 
 export * from "./animations/index.ts";
 export * from "./browser-state/index.ts";
+export * from "./dependency-injection/index.ts";
 export * from "./event-listener/index.ts";
 export * from "./keyboard/index.ts";
 export * from "./pre-fetcher/index.ts";

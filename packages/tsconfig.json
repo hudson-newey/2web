@@ -4,6 +4,7 @@
     "index.ts",
     "animations/**/*",
     "browser-state/**/*",
+    "dependency-injection/**/*",
     "event-listener/**/*",
     "keyboard/**/*",
     "pre-fetcher/**/*",

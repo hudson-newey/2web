@@ -25,6 +25,7 @@
     ".": "./dist/index.js",
     "./animations": "./dist/animations.js",
     "./browser-state": "./dist/browser-state.js",
+    "./dependency-injection": "./dist/dependency-injection.js",
     "./event-listener": "./dist/event-listener.js",
     "./keyboard": "./dist/keyboard.js",
     "./database": "./dist/database.js",
