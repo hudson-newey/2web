@@ -17,7 +17,7 @@ read/manipulated in the live DOM.
 ## Usage
 
 ```ts
-import { VDomElement, render } from "@two-web/kit/vdom";
+import { VDomElement, render, vIf } from "@two-web/kit/vdom";
 
 const counterButton = new VDomElement({
   tagName: "button",
@@ -26,6 +26,9 @@ const counterButton = new VDomElement({
   events: {
     "click": () => counterButton.textContent++,
   },
+  directives: [
+    vDomIf(true),
+  ],
 });
 
 render(document.body, counterButton);

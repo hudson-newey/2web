@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@two-web/vdom</title>
+    <link rel="stylesheet" href="../dev-styles.css" />
+  </head>
+
+  <body>
+    <div>Count to 10</div>
+    <div id="counter-outlet"></div>
+    <div id="blog-outlet"></div>
+
+    <script type="module">
+      import { VDomElement, render } from "../../vdom/index.ts";
+      import { counterButton } from "./counter.ts";
+      import { article } from "./article.ts";
+
+      render(document.getElementById("counter-outlet"), counterButton);
+      render(document.getElementById("blog-outlet"), article);
+    </script>
+
+    <style>
+      #counter {
+        font-size: 2rem;
+        padding: 1rem 2rem;
+        cursor: pointer;
+
+        margin: auto;
+      }
+    </style>
+  </body>
+</html>
