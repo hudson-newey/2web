@@ -28,6 +28,7 @@
     "./dependency-injection": "./dist/dependency-injection.js",
     "./event-listener": "./dist/event-listener.js",
     "./htmx-layouts": "./dist/htmx-layouts.js",
+    "./hydration": "./dist/hydration.js",
     "./keyboard": "./dist/keyboard.js",
     "./database": "./dist/database.js",
     "./pre-fetcher": "./dist/pre-fetcher.js",

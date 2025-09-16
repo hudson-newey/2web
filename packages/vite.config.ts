@@ -30,6 +30,7 @@ export default defineConfig({
         "dependency-injection": "./dependency-injection/index.ts",
         "event-listener": "./event-listener/index.ts",
         "htmx-layouts": "./htmx-layouts/index.ts",
+        "hydration": "./hydration/index.ts",
         keyboard: "./keyboard/index.ts",
         "pre-fetcher": "./pre-fetcher/index.ts",
         "route-guards": "./route-guards/index.ts",
