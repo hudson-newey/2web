@@ -2,23 +2,23 @@
 
 A collection of packages to enhance your 2web application
 
-| Package                                          | State |
-| ------------------------------------------------ | ----- |
-| [animations](animations/README.md)               | 🔧     |
-| [browser-state](event-listener/README.md)        | ❌     |
-| [event-listener](event-listener/README.md)       | ❌     |
-| [htmx-layouts](htmx-layouts/README.md)           | ❌     |
-| [dependency-injection](event-listener/README.md) | ❌     |
-| [keyboard](keyboard/README.md)                   | 🔧     |
-| [pre-fetcher](pre-fetcher/README.md)             | 🔧     |
-| [route-guards](route-guards/README.md)           | 🔧     |
-| [signals](signals/README.md)                     | 🔧     |
-| [ssr](ssr/README.md)                             | 🔧     |
-| [threads](threads/README.md)                     | ❌     |
-| [typescript](typescript/README.md)               | 🔧     |
-| [vdom](vdom/README.md)                           | 🔧     |
-| [view-transitions](view-transitions/README.md)   | 🔧     |
-| [vite-plugin](vite-plugin/README.md)             | 🔧     |
+| Package                                                | State |
+| ------------------------------------------------------ | ----- |
+| [animations](animations/README.md)                     | 🔧     |
+| [browser-state](browser-state/README.md)               | ❌     |
+| [event-listener](event-listener/README.md)             | ❌     |
+| [htmx-layouts](htmx-layouts/README.md)                 | ❌     |
+| [dependency-injection](dependency-injection/README.md) | ❌     |
+| [keyboard](keyboard/README.md)                         | 🔧     |
+| [pre-fetcher](pre-fetcher/README.md)                   | 🔧     |
+| [route-guards](route-guards/README.md)                 | 🔧     |
+| [signals](signals/README.md)                           | 🔧     |
+| [ssr](ssr/README.md)                                   | 🔧     |
+| [threads](threads/README.md)                           | ❌     |
+| [typescript](typescript/README.md)                     | 🔧     |
+| [vdom](vdom/README.md)                                 | 🔧     |
+| [view-transitions](view-transitions/README.md)         | 🔧     |
+| [vite-plugin](vite-plugin/README.md)                   | 🔧     |
 
 ❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
 

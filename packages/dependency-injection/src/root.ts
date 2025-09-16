@@ -3,7 +3,7 @@ import { isInjectableRequest } from "./inject";
 import type { Injectable, InjectionConstructor } from "./injectable";
 import { isProviderAdvertisement } from "./provider";
 
-export class InjectionModule {
+export class InjectionRoot {
   private readonly providers = new Map<InjectionConstructor, Injectable>();
   private readonly rootElement: HTMLElement;
 
