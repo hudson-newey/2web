@@ -73,3 +73,5 @@ perform in constant time.
 Additionally, you'll note that the `__2_element_0` is cached for the elements
 lifetime, meaning that we don't have to re-query the DOM for the element every
 time it changes.
+
+[**Next**](./3-templating.md) (Templating)

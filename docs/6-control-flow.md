@@ -19,3 +19,5 @@ Syntax is also subject to change.
   {% for 1,2,3 <li>item: {{&value}}</li> %}
 </ul>
 ```
+
+[**Next**](./7-code-splitting.md) (Code Splitting)

@@ -33,3 +33,5 @@ justifiable because any bugs produced will be consistent and the result of a
 logic error, not human error.
 
 Meaning that if implemented correctly, there can only be benefits.
+
+[**Next**](./2-prefetching.md) (Resource Pre-fetching)

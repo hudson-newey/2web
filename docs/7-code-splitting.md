@@ -29,3 +29,5 @@ During code-splitting, the compiler has the following goals:
   have loaded.
 - Styling should be visible on first load so that there is no flash of unstyled
   content.
+
+[**Next**](./8-typescript.md) (TypeScript)

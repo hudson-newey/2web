@@ -50,3 +50,5 @@ Will expand into the following html code:
 
 As you can see, the `<title>` and `<link>` elements have been injected into the
 `<head>` element.
+
+[**Next**](./5-components.md) (Components)

@@ -19,3 +19,5 @@ in the users initial viewport.
 We will only prefetch resources in the initial viewport, because there is no
 need to prefetch a large resource at the bottom of the page that can be lazy
 loaded.
+
+[**Next**](./3-lazy-loading.md) (Resource Lazy Loading)

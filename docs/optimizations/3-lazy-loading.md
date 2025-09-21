@@ -5,3 +5,5 @@ needs to scroll or interact to see, we will lazy load that resource.
 
 This is so that the initial render can be performed without fetching resources
 that are not needed.
+
+[**Next**](./4-dom-ranges.md) (DOM Ranges)

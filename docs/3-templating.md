@@ -75,3 +75,5 @@ string was located.
 This provides more targeted DOM updates, as we don't have to re-render the
 parent element or the "Current Count:" text every time the `$count` variable is
 updated.
+
+[**Next**](./4-document-partials.md) (Document partials)

@@ -56,3 +56,5 @@ lazy-loaded.
 
 All scripts are run in "strict" mode to encourage good programming practices and
 so the browser can make improved performance optimizations.
+
+[**Next**](./11-compiler-errors.md) (Compiler Errors)

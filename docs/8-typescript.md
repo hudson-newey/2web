@@ -20,3 +20,11 @@ By default, all `<script>` tags are compiled to
 [ecma script modules](https://webpack.js.org/guides/ecma-script-modules/) (esm).
 This means that you can import any third party libraries that export JavaScript
 or TypeScript as ESM.
+
+## 2Web Kit Helpers
+
+In the [`@two-web/kit/typescript`](../packages/typescript/README.md) package,
+there exists typescript helpers for common use cases such as untrusted inputs,
+unstable variables, and testing types.
+
+[**Next**](./9-styling.md) (Page/Component Styling)
