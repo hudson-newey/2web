@@ -90,7 +90,7 @@ A vscode extension to integrate with the 2web cli.
 2Web is not intended to be a complete solution for web development, and is
 instead supposed to patch quirks.
 
-You should consider adding using the following libraries with 2Web
+You should **consider** using the following libraries with 2Web.
 
 - [htmx](https://htmx.org/)
 - [Tailwind preflight (for css reset)](https://tailwindcss.com/docs/preflight)
