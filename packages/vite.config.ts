@@ -29,7 +29,6 @@ export default defineConfig({
         "browser-state": "./browser-state/index.ts",
         "dependency-injection": "./dependency-injection/index.ts",
         "event-listener": "./event-listener/index.ts",
-        "htmx-layouts": "./htmx-layouts/index.ts",
         "hydration": "./hydration/index.ts",
         keyboard: "./keyboard/index.ts",
         "pre-fetcher": "./pre-fetcher/index.ts",

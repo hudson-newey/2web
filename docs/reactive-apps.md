@@ -34,13 +34,14 @@ _NOTE_: This is an dev build. optimized for readability, not performance.
 <!DOCTYPE html>
 <html>
   <body>
-    <h1 data-__2_element_0>0</h1>
+    <h1 id="__2_element_0">0</h1>
     <button onclick="__2_func_0(++__2_var__0)">Increment</button>
 
-    <script>
+    <script type="module">
+      const __2_element_0 = document.getElementById("__2_element_0");
       let __2_var_0 = 0;
       function __2_func_0(__2_value) {
-        document.querySelector("data-__2_element_0")["innerText"] = __2_value;
+        __2_element_0["innerText"] = __2_value;
       }
     </script>
   </body>
@@ -63,4 +64,12 @@ zero variable runtime, it would greatly hurt performance.
 
 Additionally, all of the first paint content is pre-rendered as SSG content.
 You can see in the template above that the initial text of the initial value of
-`$count` is inlined as the text `0` in the `data-2-element-0` element.
+`$count` is inlined as the text `0` in the `__2_element_0` element.
+
+We use ids for reactivity because they can be looked up in constant time,
+while finding an element in the DOM by anything that is not an id does not
+perform in constant time.
+
+Additionally, you'll note that the `__2_element_0` is cached for the elements
+lifetime, meaning that we don't have to re-query the DOM for the element every
+time it changes.

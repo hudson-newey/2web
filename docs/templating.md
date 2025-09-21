@@ -56,13 +56,14 @@ Therefore, the code above compiles into the following code:
   </head>
 
   <body>
-    <h1>Current Count: <span data-__2_element_0>0</span></h1>
+    <h1>Current Count: <span id="__2_element_0">0</span></h1>
     <button onclick="__2_func_0(++__2_var__0)">Increment</button>
 
-    <script>
+    <script type="module">
+      const __2_element_0 = document.getElementById("__2_element_0");
       let __2_var_0 = 0;
       function __2_func_0(__2_value) {
-        document.querySelector("data-__2_element_0")["innerText"] = __2_value;
+        __2_element_0["innerText"] = __2_value;
       }
     </script>
   </body>
