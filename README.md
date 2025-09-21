@@ -84,3 +84,15 @@ application with one command.
 ### VsCode Extension
 
 A vscode extension to integrate with the 2web cli.
+
+## Additional Libraries
+
+2Web is not intended to be a complete solution for web development, and is
+instead supposed to patch quirks.
+
+You should consider adding using the following libraries with 2Web
+
+- [htmx](https://htmx.org/)
+- [Tailwind preflight (for css reset)](https://tailwindcss.com/docs/preflight)
+- [zod (for form/input validation)](https://zod.dev/)
+- [Lion](https://lion.js.org/)
