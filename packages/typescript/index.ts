@@ -14,6 +14,7 @@ export * from "./src/datatypes/functions.ts";
 export * from "./src/datatypes/memory.ts";
 export * from "./src/datatypes/numbers.ts";
 export * from "./src/datatypes/objects.ts";
+export * from "./src/datatypes/json.ts";
 
 export * from "./src/helpers/typeFunctions.ts";
 export * from "./src/helpers/without.ts";
