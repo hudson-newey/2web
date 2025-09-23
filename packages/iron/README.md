@@ -5,6 +5,47 @@ Defensive programming helpers.
 If you're using TypeScript, you probably don't need this library unless you're
 creating high-reliability software that must never crash.
 
+## Errors
+
+### Retry
+
+Retries a statement until it passes
+
+```ts
+// Attempt to fetch the current user model 5 times, if one request fails, retry
+// after 1 second.
+// If 5 attempts fail, the last error will be thrown.
+const user = await retry(() => {
+  return await fetch("https://example.com");
+}, { interval: 1_000, times: 5 });
+```
+
+### Wait
+
+An awaitable function to unwrap promises while handling their rejections.
+
+This is needed because a normal async function does have a `catch` callback, but
+this cannot be easily used with the `await` keyword.
+
+```ts
+const resp = await wait(fetch("https://example.com"), {
+  catch: (err) => {
+    throw new Error("Error fetching user data", { context: err });
+  }
+});
+```
+
+### Try
+
+Requires you to handle error cases.
+
+```ts
+const resp = try(() => throw Error("my error"));
+if (resp instanceof Error) {
+  console.log("handle the error");
+}
+```
+
 ## Conditionals
 
 When creating high-reliability software, type guards can cause the program to
@@ -48,45 +89,6 @@ This function will **reject** because it turns the return type into a `Promise`.
   assert((person) => iif(() => person.age > 0)),
 ])
 function sayHello(person: Person) {
-}
-```
-
-## Errors
-
-### Retry
-
-Retries a statement until it passes
-
-```ts
-// Attempt to fetch the current user model 5 times, if one request fails, retry
-// after 1 second.
-// If 5 attempts fail, the last error will be thrown.
-const user = await retry(() => {
-  return await fetch("https://example.com");
-}, { interval: 1_000, times: 5 });
-```
-
-### Wait
-
-An awaitable function to unwrap promises while handling their rejections.
-
-This is needed because a normal async function does have a `catch` callback, but
-this cannot be easily used with the `await` keyword.
-
-```ts
-const resp = await wait(fetch("https://example.com"), {
-  catch: () => handleError,
-});
-```
-
-### Try
-
-Requires you to handle error cases.
-
-```ts
-const resp = try(() => throw Error("my error"));
-if (resp instanceof Error) {
-  console.log("handle the error");
 }
 ```
 
