@@ -6,6 +6,7 @@ A collection of packages to enhance your 2web application
 | ------------------------------------------------------ | ----- |
 | [animations](animations/README.md)                     | 🔧     |
 | [browser-state](browser-state/README.md)               | ❌     |
+| [iron](iron/README.md)                                 | 🔧     |
 | [event-listener](event-listener/README.md)             | ❌     |
 | [hydration](hydration/README.md)                       | ❌     |
 | [dependency-injection](dependency-injection/README.md) | ❌     |

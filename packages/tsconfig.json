@@ -4,6 +4,7 @@
     "index.ts",
     "animations/**/*",
     "browser-state/**/*",
+    "iron/**/*",
     "dependency-injection/**/*",
     "event-listener/**/*",
     "hydration/**/*",
