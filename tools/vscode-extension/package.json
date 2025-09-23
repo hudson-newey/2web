@@ -6,5 +6,27 @@
   "icon": "./icons/2web.png",
   "engines": {
     "vscode": "^1.92.0"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "2web",
+        "extensions": [
+          ".2web"
+        ],
+        "icon": {
+          "light": "./icons/2web.svg",
+          "dark": "./icons/2web.svg"
+        },
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "2web",
+        "scopeName": "source.2web",
+        "path": "./syntaxes/2web.tmLanguage.json"
+      }
+    ]
   }
 }

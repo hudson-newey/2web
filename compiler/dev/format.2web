@@ -1,0 +1,8 @@
+<title>2Web File Format</title>
+<link rel="stylesheet" href="dev-styles.css" />
+
+<script compiled>
+  import Counter from "components/counter.component.html";
+</script>
+
+<Counter />
