@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <rect x="0" y="0" width="24" height="24" fill="transparent" />
+
+    <!-- Two vertical lines that represent the number 2 in roman numerals -->
+    <rect x="5" y="4" width="4" height="18" fill="darkgreen" />
+    <rect x="15" y="4" width="4" height="18" fill="darkgreen" />
+
+    <!-- A capstone representing completion -->
+    <rect x="2" y="2.05" width="20" height="2" fill="darkgreen" rx="0.75" />
+
+    <!-- A base without rounding representing a solid foundation -->
+    <rect x="2" y="20" width="20" height="2" fill="darkgreen" />
+</svg>
