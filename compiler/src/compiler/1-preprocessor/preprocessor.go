@@ -1,6 +1,7 @@
 package preprocessor
 
 import (
+	twoWeb "hudson-newey/2web/src/content/2web"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
 )
@@ -8,7 +9,7 @@ import (
 func ProcessStaticSite(filePath string, content string) string {
 	ssgResult := content
 
-	if html.IsHtmlFile(filePath) {
+	if html.IsHtmlFile(filePath) || twoWeb.IsTwoWebFile(filePath) {
 		// 2Web supports partial content, meaning that pages don't need and doctype,
 		// html, head, meta, or body tags.
 		// The user can just start writing the pages content, and the compiler can

@@ -3,7 +3,9 @@
   "displayName": "2web",
   "description": "2Web support for VSCode",
   "version": "0.0.1",
+  "publisher": "hudson-newey",
   "icon": "./icons/2web.png",
+  "categories": ["Programming Languages"],
   "engines": {
     "vscode": "^1.92.0"
   },
@@ -11,6 +13,7 @@
     "languages": [
       {
         "id": "2web",
+        "aliases": ["2Web", "2web"],
         "extensions": [
           ".2web"
         ],

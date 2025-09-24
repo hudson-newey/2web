@@ -1,6 +1,7 @@
 package builder
 
 import (
+	twoWeb "hudson-newey/2web/src/content/2web"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
@@ -35,7 +36,7 @@ func indexPages(inputPath string) []string {
 				// TODO: Don't include assets in page indexing. They should instead be
 				// pulled out of the page source so that they can be efficiently tree
 				// shaken.
-				if html.IsPage(page) || markdown.IsMarkdownFile(page) || css.IsCssFile(page) || javascript.IsJsFile(page) || svg.IsSvgFile(page) {
+				if html.IsPage(page) || markdown.IsMarkdownFile(page) || css.IsCssFile(page) || javascript.IsJsFile(page) || svg.IsSvgFile(page) || twoWeb.IsTwoWebFile(page) {
 					totalFiles = append(totalFiles, page)
 				}
 			}

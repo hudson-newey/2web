@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="dev-styles.css" />
 
 <script compiled>
-  import Counter from "components/counter.component.html";
+  $ count = 0;
 </script>
 
-<Counter />
+<button @click="$count = $count + 1">{{ $count }} Clicks</button>

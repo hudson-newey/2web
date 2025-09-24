@@ -6,6 +6,7 @@ import (
 	parser "hudson-newey/2web/src/compiler/4-parser"
 	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
+	twoWeb "hudson-newey/2web/src/content/2web"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/page"
@@ -43,7 +44,7 @@ func Compile(filePath string, ast []parser.Node) page.Page {
 
 	pageModel.Html.Content = controlFlow.ProcessControlFlow(filePath, pageModel.Html.Content)
 
-	if html.IsHtmlFile(filePath) {
+	if html.IsHtmlFile(filePath) || twoWeb.IsTwoWebFile(filePath) {
 		pageModel.Html.Content = expandElementRefs(pageModel.Html.Content)
 	}
 
