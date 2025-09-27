@@ -96,6 +96,27 @@ vite.config.ts.timestamp-*.mjs
 .env.local
 `
 
+const vscodeSettingsContent = `{
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"files.trimTrailingWhitespace": true,
+	"editor.tabSize": 2,
+	"editor.defaultFormatter": "biomejs.biome",
+	["2web"]: {
+		"files.autoSave": "afterDelay",
+		"files.autoSaveDelay": 0,
+	},
+}`
+
+const viteSettingsContent = `import { defineConfig } from 'vite'
+import twoWeb from "@two-web/kit/vite-plugin";
+
+export default defineConfig({
+  appType: "mpa",
+	plugins: [twoWeb()],
+})
+`
+
 func NewTemplate(path string) {
 	templateFiles := []files.File{
 		{
@@ -103,8 +124,8 @@ func NewTemplate(path string) {
 			IsDirectory: true,
 			Children: []files.File{
 				{
-					Path:        path + "/README.md",
-					Content:     readmeContent,
+					Path:        path + "/.gitignore",
+					Content:     gitignoreContent,
 					IsDirectory: false,
 				},
 				{
@@ -118,13 +139,23 @@ func NewTemplate(path string) {
 					IsDirectory: false,
 				},
 				{
+					Path:        path + "/README.md",
+					Content:     readmeContent,
+					IsDirectory: false,
+				},
+				{
 					Path:        path + "/tsconfig.json",
 					Content:     tsconfigContent,
 					IsDirectory: false,
 				},
 				{
-					Path:        path + "/.gitignore",
-					Content:     gitignoreContent,
+					Path:        path + "/vite.config.ts",
+					Content:     viteSettingsContent,
+					IsDirectory: false,
+				},
+				{
+					Path:        path + "/.vscode/settings.json",
+					Content:     vscodeSettingsContent,
 					IsDirectory: false,
 				},
 				{

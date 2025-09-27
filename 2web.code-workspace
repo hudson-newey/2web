@@ -38,8 +38,14 @@
       "editor.defaultFormatter": "biomejs.biome"
     },
     "[html]": {
-      "editor.defaultFormatter": "biomejs.biome"
-    }
+      "files.autoSave": "afterDelay",
+      "files.autoSaveDelay": 0,
+    },
+    "[2web]": {
+      "editor.defaultFormatter": "biomejs.biome",
+      "files.autoSave": "afterDelay",
+      "files.autoSaveDelay": 0,
+    },
   },
   "extensions": {
     "recommendations": [
