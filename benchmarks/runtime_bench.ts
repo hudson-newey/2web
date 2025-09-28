@@ -15,8 +15,16 @@
 const injectedCode = `
 import * as bench from "/bench.js";
 
-const inTarget = document.getElementById("inTarget");
-const outTarget = document.getElementById("outTarget");
+// Because some frameworks (React, Vue, etc...) bootstrap themselves using
+// JavaScript, we need to wait until the DOM has been fully populated with our
+// target elements before running the benchmark.
+let inTarget;
+let outTarget;
+do {
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  inTarget = document.getElementById("inTarget");
+  outTarget = document.getElementById("outTarget");
+} while (!inTarget || !outTarget);
 
 let currentCount = 0;
 bench.start();
