@@ -24,11 +24,7 @@
 
 - `__2_CACHE_PATH` (default: ./.cache/) A path that will be used for the build cache
 
-### Dev Tools
-
-Placeholder (not fully implemented)
-
-### Production Builds
+## Production Builds
 
 - Performs code minification
 - Performs a handful of runtime [optimizations](../docs/README.md)

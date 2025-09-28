@@ -25,6 +25,7 @@ Once installed, you will have access to the `2web` command.
 - `2web template <template>` (alias: t)
 - `2web install <package_name>` (alias: i)
 - `2web db <sub_command>`
+- `2web doctor <sub_command>`
 - `2web serve [path]`
 - `2web build [path]`
 - `2web lint [path]`
@@ -54,3 +55,27 @@ once, and do not take a name as an argument.
 | server-side-rendering | ssr   | Add ssr to a 2web project             |
 | database              | db    | Add a database to a 2web project      |
 | load-balancer         | lb    | Add a load balancer to a 2web project |
+
+### Doctor Command
+
+Automatically checks for common problems in a 2web project.
+
+| Command            | Alias | Description                                      |
+| ------------------ | ----- | ------------------------------------------------ |
+| check              | c     | Checks common issues for a 2web project          |
+| check-dependencies | cd    | Checks dependencies for 2web compiler, kit & cli |
+
+#### Dependencies
+
+The 2web compiler requires some dependencies to convert file formats.
+This is typically only needed in edge cases for unconventional file formats
+e.g. creating a web page from a `.docx` (Microsoft Word) file.
+
+To keep the number of dependencies low, 2web does not require these dependencies
+to be installed until you need some of the dependencies features.
+
+| Dependency                          | Required for                                   |
+| ----------------------------------- | ---------------------------------------------- |
+| [pandoc](https://pandoc.org/)       | `.tex`, `.docx`, `.doc`, `.odt`                |
+| [dart-sass](https://sass-lang.com/) | `.sass`, `.scss`                               |
+| [ffmpeg](https://ffmpeg.org/)       | Optimizing images/videos for production builds |

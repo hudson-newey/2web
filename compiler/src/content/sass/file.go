@@ -21,7 +21,7 @@ func (model *SassFile) ToCss(filePath string) css.CSSFile {
 func (model *SassFile) cssContent(filePath string) string {
 	transpiler, err := sass.Start(sass.Options{})
 	if err != nil {
-		fmt.Println("dart sass may not be installed on your system. Try npm install -g sass")
+		fmt.Println("dart sass may not be installed on your system. Try 'npm install -g sass'")
 		panic(err)
 	}
 
