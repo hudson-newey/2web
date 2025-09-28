@@ -5,4 +5,4 @@
 <h1 id="outTarget">{ count }</h1>
 
 <button id="inTarget" onclick={() => count++}>Increment</button>
-<button onclick={() => count++}>Decrement</button>
+<button onclick={() => count--}>Decrement</button>

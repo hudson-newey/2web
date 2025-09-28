@@ -46,11 +46,7 @@ const frameworks = [
   "2web",
   "preact",
   "react",
-
-  // Svelte is temporarily disabled until I figure out how to make a page build
-  // instead of a web component build.
-  // "svelte",
-
+  "svelte",
   "vanilla",
   "vue",
 ];
