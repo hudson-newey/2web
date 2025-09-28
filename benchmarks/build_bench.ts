@@ -74,6 +74,17 @@ async function runBenchmark() {
     "react",
   ] as const satisfies FrameworkName[];
 
+  // Delete the dist/ directory if it exists
+  for (const framework of testedFrameworks) {
+    const distPath = implementationPath(framework) + "/dist";
+
+    try {
+      await Deno.remove(distPath, { recursive: true });
+    } catch {
+      // do nothing
+    }
+  }
+
   const results = Promise.all(
     testedFrameworks.map((name) => ({
       name: name,
@@ -103,7 +114,7 @@ async function runBenchmark() {
 
   // I write to a csv so that I can do some cool graphs in the future and so
   // that loading into excel is easy
-  const assetSizeFileName = reportsDirectory + "report.csv";
+  const assetSizeFileName = reportsDirectory + "build_report.csv";
   await Deno.writeTextFile(assetSizeFileName, "Framework,size (KB),Build Time (ms)\n", {
     append: true,
   });

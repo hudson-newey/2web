@@ -4,8 +4,8 @@ const count = ref(0);
 </script>
 
 <template>
-  <h1>{{ count }}</h1>
+  <h1 id="outTarget">{{ count }}</h1>
 
-  <button @click="count++">Increment</button>
+  <button id="inTarget" @click="count++">Increment</button>
   <button @click="count--">Decrement</button>
 </template>

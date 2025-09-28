@@ -6,8 +6,8 @@ export function App() {
 
   return (
 		<>
-			<h1>{ countValue }</h1>
-			<button onClick={() => setCount(countValue + 1)}>Increment</button>
+			<h1 id="outTarget">{ countValue }</h1>
+			<button id="inTarget" onClick={() => setCount(countValue + 1)}>Increment</button>
 			<button onClick={() => setCount(countValue - 1)}>Decrement</button>
 		</>
   );

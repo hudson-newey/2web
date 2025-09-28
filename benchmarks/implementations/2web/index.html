@@ -4,7 +4,6 @@
   $ count = 0;
 </script>
 
-<h1 *innerText="$count"></h1>
-<button @click="$count = $count + 1">Increment</button>
+<h1 id="outTarget" *textContent="$count"></h1>
+<button id="inTarget" @click="$count = $count + 1">Increment</button>
 <button @click="$count = $count - 1">Decrement</button>
-	

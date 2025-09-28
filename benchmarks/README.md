@@ -3,8 +3,8 @@
 Here I compare 2web against other popular web frameworks on a variety of
 metrics.
 
-These are by no means scientific tests, but serve as a simple smoke test for my
-web framework.
+**These are by no means scientific or accurate benchmarks**, and ONLY serve as a
+simple smoke test for my web framework.
 
 ## How to run
 
@@ -17,22 +17,9 @@ To run the benchmark script, simply run the following command with
 [Deno](https://deno.com/) installed.
 
 ```sh
-$ ./build_bench.ts
+$ pnpm start
 >
 ```
 
 Benchmarking software is written in JavaScript so that it can easily interop
 with real browsers to test the speed of each framework.
-
-## Currently Benchmarked Frameworks
-
-| Framework         | Build Size (KB) | Build Time (MS) |
-| ----------------- | --------------- | --------------- |
-| Vanilla HTML + JS | 0.293           | 0               |
-| 2Web              | 0.473           | 9               |
-| Svelte            | 20.122          | 1480            |
-| Preact            | 25.064          | 1577            |
-| Vue               | 58.705          | 2852            |
-| React             | 186.673         | 1733            |
-
-Benchmark results are highly experimental and have high std-error.
