@@ -12,6 +12,7 @@
 - `--stdout` (default: false) Write to STDOUT instead of writing to the output_path
 - `--verbose` (default: false) Print extra debug information to the console
 - `--no-runtime-optimizations` (default: false) Do not ship additional runtime optimizations
+- `--format` (default: false) Formats output assets for readability
 
 ## Sub commands
 

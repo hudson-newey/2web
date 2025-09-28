@@ -60,8 +60,16 @@ func buildToPage(inputPath string) (page.Page, bool) {
 		compiledPage = runtimeOptimizer.InjectRuntimeOptimizations(compiledPage)
 	}
 
+	if *args.WithFormatting {
+		compiledPage.Format()
+	}
+
 	// We always optimize last so that even the injected content is optimized.
 	if *args.IsProd {
+		if *args.WithFormatting {
+			cli.PrintWarning("Ignoring '--format' because '--production' was specified")
+		}
+
 		compiledPage = optimizer.OptimizePage(compiledPage)
 	}
 

@@ -3,6 +3,8 @@ package html
 import (
 	"io"
 	"strings"
+
+	"github.com/yosssi/gohtml"
 )
 
 type htmlCode = string
@@ -17,4 +19,8 @@ func (model *HTMLFile) AddContent(contentPartial htmlCode) {
 
 func (model *HTMLFile) Reader() io.Reader {
 	return strings.NewReader(model.Content)
+}
+
+func (model *HTMLFile) Format() {
+	model.Content = gohtml.Format(model.Content)
 }

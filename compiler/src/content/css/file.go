@@ -79,3 +79,5 @@ func (model *CSSFile) FileName() string {
 func (model *CSSFile) Reader() io.Reader {
 	return strings.NewReader(model.Content)
 }
+
+func (model *CSSFile) Format() {}

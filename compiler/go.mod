@@ -9,6 +9,8 @@ require (
 	github.com/gomarkdown/mdtohtml v0.0.0-20240124153210-d773061d1585 // indirect
 	github.com/tdewolff/minify/v2 v2.23.3 // indirect
 	github.com/tdewolff/parse/v2 v2.7.23 // indirect
-	golang.org/x/sys v0.33.0 // indirect
+	github.com/yosssi/gohtml v0.0.0-20201013000340-ee4748c638f4 // indirect
+	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
 	google.golang.org/protobuf v1.35.2 // indirect
 )

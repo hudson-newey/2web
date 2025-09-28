@@ -125,3 +125,5 @@ func (model *JSFile) FileName() string {
 func (model *JSFile) Reader() io.Reader {
 	return strings.NewReader(model.Content)
 }
+
+func (model *JSFile) Format() {}

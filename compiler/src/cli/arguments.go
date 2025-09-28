@@ -21,6 +21,7 @@ func ParseArguments() models.CliArguments {
 	verbose := flag.Bool("verbose", false, "Print extra debug information to the console")
 	verboseLexer := flag.Bool("verbose-lexer", false, "Logs the lexer output to the console")
 	verboseAst := flag.Bool("verbose-ast", false, "Logs the ast output to the console")
+	withFormatting := flag.Bool("format", false, "Formats output assets for readability")
 
 	flag.Parse()
 
@@ -34,6 +35,7 @@ func ParseArguments() models.CliArguments {
 		DisableCache:           disableCache,
 		FromStdin:              fromStdin,
 		ToStdout:               toStdout,
+		WithFormatting:         withFormatting,
 
 		Verbose:      verbose,
 		VerboseLexer: verboseLexer,

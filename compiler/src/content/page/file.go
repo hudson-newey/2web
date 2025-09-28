@@ -61,9 +61,23 @@ func (model *Page) AddStyle(cssFile *css.CSSFile) {
 	model.Css = append(model.Css, cssFile)
 
 	// Adds a "<link>" tag to the html document to load the css file
-	injectedContent := fmt.Sprintf(`<link rel="stylesheet" href="%s" />%s`, cssFile.FileName(), "\n")
+	injectedContent := fmt.Sprintf("<link rel=\"stylesheet\" href=\"%s\" />\n", cssFile.FileName())
 
 	// Always inject css styles into the top of the head element so that they can
 	// be discovered as soon as possible, to begin parsing
 	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, document.HeadTop)
+}
+
+func (model *Page) Format() {
+	if model.Html != nil {
+		model.Html.Format()
+	}
+
+	for _, jsFile := range model.JavaScript {
+		jsFile.Format()
+	}
+
+	for _, cssFile := range model.Css {
+		cssFile.Format()
+	}
 }
