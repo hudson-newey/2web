@@ -1,4 +1,5 @@
 #!/usr/bin/env -S deno run --allow-all
+import { testedFrameworks } from "./frameworks.ts";
 
 // We use tachometer to benchmark the runtime performance of different
 // frameworks.
@@ -28,7 +29,7 @@ do {
 
 let currentCount = 0;
 bench.start();
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 200; i++) {
   inTarget.click();
 
   // Wait until the outTarget updates to the expected value.
@@ -41,15 +42,6 @@ for (let i = 0; i < 100; i++) {
 }
 bench.stop();
 `;
-
-const frameworks = [
-  "2web",
-  "preact",
-  "react",
-  "svelte",
-  "vanilla",
-  "vue",
-];
 
 // Create the dist_bench directory if it doesn't exist. If  it already exists,
 // delete it first
@@ -83,7 +75,7 @@ function copyDirectory(src: string, dest: string) {
   });
 }
 
-for (const framework of frameworks) {
+for (const framework of testedFrameworks) {
   const distPath = `./implementations/${framework}/dist`;
   const indexPath = `${distPath}/index.html`;
 

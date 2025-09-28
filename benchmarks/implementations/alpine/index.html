@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Minimal Counter</title>
+  </head>
+
+  <body>
+    <div x-data="{ count: 0 }">
+      <h1 id="outTarget" x-text="count">0</h1>
+
+      <button id="inTarget" type="button" x-on:click="count++">
+        Increment
+      </button>
+      <button type="button" x-on:click="count--">Decrement</button>
+    </div>
+
+    <script type="module">
+      import Alpine from "alpinejs";
+      window.Alpine = Alpine;
+      Alpine.start();
+    </script>
+  </body>
+</html>

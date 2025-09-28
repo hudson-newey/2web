@@ -1,5 +1,6 @@
 #!/usr/bin/env -S deno run --allow-run --allow-write --allow-read
-type FrameworkName = string;
+import { FrameworkName, testedFrameworks } from "./frameworks.ts";
+
 type Kilobyte = number;
 type Milliseconds = number;
 
@@ -65,15 +66,6 @@ async function getDirectorySize(dirPath: string): Promise<Kilobyte> {
 }
 
 async function runBenchmark() {
-  const testedFrameworks = [
-    "vanilla",
-    "2web",
-    "svelte",
-    "preact",
-    "vue",
-    "react",
-  ] as const satisfies FrameworkName[];
-
   // Delete the dist/ directory if it exists
   for (const framework of testedFrameworks) {
     const distPath = implementationPath(framework) + "/dist";
