@@ -19,7 +19,8 @@ func ExpandPartial(content string) string {
 	// We automatically set the charset and viewport so that the developer doesn't
 	// have to worry about this boilerplate.
 	// TODO: This should be refactored when we introduce layouts.
-	resultContent := fmt.Sprintf(`<!doctype html>
+	resultContent := fmt.Sprintf(
+		`<!doctype html>
 	<html>
 		<head>
 			<meta charset="UTF-8" />
@@ -31,7 +32,7 @@ func ExpandPartial(content string) string {
 			%s
 		</body>
 	</html>
-	`, headContent, bodyContent)
+`, headContent, bodyContent)
 
 	return resultContent
 }

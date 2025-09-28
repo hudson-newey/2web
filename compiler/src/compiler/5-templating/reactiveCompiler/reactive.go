@@ -24,24 +24,29 @@ func compileReactiveVar(
 
 		selectorCount := strings.Count(content, propNode.Node.Selector)
 		if selectorCount > 1 {
-			functionContent += fmt.Sprintf(`
-				document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);
-			`, elementSelector, propNode.PropName, javascript.ValueVar)
+			functionContent += fmt.Sprintf(
+				`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
+				elementSelector, propNode.PropName, javascript.ValueVar,
+			)
 		} else {
-			functionContent += fmt.Sprintf(`
-				document.querySelector("[%s]")["%s"] = %s;
-			`, elementSelector, propNode.PropName, javascript.ValueVar)
+			functionContent += fmt.Sprintf(
+				`document.querySelector("[%s]")["%s"] = %s;`,
+				elementSelector, propNode.PropName, javascript.ValueVar,
+			)
 		}
 	}
 
+	// There's a newline at the start of this script tag so that when it is
+	// appended to the body, it's on its own line, and semantically distinct.
 	updateJsSource := fmt.Sprintf(`
-    <script type="module">
+		<script type="module">
       globalThis.%s = %s;
       globalThis.%s = (%s) => {
         %s
       }
-    </script>
-  `, variableName, varNode.InitialValue, callbackName, javascript.ValueVar, functionContent)
+    </script>`,
+		variableName, varNode.InitialValue, callbackName, javascript.ValueVar, functionContent,
+	)
 
 	injectableTemplate, err := document.BuildTemplate(updateJsSource, *varNode)
 	if err != nil {

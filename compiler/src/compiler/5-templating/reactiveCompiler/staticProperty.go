@@ -49,17 +49,22 @@ func compileStaticPropVar(content string, varNode *models.ReactiveVariable) stri
 			//
 			// We use the square brackets here because some properties have dashes which
 			// cannot be acceded with a period.
+			//
+			// There's a newline at the start of this script tag so that when it is
+			// appended to the body, it's on its own line, and semantically distinct.
 			htmlSource = fmt.Sprintf(`
 				<script type="module">
 					document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);
-				</script>
-			`, elementSelector, propNode.PropName, propNode.Variable.InitialValue)
+				</script>`,
+				elementSelector, propNode.PropName, propNode.Variable.InitialValue,
+			)
 		} else {
 			htmlSource = fmt.Sprintf(`
 				<script type="module">
 					document.querySelector("[%s]")["%s"] = %s;
-				</script>
-			`, elementSelector, propNode.PropName, propNode.Variable.InitialValue)
+				</script>`,
+				elementSelector, propNode.PropName, propNode.Variable.InitialValue,
+			)
 		}
 
 		injectableTemplate, err := document.BuildTemplate(htmlSource, nil)

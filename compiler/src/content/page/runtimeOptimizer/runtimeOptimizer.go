@@ -36,11 +36,18 @@ func InjectRuntimeOptimizations(page page.Page) page.Page {
 		isolatedContainerClassName = fmt.Sprintf("%so0", constants.CompilerNamespace)
 	}
 
-	runtimeStyles := fmt.Sprintf(`
-		.%s{
-			contain: content;
-		}
-	`, isolatedContainerClassName)
+	runtimeStyles := fmt.Sprintf(
+		// We include a newline at the end of this runtime style so that if it is
+		// the only or last file in the stylesheet, the file will remain POSIX
+		// compliant.
+		//
+		// Additionally, any user-defined styles will be semantically separated from
+		// this runtime style.
+		// I do this because I believe that the source for dev builds should be as
+		// human-readable as possible.
+		".%s { contain: content; }\n",
+		isolatedContainerClassName,
+	)
 
 	newStyleSheet := css.CSSFile{}
 	newStyleSheet.AddContent(runtimeStyles)

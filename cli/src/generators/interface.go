@@ -27,5 +27,6 @@ func InterfaceGenerator(interfaceName string) {
 
 func createInterfaceContent(name string) string {
 	return fmt.Sprintf(`export interface %s {
-}`, name)
+}
+`, name)
 }

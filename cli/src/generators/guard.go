@@ -37,8 +37,7 @@ func GuardGenerator(guardName string) {
 }
 
 func createGuardContent(name string) string {
-	return fmt.Sprintf(`
-	import { RouteGuard } from "@two-web/kit/route-guards";
+	return fmt.Sprintf(`import { RouteGuard } from "@two-web/kit/route-guards";
 
 	function failCondition(): boolean {
 		return false;

@@ -26,5 +26,6 @@ func EnumGenerator(enumName string) {
 
 func createEnumContent(name string) string {
 	return fmt.Sprintf(`export enum %s {
-}`, name)
+}
+`, name)
 }
