@@ -10,7 +10,7 @@
     "start": "pnpm start:build && pnpm start:runtime && pnpm start:tachometer",
     "start:build": "./build_bench.ts",
     "start:runtime": "./runtime_bench.ts",
-    "start:tachometer": "tachometer ./implementations/2web/dist/index.html ./implementations/vanilla/dist/index.html"
+    "start:tachometer": "tachometer --root ./dist_bench/ ./dist_bench/2web.html ./dist_bench/vanilla.html ./dist_bench/preact.html"
   },
   "dependencies": {
     "tachometer": "^0.7.2"
