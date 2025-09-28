@@ -13,6 +13,11 @@
 - `--verbose` (default: false) Print extra debug information to the console
 - `--no-runtime-optimizations` (default: false) Do not ship additional runtime optimizations
 
+## Sub commands
+
+- `cache` (TODO)
+  - `cache clean` Deletes all cache files
+
 ## Environment Variables
 
 - `__2_CACHE_PATH` (default: ./.cache/) A path that will be used for the build cache

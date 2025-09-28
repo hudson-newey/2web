@@ -2,7 +2,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build --outDir dist/"
+		"dev": "vite",
+    "build": "vite build --outDir dist/",
+		"preview": "vite preview"
   },
   "packageManager": "pnpm@10.8.0",
   "devDependencies": {

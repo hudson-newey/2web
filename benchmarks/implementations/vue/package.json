@@ -3,9 +3,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vite build --outDir ./dist/",
     "preview": "vite preview",
-    "build-only": "vite build --outDir ./dist/",
+    "build-and-check": "run-p type-check \"build {@}\" --",
     "type-check": "vue-tsc --build"
   },
   "dependencies": {

@@ -17,7 +17,7 @@ To run the benchmark script, simply run the following command with
 [Deno](https://deno.com/) installed.
 
 ```sh
-$ ./bench.ts
+$ ./build_bench.ts
 >
 ```
 
@@ -32,7 +32,7 @@ with real browsers to test the speed of each framework.
 | 2Web              | 0.473           | 9               |
 | Svelte            | 20.122          | 1480            |
 | Preact            | 25.064          | 1577            |
-| Vue               | 58.705          | 2988            |
+| Vue               | 58.705          | 2852            |
 | React             | 186.673         | 1733            |
 
 Benchmark results are highly experimental and have high std-error.

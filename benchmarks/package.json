@@ -1,0 +1,16 @@
+{
+  "name": "@two-web/benchmarks",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Benchmarks for 2web",
+  "author": "hudson-newey",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "start": "deno build_bench.ts && tachometer ./benchmarks/ --runs 5 --output html-report"
+  },
+  "dependencies": {
+    "tachometer": "^0.7.2"
+  },
+  "packageManager": "pnpm@10.6.5"
+}

@@ -34,15 +34,19 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 	}
 
 	compiledPage, success := buildToPage(inputPath)
-	compiledPage.Write(outputPath)
+	compiledPage.WriteHtml(outputPath)
 
 	if success {
-		cli.PrintBuildLog("\t- " + inputPath)
+		if cacheDisabled {
+			cli.PrintBuildLog("\t- " + inputPath)
+		} else {
+			cli.PrintBuildLog("\t- " + inputPath + " \033[33m(MODIFIED)\033[0m")
+		}
 
 		if !cacheDisabled {
 			cache.CacheAsset(inputPath, outputPath)
 		}
 	} else {
-		cli.PrintBuildLog("\t- " + inputPath + " \033[31m(error)\033[0m")
+		cli.PrintBuildLog("\t- " + inputPath + " \033[31m(ERROR)\033[0m")
 	}
 }

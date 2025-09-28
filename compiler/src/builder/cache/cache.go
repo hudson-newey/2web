@@ -1,8 +1,8 @@
 package cache
 
 import (
+	"hudson-newey/2web/src/utils"
 	"os"
-	"path"
 )
 
 // TODO: Refactor this a lot better because it is still possible to break this.
@@ -36,13 +36,5 @@ func CacheAsset(inputPath string, outputPath string) {
 		inputFileInfo.ModTime(),
 	)
 
-	if err = os.MkdirAll(path.Dir(recordLocation), 0755); err != nil {
-		panic(err)
-	}
-
-	file, err := os.Create(recordLocation)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
+	utils.CreateFile(recordLocation)
 }

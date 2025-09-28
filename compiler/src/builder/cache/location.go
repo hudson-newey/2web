@@ -34,7 +34,7 @@ func cacheRecordLocation(
 
 func cacheLocation() string {
 	currentDir, _ := os.Getwd()
-	defaultCachePath := path.Join(currentDir, "./.cache/")
+	defaultCachePath := path.Join(currentDir, "/.cache/")
 
 	overrideValue, hasOverride := os.LookupEnv(constants.EnvCacheOverride)
 	if hasOverride {

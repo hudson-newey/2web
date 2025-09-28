@@ -1,17 +1,30 @@
 package utils
 
 import (
-	"fmt"
-	"hudson-newey/2web/src/cli"
 	"os"
 	"path/filepath"
 )
 
+// Overwrites or creates a file at the given path with the given content and
+// creates any necessary directories.
 func WriteFile(content string, outputPath string) {
-	if *cli.GetArgs().ToStdout {
-		fmt.Println(content)
-	} else {
-		os.MkdirAll(filepath.Dir(outputPath), os.ModePerm)
-		os.WriteFile(outputPath, []byte(content), 0644)
+	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
+		panic(err)
 	}
+
+	if err := os.WriteFile(outputPath, []byte(content), 0644); err != nil {
+		panic(err)
+	}
+}
+
+func CreateFile(outputPath string) {
+	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
+		panic(err)
+	}
+
+	file, err := os.Create(outputPath)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
 }
