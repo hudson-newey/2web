@@ -11,7 +11,7 @@ tmp_dir = "tmp"
   # Using a small file is helpful for debugging the lexer and parser because
   # there is less debug info to sift through.
   # bin = "./tmp/main -i dev/small-file.html -o dist/ --no-cache --verbose-lexer --verbose-ast"
-  # bin = "./tmp/main -i dev/ -o dist/ --production"
+  # bin = "./tmp/main -i dev/ -o dist/ --production --ignore-errors"
   cmd = "go build -o ./tmp/main ./src"
   delay = 1
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
