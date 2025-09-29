@@ -9,14 +9,19 @@
 
   <body>
     <script type="module">
-      import { Signal, ComputedSignal, effect } from "../signals/index.ts";
+      import {
+        Signal,
+        ComputedSignal,
+        effect,
+        textContent,
+        queryParameter,
+      } from "../signals/index.ts";
 
       const counter = new Signal(0);
 
       const targetButton = document.getElementById("counter-button");
-      counter.subscribe((value) => {
-        targetButton.textContent = value;
-      });
+      textContent(targetButton, counter);
+      queryParameter("count", counter);
 
       targetButton.addEventListener("click", () => {
         counter.set(counter.value + 1);
@@ -24,20 +29,18 @@
 
       const doubleCount = new ComputedSignal(
         () => counter.value * 2,
-        [counter],
+        [counter]
       );
 
       const doubleCountElement = document.getElementById("double-count");
-      doubleCount.subscribe((value) => {
-        doubleCountElement.textContent = value;
-      });
+      textContent(doubleCountElement, doubleCount);
 
       effect(() => {
         console.debug(
           "Counter:",
           counter.value,
           "Double Count:",
-          doubleCount.value,
+          doubleCount.value
         );
       }, [counter]);
     </script>
