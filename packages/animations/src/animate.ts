@@ -5,15 +5,15 @@ export type AnimationCallback = <AnimationArgs extends unknown[]>(
 ) => void;
 
 export function animate(
-  identifier: AnimationIdentifier,
   callback: AnimationCallback,
+  identifier: AnimationIdentifier | AnimationCallback = callback,
 ) {
   vsyncQueue.set(identifier, callback);
   frame();
 }
 
 // TODO: Replace this with a WeakMap
-const vsyncQueue = new Map<AnimationIdentifier, AnimationCallback>();
+const vsyncQueue = new Map<AnimationCallback | AnimationIdentifier, AnimationCallback>();
 
 let hasQueuedFrame = false;
 function frame() {

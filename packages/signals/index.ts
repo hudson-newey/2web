@@ -37,3 +37,5 @@ export { effect } from "./src/sinks/effect.ts";
 export { attribute } from "./src/sinks/attribute.ts";
 export { property } from "./src/sinks/property.ts";
 export { textContent } from "./src/sinks/textContent.ts";
+export { href } from "./src/sinks/href.ts";
+export { queryParameter } from "./src/sinks/queryParameters.ts";

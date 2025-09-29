@@ -14,23 +14,24 @@
 
   <body>
     <script type="module">
-      import { animation, animate } from "../animations/index.ts";
-
-      const bounce = animation("bounce");
+      import { animate } from "../animations/index.ts";
 
       const animationTarget = document.getElementById("ball");
 
       const height = 400;
       let progress = 0;
+      function bounce() {
+        const y = Math.abs(Math.sin(progress * Math.PI)) * height;
+        animationTarget.style.transform = `translateY(-${y}px)`;
+
+        progress += 0.01;
+      }
+
       setInterval(() => {
         // Notice that although we perform 16 calls to `animate` per frame
         // (assuming 60fps), the animation callback is only invoked once per
         // frame, because the values are debounced per animation identifier.
-        animate(bounce, () => {
-          const y = Math.abs(Math.sin(progress * Math.PI)) * height;
-          animationTarget.style.transform = `translateY(-${y}px)`;
-          progress += 0.01;
-        });
+        animate(bounce);
       }, 1);
     </script>
 
