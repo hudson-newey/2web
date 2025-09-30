@@ -15,7 +15,7 @@
 - `--format` (default: false) Formats output assets for readability
 - `--ignore-errors` (default: false) Ignores errors in production builds. This allows you to ship compiler errors.
 
-## Sub commands
+## Sub Commands
 
 - `cache` (TODO)
   - `cache clean` Deletes all cache files
@@ -37,3 +37,41 @@ compiler.
 
 - `--verbose-lexer` (default: false) Logs the lexer output to the console
 - `--verbose-ast` (default: false) Logs the abstract syntax tree to the console
+
+## Language Support
+
+❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
+
+### Supported Scripting Languages
+
+| Package    | State | JS Target | WASM Target |
+| ---------- | ----- | --------- | ----------- |
+| JavaScript | ✅     | ✅         | ❌           |
+| TypeScript | ✅     | ✅         | ❌           |
+| Rust       | ❌     | ❌         | ❌           |
+| C/C++      | ❌     | ❌         | ❌           |
+| Gleam      | ❌     | ❌         | ❌           |
+| F#         | ❌     | ❌         | ❌           |
+| C#         | ❌     | ❌         | ❌           |
+| VB.net     | ❌     | ❌         | ❌           |
+
+### Supported Markup Languages
+
+| Package | State |
+| ------- | ----- |
+| .html   | ✅     |
+| .xhtml  | ❌     |
+| .md     | ✅     |
+| .org    | ❌     |
+| .pug    | ❌     |
+| .docx   | ❌     |
+| .odt    | ❌     |
+
+### Supported Style Languages
+
+| Package | State |
+| ------- | ----- |
+| css     | ✅     |
+| sass    | ❌     |
+| scss    | ❌     |
+| less    | ❌     |
