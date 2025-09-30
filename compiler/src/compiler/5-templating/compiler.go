@@ -6,9 +6,9 @@ import (
 	parser "hudson-newey/2web/src/compiler/4-parser"
 	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
-	twoWeb "hudson-newey/2web/src/content/2web"
 	"hudson-newey/2web/src/content/document/documentErrors"
-	"hudson-newey/2web/src/content/html"
+	"hudson-newey/2web/src/content/markdown"
+	"hudson-newey/2web/src/content/markup"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/reactiveEvent"
@@ -44,7 +44,10 @@ func Compile(filePath string, ast []parser.Node) page.Page {
 
 	pageModel.Html.Content = controlFlow.ProcessControlFlow(filePath, pageModel.Html.Content)
 
-	if html.IsHtmlFile(filePath) || twoWeb.IsTwoWebFile(filePath) {
+	// We want to exclude Markdown files from this processing step because our
+	// element ref symbol is a hashtag which has meaning in Markdown syntax.
+	// TODO: We should add support for element refs in Markdown files.
+	if markup.IsMarkupFile(filePath) && !markdown.IsMarkdownFile(filePath) {
 		pageModel.Html.Content = expandElementRefs(pageModel.Html.Content)
 	}
 

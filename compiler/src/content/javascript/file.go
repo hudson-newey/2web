@@ -7,7 +7,6 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
-	"io"
 	"path/filepath"
 	"strings"
 
@@ -120,10 +119,6 @@ func (model *JSFile) FileName() string {
 
 	model.memoisedFileName = result
 	return result
-}
-
-func (model *JSFile) Reader() io.Reader {
-	return strings.NewReader(model.Content)
 }
 
 func (model *JSFile) Format() {}

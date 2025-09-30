@@ -21,6 +21,9 @@ func outputFileName(inputPath string, outputPath string, fileName string) string
 	// If we are compiling a markdown file, we want to replace the .md suffix
 	// with .html
 	// This is because we compile markdown to html files.
+	//
+	// Note that we preserve the .xhtml suffix for XHTML files, because they
+	// can be natively rendered by browsers.
 	adjustedFileName := fileName
 	if markdown.IsMarkdownFile(fileName) {
 		adjustedFileName = strings.TrimSuffix(adjustedFileName, ".md") + ".html"

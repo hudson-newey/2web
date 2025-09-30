@@ -39,11 +39,23 @@
     "[html]": {
       "files.autoSave": "afterDelay",
       "files.autoSaveDelay": 0,
+
+      // Do not foramt HTML of .2web files on save because it tries to make all
+      // html tags lowercase which might break imports.
+      "editor.formatOnSave": false
     },
-    "[2web]": {
-      "editor.defaultFormatter": "biomejs.biome",
+    "[xhtml]": {
       "files.autoSave": "afterDelay",
       "files.autoSaveDelay": 0,
+
+      // Do not foramt HTML of .2web files on save because it tries to make all
+      // html tags lowercase which might break imports.
+      "editor.formatOnSave": false
+    },
+    "[2web]": {
+      "files.autoSave": "afterDelay",
+      "files.autoSaveDelay": 0,
+      "editor.formatOnSave": false
     },
   },
   "extensions": {

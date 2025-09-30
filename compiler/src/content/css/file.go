@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"hudson-newey/2web/src/cli"
-	"io"
 	"strings"
 )
 
@@ -74,10 +73,6 @@ func (model *CSSFile) FileName() string {
 
 	model.memoisedFileName = result
 	return result
-}
-
-func (model *CSSFile) Reader() io.Reader {
-	return strings.NewReader(model.Content)
 }
 
 func (model *CSSFile) Format() {}
