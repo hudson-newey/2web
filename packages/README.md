@@ -11,6 +11,7 @@ A collection of packages to enhance your 2web application
 | [hydration](hydration/README.md)                       | ❌     |
 | [dependency-injection](dependency-injection/README.md) | ❌     |
 | [keyboard](keyboard/README.md)                         | 🔧     |
+| [named-strings](named-strings/README.md)               | 🔧     |
 | [pre-fetcher](pre-fetcher/README.md)                   | 🔧     |
 | [route-guards](route-guards/README.md)                 | 🔧     |
 | [signals](signals/README.md)                           | 🔧     |

@@ -77,6 +77,8 @@
       "vitest.explorer",
       "biomejs.biome",
 
+      "bierner.lit-html",
+
       // For benchmarking + islands
       "vue.volar",
       "svelte.svelte-vscode"

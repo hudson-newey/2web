@@ -4,9 +4,13 @@ export * from "./src/autocomplete/autocomplete.ts";
 
 export * from "./src/brands/brand.ts";
 
-export * from "./src/conditions/conditions.ts";
+export * from "./src/combinators/join.ts";
+
+export * from "./src/conditions/not.ts";
 export * from "./src/conditions/error.ts";
+export * from "./src/conditions/extends.ts";
 export * from "./src/conditions/if.ts";
+export * from "./src/conditions/or.ts";
 
 export * from "./src/datatypes/booleanish.ts";
 export * from "./src/datatypes/characters.ts";

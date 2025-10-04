@@ -9,6 +9,7 @@
     "event-listener/**/*",
     "hydration/**/*",
     "keyboard/**/*",
+    "named-strings/**/*",
     "pre-fetcher/**/*",
     "route-guards/**/*",
     "signals/**/*",

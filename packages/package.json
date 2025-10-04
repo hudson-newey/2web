@@ -30,6 +30,7 @@
     "./event-listener": "./dist/event-listener.js",
     "./hydration": "./dist/hydration.js",
     "./keyboard": "./dist/keyboard.js",
+    "./named-strings": "./dist/named-strings.js",
     "./database": "./dist/database.js",
     "./pre-fetcher": "./dist/pre-fetcher.js",
     "./route-guards": "./dist/route-guards.js",

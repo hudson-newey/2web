@@ -1,11 +1,10 @@
-package markup
+package assets
 
 import (
 	twoWeb "hudson-newey/2web/src/content/2web"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/xhtml"
-	"strings"
 )
 
 func IsMarkupFile(filePath string) bool {
@@ -13,8 +12,4 @@ func IsMarkupFile(filePath string) bool {
 		xhtml.IsXhtmlFile(filePath) ||
 		twoWeb.IsTwoWebFile(filePath) ||
 		markdown.IsMarkdownFile(filePath)
-}
-
-func IsComponent(filePath string) bool {
-	return strings.HasSuffix(filePath, ".component.html")
 }

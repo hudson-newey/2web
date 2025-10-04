@@ -1,9 +1,9 @@
 package builder
 
 import (
+	"hudson-newey/2web/src/content/assets"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/javascript"
-	"hudson-newey/2web/src/content/markup"
 	"hudson-newey/2web/src/content/svg"
 	"os"
 	"strings"
@@ -31,7 +31,7 @@ func indexPages(inputPath string) []string {
 			pages := indexPages(dirInputPath + file.Name())
 
 			for _, page := range pages {
-				shouldPreserve := markup.IsMarkupFile(page) ||
+				shouldPreserve := assets.IsMarkupFile(page) ||
 					css.IsCssFile(page) ||
 					javascript.IsJsFile(page) ||
 					svg.IsSvgFile(page)
@@ -39,7 +39,7 @@ func indexPages(inputPath string) []string {
 				// TODO: Don't include assets in page indexing. They should instead be
 				// pulled out of the page source so that they can be efficiently tree
 				// shaken.
-				if shouldPreserve && !markup.IsComponent(page) {
+				if shouldPreserve && !assets.IsComponent(page) {
 					totalFiles = append(totalFiles, page)
 				}
 			}
