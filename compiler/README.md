@@ -48,6 +48,7 @@ compiler.
 | ---------- | ----- | --------- | ----------- |
 | JavaScript | ✅     | ✅         | ❌           |
 | TypeScript | ✅     | ✅         | ❌           |
+| Elm        | ❌     | ❌         | ❌           |
 | Rust       | ❌     | ❌         | ❌           |
 | C/C++      | ❌     | ❌         | ❌           |
 | Gleam      | ❌     | ❌         | ❌           |
@@ -62,6 +63,7 @@ compiler.
 | .html   | ✅     |
 | .xhtml  | ✅     |
 | .md     | ✅     |
+| .tex    | ❌     |
 | .org    | ❌     |
 | .pug    | ❌     |
 | .docx   | ❌     |
