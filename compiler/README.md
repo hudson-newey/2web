@@ -40,21 +40,29 @@ compiler.
 
 ## Language Support
 
-❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
+❌ = Not working, 🔧 = Developer preview, ✅ = Production ready, ➖ = Not Planned
 
 ### Supported Scripting Languages
 
-| Package    | State | JS Target | WASM Target |
-| ---------- | ----- | --------- | ----------- |
-| JavaScript | ✅     | ✅         | ❌           |
-| TypeScript | ✅     | ✅         | ❌           |
-| Elm        | ❌     | ❌         | ❌           |
-| Rust       | ❌     | ❌         | ❌           |
-| C/C++      | ❌     | ❌         | ❌           |
-| Gleam      | ❌     | ❌         | ❌           |
-| F#         | ❌     | ❌         | ❌           |
-| C#         | ❌     | ❌         | ❌           |
-| VB.net     | ❌     | ❌         | ❌           |
+| Package                                      | State | JS Target | WASM Target |
+| -------------------------------------------- | ----- | --------- | ----------- |
+| [Nim](https://nim-lang.org)                  | ❌     | ❌         | ❌           |
+| [Gleam](https://gleam.run)                   | ❌     | ❌         | ❌           |
+| [F#](https://fsharp.org)                     | ❌     | ❌         | ❌           |
+| JavaScript                                   | ✅     | ✅         | ➖           |
+| [TypeScript](https://www.typescriptlang.org) | ✅     | ✅         | ➖           |
+| [Flow](https://flow.org)                     | ❌     | ❌         | ➖           |
+| [CoffeeScript](https://coffeescript.org)     | ❌     | ❌         | ➖           |
+| [Elm](https://elm-lang.org)                  | ❌     | ❌         | ➖           |
+| [clojurescript](https://clojurescript.org)   | ❌     | ❌         | ➖           |
+| [reason](https://reasonml.github.io)         | ❌     | ❌         | ➖           |
+| [rescript](https://rescript-lang.org)        | ❌     | ❌         | ➖           |
+| [purescript](https://www.purescript.org)     | ❌     | ❌         | ➖           |
+| [Civet](https://civet.dev)                   | ❌     | ❌         | ➖           |
+| [Rust](https://rust-lang.org)                | ❌     | ➖         | ❌           |
+| C/C++                                        | ❌     | ➖         | ❌           |
+| C#                                           | ❌     | ➖         | ❌           |
+| VB.net                                       | ❌     | ➖         | ❌           |
 
 ### Supported Markup Languages
 
