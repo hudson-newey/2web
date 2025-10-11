@@ -66,21 +66,21 @@ compiler.
 
 ### Supported Markup Languages
 
-| Package | State |
-| ------- | ----- |
-| html    | ✅     |
-| xhtml   | ✅     |
-| xml     | ✅     |
-| xslt    | ✅     |
-| md      | ✅     |
-| txt     | ✅     |
-| pdf     | ❌     |
-| tex     | ❌     |
-| org     | ❌     |
-| pug     | ❌     |
-| docx    | ❌     |
-| odt     | ❌     |
-| php     | ❌     |
+| Package | State | File Extensions |
+| ------- | ----- | --------------- |
+| html    | ✅     | `.html`, `.htm` |
+| xhtml   | ✅     | `.xhtml`        |
+| xml     | ✅     | `.xml`          |
+| xslt    | ✅     | `.xslt`, `.xsl` |
+| txt     | ✅     | `.txt`          |
+| pdf     | ❌     | `.pdf`          |
+| md      | ✅     | `.md`           |
+| pug     | ❌     | `.pug`          |
+| tex     | ❌     | `.tex`          |
+| org     | ❌     | `.org`          |
+| docx    | ❌     | `.docx`, `.doc` |
+| odt     | ❌     | `.odt`          |
+| php     | ❌     | `.php`          |
 
 ### Supported Style Languages
 
@@ -90,3 +90,14 @@ compiler.
 | sass    | ❌     |
 | scss    | ❌     |
 | less    | ❌     |
+
+### Supported Frameworks
+
+The following frameworks can be used in component islands.
+
+| Package | State | File Extensions            |
+| ------- | ----- | -------------------------- |
+| React   | ❌     | `.react.jsx`, `.react.tsx` |
+| Vue     | ❌     | `.vue`                     |
+| Svelte  | ❌     | `.svelte`                  |
+| hugo    | ❌     | `.hugo.html`               |
