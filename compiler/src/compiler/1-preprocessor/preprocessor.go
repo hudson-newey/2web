@@ -4,6 +4,7 @@ import (
 	"hudson-newey/2web/src/content/assets"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
+	"hudson-newey/2web/src/content/txt"
 	"hudson-newey/2web/src/content/xml"
 	"hudson-newey/2web/src/content/xslt"
 )
@@ -14,7 +15,8 @@ func ProcessStaticSite(filePath string, content string) string {
 	if assets.IsMarkupFile(filePath) &&
 		!markdown.IsMarkdownFile(filePath) &&
 		!xml.IsXmlFile(filePath) &&
-		!xslt.IsXsltFile(filePath) {
+		!xslt.IsXsltFile(filePath) &&
+		!txt.IsTxtFile(filePath) {
 		// 2Web supports partial content, meaning that pages don't need and doctype,
 		// html, head, meta, or body tags.
 		// The user can just start writing the pages content, and the compiler can

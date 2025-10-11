@@ -10,6 +10,7 @@ import (
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
+	"hudson-newey/2web/src/content/txt"
 	"hudson-newey/2web/src/content/xml"
 	"hudson-newey/2web/src/content/xslt"
 	"hudson-newey/2web/src/models"
@@ -55,7 +56,8 @@ func Compile(filePath string, ast []parser.Node) page.Page {
 	if assets.IsMarkupFile(filePath) &&
 		!markdown.IsMarkdownFile(filePath) &&
 		!xml.IsXmlFile(filePath) &&
-		!xslt.IsXsltFile(filePath) {
+		!xslt.IsXsltFile(filePath) &&
+		!txt.IsTxtFile(filePath) {
 		pageModel.Html.Content = expandElementRefs(pageModel.Html.Content)
 	}
 

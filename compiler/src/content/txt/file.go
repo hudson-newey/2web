@@ -1,7 +1,7 @@
-package xml
+package txt
 
 import (
 	"hudson-newey/2web/src/content/html"
 )
 
-type XmlFile = html.HTMLFile
+type TxtFile = html.HTMLFile

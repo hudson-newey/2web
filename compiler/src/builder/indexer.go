@@ -31,6 +31,8 @@ func indexPages(inputPath string) []string {
 			pages := indexPages(dirInputPath + file.Name())
 
 			for _, page := range pages {
+				// TODO: Instead of copying all files, we should only copy files that
+				// are referenced/linked directly/indirectly from markdown files.
 				shouldPreserve := assets.IsMarkupFile(page) ||
 					css.IsCssFile(page) ||
 					javascript.IsJsFile(page) ||

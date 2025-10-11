@@ -1,0 +1,7 @@
+<button>This is a test</button>
+
+Even though this file is intended to be rendered by the browser, we should see
+that html elements should not be rendered because this is a text file.
+
+TODO: We should be able to import this file as a component and have it
+automatically escape special characters so that it's still rendered as text.
