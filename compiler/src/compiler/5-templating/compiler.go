@@ -10,6 +10,8 @@ import (
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
+	"hudson-newey/2web/src/content/xml"
+	"hudson-newey/2web/src/content/xslt"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/reactiveEvent"
 	"hudson-newey/2web/src/models/reactiveProperty"
@@ -44,10 +46,16 @@ func Compile(filePath string, ast []parser.Node) page.Page {
 
 	pageModel.Html.Content = controlFlow.ProcessControlFlow(filePath, pageModel.Html.Content)
 
-	// We want to exclude Markdown files from this processing step because our
-	// element ref symbol is a hashtag which has meaning in Markdown syntax.
-	// TODO: We should add support for element refs in Markdown files.
-	if assets.IsMarkupFile(filePath) && !markdown.IsMarkdownFile(filePath) {
+	// We want to exclude Markdown, xml, and xslt files from this processing step
+	// because our element ref symbol is a hashtag which has meaning in these
+	// formats.
+	//
+	// TODO: We should add support for element refs in Markdown, xml and xslt
+	// files.
+	if assets.IsMarkupFile(filePath) &&
+		!markdown.IsMarkdownFile(filePath) &&
+		!xml.IsXmlFile(filePath) &&
+		!xslt.IsXsltFile(filePath) {
 		pageModel.Html.Content = expandElementRefs(pageModel.Html.Content)
 	}
 
