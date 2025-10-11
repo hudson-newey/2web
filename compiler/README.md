@@ -68,17 +68,19 @@ compiler.
 
 | Package | State |
 | ------- | ----- |
-| .html   | ✅     |
-| .xhtml  | ✅     |
-| .xml    | ✅     |
-| .xslt   | ✅     |
-| .md     | ✅     |
-| .txt    | ✅     |
-| .tex    | ❌     |
-| .org    | ❌     |
-| .pug    | ❌     |
-| .docx   | ❌     |
-| .odt    | ❌     |
+| html    | ✅     |
+| xhtml   | ✅     |
+| xml     | ✅     |
+| xslt    | ✅     |
+| md      | ✅     |
+| txt     | ✅     |
+| pdf     | ❌     |
+| tex     | ❌     |
+| org     | ❌     |
+| pug     | ❌     |
+| docx    | ❌     |
+| odt     | ❌     |
+| php     | ❌     |
 
 ### Supported Style Languages
 
