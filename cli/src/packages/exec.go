@@ -2,6 +2,7 @@ package packages
 
 import (
 	"fmt"
+	"os/exec"
 
 	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/shell"
@@ -84,8 +85,8 @@ func executeNpx(args []string) {
 }
 
 func isGloballyInstalled(packageName string) bool {
-	exitCode, _ := shell.ExecuteCommand("npm", "list", "-g", "--depth=0", packageName)
-	return exitCode == 0
+	_, err := exec.LookPath(packageName)
+	return err == nil
 }
 
 func packageManagerPath(packageManager PackageManager) string {
