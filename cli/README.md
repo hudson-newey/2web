@@ -61,10 +61,11 @@ once, and do not take a name as an argument.
 
 Automatically checks for common problems in a 2web project.
 
-| Command            | Alias | Description                                      |
-| ------------------ | ----- | ------------------------------------------------ |
-| check              | c     | Checks common issues for a 2web project          |
-| check-dependencies | cd    | Checks dependencies for 2web compiler, kit & cli |
+| Command              | Alias | Description                                                     |
+| -------------------- | ----- | --------------------------------------------------------------- |
+| check                | c     | Checks common issues for a 2web project                         |
+| check-dependencies   | cd    | Checks dependencies for 2web compiler, kit & cli                |
+| install-dependencies |       | Installs **all** (including optional) dependencies used by 2web |
 
 #### Dependencies
 
