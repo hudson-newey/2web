@@ -79,6 +79,11 @@ func ProcessInvocation(args []string) {
 		return
 	}
 
+	if command == "format" {
+		builders.FormatSolution(args)
+		return
+	}
+
 	if command == "test" {
 		builders.TestSolution(args)
 	}

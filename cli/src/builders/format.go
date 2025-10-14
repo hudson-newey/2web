@@ -5,7 +5,7 @@ import (
 	"github.com/hudson-newey/2web-cli/src/packages"
 )
 
-func LintSolution(args []string) {
+func FormatSolution(args []string) {
 	biomeConfig, err := configs.BiomeConfigLocation()
 	pathTarget := entryTarget(args)
 
@@ -14,15 +14,29 @@ func LintSolution(args []string) {
 	if err == nil {
 		packages.ExecutePackage(
 			"biome",
-			"lint",
+			"format",
+			"--write",
 			configPathArg,
 			pathTarget,
 		)
 	} else {
 		if hasSsrTarget() {
-			packages.ExecutePackage("biome", "lint", configPathArg, "./src/", "./server/")
+			packages.ExecutePackage(
+				"biome",
+				"format",
+				"--write",
+				configPathArg,
+				"./src/",
+				"./server/",
+			)
 		} else {
-			packages.ExecutePackage("biome", "lint", configPathArg, "./src/")
+			packages.ExecutePackage(
+				"biome",
+				"format",
+				"--write",
+				configPathArg,
+				"./src/",
+			)
 		}
 	}
 }
