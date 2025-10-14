@@ -8,7 +8,7 @@ import (
 )
 
 func installBunPackage(name string) {
-	err := shell.ExecuteCommand("bun", "add", name)
+	_, err := shell.ExecuteCommand("bun", "add", name)
 
 	if err != nil {
 		errorMsg := fmt.Sprintf("failed to install package '%s': %s", name, err)

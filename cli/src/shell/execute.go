@@ -6,8 +6,11 @@ import (
 	"os/exec"
 )
 
-// Executes a shell command while providing feedback
-func ExecuteCommand(command ...string) error {
+// Executes a shell command while providing stdout and stderr to the standard
+// output and error streams of the current process.
+// Returns the exit code of the executed command and any error that occurred
+// while trying to run the command.
+func ExecuteCommand(command ...string) (int, error) {
 	log.Println(command)
 
 	commandLen := len(command)
@@ -25,5 +28,7 @@ func ExecuteCommand(command ...string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	return cmd.Run()
+	err := cmd.Run()
+
+	return cmd.ProcessState.ExitCode(), err
 }

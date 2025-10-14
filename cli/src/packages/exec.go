@@ -1,6 +1,8 @@
 package packages
 
 import (
+	"fmt"
+
 	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/shell"
 )
@@ -37,30 +39,33 @@ func internalExecute(args []string, allowFallback bool) {
 	packageManager := DeterminePackageManager()
 
 	if packageManager == None {
-		if allowFallback {
-			executeNpx(args)
-		} else {
-			cli.PrintError("could not find 'web-test-runner'.")
+		if !allowFallback {
+			cli.PrintError("could not find a package manager in the current solution.")
+			return
 		}
+
+		// We always prefer to use the current solutions package, however, if it is
+		// not available, we try to execute a globally installed version of the
+		// package instead.
+		packageName := args[0]
+		if isGloballyInstalled(packageName) {
+			shell.ExecuteCommand(args...)
+		} else {
+			warningMsg := fmt.Sprintf("could not find global install of package '%s'.\n This may result in slow execution.", packageName)
+			cli.PrintWarning(warningMsg)
+			executeNpx(args)
+		}
+
 		return
 	}
 
-	binaryPath := ""
-	switch packageManager {
-	case Npm:
-		binaryPath = "npm"
-	case Pnpm:
-		binaryPath = "pnpm"
-	case Yarn:
-		binaryPath = "yarn"
-	case Bun:
-		binaryPath = "bun"
-	}
-
-	shellCommand := []string{binaryPath, "exec"}
+	shellCommand := []string{packageManagerPath(packageManager), "exec"}
 	shellCommand = append(shellCommand, args...)
 
-	shell.ExecuteCommand(shellCommand...)
+	_, err := shell.ExecuteCommand(shellCommand...)
+	if err == nil {
+		return
+	}
 }
 
 // If no local package manager is installed, we can run most commands using the
@@ -76,4 +81,25 @@ func executeNpx(args []string) {
 	shellCommand = append(shellCommand, args...)
 
 	shell.ExecuteCommand(shellCommand...)
+}
+
+func isGloballyInstalled(packageName string) bool {
+	exitCode, _ := shell.ExecuteCommand("npm", "list", "-g", "--depth=0", packageName)
+	return exitCode == 0
+}
+
+func packageManagerPath(packageManager PackageManager) string {
+	switch packageManager {
+	case Npm:
+		return "npm"
+	case Pnpm:
+		return "pnpm"
+	case Yarn:
+		return "yarn"
+	case Bun:
+		return "bun"
+	}
+
+	cli.PrintError("unknown package manager")
+	panic("unreachable")
 }

@@ -74,14 +74,27 @@ e.g. creating a web page from a `.docx` (Microsoft Word) file.
 To keep the number of dependencies low, 2web does not require these dependencies
 to be installed until you need some of the dependencies features.
 
-| Dependency                           | Required for                               |
-| ------------------------------------ | ------------------------------------------ |
-| [pandoc](https://pandoc.org/)        | `.tex`, `.docx`, `.doc`, `.odt`            |
-| [dart-sass](https://sass-lang.com/)  | `.sass`, `.scss`                           |
-| [less](https://lesscss.org/)         | `.less`                                    |
-| [rustc](https://rust-lang.org/)      | `.rs`                                      |
-| [emcc](https://emscripten.org/)      | `.c`, `.h`, `.cpp`, `.c++`, `.hpp`, `.h++` |
-| [gleam](https://gleam.run/)          | `.gleam`                                   |
-| [fable](https://fable.io/)           | `.fs`                                      |
-| [.NET](https://dotnet.microsoft.com) | `.cs`, `.fs`, `.vb`                        |
-| [ffmpeg](https://ffmpeg.org/)        | Optimizing images/videos                   |
+| Dependency                                        | Required for                                |
+| ------------------------------------------------- | ------------------------------------------- |
+| [pandoc](https://pandoc.org)                      | `.tex`, `.docx`, `.doc`, `.odt`             |
+| [dart-sass](https://sass-lang.com)                | `.sass`, `.scss`                            |
+| [less](https://lesscss.org)                       | `.less`                                     |
+| [rustc](https://rust-lang.org)                    | `.rs`                                       |
+| [emcc](https://emscripten.org)                    | `.c`, `.h`, `.cpp`, `.c++`, `.hpp`, `.h++`  |
+| [gleam](https://gleam.run)                        | `.gleam`                                    |
+| [fable](https://fable.io)                         | `.fs`                                       |
+| [.NET](https://dotnet.microsoft.com)              | `.cs`, `.fs`, `.vb`                         |
+| [ffmpeg](https://ffmpeg.org)                      | Optimizing images/videos                    |
+| [docker](https://www.docker.com)                  | Database, load balancer & deployment images |
+| [docker-compose](https://docs.docker.com/compose) |                                             |
+
+#### Optional Dependencies
+
+These dependencies can be temporarily downloaded when needed (e.g. through npx)
+although, it is recommended to install these dependencies globally if used
+frequently, and in the projects `node_modules/` for larger projects.
+
+| Dependency                   | Required for |
+| ---------------------------- | ------------ |
+| [Vite](https://vite.dev)     | `2web serve` |
+| [Biome](https://biomejs.dev) | ``           |
