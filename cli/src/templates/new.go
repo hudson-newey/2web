@@ -154,17 +154,24 @@ func NewTemplate(path string) {
 					IsDirectory: false,
 				},
 				{
-					Path:        path + "/.vscode/settings.json",
-					Content:     vscodeSettingsContent,
-					IsDirectory: false,
+					Path:        path + "/.vscode/",
+					IsDirectory: true,
+					Children: []files.File{
+						{
+							Path:        path + "/.vscode/settings.json",
+							Content:     vscodeSettingsContent,
+							IsDirectory: false,
+						},
+					},
 				},
 				{
 					Path:        path + "/src/",
 					IsDirectory: true,
 					Children: []files.File{
 						{
-							Path:    path + "/src/index.html",
-							Content: indexHtmlContent,
+							Path:        path + "/src/index.html",
+							Content:     indexHtmlContent,
+							IsDirectory: false,
 						},
 						{
 							Path:        path + "/src/styles/",
