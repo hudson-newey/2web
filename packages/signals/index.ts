@@ -3,6 +3,7 @@ export { Signal } from "./src/signal.ts";
 export { EventHandler } from "./src/sources/eventHandler.ts";
 export { FormSignal } from "./src/sources/form.ts";
 export { QuerySignal } from "./src/sources/query.ts";
+export { ResizeObserverSignal } from "./src/sources/resizeObserver.ts";
 export { ResourceSignal } from "./src/sources/resource.ts";
 
 // Transforms
