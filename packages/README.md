@@ -9,7 +9,6 @@ A collection of packages to enhance your 2web application
 | [iron](iron/README.md)                                 | ❌     |
 | [event-listener](event-listener/README.md)             | ❌     |
 | [hydration](hydration/README.md)                       | ❌     |
-| [dependency-injection](dependency-injection/README.md) | ❌     |
 | [keyboard](keyboard/README.md)                         | 🔧     |
 | [named-strings](named-strings/README.md)               | 🔧     |
 | [pre-fetcher](pre-fetcher/README.md)                   | 🔧     |

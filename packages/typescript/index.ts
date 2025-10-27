@@ -12,6 +12,7 @@ export * from "./src/conditions/extends.ts";
 export * from "./src/conditions/if.ts";
 export * from "./src/conditions/or.ts";
 
+export * from "./src/datatypes/arrays.ts";
 export * from "./src/datatypes/booleanish.ts";
 export * from "./src/datatypes/characters.ts";
 export * from "./src/datatypes/enums.ts";

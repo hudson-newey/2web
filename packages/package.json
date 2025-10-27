@@ -26,7 +26,6 @@
     "./animations": "./dist/animations.js",
     "./browser-state": "./dist/browser-state.js",
     "./iron": "./dist/iron.js",
-    "./dependency-injection": "./dist/dependency-injection.js",
     "./event-listener": "./dist/event-listener.js",
     "./hydration": "./dist/hydration.js",
     "./keyboard": "./dist/keyboard.js",
