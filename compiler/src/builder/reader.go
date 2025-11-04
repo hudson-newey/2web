@@ -10,21 +10,22 @@ import (
 	"os"
 )
 
-func getContent(inputPath string) string {
+func getContent(inputPath string) []byte {
 	rawData, err := getInputContent(inputPath)
 	if err != nil {
-		rawData = []byte{}
 		documentErrors.AddErrors(models.Error{
 			FilePath: inputPath,
 			Message:  fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
-			Position: lexer.Position{
-				Row: 0,
-				Col: 0,
-			},
+			Position: lexer.StartingPosition,
 		})
+
+		// If there was an error reading the file, we return an empty byte slice
+		// instead of returning a potentially partially read/corrupted byte slice
+		// from the failed read attempt.
+		return []byte{}
 	}
 
-	return string(rawData)
+	return rawData
 }
 
 func getInputContent(inputPath string) ([]byte, error) {
