@@ -4,6 +4,7 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
+	"hudson-newey/2web/src/site"
 	"os"
 )
 
@@ -41,6 +42,17 @@ func Build() bool {
 		for _, file := range indexedPages {
 			compileAndWriteFile(file, outputFileName(*args.InputPath, *args.OutputPath, file))
 		}
+
+		// TODO: These AfterAll hooks should use the output asset models as the
+		// input so if any files implicitly create any site-wide assets, the
+		// AfterAll hook does not overwrite the files.
+		//
+		// We only perform a site-wide AfterAll hook if we are compiling a page of
+		// results so that you don't end up with a bunch of unnecessary site-wide
+		// files when compiling a single document.
+		// Note that compiling a single document is primarily used by external tools
+		// such as bundler plugins, linters, etc...
+		site.AfterAll()
 	} else {
 		compileAndWriteFile(*args.InputPath, outputFileName(*args.InputPath, *args.OutputPath, *args.InputPath))
 	}

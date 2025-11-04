@@ -29,6 +29,7 @@ func MinifyHtml(content string) string {
 	m := minify.New()
 	m.Add("text/html", &html.Minifier{
 		KeepDocumentTags: true,
+		KeepWhitespace:   false,
 	})
 	m.AddFunc("text/css", css.Minify)
 	m.AddFunc("image/svg+xml", svg.Minify)

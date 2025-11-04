@@ -3,12 +3,15 @@ package builder
 import (
 	"hudson-newey/2web/src/builder/cache"
 	"hudson-newey/2web/src/cli"
+	"hudson-newey/2web/src/site"
 )
 
 func compileAndWriteFile(inputPath string, outputPath string) {
 	args := cli.GetArgs()
 	cacheDisabled := *args.DisableCache
 	production := *args.IsProd
+
+	site.BeforeEach(outputPath)
 
 	// We keep a record of the last modified time of all recent input files, so
 	// that we can skip re-compiling source files that have not changed.
