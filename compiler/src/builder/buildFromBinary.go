@@ -3,6 +3,7 @@ package builder
 import (
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/docx"
+	"hudson-newey/2web/src/content/odt"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/convert"
 	"hudson-newey/2web/src/models"
@@ -11,6 +12,8 @@ import (
 func buildFromBinary(inputPath string, data []byte) (page.Page, bool) {
 	if docx.IsDocxFile(inputPath) {
 		return buildDocx(inputPath)
+	} else if odt.IsOdtFile(inputPath) {
+		return buildOdt(inputPath)
 	}
 
 	compiledPage := page.NewPage()
@@ -36,6 +39,25 @@ func buildDocx(inputPath string) (page.Page, bool) {
 	// We use buildFromString to process the resulting HTML content
 	// so that the reactive compiler and other features such as the devtools,
 	// runtime optimizer, element refs, etc... still work.
+	page, isErrorFree := buildFromString(inputPath, string(htmlContent))
+
+	return page, isErrorFree
+}
+
+func buildOdt(inputPath string) (page.Page, bool) {
+	odtModel := odt.NewOdtFile(inputPath)
+	htmlContent, err := convert.ConvertFormat(odtModel.Data, "odt", "html")
+	if err != nil {
+		documentErrors.AddErrors(
+			models.Error{
+				FilePath: inputPath,
+				Message:  "Failed to convert 'docx' file to 'html'",
+			},
+		)
+
+		return page.NewPage(), false
+	}
+
 	page, isErrorFree := buildFromString(inputPath, string(htmlContent))
 
 	return page, isErrorFree

@@ -4,6 +4,7 @@ import (
 	twoWeb "hudson-newey/2web/src/content/2web"
 	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/markdown"
+	"hudson-newey/2web/src/content/odt"
 	"os"
 	"path"
 	"strings"
@@ -32,6 +33,8 @@ func outputFileName(inputPath string, outputPath string, fileName string) string
 		adjustedFileName = strings.TrimSuffix(adjustedFileName, ".2web") + ".html"
 	} else if docx.IsDocxFile(fileName) {
 		adjustedFileName = strings.TrimSuffix(adjustedFileName, ".docx") + ".html"
+	} else if odt.IsOdtFile(fileName) {
+		adjustedFileName = strings.TrimSuffix(adjustedFileName, ".odt") + ".html"
 	}
 
 	adjustedFileName = path.Base(adjustedFileName)

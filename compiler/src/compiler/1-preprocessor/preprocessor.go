@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
+	"hudson-newey/2web/src/content/odt"
 	"hudson-newey/2web/src/content/txt"
 	"hudson-newey/2web/src/content/xml"
 	"hudson-newey/2web/src/content/xslt"
@@ -35,6 +36,8 @@ func ProcessStaticSite(filePath string, content string) string {
 		// created.
 		ssgResult = html.ExpandPartial(ssgResult)
 	} else if docx.IsDocxFile(filePath) {
+		ssgResult = html.ExpandPartial(content)
+	} else if odt.IsOdtFile(filePath) {
 		ssgResult = html.ExpandPartial(content)
 	}
 

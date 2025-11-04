@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
+	"hudson-newey/2web/src/content/odt"
 	"hudson-newey/2web/src/content/txt"
 	"hudson-newey/2web/src/content/xhtml"
 	"hudson-newey/2web/src/content/xml"
@@ -18,6 +19,7 @@ func IsMarkupFile(filePath string) bool {
 		markdown.IsMarkdownFile(filePath) ||
 
 		docx.IsDocxFile(filePath) ||
+		odt.IsOdtFile(filePath) ||
 
 		// Most browsers can render xml natively, therefore, we treat them as markup
 		// files.

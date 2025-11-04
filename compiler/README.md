@@ -79,7 +79,7 @@ compiler.
 | tex     | ❌     | `.tex`          |
 | org     | ❌     | `.org`          |
 | docx    | 🔧     | `.docx`, `.doc` |
-| odt     | ❌     | `.odt`          |
+| odt     | ✅     | `.odt`          |
 | php     | ❌     | `.php`          |
 
 ### Supported Style Languages

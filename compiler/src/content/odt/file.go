@@ -1,22 +1,20 @@
-package docx
+package odt
 
-import (
-	"os"
-)
+import "os"
 
-func NewDocxFile(inputPath string) DocxFile {
+func NewOdtFile(inputPath string) OdtFile {
 	content, err := os.ReadFile(inputPath)
 	if err != nil {
-		return DocxFile{}
+		return OdtFile{}
 	}
 
-	return DocxFile{
+	return OdtFile{
 		InputPath: inputPath,
 		Data:      content,
 	}
 }
 
-type DocxFile struct {
+type OdtFile struct {
 	InputPath string
 	Data      []byte
 }
