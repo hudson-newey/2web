@@ -24,6 +24,10 @@ func (model *Page) WriteAssets() {
 
 		write(file.RawContent(), file.OutputPath())
 	}
+
+	for _, file := range model.Assets {
+		writeBinary(file.Data(), file.OutputPath())
+	}
 }
 
 func write(content string, outputPath string) {
@@ -31,5 +35,13 @@ func write(content string, outputPath string) {
 		fmt.Println(content)
 	} else {
 		utils.WriteFile(content, outputPath)
+	}
+}
+
+func writeBinary(content []byte, outputPath string) {
+	if *cli.GetArgs().ToStdout {
+		fmt.Println(string(content))
+	} else {
+		utils.WriteBinaryFile(content, outputPath)
 	}
 }

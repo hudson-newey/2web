@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/odt"
 	"hudson-newey/2web/src/content/page"
+	"hudson-newey/2web/src/content/pdf"
 	"hudson-newey/2web/src/convert"
 	"hudson-newey/2web/src/models"
 )
@@ -14,6 +15,8 @@ func buildFromBinary(inputPath string, data []byte) (page.Page, bool) {
 		return buildDocx(inputPath)
 	} else if odt.IsOdtFile(inputPath) {
 		return buildOdt(inputPath)
+	} else if pdf.IsPdfFile(inputPath) {
+		return buildPdf(inputPath)
 	}
 
 	compiledPage := page.NewPage()
@@ -51,7 +54,7 @@ func buildOdt(inputPath string) (page.Page, bool) {
 		documentErrors.AddErrors(
 			models.Error{
 				FilePath: inputPath,
-				Message:  "Failed to convert 'docx' file to 'html'",
+				Message:  "Failed to convert 'odt' file to 'html'",
 			},
 		)
 
@@ -61,4 +64,13 @@ func buildOdt(inputPath string) (page.Page, bool) {
 	page, isErrorFree := buildFromString(inputPath, string(htmlContent))
 
 	return page, isErrorFree
+}
+
+func buildPdf(inputPath string) (page.Page, bool) {
+	pageModel := page.NewPage()
+	pdfModel := pdf.NewPdfFile(inputPath)
+
+	pageModel.AddAsset(pdfModel)
+
+	return pageModel, true
 }

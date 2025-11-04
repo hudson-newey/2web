@@ -73,7 +73,7 @@ compiler.
 | xml     | ✅     | `.xml`          |
 | xslt    | ✅     | `.xslt`, `.xsl` |
 | txt     | ✅     | `.txt`          |
-| pdf     | ❌     | `.pdf`          |
+| pdf     | ✅     | `.pdf`          |
 | md      | ✅     | `.md`           |
 | pug     | ❌     | `.pug`          |
 | tex     | ❌     | `.tex`          |

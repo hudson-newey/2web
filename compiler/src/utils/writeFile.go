@@ -17,6 +17,16 @@ func WriteFile(content string, outputPath string) {
 	}
 }
 
+func WriteBinaryFile(content []byte, outputPath string) {
+	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
+		panic(err)
+	}
+
+	if err := os.WriteFile(outputPath, content, 0644); err != nil {
+		panic(err)
+	}
+}
+
 func CreateFile(outputPath string) {
 	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
 		panic(err)
