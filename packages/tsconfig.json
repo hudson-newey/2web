@@ -5,7 +5,6 @@
     "animations/**/*",
     "browser-state/**/*",
     "iron/**/*",
-    "event-listener/**/*",
     "hydration/**/*",
     "keyboard/**/*",
     "named-strings/**/*",
