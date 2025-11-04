@@ -78,7 +78,7 @@ compiler.
 | pug     | ❌     | `.pug`          |
 | tex     | ❌     | `.tex`          |
 | org     | ❌     | `.org`          |
-| docx    | ❌     | `.docx`, `.doc` |
+| docx    | 🔧     | `.docx`, `.doc` |
 | odt     | ❌     | `.odt`          |
 | php     | ❌     | `.php`          |
 

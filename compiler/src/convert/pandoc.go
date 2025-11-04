@@ -6,13 +6,15 @@ import (
 	"os/exec"
 )
 
+var emptyFile = []byte{}
+
 // Uses Pandoc to convert between markup formats.
 // Pandoc must be installed on the system for this to work.
 func ConvertFormat(
-	content string,
+	content []byte,
 	fromFormat string,
 	toFormat string,
-) (string, error) {
+) ([]byte, error) {
 	pandocPath, err := exec.LookPath("pandoc")
 	if err != nil {
 		errorMsg := fmt.Sprintf(
@@ -22,7 +24,7 @@ func ConvertFormat(
 			fromFormat,
 		)
 		cli.HardError(errorMsg)
-		return "", nil
+		return emptyFile, nil
 	}
 
 	cmd := exec.Command(pandocPath, "-f", fromFormat, "-t", toFormat)
@@ -31,21 +33,21 @@ func ConvertFormat(
 
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
-		return "", err
+		return emptyFile, err
 	}
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		return "", err
+		return emptyFile, err
 	}
 
 	if err := cmd.Start(); err != nil {
-		return "", err
+		return emptyFile, err
 	}
 
 	_, err = stdin.Write([]byte(content))
 	if err != nil {
-		return "", err
+		return emptyFile, err
 	}
 
 	stdin.Close()
@@ -63,10 +65,8 @@ func ConvertFormat(
 	}
 
 	if err := cmd.Wait(); err != nil {
-		return "", err
+		return emptyFile, err
 	}
 
-	content = string(outputBytes)
-
-	return content, nil
+	return outputBytes, nil
 }

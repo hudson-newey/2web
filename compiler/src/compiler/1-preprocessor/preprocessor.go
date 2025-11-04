@@ -2,6 +2,7 @@ package preprocessor
 
 import (
 	"hudson-newey/2web/src/content/assets"
+	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/txt"
@@ -33,6 +34,8 @@ func ProcessStaticSite(filePath string, content string) string {
 		// therefore, we also expand html partials once the html document has been
 		// created.
 		ssgResult = html.ExpandPartial(ssgResult)
+	} else if docx.IsDocxFile(filePath) {
+		ssgResult = html.ExpandPartial(content)
 	}
 
 	return ssgResult

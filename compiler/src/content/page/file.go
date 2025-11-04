@@ -2,16 +2,26 @@ package page
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/content"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 )
 
+func NewPage() Page {
+	return Page{
+		Html:       &html.HTMLFile{},
+		JavaScript: []*javascript.JSFile{},
+		Css:        []*css.CSSFile{},
+	}
+}
+
 type Page struct {
 	Html       *html.HTMLFile
 	JavaScript []*javascript.JSFile
 	Css        []*css.CSSFile
+	Assets     []content.BinaryFile
 }
 
 func (model *Page) SetContent(htmlFile *html.HTMLFile) {
@@ -66,6 +76,14 @@ func (model *Page) AddStyle(cssFile *css.CSSFile) {
 	// Always inject css styles into the top of the head element so that they can
 	// be discovered as soon as possible, to begin parsing
 	model.Html.Content = document.InjectContent(model.Html.Content, injectedContent, document.HeadTop)
+}
+
+// Adds an asset (binary file) to the page model.
+// This is an escape hatch for adding binary or unrecognized formats to the
+// output assets, and a smell that the compiler cannot correctly handle the file
+// type and perform necessary optimizations/transpilation/etc.
+func (model *Page) AddAsset(binaryFile content.BinaryFile) {
+	model.Assets = append(model.Assets, binaryFile)
 }
 
 func (model *Page) Format() {
