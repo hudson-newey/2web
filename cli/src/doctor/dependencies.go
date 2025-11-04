@@ -15,6 +15,7 @@ func CheckDependencies() {
 		{name: "ffmpeg", url: "https://ffmpeg.org/download.html"},
 		{name: "node", url: "https://nodejs.org/en/download"},
 		{name: "npm", url: "https://docs.npmjs.com/cli/configuring-npm/install"},
+		{name: "2webc", url: "https://github.com/hudson-newey/2web"},
 	}
 
 	tabWriter := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
