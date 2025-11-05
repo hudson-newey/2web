@@ -8,7 +8,7 @@ func errorHtmlSource() string {
 	return `
         <div class="__2_error_overlay">
             <div class="__2_error_container">
-            	<div class="__2_error_header">
+                <div class="__2_error_header">
                     <h1 class="__2_error_title">
                         <strong>Compiler Error</strong>
                     </h1>
@@ -36,7 +36,7 @@ func errorHtmlSource() string {
                 .__2_error_overlay {
                     position: fixed;
                     inset: 0 0;
-                    background-color: rgba(100, 100, 100, 0.5);
+                    background-color: rgba(0, 0, 0, 0.4);
                 }
 
                 .__2_error_container {
@@ -106,6 +106,8 @@ func errorHtmlSource() string {
                         background-color: rgba(80, 20, 20, 0.1);
                         border-radius: 0.5rem;
                         box-shadow: 0 0 0.25rem rgba(149, 38, 43, 0.9);
+
+                        animation: pulseRedSmall 2s ease-in-out infinite alternate;
                     }
 
                     .__2_error_file {
@@ -123,8 +125,17 @@ func errorHtmlSource() string {
                         font-family: monospace;
                         white-space: pre-wrap;
                         line-height: 2;
-                        
+
                         overflow-wrap: break-word;
+                    }
+                }
+
+                @keyframes pulseRedSmall {
+                    0% {
+                        box-shadow: 0 0 0.25rem rgba(149, 38, 43, 0.9), inset 0 0 0.0625rem rgba(140, 30, 40, 0.7);
+                    }
+                    100% {
+                        box-shadow: 0 0 2rem rgba(140, 30, 40, 0.7), inset 0 0 0.5rem rgba(149, 38, 43, 0.9);
                     }
                 }
             </style>
