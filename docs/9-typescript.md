@@ -30,11 +30,11 @@ unstable variables, and testing types.
 ## Route scripts
 
 If you want to run a script in all pages within a directory (not including
-sub-directories), you can add a `__scripts.ts` file to the containing directory.
+sub-directories), you can add a `__script.ts` file to the containing directory.
 
 ```txt
 └─ .
-   ├─ __scripts.ts
+   ├─ __script.ts
    └─ article.html
 ```
 

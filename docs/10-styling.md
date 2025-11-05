@@ -9,11 +9,11 @@ Note that we also support styling through
 ## Route styling
 
 If you want to apply styles to all pages within a directory (not including
-sub-directories), you can add a `__styles.css` file to the containing directory.
+sub-directories), you can add a `__style.css` file to the containing directory.
 
 ```txt
 └─ .
-   ├─ __styles.css
+   ├─ __style.css
    └─ article.html
 ```
 
