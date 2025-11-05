@@ -91,7 +91,7 @@ func buildComponent(component *models.Component) (page.Page, error) {
 		fullDocumentContent = string(data)
 	}
 
-	pageModel := BuildPage(fullDocumentContent)
+	pageModel := BuildPage(inputPath, fullDocumentContent)
 
 	return pageModel, nil
 }

@@ -18,6 +18,7 @@ func NewPage() Page {
 }
 
 type Page struct {
+	InputPath  string
 	Html       *html.HTMLFile
 	JavaScript []*javascript.JSFile
 	Css        []*css.CSSFile

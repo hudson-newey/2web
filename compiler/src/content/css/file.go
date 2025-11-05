@@ -5,10 +5,27 @@ import (
 	"encoding/hex"
 	"fmt"
 	"hudson-newey/2web/src/cli"
+	"os"
 	"strings"
 )
 
 type cssCode = string
+
+func NewCssFile() CSSFile {
+	return CSSFile{}
+}
+
+func FromFilePath(filePath string) CSSFile {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		panic(err)
+	}
+
+	newCssFile := NewCssFile()
+	newCssFile.AddContent(string(content))
+
+	return newCssFile
+}
 
 type CSSFile struct {
 	Content          cssCode

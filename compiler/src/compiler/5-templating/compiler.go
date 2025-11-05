@@ -28,7 +28,7 @@ func Compile(filePath string, ast []parser.Node) page.Page {
 		htmlContent += node.HtmlContent().Content
 	}
 
-	pageModel := BuildPage(htmlContent)
+	pageModel := BuildPage(filePath, htmlContent)
 
 	// TODO: Once the parser is fully functional and capable of emitting more than
 	// just "MarkupTextNode"s, we should be able to build the page model directly

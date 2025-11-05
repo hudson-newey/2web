@@ -1,5 +1,4 @@
 <title>2Web File Format</title>
-<link rel="stylesheet" href="dev-styles.css" />
 
 <script compiled>
   $ count = 0;

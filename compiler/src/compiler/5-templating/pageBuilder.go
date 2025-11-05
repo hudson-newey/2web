@@ -1,10 +1,13 @@
 package templating
 
 import (
+	"fmt"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -17,14 +20,14 @@ const (
 	codeNode
 )
 
-func BuildPage(content string) page.Page {
+func BuildPage(filePath string, content string) page.Page {
 	nonHtmlStartTags := []string{"<script", "<style", "<code"}
 	nonHtmlEndTags := []string{"</script>", "</style>", "</code>"}
 
 	currentNodeType := htmlNode
 	bufferedContent := ""
 
-	pageModel := page.Page{}
+	pageModel := page.Page{InputPath: filePath}
 	pageModel.Html = &html.HTMLFile{}
 
 	for i := range content {
@@ -37,12 +40,12 @@ func BuildPage(content string) page.Page {
 				if content[i-len(endTag):i] == endTag {
 					if bufferedContent != "" {
 						if currentNodeType == jsNode {
-							newJsNode := javascript.JSFile{}
+							newJsNode := javascript.NewJsFile()
 							newJsNode.AddContent(bufferedContent)
 
 							pageModel.AddScript(&newJsNode)
 						} else if currentNodeType == cssNode {
-							newCssNode := css.CSSFile{}
+							newCssNode := css.NewCssFile()
 							newCssNode.AddContent(bufferedContent)
 
 							pageModel.AddStyle(&newCssNode)
@@ -95,5 +98,20 @@ func BuildPage(content string) page.Page {
 		}
 	}
 
+	addRouteAssets(&pageModel)
+
 	return pageModel
+}
+
+func addRouteAssets(page *page.Page) {
+	// If there is a __style.css sidecar file, we want to include it in the page.
+	// To do this, we remove the complete file name from the file path so that
+	// only the directory remains, and then we append the __styles.css file name.
+	directory := filepath.Dir(page.InputPath)
+	routeCssFile := fmt.Sprintf("%s/__styles.css", directory)
+
+	if _, err := os.Stat(routeCssFile); err == nil {
+		cssFile := css.FromFilePath(routeCssFile)
+		page.AddStyle(&cssFile)
+	}
 }

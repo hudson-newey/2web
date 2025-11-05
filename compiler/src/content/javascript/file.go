@@ -7,6 +7,7 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -14,6 +15,22 @@ import (
 )
 
 type javascriptCode = string
+
+func NewJsFile() JSFile {
+	return JSFile{}
+}
+
+func FromFilePath(filePath string) JSFile {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		panic(err)
+	}
+
+	newJsFile := NewJsFile()
+	newJsFile.AddContent(string(content))
+
+	return newJsFile
+}
 
 type JSFile struct {
 	Content          javascriptCode
