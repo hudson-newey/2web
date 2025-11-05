@@ -56,6 +56,9 @@
       "files.autoSave": "afterDelay",
       "files.autoSaveDelay": 0,
       "editor.formatOnSave": false
+    },
+    "[markdown]": {
+      "editor.defaultFormatter": "yzhang.markdown-all-in-one"
     }
   },
   "extensions": {

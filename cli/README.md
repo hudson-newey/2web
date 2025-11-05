@@ -26,6 +26,7 @@ Once installed, you will have access to the `2web` command.
 - `2web install <package_name>` (alias: i)
 - `2web db <sub_command>`
 - `2web doctor <sub_command>`
+- `2web cms <sub_command>`
 - `2web serve [path]`
 - `2web build [path]`
 - `2web lint [path]`
@@ -45,6 +46,7 @@ Once installed, you will have access to the `2web` command.
 | model       | m     | Add a model to a 2web project                   |
 | enum        | e     | Add a **global** enum to a 2web project         |
 | interface   |       | Add a **global** interface to a 2web project    |
+| migration   |       | Adds a database migration                       |
 
 ### Template Command
 
@@ -56,6 +58,33 @@ once, and do not take a name as an argument.
 | server-side-rendering | ssr   | Add ssr to a 2web project             |
 | database              | db    | Add a database to a 2web project      |
 | load-balancer         | lb    | Add a load balancer to a 2web project |
+
+### Database Command
+
+| Command | Alias | Description                  |
+| ------- | ----- | ---------------------------- |
+| init    |       | Initializes a local database |
+| migrate |       | Runs a database migration    |
+
+### CMS Command
+
+| Command | Alias | Description            |
+| ------- | ----- | ---------------------- |
+| add     |       | Adds a cms source      |
+| view    | v     | View remote CMS source |
+
+#### CMS Sources
+
+The 2web CLI can build websites from existing document stores.
+
+❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
+
+| Source     | State |
+| ---------- | ----- |
+| Wordpress  | ❌     |
+| Git/GitHub | ❌     |
+| OneDrive   | ❌     |
+| Sharepoint | ❌     |
 
 ### Doctor Command
 
@@ -78,6 +107,7 @@ to be installed until you need some of the dependencies features.
 
 | Dependency                                        | Required for                                |
 | ------------------------------------------------- | ------------------------------------------- |
+| [2webc](https://github.com/hudson-newey/2web)     |                                             |
 | [pandoc](https://pandoc.org)                      | `.tex`, `.docx`, `.doc`, `.odt`             |
 | [dart-sass](https://sass-lang.com)                | `.sass`, `.scss`                            |
 | [less](https://lesscss.org)                       | `.less`                                     |
@@ -89,6 +119,10 @@ to be installed until you need some of the dependencies features.
 | [ffmpeg](https://ffmpeg.org)                      | Optimizing images/videos                    |
 | [docker](https://www.docker.com)                  | Database, load balancer & deployment images |
 | [docker-compose](https://docs.docker.com/compose) |                                             |
+| [node](https://nodejs.org)                        |                                             |
+| [npm](https://docs.npmjs.com)                     |                                             |
+| [rclone](https://rclone.org)                      |                                             |
+| [git](https://git-scm.com)                        |                                             |
 
 #### Optional Dependencies
 
