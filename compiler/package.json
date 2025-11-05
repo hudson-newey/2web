@@ -10,6 +10,7 @@
   "author": "hudson-newey",
   "type": "module",
   "license": "MIT",
+  "types": "types/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hudson-newey/2web.git"
@@ -26,10 +27,17 @@
   },
   "files": [
     "bin/",
+    "types/",
     "package.json",
     "README.md",
     "LICENSE"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./types/index.d.ts"
+    }
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.2.2",
     "@ngneat/falso": "^7.3.0",
