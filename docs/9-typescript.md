@@ -28,3 +28,14 @@ there exists typescript helpers for common use cases such as untrusted inputs,
 unstable variables, and testing types.
 
 [**Next**](./9-styling.md) (Page/Component Styling)
+
+## Route scripts
+
+If you want to run a script in all pages within a directory (not including
+sub-directories), you can add a `__scripts.ts` file to the containing directory.
+
+```txt
+└─ .
+   ├─ __scripts.ts
+   └─ article.html
+```
