@@ -27,19 +27,13 @@ declare module "@two-web/compiler" {
    *
    * @example
    * ```html
-   * <!-- index.2web -->
-   * <my-message title="Hello" count="5"></my-message>
-   * ```
-   *
-   * ```ts
-   * // message.component.2web
+   * <!-- message.component.2web -->
    * <script compiled>
    *   import { $props } from "@two-web/compiler";
-   *   $ count = $props().count;
    * </script>
    *
    * <h1>{{ $props().title }}</h1>
-   * <p>You have {{ $count }} new messages.</p>
+   * <p>You have {{ $props().count }} new messages.</p>
    * ```
    */
   export function $props(): Readonly<Record<string, Readonly<unknown>>>;
