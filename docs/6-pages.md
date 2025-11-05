@@ -93,3 +93,5 @@ content is rendered inside of the `<slot></slot>` elements.
 
 Unlike declarative layouts, consumers of route layouts do **not** need to
 explicitly import or template the layout inside of consumers.
+
+[**Next**](./7-control-flow.md) (Template Control Flow)

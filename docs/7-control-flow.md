@@ -20,4 +20,4 @@ Syntax is also subject to change.
 </ul>
 ```
 
-[**Next**](./7-code-splitting.md) (Code Splitting)
+[**Next**](./8-code-splitting.md) (Code Splitting)

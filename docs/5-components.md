@@ -32,4 +32,4 @@ that the component is imported as by changing the default export name.
 Additionally, all components do not need an associated closing tag, and can be
 terminated by simply adding a `/>` at the end of the element.
 
-[**Next**](./6-control-flow.md) (Template Control Flow)
+[**Next**](./6-pages.md) (Pages)
