@@ -1,3 +1,22 @@
-<div class="content-container">
-  <slot></slot>
+<div class="container">
+  <div class="header">
+    <span id="site-logo">
+      <a href="/">2Web Compiler</a>
+    </span>
+  </div>
+
+  <div class="sidebar">
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a href="/compiler/dev/overview">Overview</a></li>
+        <li><a href="/compiler/dev/building">Building</a></li>
+        <li><a href="/compiler/dev/testing">Testing</a></li>
+        <li><a href="/compiler/dev/deployment">Deployment</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main class="main-content">
+    <slot></slot>
+  </main>
 </div>
