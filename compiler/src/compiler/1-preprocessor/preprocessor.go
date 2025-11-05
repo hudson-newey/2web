@@ -2,11 +2,10 @@ package preprocessor
 
 import (
 	"hudson-newey/2web/src/content/assets"
-	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
-	"hudson-newey/2web/src/content/odt"
 	"hudson-newey/2web/src/content/txt"
+	"hudson-newey/2web/src/content/xhtml"
 	"hudson-newey/2web/src/content/xml"
 	"hudson-newey/2web/src/content/xslt"
 )
@@ -14,19 +13,11 @@ import (
 func ProcessStaticSite(filePath string, content string) string {
 	ssgResult := content
 
-	if assets.IsMarkupFile(filePath) &&
-		!markdown.IsMarkdownFile(filePath) &&
-		!xml.IsXmlFile(filePath) &&
-		!xslt.IsXsltFile(filePath) &&
-		!txt.IsTxtFile(filePath) {
-		// 2Web supports partial content, meaning that pages don't need and doctype,
-		// html, head, meta, or body tags.
-		// The user can just start writing the pages content, and the compiler can
-		// figure out what should be in the body vs head.
-		ssgResult = html.ExpandPartial(content)
-	} else if markdown.IsMarkdownFile(filePath) {
+	// We convert markdown files into HTML first so that layouts and partials can
+	// be applied to the resulting HTML.
+	if markdown.IsMarkdownFile(filePath) {
 		markdownFile := markdown.MarkdownFile{
-			Content: content,
+			Content: ssgResult,
 		}
 		ssgResult = markdownFile.ToHtml().Content
 
@@ -35,10 +26,26 @@ func ProcessStaticSite(filePath string, content string) string {
 		// therefore, we also expand html partials once the html document has been
 		// created.
 		ssgResult = html.ExpandPartial(ssgResult)
-	} else if docx.IsDocxFile(filePath) {
-		ssgResult = html.ExpandPartial(content)
-	} else if odt.IsOdtFile(filePath) {
-		ssgResult = html.ExpandPartial(content)
+	}
+
+	if assets.IsMarkupFile(filePath) &&
+		!xml.IsXmlFile(filePath) &&
+		!xslt.IsXsltFile(filePath) &&
+		!txt.IsTxtFile(filePath) {
+		// Before we expand the HTML partials, we need to expand the layouts because
+		// the layout may contain the doctype, html, head, and body tags that would
+		// cause the partial expansion to fail.
+		//
+		// TODO: Add support for markdown & xhtml layouts.
+		if !xhtml.IsXhtmlFile(filePath) && !markdown.IsMarkdownFile(filePath) {
+			ssgResult = expandLayout(filePath, ssgResult)
+		}
+
+		// 2Web supports partial content, meaning that pages don't need and doctype,
+		// html, head, meta, or body tags.
+		// The user can just start writing the pages content, and the compiler can
+		// figure out what should be in the body vs head.
+		ssgResult = html.ExpandPartial(ssgResult)
 	}
 
 	return ssgResult
