@@ -19,6 +19,44 @@ declare module "@two-web/compiler" {
    * current page.
    */
   export function $uid(): string;
+
+  /**
+   * @description
+   * An object of all of the props passed to the component either as attributes
+   * or via property binding.
+   *
+   * @example
+   * ```html
+   * <!-- index.2web -->
+   * <my-message title="Hello" count="5"></my-message>
+   * ```
+   *
+   * ```ts
+   * // message.component.2web
+   * <script compiled>
+   *   import { $props } from "@two-web/compiler";
+   *   $ count = $props().count;
+   * </script>
+   *
+   * <h1>{{ $props().title }}</h1>
+   * <p>You have {{ $count }} new messages.</p>
+   * ```
+   */
+  export function $props(): Readonly<Record<string, Readonly<unknown>>>;
+
+  /**
+   * @description
+   * Retrieves the value of an environment variable at compile time.
+   * Returns `undefined` if the environment variable is not defined.
+   *
+   * @example
+   * ```ts
+   * import { $env } from "@two-web/compiler";
+   *
+   * const apiUrl = $env("API_URL") ?? "https://default.api.com";
+   * ```
+   */
+  export function $env(key: string): string | undefined;
 }
 
 declare global {
