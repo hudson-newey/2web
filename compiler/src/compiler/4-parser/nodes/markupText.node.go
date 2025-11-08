@@ -1,14 +1,16 @@
 package nodes
 
 import (
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 )
 
-func NewMarkupTextNode(content string) *markupTextNode {
+func NewMarkupTextNode(lexNode *lexer.V2LexNode) *markupTextNode {
 	return &markupTextNode{
-		content: content,
+		content: lexNode.Content,
 	}
 }
 
@@ -16,8 +18,12 @@ type markupTextNode struct {
 	content string
 }
 
-func (model *markupTextNode) Tokens() []string {
-	return []string{model.content}
+func (model *markupTextNode) Type() string {
+	return "MarkupTextNode"
+}
+
+func (model *markupTextNode) Tokens() []lexerTokens.LexToken {
+	return []lexerTokens.LexToken{lexerTokens.TextContent}
 }
 
 func (model *markupTextNode) HtmlContent() *html.HTMLFile {

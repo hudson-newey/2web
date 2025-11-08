@@ -17,17 +17,17 @@ func (model *Parser) Parse(structure []lexer.V2LexNode) {
 func CreateAst(structure []lexer.V2LexNode) AbstractSyntaxTree {
 	var ast AbstractSyntaxTree
 	for _, node := range structure {
-		ast = append(ast, processNode(node))
+		ast = append(ast, processNode(&node))
 	}
 
 	return ast
 }
 
-func processNode(structure lexer.V2LexNode) Node {
+func processNode(structure *lexer.V2LexNode) Node {
 	// TODO: During development, I just want to treat everything as a text node
 	return textNode(structure)
 }
 
-func textNode(structure lexer.V2LexNode) Node {
-	return nodes.NewMarkupTextNode(structure.Content)
+func textNode(structure *lexer.V2LexNode) Node {
+	return nodes.NewMarkupTextNode(structure)
 }
