@@ -38,7 +38,9 @@ func BuildPage(filePath string, content string) page.Page {
 
 				if content[i-len(endTag):i] == endTag {
 					if bufferedContent != "" {
-						if currentNodeType == codeNode {
+						if currentNodeType == jsNode {
+							pageModel.AddScript(javascript.FromContent(bufferedContent))
+						} else if currentNodeType == codeNode {
 							contentToPrepend := strings.TrimPrefix(bufferedContent, "<code>")
 
 							escapedContent := html.EscapeHtml(contentToPrepend)
