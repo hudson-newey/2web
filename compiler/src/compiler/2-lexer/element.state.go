@@ -11,20 +11,16 @@ func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
 		"!doctype": {token: lexerTokens.Doctype, next: elementLexer},
 
-		// I treat tabs like spaces so that they are treated the same in attributes
-		" ":  {token: lexerTokens.Space, next: elementLexer},
-		"\t": {token: lexerTokens.Space, next: elementLexer},
-		"/":  {token: lexerTokens.Slash, next: elementLexer},
-		"'":  {token: lexerTokens.QuoteSingle, next: elementLexer},
-		"\"": {token: lexerTokens.QuoteDouble, next: elementLexer},
-		"@":  {token: lexerTokens.AtSymbol, next: elementLexer},
-		"*":  {token: lexerTokens.Star, next: elementLexer},
-		"#":  {token: lexerTokens.Hash, next: elementLexer},
-		"=":  {token: lexerTokens.Equals, next: elementLexer},
-		"!":  {token: lexerTokens.Exclamation, next: textLexer},
-		">":  {token: lexerTokens.GreaterAngle, next: textLexer},
+		// TODO: Move these out of the element lexer.
+		// Having this in here technically means that if you add a script or style
+		// attribute to an element, it will switch into the script/style lexer which
+		// is not correct.
+		// (Or maybe this is a feature? Needs more thought.)
+		"script": {token: lexerTokens.ScriptStartTag, next: inlineScriptTagLexer},
+		"style":  {token: lexerTokens.StyleStartTag, next: inlineStyleTagLexer},
 	}
 
+	cases = withAttributes(cases)
 	cases = withStrings(cases, elementLexer)
 
 	return lexerFactory(cases, states.Element)(model)

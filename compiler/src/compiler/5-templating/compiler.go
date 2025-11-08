@@ -3,7 +3,7 @@ package templating
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	parser "hudson-newey/2web/src/compiler/4-parser"
+	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
 	"hudson-newey/2web/src/content/assets"
@@ -22,20 +22,20 @@ import (
 
 // TODO: Page/component models should have their associated reactive models as
 // properties.
-func Compile(filePath string, ast []parser.Node) page.Page {
+func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	htmlContent := ""
-	for _, node := range ast {
+	for _, node := range parsedAst {
 		htmlContent += node.HtmlContent().Content
 	}
 
 	pageModel := BuildPage(filePath, htmlContent)
 
-	for _, node := range ast {
-		if parser.HasCssContent(node) {
+	for _, node := range parsedAst {
+		if ast.HasCssContent(node) {
 			pageModel.AddStyle(node.CssContent())
 		}
 
-		if parser.HasJsContent(node) {
+		if ast.HasJsContent(node) {
 			pageModel.AddScript(node.JsContent())
 		}
 	}

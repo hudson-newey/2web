@@ -7,7 +7,7 @@ import (
 
 func scriptCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"*/": {token: lexerTokens.MarkupCommentStart, next: scriptLexer},
+		"*/": {token: lexerTokens.MarkupCommentStart, next: inlineScriptTagLexer},
 	}
 
 	return lexerFactory(cases, states.ScriptComment)(model)

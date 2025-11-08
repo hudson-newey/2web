@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"hudson-newey/2web/src/compiler/io/reader"
 	"io"
@@ -94,26 +93,18 @@ func (model *Lexer) lineFeed() {
 func (model *Lexer) lexLiteral(exitConditions lexDefMap) string {
 	var literal string
 	for {
+		if exitConditions.wouldMatchAt(model) {
+			return literal
+		}
+
 		r, _, err := model.Input.Reader.ReadRune()
 		if err != nil {
 			if err == io.EOF {
-				// at the end of the identifier
 				return literal
 			}
 		}
 
 		model.Pos.Col++
-
-		literal = literal + string(r)
-
-		_, nextState := exitConditions.matching(model, states.SourceText)
-		if nextState != nil {
-			// We've reached an exit condition
-			// Back up one character and return the literal.
-			// When the original lexer resumes, it will re-consume the character that
-			// caused the exit condition.
-			model.backup(1)
-			return literal
-		}
+		literal += string(r)
 	}
 }

@@ -6,7 +6,11 @@ import (
 
 type htmlCode = string
 
-func NewHtmlFile(content htmlCode) *HTMLFile {
+func NewHtmlFile() *HTMLFile {
+	return &HTMLFile{}
+}
+
+func FromContent(content htmlCode) *HTMLFile {
 	return &HTMLFile{Content: content}
 }
 

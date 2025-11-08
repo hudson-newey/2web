@@ -62,7 +62,7 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 		// Sometimes it can be external source code.
 		tokenMap := map[states.LexState]lexerTokens.LexToken{
 			states.ScriptSource: lexerTokens.ScriptSource,
-			states.StyleSource:  lexerTokens.ScriptSource,
+			states.StyleSource:  lexerTokens.StyleSource,
 			states.TextContent:  lexerTokens.TextContent,
 		}
 

@@ -9,9 +9,7 @@ func textLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
 		// The comment state has to always come first that it takes precedence over
 		// other matches and can omit them as source text.
-		"<!--":     {token: lexerTokens.MarkupCommentStart, next: markupCommentLexer},
-		"<script>": {token: lexerTokens.ScriptStartTag, next: scriptLexer},
-		"<style>":  {token: lexerTokens.StyleStartTag, next: styleLexer},
+		"<!--": {token: lexerTokens.MarkupCommentStart, next: markupCommentLexer},
 
 		"<":  {token: lexerTokens.LessAngle, next: elementLexer},
 		">":  {token: lexerTokens.GreaterAngle, next: textLexer},

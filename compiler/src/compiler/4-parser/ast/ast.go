@@ -1,3 +1,3 @@
-package parser
+package ast
 
 type AbstractSyntaxTree []Node

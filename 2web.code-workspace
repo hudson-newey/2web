@@ -37,7 +37,7 @@
       "editor.defaultFormatter": "biomejs.biome"
     },
     "[html]": {
-      "files.autoSave": "afterDelay",
+      // "files.autoSave": "afterDelay",
       "files.autoSaveDelay": 0,
 
       // Do not foramt HTML of .2web files on save because it tries to make all

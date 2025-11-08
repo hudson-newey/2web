@@ -14,6 +14,10 @@ type Position struct {
 	Col int
 }
 
+func NewV2LexNode() V2LexNode {
+	return V2LexNode{}
+}
+
 type V2LexNode struct {
 	Pos     Position
 	Token   lexerTokens.LexToken

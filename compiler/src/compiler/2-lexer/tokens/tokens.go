@@ -1,7 +1,5 @@
 package lexerTokens
 
-type LexToken string
-
 const (
 	// EOF
 	EOF LexToken = "EOF"

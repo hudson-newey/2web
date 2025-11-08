@@ -1,7 +1,6 @@
-package parser
+package ast
 
 import (
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
@@ -11,7 +10,6 @@ type nodeType = string
 
 type Node interface {
 	Type() nodeType
-	Tokens() []lexerTokens.LexToken
 
 	HtmlContent() *html.HTMLFile
 	JsContent() *javascript.JSFile
