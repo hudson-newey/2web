@@ -17,3 +17,15 @@ type Node interface {
 	JsContent() *javascript.JSFile
 	CssContent() *css.CSSFile
 }
+
+func HasHtmlContent(node Node) bool {
+	return node.HtmlContent().Content != ""
+}
+
+func HasJsContent(node Node) bool {
+	return node.JsContent().Content != ""
+}
+
+func HasCssContent(node Node) bool {
+	return node.CssContent().Content != ""
+}

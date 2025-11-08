@@ -6,6 +6,10 @@ import (
 
 type htmlCode = string
 
+func NewHtmlFile(content htmlCode) *HTMLFile {
+	return &HTMLFile{Content: content}
+}
+
 type HTMLFile struct {
 	Content htmlCode
 }

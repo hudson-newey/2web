@@ -31,23 +31,14 @@ func Compile(filePath string, ast []parser.Node) page.Page {
 	pageModel := BuildPage(filePath, htmlContent)
 
 	for _, node := range ast {
-		pageModel.AddStyle(node.CssContent())
+		if parser.HasCssContent(node) {
+			pageModel.AddStyle(node.CssContent())
+		}
+
+		if parser.HasJsContent(node) {
+			pageModel.AddScript(node.JsContent())
+		}
 	}
-
-	// TODO: Once the parser is fully functional and capable of emitting more than
-	// just "MarkupTextNode"s, we should be able to build the page model directly
-	// from the AST rather than re-parsing the HTML content using the v1 compiler.
-	// pageModel := page.Page{
-	// 	Html:       &html.HTMLFile{},
-	// 	JavaScript: []*javascript.JSFile{},
-	// 	Css:        []*css.CSSFile{},
-	// }
-
-	// for _, node := range ast {
-	// 	pageModel.Html.AddContent(node.HtmlContent().Content)
-	// 	pageModel.JavaScript = append(pageModel.JavaScript, node.JsContent())
-	// 	pageModel.Css = append(pageModel.Css, node.CssContent())
-	// }
 
 	pageModel.Html.Content = controlFlow.ProcessControlFlow(filePath, pageModel.Html.Content)
 

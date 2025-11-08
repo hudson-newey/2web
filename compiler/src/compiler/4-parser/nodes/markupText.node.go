@@ -27,13 +27,13 @@ func (model *markupTextNode) Tokens() []lexerTokens.LexToken {
 }
 
 func (model *markupTextNode) HtmlContent() *html.HTMLFile {
-	return &html.HTMLFile{Content: model.content}
+	return html.NewHtmlFile(model.content)
 }
 
 func (model *markupTextNode) JsContent() *javascript.JSFile {
-	return &javascript.JSFile{Content: ""}
+	return javascript.NewJsFile()
 }
 
 func (model *markupTextNode) CssContent() *css.CSSFile {
-	return &css.CSSFile{Content: ""}
+	return css.NewCssFile()
 }

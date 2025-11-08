@@ -27,7 +27,7 @@ func FromFilePath(filePath string) *CSSFile {
 	return newCssFile
 }
 
-func FromContent(content string) *CSSFile {
+func FromContent(content cssCode) *CSSFile {
 	newCssFile := NewCssFile()
 	newCssFile.AddContent(content)
 

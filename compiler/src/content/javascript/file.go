@@ -32,7 +32,7 @@ func FromFilePath(filePath string) *JSFile {
 	return newJsFile
 }
 
-func FromContent(content string) *JSFile {
+func FromContent(content javascriptCode) *JSFile {
 	newJsFile := NewJsFile()
 	newJsFile.AddContent(content)
 
