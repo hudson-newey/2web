@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"hudson-newey/2web/src/cli"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"os"
@@ -71,10 +72,11 @@ func (model *JSFile) RawContent() string {
 	}
 
 	for _, buildError := range esbuildOutput.Errors {
-		errorModel := models.Error{
-			Message:  buildError.Text,
-			FilePath: model.FileName(),
-		}
+		errorModel := models.NewError(
+			buildError.Text,
+			model.FileName(),
+			lexer.Position{},
+		)
 
 		documentErrors.AddErrors(errorModel)
 	}

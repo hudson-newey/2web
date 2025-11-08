@@ -94,10 +94,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 		for _, variableNode := range variableNodes {
 			variableModel, err := reactiveVariable.FromNode(variableNode)
 			if err != nil {
-				documentErrors.AddErrors(models.Error{
-					FilePath: filePath,
-					Message:  err.Error(),
-				})
+				documentErrors.AddErrors(
+					models.NewError(
+						err.Error(),
+						filePath,
+						lexer.Position{},
+					),
+				)
 				continue
 			}
 
@@ -111,10 +114,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	for _, node := range propertyNodes {
 		property, err := reactiveProperty.FromNode(node)
 		if err != nil {
-			documentErrors.AddErrors(models.Error{
-				FilePath: filePath,
-				Message:  err.Error(),
-			})
+			documentErrors.AddErrors(
+				models.NewError(
+					err.Error(),
+					filePath,
+					lexer.Position{},
+				),
+			)
 			continue
 		}
 
@@ -131,10 +137,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 
 		if !foundAssociatedProperty {
 			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for property %s", property.VarName, property.Node.Selector)
-			documentErrors.AddErrors(models.Error{
-				FilePath: filePath,
-				Message:  errorMessage,
-			})
+			documentErrors.AddErrors(
+				models.NewError(
+					errorMessage,
+					filePath,
+					lexer.Position{},
+				),
+			)
 			continue
 		}
 	}
@@ -142,10 +151,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	for _, node := range eventNodes {
 		event, err := reactiveEvent.FromNode(node)
 		if err != nil {
-			documentErrors.AddErrors(models.Error{
-				FilePath: filePath,
-				Message:  err.Error(),
-			})
+			documentErrors.AddErrors(
+				models.NewError(
+					err.Error(),
+					filePath,
+					lexer.Position{},
+				),
+			)
 			continue
 		}
 
@@ -161,10 +173,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 
 		if !foundAssociatedProperty {
 			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for event %s", event.VarName, event.Node.Selector)
-			documentErrors.AddErrors(models.Error{
-				FilePath: filePath,
-				Message:  errorMessage,
-			})
+			documentErrors.AddErrors(
+				models.NewError(
+					errorMessage,
+					filePath,
+					lexer.Position{},
+				),
+			)
 			continue
 		}
 	}

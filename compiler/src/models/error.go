@@ -6,10 +6,19 @@ import (
 	"strings"
 )
 
+func NewError(message, filePath string, position lexer.Position) Error {
+	return Error{
+		Message:  message,
+		FilePath: filePath,
+		Position: position,
+	}
+}
+
 type Error struct {
-	Message  string
-	FilePath string
-	Position lexer.Position
+	Message      string
+	FilePath     string
+	Position     lexer.Position
+	CreationTime string
 }
 
 func (model *Error) PrintError() {

@@ -1,6 +1,7 @@
 package builder
 
 import (
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/docx"
@@ -31,10 +32,11 @@ func buildDocx(inputPath string) (page.Page, bool) {
 	htmlContent, err := convert.ConvertFormat(docxModel.Data, "docx", "html")
 	if err != nil {
 		documentErrors.AddErrors(
-			models.Error{
-				FilePath: inputPath,
-				Message:  "Failed to convert 'docx' file to 'html'",
-			},
+			models.NewError(
+				"Failed to convert 'docx' file to 'html'",
+				inputPath,
+				lexer.Position{},
+			),
 		)
 
 		return page.NewPage(), false
@@ -53,10 +55,11 @@ func buildOdt(inputPath string) (page.Page, bool) {
 	htmlContent, err := convert.ConvertFormat(odtModel.Data, "odt", "html")
 	if err != nil {
 		documentErrors.AddErrors(
-			models.Error{
-				FilePath: inputPath,
-				Message:  "Failed to convert 'odt' file to 'html'",
-			},
+			models.NewError(
+				"Failed to convert 'odt' file to 'html'",
+				inputPath,
+				lexer.Position{},
+			),
 		)
 
 		return page.NewPage(), false

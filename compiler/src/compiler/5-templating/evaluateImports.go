@@ -23,10 +23,9 @@ func evaluateImports(
 	for _, importNode := range importNodes {
 		componentModel, err := component.FromNode(importNode, filePath)
 		if err != nil {
-			documentErrors.AddErrors(models.Error{
-				FilePath: filePath,
-				Message:  err.Error(),
-			})
+			documentErrors.AddErrors(
+				models.NewError(err.Error(), filePath, lexer.Position{}),
+			)
 			continue
 		}
 

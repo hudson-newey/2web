@@ -2,6 +2,7 @@ package templating
 
 import (
 	"fmt"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
@@ -31,10 +32,13 @@ func expandImport(
 ) page.Page {
 	componentModel, err := buildComponent(component)
 	if err != nil {
-		documentErrors.AddErrors(models.Error{
-			FilePath: workingPath,
-			Message:  err.Error(),
-		})
+		documentErrors.AddErrors(
+			models.NewError(
+				err.Error(),
+				workingPath,
+				lexer.Position{},
+			),
+		)
 
 		// We return the input content without modification in the hopes that the
 		// page will be semi-functional and assist in debugging how the error

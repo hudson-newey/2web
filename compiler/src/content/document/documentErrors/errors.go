@@ -2,9 +2,16 @@ package documentErrors
 
 import (
 	"hudson-newey/2web/src/cli"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/models"
+	"time"
 )
+
+type errorTemplateData struct {
+	Errors    []models.Error
+	CreatedAt string
+}
 
 var pageErrors []models.Error
 var totalErrors []models.Error
@@ -53,10 +60,19 @@ func PrintDocumentErrors() {
 // creates a HTML error template that can be used to display errors
 // in the browser
 func createErrorTemplate(errors []models.Error) string {
-	errorHtml, err := document.BuildTemplate(errorHtmlSource(), errors)
+	creationTime := time.Now().Format(time.DateTime)
+
+	templateData := errorTemplateData{
+		Errors:    errors,
+		CreatedAt: creationTime,
+	}
+
+	errorHtml, err := document.BuildTemplate(errorHtmlSource(), templateData)
 	if err != nil {
 		// Handle the error, maybe add it to errorList
-		AddErrors(models.Error{Message: "failed to render error template: " + err.Error()})
+		AddErrors(
+			models.NewError("failed to render error template: "+err.Error(), "internal", lexer.Position{}),
+		)
 	}
 
 	return errorHtml

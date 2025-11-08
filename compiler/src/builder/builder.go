@@ -2,6 +2,7 @@ package builder
 
 import (
 	"hudson-newey/2web/src/cli"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/site"
@@ -19,10 +20,9 @@ func Build() bool {
 
 	inputPath, err := os.Stat(*args.InputPath)
 	if err != nil {
-		documentErrors.AddErrors(models.Error{
-			FilePath: *args.InputPath,
-			Message:  err.Error(),
-		})
+		documentErrors.AddErrors(
+			models.NewError(err.Error(), *args.InputPath, lexer.Position{}),
+		)
 
 		documentErrors.PrintDocumentErrors()
 		return false
