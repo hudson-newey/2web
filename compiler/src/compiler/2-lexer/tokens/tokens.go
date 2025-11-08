@@ -107,10 +107,4 @@ const (
 
 	// Inside a <style> tag or in an external .css file
 	StyleSource LexToken = "StyleContent"
-
-	// Only needed within text nodes to represent a new line ("\n")
-	NewLine LexToken = "NewLine"
-
-	// Tab character ("\t")
-	Tab LexToken = "Tab"
 )

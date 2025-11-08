@@ -20,15 +20,12 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 		readerChar, _, err := lexerModel.nextChar()
 		if readerChar == '\n' {
 			lexerModel.lineFeed()
-			return V2LexNode{
-				Pos: Position{
-					Row: lexerModel.Pos.Row - 1,
-					Col: lexerModel.Pos.Col - 1,
-				},
-				Token:   lexerTokens.NewLine,
-				State:   state,
-				Content: "\n",
-			}, lexerModel.State
+
+			// We do not want to include new lines in the final lexed output, so we
+			// keep lexing until we find a different token.
+			for {
+				return lexerFactory(lexMap, state)(lexerModel)
+			}
 		}
 
 		if err != nil {

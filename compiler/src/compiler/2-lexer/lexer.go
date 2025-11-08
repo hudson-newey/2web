@@ -97,7 +97,7 @@ func (model *Lexer) lexLiteral(exitConditions lexDefMap) string {
 			return literal
 		}
 
-		r, _, err := model.Input.Reader.ReadRune()
+		nextChar, _, err := model.Input.Reader.ReadRune()
 		if err != nil {
 			if err == io.EOF {
 				return literal
@@ -105,6 +105,6 @@ func (model *Lexer) lexLiteral(exitConditions lexDefMap) string {
 		}
 
 		model.Pos.Col++
-		literal += string(r)
+		literal += string(nextChar)
 	}
 }
