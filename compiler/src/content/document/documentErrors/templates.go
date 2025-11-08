@@ -37,13 +37,13 @@ func errorHtmlSource() string {
                     position: fixed;
                     inset: 0 0;
                     background-color: rgba(0, 0, 0, 0.4);
+                    z-index: calc(infinity);
                 }
 
                 .__2_error_container {
                     position: fixed;
                     inset: 5%;
                     padding: 2rem 5rem;
-                    z-index: 5000;
 
                     background: radial-gradient(circle, rgba(5, 0, 0, 0.9) 0%, rgba(20, 0, 0, 0.98) 99%, rgba(40, 0, 0, 1) 100%);
                     background-color: rgba(20, 0, 0);
