@@ -72,12 +72,12 @@ func expandImport(
 func buildComponent(component *models.Component) (page.Page, error) {
 	inputPath, err := component.ComponentPath()
 	if err != nil {
-		return page.Page{}, err
+		return page.NewPage(), err
 	}
 
 	data, err := os.ReadFile(inputPath)
 	if err != nil {
-		return page.Page{}, err
+		return page.NewPage(), err
 	}
 
 	// We don't want to expand HTML partials for component imports

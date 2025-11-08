@@ -7,19 +7,23 @@ import (
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
 func NewPage() Page {
 	return Page{
 		Html:       &html.HTMLFile{},
+		TwoScript:  []*twoscript.TwoScriptFile{},
 		JavaScript: []*javascript.JSFile{},
 		Css:        []*css.CSSFile{},
+		Assets:     []*content.BinaryFile{},
 	}
 }
 
 type Page struct {
 	InputPath  string
 	Html       *html.HTMLFile
+	TwoScript  []*twoscript.TwoScriptFile
 	JavaScript []*javascript.JSFile
 	Css        []*css.CSSFile
 	Assets     []*content.BinaryFile
@@ -27,6 +31,10 @@ type Page struct {
 
 func (model *Page) SetContent(htmlFile *html.HTMLFile) {
 	model.Html = htmlFile
+}
+
+func (model *Page) AddTwoScript(tsFile *twoscript.TwoScriptFile) {
+	model.TwoScript = append(model.TwoScript, tsFile)
 }
 
 func (model *Page) AddScript(jsFile *javascript.JSFile) {
