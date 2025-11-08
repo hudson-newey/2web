@@ -40,15 +40,9 @@ func BuildPage(filePath string, content string) page.Page {
 				if content[i-len(endTag):i] == endTag {
 					if bufferedContent != "" {
 						if currentNodeType == jsNode {
-							newJsNode := javascript.NewJsFile()
-							newJsNode.AddContent(bufferedContent)
-
-							pageModel.AddScript(newJsNode)
+							pageModel.AddScript(javascript.FromContent(bufferedContent))
 						} else if currentNodeType == cssNode {
-							newCssNode := css.NewCssFile()
-							newCssNode.AddContent(bufferedContent)
-
-							pageModel.AddStyle(newCssNode)
+							pageModel.AddStyle(css.FromContent(bufferedContent))
 						} else if currentNodeType == codeNode {
 							contentToPrepend := strings.TrimPrefix(bufferedContent, "<code>")
 
