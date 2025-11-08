@@ -30,6 +30,10 @@ func Compile(filePath string, ast []parser.Node) page.Page {
 
 	pageModel := BuildPage(filePath, htmlContent)
 
+	for _, node := range ast {
+		pageModel.AddStyle(node.CssContent())
+	}
+
 	// TODO: Once the parser is fully functional and capable of emitting more than
 	// just "MarkupTextNode"s, we should be able to build the page model directly
 	// from the AST rather than re-parsing the HTML content using the v1 compiler.

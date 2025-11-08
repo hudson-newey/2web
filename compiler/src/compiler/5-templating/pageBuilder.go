@@ -43,12 +43,12 @@ func BuildPage(filePath string, content string) page.Page {
 							newJsNode := javascript.NewJsFile()
 							newJsNode.AddContent(bufferedContent)
 
-							pageModel.AddScript(&newJsNode)
+							pageModel.AddScript(newJsNode)
 						} else if currentNodeType == cssNode {
 							newCssNode := css.NewCssFile()
 							newCssNode.AddContent(bufferedContent)
 
-							pageModel.AddStyle(&newCssNode)
+							pageModel.AddStyle(newCssNode)
 						} else if currentNodeType == codeNode {
 							contentToPrepend := strings.TrimPrefix(bufferedContent, "<code>")
 
@@ -114,18 +114,18 @@ func addRouteAssets(page *page.Page) {
 
 	if _, err := os.Stat(routeCssFile); err == nil {
 		cssFile := css.FromFilePath(routeCssFile)
-		page.AddStyle(&cssFile)
+		page.AddStyle(cssFile)
 	}
 
 	routeJsFile := fmt.Sprintf("%s/__script.js", directory)
 	if _, err := os.Stat(routeJsFile); err == nil {
 		jsFile := javascript.FromFilePath(routeJsFile)
-		page.AddScript(&jsFile)
+		page.AddScript(jsFile)
 	}
 
 	routeTsFile := fmt.Sprintf("%s/__script.ts", directory)
 	if _, err := os.Stat(routeTsFile); err == nil {
 		jsFile := javascript.FromFilePath(routeTsFile)
-		page.AddScript(&jsFile)
+		page.AddScript(jsFile)
 	}
 }

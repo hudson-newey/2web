@@ -11,11 +11,11 @@ import (
 
 type cssCode = string
 
-func NewCssFile() CSSFile {
-	return CSSFile{}
+func NewCssFile() *CSSFile {
+	return &CSSFile{}
 }
 
-func FromFilePath(filePath string) CSSFile {
+func FromFilePath(filePath string) *CSSFile {
 	content, err := os.ReadFile(filePath)
 	if err != nil {
 		panic(err)
@@ -23,6 +23,13 @@ func FromFilePath(filePath string) CSSFile {
 
 	newCssFile := NewCssFile()
 	newCssFile.AddContent(string(content))
+
+	return newCssFile
+}
+
+func FromContent(content string) *CSSFile {
+	newCssFile := NewCssFile()
+	newCssFile.AddContent(content)
 
 	return newCssFile
 }

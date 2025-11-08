@@ -16,11 +16,11 @@ import (
 
 type javascriptCode = string
 
-func NewJsFile() JSFile {
-	return JSFile{}
+func NewJsFile() *JSFile {
+	return &JSFile{}
 }
 
-func FromFilePath(filePath string) JSFile {
+func FromFilePath(filePath string) *JSFile {
 	content, err := os.ReadFile(filePath)
 	if err != nil {
 		panic(err)
@@ -28,6 +28,13 @@ func FromFilePath(filePath string) JSFile {
 
 	newJsFile := NewJsFile()
 	newJsFile.AddContent(string(content))
+
+	return newJsFile
+}
+
+func FromContent(content string) *JSFile {
+	newJsFile := NewJsFile()
+	newJsFile.AddContent(content)
 
 	return newJsFile
 }
