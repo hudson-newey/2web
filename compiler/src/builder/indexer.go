@@ -47,7 +47,17 @@ func indexPages(inputPath string) []string {
 			}
 		}
 
-		return totalFiles
+		// Filter out all paths that are not markup files.
+		// This means that any non-markup files will be tree-shaken if they are not
+		// used by any markup files.
+		filteredFiles := []string{}
+		for _, file := range totalFiles {
+			if assets.IsMarkupFile(file) {
+				filteredFiles = append(filteredFiles, file)
+			}
+		}
+
+		return filteredFiles
 	}
 
 	return []string{inputPath}

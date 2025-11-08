@@ -2,6 +2,7 @@ package parser
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
 type Parser struct {
@@ -28,7 +29,5 @@ func processNode(structure lexer.V2LexNode) Node {
 }
 
 func textNode(structure lexer.V2LexNode) Node {
-	return &MarkupTextNode{
-		content: structure.Content,
-	}
+	return nodes.NewMarkupTextNode(structure.Content)
 }
