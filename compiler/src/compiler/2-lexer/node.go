@@ -35,5 +35,12 @@ func (model *V2LexNode) PrintDebug() string {
 	// representations so that the output is easier to read.
 	quotedContent := strconv.Quote(model.Content)
 
-	return fmt.Sprintf("%d:%d\t%s\t%s\t%s\n", model.Pos.Row, model.Pos.Col, model.State, model.Token, quotedContent)
+	return fmt.Sprintf(
+		"%d:%d\t%s\t%s\t%s\n",
+		model.Pos.Row,
+		model.Pos.Col,
+		model.State.String(),
+		model.Token.String(),
+		quotedContent,
+	)
 }

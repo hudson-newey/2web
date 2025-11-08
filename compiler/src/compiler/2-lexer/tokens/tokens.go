@@ -106,5 +106,5 @@ const (
 	ScriptSource LexToken = "ScriptSource"
 
 	// Inside a <style> tag or in an external .css file
-	StyleSource LexToken = "StyleContent"
+	StyleSource LexToken = "StyleSource"
 )

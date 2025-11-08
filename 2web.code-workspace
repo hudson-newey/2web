@@ -42,7 +42,8 @@
 
       // Do not foramt HTML of .2web files on save because it tries to make all
       // html tags lowercase which might break imports.
-      "editor.formatOnSave": false
+      "editor.formatOnSave": false,
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[xhtml]": {
       "files.autoSave": "afterDelay",

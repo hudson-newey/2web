@@ -12,7 +12,8 @@ var Rules = []Grammar{
 var inlineStyles = Grammar{
 	Def: definition{
 		lexerTokens.StyleStartTag,
-		lexerTokens.TextContent,
+		lexerTokens.GreaterAngle,
+		lexerTokens.StyleSource,
 		lexerTokens.StyleEndTag,
 	},
 	Constructor: wrapConstructor(nodes.NewStyleNode),

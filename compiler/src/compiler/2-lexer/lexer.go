@@ -20,12 +20,12 @@ func NewLexer(reader *reader.Reader) *Lexer {
 	}
 }
 
-func (model *Lexer) Execute() []V2LexNode {
-	representation := []V2LexNode{}
+func (model *Lexer) Execute() []*V2LexNode {
+	representation := []*V2LexNode{}
 
 	for {
 		lexNode := model.lex()
-		representation = append(representation, lexNode)
+		representation = append(representation, &lexNode)
 
 		if lexNode.Token == lexerTokens.EOF {
 			return representation

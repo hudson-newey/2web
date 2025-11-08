@@ -21,8 +21,8 @@ const (
 )
 
 func BuildPage(filePath string, content string) page.Page {
-	nonHtmlStartTags := []string{"<script", "<style", "<code"}
-	nonHtmlEndTags := []string{"</script>", "</style>", "</code>"}
+	nonHtmlStartTags := []string{"<script", "<code"}
+	nonHtmlEndTags := []string{"</script>", "</code>"}
 
 	currentNodeType := htmlNode
 	bufferedContent := ""
@@ -41,8 +41,6 @@ func BuildPage(filePath string, content string) page.Page {
 					if bufferedContent != "" {
 						if currentNodeType == jsNode {
 							pageModel.AddScript(javascript.FromContent(bufferedContent))
-						} else if currentNodeType == cssNode {
-							pageModel.AddStyle(css.FromContent(bufferedContent))
 						} else if currentNodeType == codeNode {
 							contentToPrepend := strings.TrimPrefix(bufferedContent, "<code>")
 

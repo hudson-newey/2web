@@ -1,7 +1,5 @@
 package states
 
-type LexState string
-
 const (
 	// Text that will be rendered in the browser.
 	TextContent LexState = "Text"

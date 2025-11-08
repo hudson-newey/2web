@@ -18,12 +18,19 @@ type Grammar struct {
 }
 
 func (model *Grammar) Matches(lexNodes []*lexer.V2LexNode) bool {
-	if len(lexNodes) != len(model.Def) {
+	// If we have not processed enough tokens to have a match yet, we can quickly
+	// return false.
+	if len(lexNodes) < len(model.Def) {
 		return false
 	}
 
+	// Because a grammar definition can sometimes come after multiple non-matching
+	// tokens, we want to check only the last N tokens where N is the length of
+	// the grammar definition.
+	matchingSubset := lexNodes[len(lexNodes)-len(model.Def):]
+
 	for i, token := range model.Def {
-		if lexNodes[i].Token != token {
+		if matchingSubset[i].Token != token {
 			return false
 		}
 	}

@@ -1,5 +1,7 @@
 package netlify
 
+import "fmt"
+
 func Deploy() {
-	println("Deployments are currently a work in progress. Check back later.")
+	fmt.Println("Deployments are currently a work in progress. Check back later.")
 }
