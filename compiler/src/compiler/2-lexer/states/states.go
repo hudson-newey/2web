@@ -16,6 +16,9 @@ const (
 	// /*[here]*/
 	ScriptComment LexState = "ScriptComment"
 
+	// <script compiled>[here]</script>
+	CompiledScriptSource LexState = "CompiledScriptSource"
+
 	// <script>[here]</script>
 	ScriptSource LexState = "ScriptSource"
 

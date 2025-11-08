@@ -16,7 +16,6 @@ type languageState = int
 const (
 	htmlNode languageState = iota
 	jsNode
-	cssNode
 	codeNode
 )
 
@@ -39,9 +38,7 @@ func BuildPage(filePath string, content string) page.Page {
 
 				if content[i-len(endTag):i] == endTag {
 					if bufferedContent != "" {
-						if currentNodeType == jsNode {
-							pageModel.AddScript(javascript.FromContent(bufferedContent))
-						} else if currentNodeType == codeNode {
+						if currentNodeType == codeNode {
 							contentToPrepend := strings.TrimPrefix(bufferedContent, "<code>")
 
 							escapedContent := html.EscapeHtml(contentToPrepend)
@@ -71,8 +68,6 @@ func BuildPage(filePath string, content string) page.Page {
 					switch startTag {
 					case "<script":
 						currentNodeType = jsNode
-					case "<style":
-						currentNodeType = cssNode
 					case "<code":
 						currentNodeType = codeNode
 					}
@@ -85,7 +80,7 @@ func BuildPage(filePath string, content string) page.Page {
 		switch currentNodeType {
 		case htmlNode:
 			pageModel.Html.AddContent(string(content[i]))
-		case jsNode, cssNode, codeNode:
+		case jsNode, codeNode:
 			bufferedContent += string(content[i])
 		}
 	}

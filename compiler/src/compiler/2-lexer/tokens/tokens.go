@@ -79,6 +79,9 @@ const (
 	// </style>
 	StyleEndTag LexToken = "StyleEndTag"
 
+	// <script compiled>
+	CompiledScriptStartTag LexToken = "CompiledScriptStartTag"
+
 	// <script>
 	ScriptStartTag LexToken = "ScriptStartTag"
 
@@ -101,6 +104,9 @@ const (
 
 	// TextContent content that is displayed on the screen
 	TextContent LexToken = "Text"
+
+	// Inside a <script compiled> tag or in an external .js file
+	CompiledScriptSource LexToken = "CompiledScriptSource"
 
 	// Inside a <script> tag or in an external .js file
 	ScriptSource LexToken = "ScriptSource"

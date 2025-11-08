@@ -58,9 +58,10 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 		// There are different types of text depending on what context we are in
 		// Sometimes it can be external source code.
 		tokenMap := map[states.LexState]lexerTokens.LexToken{
-			states.ScriptSource: lexerTokens.ScriptSource,
-			states.StyleSource:  lexerTokens.StyleSource,
-			states.TextContent:  lexerTokens.TextContent,
+			states.CompiledScriptSource: lexerTokens.CompiledScriptSource,
+			states.ScriptSource:         lexerTokens.ScriptSource,
+			states.StyleSource:          lexerTokens.StyleSource,
+			states.TextContent:          lexerTokens.TextContent,
 		}
 
 		token, exists := tokenMap[state]

@@ -16,8 +16,9 @@ func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 		// attribute to an element, it will switch into the script/style lexer which
 		// is not correct.
 		// (Or maybe this is a feature? Needs more thought.)
-		"script": {token: lexerTokens.ScriptStartTag, next: inlineScriptTagLexer},
-		"style":  {token: lexerTokens.StyleStartTag, next: inlineStyleTagLexer},
+		"script compiled": {token: lexerTokens.CompiledScriptStartTag, next: inlineCompiledScriptTagLexer},
+		"script":          {token: lexerTokens.ScriptStartTag, next: inlineScriptTagLexer},
+		"style":           {token: lexerTokens.StyleStartTag, next: inlineStyleTagLexer},
 	}
 
 	cases = withAttributes(cases)

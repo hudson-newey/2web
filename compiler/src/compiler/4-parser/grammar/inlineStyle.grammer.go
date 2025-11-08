@@ -5,12 +5,9 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-var Rules = []Grammar{
-	inlineStyles,
-}
-
 var inlineStyles = Grammar{
 	Def: definition{
+		lexerTokens.LessAngle,
 		lexerTokens.StyleStartTag,
 		lexerTokens.GreaterAngle,
 		lexerTokens.StyleSource,
