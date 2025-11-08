@@ -1,6 +1,7 @@
 package builder
 
 import (
+	"hudson-newey/2web/src/content"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/odt"
@@ -68,9 +69,9 @@ func buildOdt(inputPath string) (page.Page, bool) {
 
 func buildPdf(inputPath string) (page.Page, bool) {
 	pageModel := page.NewPage()
-	pdfModel := pdf.NewPdfFile(inputPath)
+	var pdfModel content.BinaryFile = pdf.NewPdfFile(inputPath)
 
-	pageModel.AddAsset(pdfModel)
+	pageModel.AddAsset(&pdfModel)
 
 	return pageModel, true
 }

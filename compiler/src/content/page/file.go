@@ -22,7 +22,7 @@ type Page struct {
 	Html       *html.HTMLFile
 	JavaScript []*javascript.JSFile
 	Css        []*css.CSSFile
-	Assets     []content.BinaryFile
+	Assets     []*content.BinaryFile
 }
 
 func (model *Page) SetContent(htmlFile *html.HTMLFile) {
@@ -83,7 +83,7 @@ func (model *Page) AddStyle(cssFile *css.CSSFile) {
 // This is an escape hatch for adding binary or unrecognized formats to the
 // output assets, and a smell that the compiler cannot correctly handle the file
 // type and perform necessary optimizations/transpilation/etc.
-func (model *Page) AddAsset(binaryFile content.BinaryFile) {
+func (model *Page) AddAsset(binaryFile *content.BinaryFile) {
 	model.Assets = append(model.Assets, binaryFile)
 }
 

@@ -26,7 +26,8 @@ func (model *Page) WriteAssets() {
 	}
 
 	for _, file := range model.Assets {
-		writeBinary(file.Data(), file.OutputPath())
+		derefFile := *file
+		writeBinary(derefFile.Data(), derefFile.OutputPath())
 	}
 }
 
