@@ -76,6 +76,8 @@
       "golang.go",
       "premparihar.gotestexplorer",
 
+      "qwtel.sqlite-viewer",
+
       "ms-vscode.vscode-typescript-next",
       "zignd.html-css-class-completion",
       "vitest.explorer",

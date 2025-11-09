@@ -1,8 +1,8 @@
 package cache
 
 import (
-	"hudson-newey/2web/src/utils"
 	"os"
+	"time"
 )
 
 // TODO: Refactor this a lot better because it is still possible to break this.
@@ -12,16 +12,27 @@ func IsCached(inputPath string, outputPath string) bool {
 		return false
 	}
 
-	inputFileInfo, _ := os.Stat(inputPath)
+	inputFileInfo, err := os.Stat(inputPath)
+	if err != nil {
+		panic(err)
+	}
 
-	recordLocation := cacheRecordLocation(
-		inputPath,
-		outputPath,
-		inputFileInfo.ModTime(),
-	)
+	modTime := inputFileInfo.ModTime()
+	queryKey := newInOutModKey(inputPath, outputPath, modTime)
 
-	_, err = os.Stat(recordLocation)
-	return err == nil
+	conn := dbConnection()
+
+	querySQL := `
+	SELECT COUNT(*) FROM ` + buildCacheTableName + ` WHERE in_out_mod = ?;
+	`
+
+	var count int
+	err = conn.QueryRow(querySQL, queryKey).Scan(&count)
+	if err != nil {
+		return false
+	}
+
+	return count > 0
 }
 
 func CacheAsset(inputPath string, outputPath string) {
@@ -30,11 +41,21 @@ func CacheAsset(inputPath string, outputPath string) {
 		panic(err)
 	}
 
-	recordLocation := cacheRecordLocation(
-		inputPath,
-		outputPath,
-		inputFileInfo.ModTime(),
-	)
+	modTime := inputFileInfo.ModTime()
+	cacheKey := newInOutModKey(inputPath, outputPath, modTime)
 
-	utils.CreateFile(recordLocation)
+	conn := dbConnection()
+
+	insertSQL := `
+	INSERT INTO ` + buildCacheTableName + `(in_out_mod)
+	VALUES (?);`
+
+	_, err = conn.Exec(insertSQL, cacheKey)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func newInOutModKey(inputPath string, outputPath string, modTime time.Time) string {
+	return inputPath + "->" + outputPath + "@" + modTime.String()
 }

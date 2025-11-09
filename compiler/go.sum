@@ -12,6 +12,8 @@ github.com/gomarkdown/markdown v0.0.0-20250810172220-2e2c11897d1a h1:l7A0loSszR5
 github.com/gomarkdown/markdown v0.0.0-20250810172220-2e2c11897d1a/go.mod h1:JDGcbDT52eL4fju3sZ4TeHGsQwhG9nbDV21aMyhwPoA=
 github.com/gomarkdown/mdtohtml v0.0.0-20240124153210-d773061d1585 h1:gfB9CukKWjBI83xByTJwpOkSwFD+Ev+2m3U332KZCLo=
 github.com/gomarkdown/mdtohtml v0.0.0-20240124153210-d773061d1585/go.mod h1:6grYm5/uY15CwgBBqwA3+o/cAzaxssckznJ0B35ouBY=
+github.com/mattn/go-sqlite3 v1.14.32 h1:JD12Ag3oLy1zQA+BNn74xRgaBbdhbNIDYvQUEuuErjs=
+github.com/mattn/go-sqlite3 v1.14.32/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxUwlHK0RXw+Y=
 github.com/tdewolff/minify/v2 v2.23.3 h1:ukamplWSwuuklnW8gLSvY+nvU+0lCRrRcZNoeHjhKng=
 github.com/tdewolff/minify/v2 v2.23.3/go.mod h1:RkUGjklq6uIsBoOdzY3ll35HKKQ2aFqLQhnanBHhDyU=
 github.com/tdewolff/minify/v2 v2.24.6 h1:GdScQWO9fJcMsR93SFWFvD3q3b4W4Uhf81VBYAiK8qk=
