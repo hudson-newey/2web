@@ -8,9 +8,9 @@ import (
 
 func CompileReactivity(
 	filePath string,
-	pageModel page.Page,
+	pageModel *page.Page,
 	varNodes []*models.ReactiveVariable,
-) page.Page {
+) {
 	for _, varNode := range varNodes {
 		// Ideally, slower reactive types would only target properties and events
 		// that are effected.
@@ -59,6 +59,4 @@ func CompileReactivity(
 
 		pageModel.Html.Content = compileStatic(pageModel.Html.Content, varNode)
 	}
-
-	return pageModel
 }

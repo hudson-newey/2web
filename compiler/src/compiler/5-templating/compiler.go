@@ -189,7 +189,7 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	// inside of expandImports will be reflected outside of this function.
 	expandImports(filePath, &pageModel, importNodes)
 
-	pageModel = reactiveCompiler.CompileReactivity(filePath, pageModel, reactiveVariables)
+	reactiveCompiler.CompileReactivity(filePath, &pageModel, reactiveVariables)
 
 	return pageModel
 }
