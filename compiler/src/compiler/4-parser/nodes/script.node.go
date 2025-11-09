@@ -3,6 +3,7 @@ package nodes
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
@@ -10,18 +11,14 @@ import (
 )
 
 func NewScriptNode(lexNodes []*lexer.V2LexNode) *scriptNode {
-	// Find the lexNode that is a StyleSource token
-	var content string
-	for _, lexNode := range lexNodes {
-		if lexNode.Token == lexerTokens.ScriptSource {
-			content = lexNode.Content
-			break
-		}
+	sourceNode, err := scanners.FirstToken(lexNodes, lexerTokens.ScriptSource)
+	if err != nil {
+		panic(err)
 	}
 
 	return &scriptNode{
 		lexerNodes: lexNodes,
-		content:    content,
+		content:    sourceNode.Content,
 	}
 }
 
