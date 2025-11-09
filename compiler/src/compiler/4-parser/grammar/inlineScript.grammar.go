@@ -5,7 +5,7 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-var inlineScripts = Grammar{
+var inlineScripts = grammar{
 	Def: definition{
 		lexerTokens.LessAngle,
 		lexerTokens.ScriptStartTag,

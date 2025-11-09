@@ -9,7 +9,7 @@ import (
 
 type definition []lexerTokens.LexToken
 
-type Grammar struct {
+type grammar struct {
 	// A sequence of tokens that define the reactive variable
 	Def definition
 
@@ -17,7 +17,7 @@ type Grammar struct {
 	Constructor func(lexNodes []*lexer.V2LexNode) *ast.Node
 }
 
-func (model *Grammar) Matches(lexNodes []*lexer.V2LexNode) bool {
+func (model *grammar) Matches(lexNodes []*lexer.V2LexNode) bool {
 	// If we have not processed enough tokens to have a match yet, we can quickly
 	// return false.
 	if len(lexNodes) < len(model.Def) {

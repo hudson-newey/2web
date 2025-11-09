@@ -30,7 +30,7 @@ func CreateAst(lexNodes []*lexer.V2LexNode) ast.AbstractSyntaxTree {
 // a text node so that the old compiler can still process the text through the
 // old string manipulation methods.
 func processNode(index int, lexNodes []*lexer.V2LexNode) (ast.Node, int) {
-	grammars := grammar.Rules
+	grammars := grammar.TextRules
 	for _, rule := range grammars {
 		// Searches ahead of the current position in the lexed tokens to see if the
 		// grammar definition matches.
