@@ -5,7 +5,7 @@ import (
 	"hudson-newey/2web/src/optimizer/minify"
 )
 
-func OptimizePage(pageModel page.Page) page.Page {
+func OptimizePage(pageModel *page.Page) {
 	pageModel.Html.Content = minify.MinifyHtml(pageModel.Html.Content)
 
 	for _, cssModel := range pageModel.Css {
@@ -15,6 +15,4 @@ func OptimizePage(pageModel page.Page) page.Page {
 	for _, jsModel := range pageModel.JavaScript {
 		jsModel.Content = minify.MinifyJs(jsModel.Content)
 	}
-
-	return pageModel
 }

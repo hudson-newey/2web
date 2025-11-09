@@ -59,7 +59,7 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 			cli.PrintWarning("Ignoring '--format' because '--production' was specified")
 		}
 
-		compiledPage = optimizer.OptimizePage(compiledPage)
+		optimizer.OptimizePage(&compiledPage)
 	}
 
 	if !success && production && !*args.IgnoreErrors {
