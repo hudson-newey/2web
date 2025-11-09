@@ -2,23 +2,22 @@
 
 A collection of packages to enhance your 2web application
 
-| Package                                                | State |
-| ------------------------------------------------------ | ----- |
-| [animations](animations/README.md)                     | 🔧     |
-| [browser-state](browser-state/README.md)               | ❌     |
-| [iron](iron/README.md)                                 | ❌     |
-| [hydration](hydration/README.md)                       | ❌     |
-| [keyboard](keyboard/README.md)                         | 🔧     |
-| [named-strings](named-strings/README.md)               | 🔧     |
-| [pre-fetcher](pre-fetcher/README.md)                   | 🔧     |
-| [route-guards](route-guards/README.md)                 | 🔧     |
-| [signals](signals/README.md)                           | 🔧     |
-| [ssr](ssr/README.md)                                   | 🔧     |
-| [threads](threads/README.md)                           | ❌     |
-| [typescript](typescript/README.md)                     | 🔧     |
-| [vdom](vdom/README.md)                                 | 🔧     |
-| [view-transitions](view-transitions/README.md)         | 🔧     |
-| [vite-plugin](vite-plugin/README.md)                   | 🔧     |
+| Package                                        | State |
+| ---------------------------------------------- | ----- |
+| [animations](animations/README.md)             | 🔧     |
+| [browser-state](browser-state/README.md)       | ❌     |
+| [iron](iron/README.md)                         | ❌     |
+| [keyboard](keyboard/README.md)                 | 🔧     |
+| [named-strings](named-strings/README.md)       | 🔧     |
+| [pre-fetcher](pre-fetcher/README.md)           | 🔧     |
+| [route-guards](route-guards/README.md)         | 🔧     |
+| [signals](signals/README.md)                   | 🔧     |
+| [ssr](ssr/README.md)                           | 🔧     |
+| [threads](threads/README.md)                   | ❌     |
+| [typescript](typescript/README.md)             | 🔧     |
+| [vdom](vdom/README.md)                         | 🔧     |
+| [view-transitions](view-transitions/README.md) | 🔧     |
+| [vite-plugin](vite-plugin/README.md)           | 🔧     |
 
 ❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
 

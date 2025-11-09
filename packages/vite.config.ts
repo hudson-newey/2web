@@ -27,7 +27,6 @@ export default defineConfig({
         index: "./index.ts",
         animations: "./animations/index.ts",
         "browser-state": "./browser-state/index.ts",
-        hydration: "./hydration/index.ts",
         iron: "./iron/index.ts",
         keyboard: "./keyboard/index.ts",
         "named-strings": "./named-strings/index.ts",

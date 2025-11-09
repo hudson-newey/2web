@@ -5,7 +5,6 @@
     "animations/**/*",
     "browser-state/**/*",
     "iron/**/*",
-    "hydration/**/*",
     "keyboard/**/*",
     "named-strings/**/*",
     "pre-fetcher/**/*",
