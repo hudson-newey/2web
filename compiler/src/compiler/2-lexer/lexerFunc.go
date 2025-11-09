@@ -61,6 +61,7 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 			states.CompiledScriptSource: lexerTokens.CompiledScriptSource,
 			states.ScriptSource:         lexerTokens.ScriptSource,
 			states.StyleSource:          lexerTokens.StyleSource,
+			states.CodeSource:           lexerTokens.CodeSource,
 			states.TextContent:          lexerTokens.TextContent,
 		}
 

@@ -7,10 +7,10 @@ tmp_dir = "tmp"
   # However, during builds, the binary might change without the input files
   # changing
   bin = "./tmp/main"
-  args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache"]
+  # args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache"]
   # Using a small file is helpful for debugging the lexer and parser because
   # there is less debug info to sift through.
-  # args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--verbose-lexer", "--verbose-ast"]
+  args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--verbose-lexer", "--verbose-ast"]
   # args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache"]
   # args_bin = ["-i", "dev/", "-o", "dist/", "--production", "--ignore-errors"]
   cmd = "go build -o ./tmp/main ./src"

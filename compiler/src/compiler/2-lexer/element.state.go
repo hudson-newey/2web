@@ -19,6 +19,7 @@ func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 		"script compiled": {token: lexerTokens.CompiledScriptStartTag, next: inlineCompiledScriptTagLexer},
 		"script":          {token: lexerTokens.ScriptStartTag, next: inlineScriptTagLexer},
 		"style":           {token: lexerTokens.StyleStartTag, next: inlineStyleTagLexer},
+		"code":            {token: lexerTokens.CodeStartTag, next: inlineCodeTagLexer},
 	}
 
 	cases = withAttributes(cases)

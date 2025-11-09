@@ -113,4 +113,17 @@ const (
 
 	// Inside a <style> tag or in an external .css file
 	StyleSource LexToken = "StyleSource"
+
+	// Code blocks are distinct from regular HTML elements in 2web because they
+	// are automatically escaped.
+	// I have made this distinction at the lexer level to avoid ambiguity.
+
+	// <code>
+	CodeStartTag LexToken = "CodeStartTag"
+
+	// Inside a <code> tag
+	CodeSource LexToken = "CodeSource"
+
+	// </code>
+	CodeEndTag LexToken = "CodeEndTag"
 )

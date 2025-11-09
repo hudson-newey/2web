@@ -25,6 +25,9 @@ const (
 	// <style>[here]</style>
 	StyleSource LexState = "StyleSource"
 
+	// <code>[here]</code>
+	CodeSource LexState = "CodeSource"
+
 	// e.g. "[here]" or '[here]'
 	String LexState = "String"
 )
