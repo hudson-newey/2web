@@ -3,7 +3,6 @@
   "include": [
     "index.ts",
     "animations/**/*",
-    "browser-state/**/*",
     "iron/**/*",
     "keyboard/**/*",
     "named-strings/**/*",

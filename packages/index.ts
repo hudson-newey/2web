@@ -5,7 +5,6 @@ console.warn(
 );
 
 export * from "./animations/index.ts";
-export * from "./browser-state/index.ts";
 export * from "./iron/index.ts";
 export * from "./keyboard/index.ts";
 export * from "./named-strings/index.ts";
