@@ -7,4 +7,6 @@ var TextRules = []grammar{
 
 	inlineScripts,
 	compiledScripts,
+
+	codeBlock,
 }

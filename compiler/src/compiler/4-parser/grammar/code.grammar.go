@@ -10,8 +10,8 @@ var codeBlock = grammar{
 		lexerTokens.LessAngle,
 		lexerTokens.CodeStartTag,
 		lexerTokens.GreaterAngle,
-		lexerTokens.ScriptSource,
-		lexerTokens.ScriptEndTag,
+		lexerTokens.CodeSource,
+		lexerTokens.CodeEndTag,
 	},
-	Constructor: wrapConstructor(nodes.NewScriptNode),
+	Constructor: wrapConstructor(nodes.NewCodeNode),
 }

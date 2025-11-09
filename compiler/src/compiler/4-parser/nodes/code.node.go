@@ -10,18 +10,25 @@ import (
 )
 
 func NewCodeNode(lexNodes []*lexer.V2LexNode) *codeNode {
+	startingCodeTagContent := ""
+
 	// Find the lexNode that is a StyleSource token
 	var content string
 	for _, lexNode := range lexNodes {
-		if lexNode.Token == lexerTokens.ScriptSource {
+		if lexNode.Token == lexerTokens.CodeSource {
 			content = lexNode.Content
 			break
 		}
+
+		// Find all content between the < and the > tokens (inclusive) so that
+		// attributes on the code tag are preserved.
+		startingCodeTagContent += lexNode.Content
 	}
 
 	return &codeNode{
-		lexerNodes: lexNodes,
-		content:    content,
+		startingCodeTagContent: startingCodeTagContent,
+		lexerNodes:             lexNodes,
+		content:                content,
 	}
 }
 
@@ -33,8 +40,9 @@ func NewCodeNode(lexNodes []*lexer.V2LexNode) *codeNode {
 // By making this distinction at the node level (instead of using the tag name),
 // it makes this distinction VERY clear without any ambiguity.
 type codeNode struct {
-	lexerNodes []*lexer.V2LexNode
-	content    string
+	startingCodeTagContent string
+	lexerNodes             []*lexer.V2LexNode
+	content                string
 }
 
 func (model *codeNode) Type() string {
@@ -42,7 +50,10 @@ func (model *codeNode) Type() string {
 }
 
 func (model *codeNode) HtmlContent() *html.HTMLFile {
-	return html.NewHtmlFile()
+	escapedContent := html.EscapeHtml(model.content)
+	withCodeTags := model.startingCodeTagContent + escapedContent + "</code>"
+
+	return html.FromContent(withCodeTags)
 }
 
 func (model *codeNode) JsContent() *javascript.JSFile {
