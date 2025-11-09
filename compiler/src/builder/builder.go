@@ -5,6 +5,7 @@ import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
+	"hudson-newey/2web/src/parallel"
 	"hudson-newey/2web/src/site"
 	"os"
 )
@@ -38,16 +39,12 @@ func Build() bool {
 		// recursively find all children of the input directory
 		indexedPages := indexPages(*args.InputPath)
 
-		for _, file := range indexedPages {
-			compileAndWriteFile(file, outputFileName(*args.InputPath, *args.OutputPath, file))
-		}
-
-		// parallel.ForEach(indexedPages, func(filePath string) {
-		// 	compileAndWriteFile(
-		// 		filePath,
-		// 		outputFileName(*args.InputPath, *args.OutputPath, filePath),
-		// 	)
-		// })
+		parallel.ForEach(indexedPages, func(filePath string) {
+			compileAndWriteFile(
+				filePath,
+				outputFileName(*args.InputPath, *args.OutputPath, filePath),
+			)
+		})
 
 		// TODO: These AfterAll hooks should use the output asset models as the
 		// input so if any files implicitly create any site-wide assets, the
