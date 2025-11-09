@@ -35,12 +35,12 @@ const resp = await wait(fetch("https://example.com"), {
 });
 ```
 
-### Try
+### Try Catch
 
 Requires you to handle error cases.
 
 ```ts
-const resp = try(() => throw Error("my error"));
+const resp = tryCatch(() => throw Error("my error"));
 if (resp instanceof Error) {
   console.log("handle the error");
 }
