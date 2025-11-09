@@ -1,11 +1,17 @@
 package reactiveCompiler
 
 import (
+	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"strings"
 )
 
-func compileStatic(content string, varNode *models.ReactiveVariable) string {
+func compileStatic(
+	pageModel *page.Page,
+	varNode *models.ReactiveVariable,
+) {
+	content := pageModel.Html.Content
+
 	initialPropValue := strings.TrimPrefix(varNode.InitialValue, "\"")
 	initialPropValue = strings.TrimPrefix(initialPropValue, "'")
 	initialPropValue = strings.TrimSuffix(initialPropValue, "\"")
@@ -13,5 +19,5 @@ func compileStatic(content string, varNode *models.ReactiveVariable) string {
 
 	content = strings.ReplaceAll(content, varNode.Name, initialPropValue)
 
-	return content
+	pageModel.Html.Content = content
 }

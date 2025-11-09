@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"strings"
 )
@@ -16,8 +17,13 @@ import (
 // star prefix.
 // E.g. value="$count" will ONLY be evaluated at compile time and results in an
 // SSG site without any runtime overhead.
-func compileStaticPropVar(content string, varNode *models.ReactiveVariable) string {
+func compileStaticPropVar(
+	pageModel *page.Page,
+	varNode *models.ReactiveVariable,
+) {
 	uniquePropSelectors := getUniqueSelectors(varNode.Props)
+
+	content := pageModel.Html.Content
 
 	for _, propNode := range uniquePropSelectors {
 		// Some of the properties can be evaluated at compile time to prevent
@@ -82,7 +88,7 @@ func compileStaticPropVar(content string, varNode *models.ReactiveVariable) stri
 		}
 	}
 
-	return content
+	pageModel.Html.Content = content
 }
 
 // If a node has an *innerText attribute and the underlying variable is static,

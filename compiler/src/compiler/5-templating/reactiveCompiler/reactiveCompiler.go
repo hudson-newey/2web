@@ -25,11 +25,11 @@ func CompileReactivity(
 		// TODO: I might be able to combine selectors for the same element that has
 		// different property targets.
 		if varNode.Type() >= models.Reactive {
-			pageModel.Html.Content = compileReactiveVar(pageModel.Html.Content, varNode)
+			compileReactiveVar(pageModel, varNode)
 		} else if varNode.Type() >= models.Assignment {
 			// TODO: explore if reactive and assignment reactivity are mutually
 			// exclusive for variables, events, or props
-			pageModel.Html.Content = compileAssignmentVar(pageModel.Html.Content, varNode)
+			compileAssignmentVar(pageModel, varNode)
 		}
 
 		// static props differ from truly static variables because static props
@@ -48,7 +48,7 @@ func CompileReactivity(
 		//
 		// e.g. <input type="range" value="$value"></input>
 		if varNode.Type() >= models.StaticProperty {
-			pageModel.Html.Content = compileStaticPropVar(pageModel.Html.Content, varNode)
+			compileStaticPropVar(pageModel, varNode)
 		}
 
 		// after this point, all of the reactive properties have been processed
@@ -57,6 +57,6 @@ func CompileReactivity(
 			pageModel.Html.Content = strings.ReplaceAll(pageModel.Html.Content, reactiveProp.Node.Selector, "")
 		}
 
-		pageModel.Html.Content = compileStatic(pageModel.Html.Content, varNode)
+		compileStatic(pageModel, varNode)
 	}
 }

@@ -4,14 +4,20 @@ import (
 	"fmt"
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"strings"
 )
 
-func compileAssignmentVar(content string, varNode *models.ReactiveVariable) string {
+func compileAssignmentVar(
+	pageModel *page.Page,
+	varNode *models.ReactiveVariable,
+) {
 	callbackName := javascript.CreateJsFunctionName()
 
 	uniquePropSelectors := getUniqueSelectors(varNode.Props)
+
+	content := pageModel.Html.Content
 
 	functionContent := ""
 	for _, propNode := range uniquePropSelectors {
@@ -72,5 +78,5 @@ func compileAssignmentVar(content string, varNode *models.ReactiveVariable) stri
 		content = strings.ReplaceAll(content, event.Node.Selector, eventBindingAttribute)
 	}
 
-	return content
+	pageModel.Html.Content = content
 }

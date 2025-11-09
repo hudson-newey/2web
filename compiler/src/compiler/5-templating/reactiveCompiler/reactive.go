@@ -4,18 +4,21 @@ import (
 	"fmt"
 	"hudson-newey/2web/src/content/document"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"strings"
 )
 
 func compileReactiveVar(
-	content string,
+	pageModel *page.Page,
 	varNode *models.ReactiveVariable,
-) string {
+) {
 	callbackName := javascript.CreateJsFunctionName()
 	variableName := javascript.CreateJsVariableName()
 
 	uniquePropSelectors := getUniqueSelectors(varNode.Props)
+
+	content := pageModel.Html.Content
 
 	functionContent := ""
 	for _, propNode := range uniquePropSelectors {
@@ -96,5 +99,5 @@ func compileReactiveVar(
 		content = strings.ReplaceAll(content, event.Node.Selector, eventBindingAttribute)
 	}
 
-	return content
+	pageModel.Html.Content = content
 }
