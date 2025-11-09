@@ -11,8 +11,6 @@ import (
 	"hudson-newey/2web/src/content/document/devtools"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/page"
-	"hudson-newey/2web/src/content/page/runtimeOptimizer"
-	"hudson-newey/2web/src/optimizer"
 )
 
 func buildFromString(inputPath string, data string, isFullPage bool) (page.Page, bool) {
@@ -52,23 +50,6 @@ func buildFromString(inputPath string, data string, isFullPage bool) (page.Page,
 
 	if *args.HasDevTools {
 		compiledPage.Html.Content = devtools.InjectDevTools(compiledPage.Html.Content)
-	}
-
-	if !(*args.NoRuntimeOptimizations) {
-		runtimeOptimizer.InjectRuntimeOptimizations(&compiledPage)
-	}
-
-	if *args.WithFormatting {
-		compiledPage.Format()
-	}
-
-	// We always optimize last so that even the injected content is optimized.
-	if *args.IsProd {
-		if *args.WithFormatting {
-			cli.PrintWarning("Ignoring '--format' because '--production' was specified")
-		}
-
-		compiledPage = optimizer.OptimizePage(compiledPage)
 	}
 
 	return compiledPage, isErrorFree

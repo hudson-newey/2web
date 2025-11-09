@@ -3,6 +3,8 @@ package builder
 import (
 	"hudson-newey/2web/src/builder/cache"
 	"hudson-newey/2web/src/cli"
+	"hudson-newey/2web/src/content/page/runtimeOptimizer"
+	"hudson-newey/2web/src/optimizer"
 	"hudson-newey/2web/src/site"
 )
 
@@ -37,6 +39,29 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 	}
 
 	compiledPage, success := BuildToPage(inputPath, true)
+
+	// We perform runtime optimizations here so that they are only applied once.
+	// If we instead applied them inside of the BuildToPage function, then the
+	// optimizations would be applied every time a component is added.
+	// Most optimizations can be applied at the very end of the page build, so
+	// this is the best place to do it.
+	if !(*args.NoRuntimeOptimizations) {
+		runtimeOptimizer.InjectRuntimeOptimizations(&compiledPage)
+	}
+
+	if *args.WithFormatting {
+		compiledPage.Format()
+	}
+
+	// We always optimize last so that even the injected content is optimized.
+	if *args.IsProd {
+		if *args.WithFormatting {
+			cli.PrintWarning("Ignoring '--format' because '--production' was specified")
+		}
+
+		compiledPage = optimizer.OptimizePage(compiledPage)
+	}
+
 	if !success && production && !*args.IgnoreErrors {
 		// Compiler errors should not be ignored in production builds, otherwise, we
 		// start shipping compiler errors to end users, which does not look good.
