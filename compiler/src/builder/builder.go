@@ -43,6 +43,13 @@ func Build() bool {
 			compileAndWriteFile(file, outputFileName(*args.InputPath, *args.OutputPath, file))
 		}
 
+		// parallel.ForEach(indexedPages, func(filePath string) {
+		// 	compileAndWriteFile(
+		// 		filePath,
+		// 		outputFileName(*args.InputPath, *args.OutputPath, filePath),
+		// 	)
+		// })
+
 		// TODO: These AfterAll hooks should use the output asset models as the
 		// input so if any files implicitly create any site-wide assets, the
 		// AfterAll hook does not overwrite the files.
