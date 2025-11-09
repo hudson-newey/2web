@@ -73,7 +73,7 @@ func (model *JSFile) RawContent() string {
 			lexer.Position{},
 		)
 
-		documentErrors.AddErrors(errorModel)
+		documentErrors.AddErrors(&errorModel)
 	}
 
 	return bundledContent

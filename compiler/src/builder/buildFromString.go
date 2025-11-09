@@ -42,10 +42,12 @@ func buildFromString(inputPath string, data string, isFullPage bool) (page.Page,
 	// 5. Template (write result)
 	compiledPage := templating.Compile(inputPath, ast)
 
-	isErrorFree := documentErrors.IsPageErrorFree()
+	isErrorFree := compiledPage.Errors.IsErrorFree()
 	if !isErrorFree {
-		compiledPage.Html.Content = documentErrors.InjectErrors(compiledPage.Html.Content)
-		documentErrors.ResetPageErrors()
+		compiledPage.Html.Content = documentErrors.InjectErrors(
+			compiledPage.Html.Content,
+			compiledPage.Errors.Errors,
+		)
 	}
 
 	if *args.HasDevTools {

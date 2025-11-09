@@ -17,6 +17,7 @@ func NewPage() Page {
 		JavaScript: []*javascript.JSFile{},
 		Css:        []*css.CSSFile{},
 		Assets:     []*content.BinaryFile{},
+		Errors:     &PageErrors{},
 	}
 }
 
@@ -27,6 +28,7 @@ type Page struct {
 	JavaScript []*javascript.JSFile
 	Css        []*css.CSSFile
 	Assets     []*content.BinaryFile
+	Errors     *PageErrors
 }
 
 func (model *Page) SetContent(htmlFile *html.HTMLFile) {

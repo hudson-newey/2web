@@ -20,9 +20,8 @@ func Build() bool {
 
 	inputPath, err := os.Stat(*args.InputPath)
 	if err != nil {
-		documentErrors.AddErrors(
-			models.NewError(err.Error(), *args.InputPath, lexer.Position{}),
-		)
+		pathError := models.NewError(err.Error(), *args.InputPath, lexer.Position{})
+		documentErrors.AddErrors(&pathError)
 
 		documentErrors.PrintDocumentErrors()
 		return false

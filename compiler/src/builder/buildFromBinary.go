@@ -31,13 +31,13 @@ func buildDocx(inputPath string, isFullPage bool) (page.Page, bool) {
 	docxModel := docx.NewDocxFile(inputPath)
 	htmlContent, err := convert.ConvertFormat(docxModel.Data, "docx", "html")
 	if err != nil {
-		documentErrors.AddErrors(
-			models.NewError(
-				"Failed to convert 'docx' file to 'html'",
-				inputPath,
-				lexer.Position{},
-			),
+		conversionError := models.NewError(
+			"Failed to convert 'docx' file to 'html'",
+			inputPath,
+			lexer.Position{},
 		)
+
+		documentErrors.AddErrors(&conversionError)
 
 		return page.NewPage(), false
 	}
@@ -54,13 +54,13 @@ func buildOdt(inputPath string, isFullPage bool) (page.Page, bool) {
 	odtModel := odt.NewOdtFile(inputPath)
 	htmlContent, err := convert.ConvertFormat(odtModel.Data, "odt", "html")
 	if err != nil {
-		documentErrors.AddErrors(
-			models.NewError(
-				"Failed to convert 'odt' file to 'html'",
-				inputPath,
-				lexer.Position{},
-			),
+		conversionError := models.NewError(
+			"Failed to convert 'odt' file to 'html'",
+			inputPath,
+			lexer.Position{},
 		)
+
+		documentErrors.AddErrors(&conversionError)
 
 		return page.NewPage(), false
 	}

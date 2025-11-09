@@ -17,7 +17,7 @@ func printError(lexer lexer.Lexer, node lexer.V2LexNode, err parserError) {
 	message := fmt.Sprintf("Error (%d:%d): %s", node.Pos.Row, node.Pos.Col, errorMessage(err))
 	errorModel := models.NewError(message, lexer.Input.FilePath, node.Pos)
 
-	documentErrors.AddErrors(errorModel)
+	documentErrors.AddErrors(&errorModel)
 }
 
 func errorMessage(err parserError) string {

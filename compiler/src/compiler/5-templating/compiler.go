@@ -7,7 +7,6 @@ import (
 	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
 	"hudson-newey/2web/src/content/assets"
-	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/content/txt"
@@ -95,13 +94,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 		for _, variableNode := range variableNodes {
 			variableModel, err := reactiveVariable.FromNode(variableNode)
 			if err != nil {
-				documentErrors.AddErrors(
-					models.NewError(
-						err.Error(),
-						filePath,
-						lexer.Position{},
-					),
+				varError := models.NewError(
+					err.Error(),
+					filePath,
+					lexer.Position{},
 				)
+
+				pageModel.Errors.AddError(&varError)
 				continue
 			}
 
@@ -115,13 +114,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	for _, node := range propertyNodes {
 		property, err := reactiveProperty.FromNode(node)
 		if err != nil {
-			documentErrors.AddErrors(
-				models.NewError(
-					err.Error(),
-					filePath,
-					lexer.Position{},
-				),
+			varError := models.NewError(
+				err.Error(),
+				filePath,
+				lexer.Position{},
 			)
+
+			pageModel.Errors.AddError(&varError)
 			continue
 		}
 
@@ -138,13 +137,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 
 		if !foundAssociatedProperty {
 			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for property %s", property.VarName, property.Node.Selector)
-			documentErrors.AddErrors(
-				models.NewError(
-					errorMessage,
-					filePath,
-					lexer.Position{},
-				),
+			varError := models.NewError(
+				errorMessage,
+				filePath,
+				lexer.Position{},
 			)
+
+			pageModel.Errors.AddError(&varError)
 			continue
 		}
 	}
@@ -152,13 +151,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	for _, node := range eventNodes {
 		event, err := reactiveEvent.FromNode(node)
 		if err != nil {
-			documentErrors.AddErrors(
-				models.NewError(
-					err.Error(),
-					filePath,
-					lexer.Position{},
-				),
+			varError := models.NewError(
+				err.Error(),
+				filePath,
+				lexer.Position{},
 			)
+
+			pageModel.Errors.AddError(&varError)
 			continue
 		}
 
@@ -174,13 +173,13 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 
 		if !foundAssociatedProperty {
 			errorMessage := fmt.Sprintf("could not find compiler variable '%s' for event %s", event.VarName, event.Node.Selector)
-			documentErrors.AddErrors(
-				models.NewError(
-					errorMessage,
-					filePath,
-					lexer.Position{},
-				),
+			varError := models.NewError(
+				errorMessage,
+				filePath,
+				lexer.Position{},
 			)
+
+			pageModel.Errors.AddError(&varError)
 			continue
 		}
 	}

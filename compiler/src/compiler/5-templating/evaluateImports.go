@@ -2,7 +2,6 @@ package templating
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/component"
@@ -23,9 +22,8 @@ func expandImports(
 	for _, importNode := range importNodes {
 		componentModel, err := component.FromNode(importNode, filePath)
 		if err != nil {
-			documentErrors.AddErrors(
-				models.NewError(err.Error(), filePath, lexer.Position{}),
-			)
+			importError := models.NewError(err.Error(), filePath, lexer.Position{})
+			pageModel.Errors.AddError(&importError)
 			continue
 		}
 

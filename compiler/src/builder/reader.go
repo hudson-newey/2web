@@ -13,13 +13,13 @@ import (
 func getContent(inputPath string) []byte {
 	rawData, err := getInputContent(inputPath)
 	if err != nil {
-		documentErrors.AddErrors(
-			models.NewError(
-				fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
-				inputPath,
-				lexer.StartingPosition,
-			),
+		inputError := models.NewError(
+			fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
+			inputPath,
+			lexer.StartingPosition,
 		)
+
+		documentErrors.AddErrors(&inputError)
 
 		// If there was an error reading the file, we return an empty byte slice
 		// instead of returning a potentially partially read/corrupted byte slice

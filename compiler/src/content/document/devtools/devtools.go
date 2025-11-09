@@ -1,10 +1,7 @@
 package devtools
 
 import (
-	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document"
-	"hudson-newey/2web/src/content/document/documentErrors"
-	"hudson-newey/2web/src/models"
 )
 
 func InjectDevTools(pageContent string) string {
@@ -15,14 +12,7 @@ func InjectDevTools(pageContent string) string {
 func createDevtoolsTemplate() string {
 	devtoolsHtml, err := document.BuildTemplate(devtoolsHtmlSource(), nil)
 	if err != nil {
-		// Handle the error, maybe add it to errorList
-		documentErrors.AddErrors(
-			models.NewError(
-				"Failed to inject devtools template: "+err.Error(),
-				"internal",
-				lexer.Position{},
-			),
-		)
+		panic(err)
 	}
 
 	return devtoolsHtml
