@@ -5,6 +5,7 @@ import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
+	"hudson-newey/2web/src/parallel"
 	"strings"
 )
 
@@ -13,9 +14,9 @@ func expandComponentImports(
 	pageModel *page.Page,
 	components []*models.Component,
 ) {
-	for _, component := range components {
+	parallel.ForEach(components, func(component *models.Component) {
 		expandImport(workingPath, pageModel, component)
-	}
+	})
 }
 
 func expandImport(
