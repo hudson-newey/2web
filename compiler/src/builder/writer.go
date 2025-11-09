@@ -36,7 +36,7 @@ func compileAndWriteFile(inputPath string, outputPath string) {
 		}
 	}
 
-	compiledPage, success := buildToPage(inputPath)
+	compiledPage, success := BuildToPage(inputPath, true)
 	if !success && production && !*args.IgnoreErrors {
 		// Compiler errors should not be ignored in production builds, otherwise, we
 		// start shipping compiler errors to end users, which does not look good.

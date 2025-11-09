@@ -5,7 +5,7 @@ import (
 	"unicode/utf8"
 )
 
-func buildToPage(inputPath string) (page.Page, bool) {
+func BuildToPage(inputPath string, isFullPage bool) (page.Page, bool) {
 	data := getContent(inputPath)
 
 	// This does limit us to UTF-8 which will exclude a lot of legacy encodings
@@ -14,8 +14,8 @@ func buildToPage(inputPath string) (page.Page, bool) {
 	//
 	// TODO: We should add support for other encodings in the future.
 	if utf8.Valid(data) {
-		return buildFromString(inputPath, string(data))
+		return buildFromString(inputPath, string(data), isFullPage)
 	} else {
-		return buildFromBinary(inputPath, data)
+		return buildFromBinary(inputPath, data, isFullPage)
 	}
 }

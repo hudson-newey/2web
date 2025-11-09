@@ -13,11 +13,11 @@ import (
 // This function takes an array of lexer nodes so that adding different import
 // types e.g. component, css, JavaScript, html, etc... is the responsibility of
 // this function instead of the compiler.
-func evaluateImports(
+func expandImports(
 	filePath string,
-	page page.Page,
+	pageModel *page.Page,
 	importNodes []lexer.LexNode[lexer.ImportNode],
-) page.Page {
+) {
 	componentImports := []*models.Component{}
 
 	for _, importNode := range importNodes {
@@ -32,5 +32,5 @@ func evaluateImports(
 		componentImports = append(componentImports, &componentModel)
 	}
 
-	return ExpandComponentImports(filePath, page, componentImports)
+	expandComponentImports(filePath, pageModel, componentImports)
 }

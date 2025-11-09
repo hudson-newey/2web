@@ -9,16 +9,6 @@ import (
 	"path/filepath"
 )
 
-func BuildPage(filePath string, content string) page.Page {
-	pageModel := page.NewPage()
-	pageModel.InputPath = filePath
-	pageModel.Html.AddContent(content)
-
-	addRouteAssets(&pageModel)
-
-	return pageModel
-}
-
 // TODO: I should find a better way to do this instead of hardcoding the file
 // names.
 func addRouteAssets(page *page.Page) {

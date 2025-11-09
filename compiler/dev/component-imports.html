@@ -1,8 +1,12 @@
 <title>Components</title>
 
 <script compiled>
+  import Header from "components/header.component.html";
   import Footer from "components/footer.component.html";
+  import Counter from "components/counter.component.html";
 </script>
+
+<Header />
 
 <p>
   On this page, we import the footer component through a "esm like" import
@@ -15,6 +19,8 @@
   You will see that I have used the component twice and that the custom
   component is self-closing.
 </p>
+
+<Counter />
 
 <Footer />
 <Footer />

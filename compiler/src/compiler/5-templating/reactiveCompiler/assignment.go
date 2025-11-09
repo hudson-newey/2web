@@ -52,7 +52,14 @@ func compileAssignmentVar(content string, varNode *models.ReactiveVariable) stri
 	// on the static compiler to make element references
 	injectableTemplate = strings.ReplaceAll(injectableTemplate, "\\u0022", "\"")
 
-	content = document.InjectContent(content, injectableTemplate, document.BodyTop)
+	// If there is no body tag, we just append to the end of the content.
+	// TODO: This should be improved once we start using lazy loaded scripts
+	// instead of inlining reactivity as scripts in HTML content.
+	if document.HasBodyTag(content) {
+		content = document.InjectContent(content, injectableTemplate, document.BodyTop)
+	} else {
+		content = document.InjectContent(content, injectableTemplate, document.Leading)
+	}
 
 	for _, event := range varNode.Events {
 		eventBindingAttribute := ""

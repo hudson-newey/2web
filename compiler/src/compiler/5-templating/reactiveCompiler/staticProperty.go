@@ -72,7 +72,14 @@ func compileStaticPropVar(content string, varNode *models.ReactiveVariable) stri
 			panic(err)
 		}
 
-		content = document.InjectContent(content, injectableTemplate, document.BodyTop)
+		// If there is no body tag, we just append to the end of the content.
+		// TODO: This should be improved once we start using lazy loaded scripts
+		// instead of inlining reactivity as scripts in HTML content.
+		if document.HasBodyTag(content) {
+			content = document.InjectContent(content, injectableTemplate, document.BodyTop)
+		} else {
+			content = document.InjectContent(content, injectableTemplate, document.Leading)
+		}
 	}
 
 	return content

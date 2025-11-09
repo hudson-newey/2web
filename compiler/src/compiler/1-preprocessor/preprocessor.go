@@ -10,7 +10,7 @@ import (
 	"hudson-newey/2web/src/content/xslt"
 )
 
-func ProcessStaticSite(filePath string, content string) string {
+func ProcessStaticSite(filePath string, content string, expandPartials bool) string {
 	ssgResult := content
 
 	// We convert markdown files into HTML first so that layouts and partials can
@@ -20,12 +20,6 @@ func ProcessStaticSite(filePath string, content string) string {
 			Content: ssgResult,
 		}
 		ssgResult = markdownFile.ToHtml().Content
-
-		// Markdown files are typically compiled as html partials. Developers
-		// typically (and shouldn't) declare a doctype, header, etc...
-		// therefore, we also expand html partials once the html document has been
-		// created.
-		ssgResult = html.ExpandPartial(ssgResult)
 	}
 
 	if assets.IsMarkupFile(filePath) &&
@@ -45,7 +39,9 @@ func ProcessStaticSite(filePath string, content string) string {
 		// html, head, meta, or body tags.
 		// The user can just start writing the pages content, and the compiler can
 		// figure out what should be in the body vs head.
-		ssgResult = html.ExpandPartial(ssgResult)
+		if expandPartials {
+			ssgResult = html.ExpandPartial(ssgResult)
+		}
 	}
 
 	return ssgResult

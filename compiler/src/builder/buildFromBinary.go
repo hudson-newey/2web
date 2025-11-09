@@ -12,11 +12,11 @@ import (
 	"hudson-newey/2web/src/models"
 )
 
-func buildFromBinary(inputPath string, data []byte) (page.Page, bool) {
+func buildFromBinary(inputPath string, data []byte, isFullPage bool) (page.Page, bool) {
 	if docx.IsDocxFile(inputPath) {
-		return buildDocx(inputPath)
+		return buildDocx(inputPath, isFullPage)
 	} else if odt.IsOdtFile(inputPath) {
-		return buildOdt(inputPath)
+		return buildOdt(inputPath, isFullPage)
 	} else if pdf.IsPdfFile(inputPath) {
 		return buildPdf(inputPath)
 	}
@@ -27,7 +27,7 @@ func buildFromBinary(inputPath string, data []byte) (page.Page, bool) {
 	return compiledPage, false
 }
 
-func buildDocx(inputPath string) (page.Page, bool) {
+func buildDocx(inputPath string, isFullPage bool) (page.Page, bool) {
 	docxModel := docx.NewDocxFile(inputPath)
 	htmlContent, err := convert.ConvertFormat(docxModel.Data, "docx", "html")
 	if err != nil {
@@ -45,12 +45,12 @@ func buildDocx(inputPath string) (page.Page, bool) {
 	// We use buildFromString to process the resulting HTML content
 	// so that the reactive compiler and other features such as the devtools,
 	// runtime optimizer, element refs, etc... still work.
-	page, isErrorFree := buildFromString(inputPath, string(htmlContent))
+	page, isErrorFree := buildFromString(inputPath, string(htmlContent), isFullPage)
 
 	return page, isErrorFree
 }
 
-func buildOdt(inputPath string) (page.Page, bool) {
+func buildOdt(inputPath string, isFullPage bool) (page.Page, bool) {
 	odtModel := odt.NewOdtFile(inputPath)
 	htmlContent, err := convert.ConvertFormat(odtModel.Data, "odt", "html")
 	if err != nil {
@@ -65,7 +65,7 @@ func buildOdt(inputPath string) (page.Page, bool) {
 		return page.NewPage(), false
 	}
 
-	page, isErrorFree := buildFromString(inputPath, string(htmlContent))
+	page, isErrorFree := buildFromString(inputPath, string(htmlContent), isFullPage)
 
 	return page, isErrorFree
 }

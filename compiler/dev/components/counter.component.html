@@ -1,14 +1,17 @@
-<span #counter-output>{{ $count }}</span>
-
 <script compiled>
   $ count = 0;
 </script>
 
-<button @click="$count = $count + 1">Increment</button>
-<button @click="$count = $count - 1">Decrement</button>
+<button #counterButton @click="$count = $count + 1">{{ $count }}</button>
 
 <style>
-  #counter-output {
-    color: red;
+  #counterButton {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
 </style>

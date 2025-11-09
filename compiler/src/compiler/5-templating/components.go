@@ -4,32 +4,26 @@ import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
-	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/models"
-	"os"
 	"strings"
 )
 
-func ExpandComponentImports(
+func expandComponentImports(
 	workingPath string,
-	content page.Page,
+	pageModel *page.Page,
 	components []*models.Component,
-) page.Page {
-	result := content
-
+) {
 	for _, component := range components {
-		result = expandImport(workingPath, content, component)
+		expandImport(workingPath, pageModel, component)
 	}
-
-	return result
 }
 
 func expandImport(
 	workingPath string,
-	page page.Page,
+	pageModel *page.Page,
 	component *models.Component,
-) page.Page {
+) *page.Page {
 	componentModel, err := buildComponent(component)
 	if err != nil {
 		documentErrors.AddErrors(
@@ -43,12 +37,12 @@ func expandImport(
 		// We return the input content without modification in the hopes that the
 		// page will be semi-functional and assist in debugging how the error
 		// occurred.
-		return page
+		return pageModel
 	}
 
 	templateSelector := fmt.Sprintf("<%s />", component.DomSelector)
-	page.Html.Content = strings.ReplaceAll(
-		page.Html.Content,
+	pageModel.Html.Content = strings.ReplaceAll(
+		pageModel.Html.Content,
 		templateSelector,
 		componentModel.Html.Content,
 	)
@@ -56,11 +50,19 @@ func expandImport(
 	// Notice that for each component, its styles and scripts are only added to
 	// the page once.
 	for _, cssFile := range componentModel.Css {
-		page.AddStyle(cssFile)
+		pageModel.AddStyle(cssFile)
 	}
 
 	for _, jsFile := range componentModel.JavaScript {
-		page.AddScript(jsFile)
+		pageModel.AddScript(jsFile)
+	}
+
+	for _, twoScript := range componentModel.TwoScript {
+		pageModel.AddTwoScript(twoScript)
+	}
+
+	for _, asset := range componentModel.Assets {
+		pageModel.AddAsset(asset)
 	}
 
 	// The HTML model might contain links to lazy loaded assets like CSS and
@@ -70,7 +72,7 @@ func expandImport(
 	// for the component, but not writing an associated .html file.
 	componentModel.WriteAssets()
 
-	return page
+	return pageModel
 }
 
 func buildComponent(component *models.Component) (page.Page, error) {
@@ -79,23 +81,16 @@ func buildComponent(component *models.Component) (page.Page, error) {
 		return page.NewPage(), err
 	}
 
-	data, err := os.ReadFile(inputPath)
-	if err != nil {
-		return page.NewPage(), err
+	// Use the injected build function to avoid an import cycle between
+	// the templating and builder packages. This is set by the builder package
+	// at init-time. If it's not set, this will return (empty, false).
+	pageModel, success := BuildComponentPage(inputPath, false)
+	if !success {
+		return page.NewPage(), fmt.Errorf(
+			"failed to build component at path: %s",
+			inputPath,
+		)
 	}
-
-	// We don't want to expand HTML partials for component imports
-	fullDocumentContent := ""
-	if markdown.IsMarkdownFile(inputPath) {
-		markdownFile := markdown.MarkdownFile{
-			Content: string(data),
-		}
-		fullDocumentContent = markdownFile.ToHtml().Content
-	} else {
-		fullDocumentContent = string(data)
-	}
-
-	pageModel := BuildPage(inputPath, fullDocumentContent)
 
 	return pageModel, nil
 }

@@ -20,15 +20,17 @@ import (
 	"strings"
 )
 
-// TODO: Page/component models should have their associated reactive models as
-// properties.
 func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	htmlContent := ""
 	for _, node := range parsedAst {
 		htmlContent += node.HtmlContent().Content
 	}
 
-	pageModel := BuildPage(filePath, htmlContent)
+	pageModel := page.NewPage()
+	pageModel.InputPath = filePath
+	pageModel.Html.AddContent(htmlContent)
+
+	addRouteAssets(&pageModel)
 
 	for _, node := range parsedAst {
 		if ast.HasCssContent(node) {
@@ -183,7 +185,9 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 		}
 	}
 
-	pageModel = evaluateImports(filePath, pageModel, importNodes)
+	// Because we pass a reference in here, any changes made to the pageModel
+	// inside of expandImports will be reflected outside of this function.
+	expandImports(filePath, &pageModel, importNodes)
 
 	pageModel = reactiveCompiler.CompileReactivity(filePath, pageModel, reactiveVariables)
 

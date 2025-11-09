@@ -15,11 +15,11 @@ import (
 	"hudson-newey/2web/src/optimizer"
 )
 
-func buildFromString(inputPath string, data string) (page.Page, bool) {
+func buildFromString(inputPath string, data string, isFullPage bool) (page.Page, bool) {
 	args := cli.GetArgs()
 
 	// 1. Preprocess
-	preprocessorResult := preprocessor.ProcessStaticSite(inputPath, data)
+	preprocessorResult := preprocessor.ProcessStaticSite(inputPath, data, isFullPage)
 
 	// 2. Lex
 	contentReader := reader.NewReader(inputPath, preprocessorResult)
@@ -72,5 +72,4 @@ func buildFromString(inputPath string, data string) (page.Page, bool) {
 	}
 
 	return compiledPage, isErrorFree
-
 }
