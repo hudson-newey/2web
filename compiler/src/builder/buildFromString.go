@@ -55,7 +55,7 @@ func buildFromString(inputPath string, data string, isFullPage bool) (page.Page,
 	}
 
 	if !(*args.NoRuntimeOptimizations) {
-		compiledPage = runtimeOptimizer.InjectRuntimeOptimizations(compiledPage)
+		runtimeOptimizer.InjectRuntimeOptimizations(&compiledPage)
 	}
 
 	if *args.WithFormatting {
