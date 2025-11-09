@@ -34,7 +34,6 @@ export default defineConfig({
         "route-guards": "./route-guards/index.ts",
         signals: "./signals/index.ts",
         ssr: "./ssr/index.ts",
-        threads: "./threads/index.ts",
         typescript: "./typescript/index.ts",
         vdom: "./vdom/index.ts",
 

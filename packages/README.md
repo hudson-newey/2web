@@ -13,7 +13,6 @@ A collection of packages to enhance your 2web application
 | [route-guards](route-guards/README.md)         | 🔧     |
 | [signals](signals/README.md)                   | 🔧     |
 | [ssr](ssr/README.md)                           | 🔧     |
-| [threads](threads/README.md)                   | ❌     |
 | [typescript](typescript/README.md)             | 🔧     |
 | [vdom](vdom/README.md)                         | 🔧     |
 | [view-transitions](view-transitions/README.md) | 🔧     |

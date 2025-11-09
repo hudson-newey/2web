@@ -33,7 +33,6 @@
     "./route-guards": "./dist/route-guards.js",
     "./signals": "./dist/signals.js",
     "./ssr": "./dist/ssr.js",
-    "./threads": "./dist/threads.js",
     "./typescript": "./dist/typescript.js",
     "./vdom": "./dist/vdom.js",
     "./view-transitions": "./dist/view-transitions/transitions/",
