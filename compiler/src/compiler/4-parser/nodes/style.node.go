@@ -6,6 +6,7 @@ import (
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
 func NewStyleNode(lexNodes []*lexer.V2LexNode) *styleNode {
@@ -43,4 +44,8 @@ func (model *styleNode) JsContent() *javascript.JSFile {
 
 func (model *styleNode) CssContent() *css.CSSFile {
 	return css.FromContent(model.content)
+}
+
+func (model *styleNode) TwoScriptContent() *twoscript.TwoScriptFile {
+	return twoscript.NewTwoScriptFile()
 }

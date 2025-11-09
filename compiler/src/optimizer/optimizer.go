@@ -13,10 +13,6 @@ func OptimizePage(pageModel page.Page) page.Page {
 	}
 
 	for _, jsModel := range pageModel.JavaScript {
-		if jsModel.IsCompilerOnly() {
-			continue
-		}
-
 		jsModel.Content = minify.MinifyJs(jsModel.Content)
 	}
 

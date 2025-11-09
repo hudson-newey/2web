@@ -10,7 +10,6 @@ import (
 	"hudson-newey/2web/src/models"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/evanw/esbuild/pkg/api"
 )
@@ -47,10 +46,6 @@ type JSFile struct {
 
 func (model *JSFile) RawContent() string {
 	result := model.Content
-
-	result = strings.ReplaceAll(result, "<script>", "")
-	result = strings.ReplaceAll(result, "<script compiled>", "")
-	result = strings.ReplaceAll(result, "</script>", "")
 
 	workingDir, _ := filepath.Abs(*cli.GetArgs().InputPath)
 
@@ -95,11 +90,6 @@ func (model *JSFile) AddContent(partialContent string) {
 // is not exposed through an attribute.
 func (model *JSFile) IsLazy() bool {
 	return true
-}
-
-func (model *JSFile) IsCompilerOnly() bool {
-	// If the script is compiled, you should use the "<script compiled>" selector
-	return strings.Contains(model.Content, "compiled>")
 }
 
 // A js file index that can be used for development builds.

@@ -9,43 +9,43 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewScriptNode(lexNodes []*lexer.V2LexNode) *scriptNode {
+func NewTwoScriptNode(lexNodes []*lexer.V2LexNode) *twoScriptNode {
 	// Find the lexNode that is a StyleSource token
 	var content string
 	for _, lexNode := range lexNodes {
-		if lexNode.Token == lexerTokens.ScriptSource {
+		if lexNode.Token == lexerTokens.CompiledScriptSource {
 			content = lexNode.Content
 			break
 		}
 	}
 
-	return &scriptNode{
+	return &twoScriptNode{
 		lexerNodes: lexNodes,
 		content:    content,
 	}
 }
 
-type scriptNode struct {
+type twoScriptNode struct {
 	lexerNodes []*lexer.V2LexNode
 	content    string
 }
 
-func (model *scriptNode) Type() string {
-	return "scriptNode"
+func (model *twoScriptNode) Type() string {
+	return "twoScriptNode"
 }
 
-func (model *scriptNode) HtmlContent() *html.HTMLFile {
+func (model *twoScriptNode) HtmlContent() *html.HTMLFile {
 	return html.NewHtmlFile()
 }
 
-func (model *scriptNode) JsContent() *javascript.JSFile {
-	return javascript.FromContent(model.content)
+func (model *twoScriptNode) JsContent() *javascript.JSFile {
+	return javascript.NewJsFile()
 }
 
-func (model *scriptNode) CssContent() *css.CSSFile {
+func (model *twoScriptNode) CssContent() *css.CSSFile {
 	return css.NewCssFile()
 }
 
-func (model *scriptNode) TwoScriptContent() *twoscript.TwoScriptFile {
-	return twoscript.NewTwoScriptFile()
+func (model *twoScriptNode) TwoScriptContent() *twoscript.TwoScriptFile {
+	return twoscript.FromContent(model.content)
 }

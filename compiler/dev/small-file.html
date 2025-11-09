@@ -1,12 +1,14 @@
+<script compiled>
+  $ value = "hello";
+</script>
+
 <p>Hello World!</p>
 
 <!-- This is a comment -->
 
-<button>Click Me!</button>
+<button @click="$value = 'world'">Click Me!</button>
 
-<script compiled>
-  $ value = "hello";
-</script>
+<div style="margin-top: 2rem;">Message: {{ $value }}</div>
 
 <script>
   const x = 42;

@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
 func NewMarkupTextNode(lexNode []*lexer.V2LexNode) *markupTextNode {
@@ -31,4 +32,8 @@ func (model *markupTextNode) JsContent() *javascript.JSFile {
 
 func (model *markupTextNode) CssContent() *css.CSSFile {
 	return css.NewCssFile()
+}
+
+func (model *markupTextNode) TwoScriptContent() *twoscript.TwoScriptFile {
+	return twoscript.NewTwoScriptFile()
 }

@@ -38,6 +38,10 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 		if ast.HasJsContent(node) {
 			pageModel.AddScript(node.JsContent())
 		}
+
+		if ast.HasTwoScriptContent(node) {
+			pageModel.AddTwoScript(node.TwoScriptContent())
+		}
 	}
 
 	pageModel.Html.Content = controlFlow.ProcessControlFlow(filePath, pageModel.Html.Content)
@@ -68,12 +72,7 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	propertyNodes := lexer.FindPropNodes[lexer.PropNode](pageModel.Html.Content, propertyPrefix)
 	eventNodes := lexer.FindPropNodes[lexer.EventNode](pageModel.Html.Content, eventPrefix)
 
-	for _, node := range pageModel.JavaScript {
-		// At the moment, we do not support mixing compiler and runtime scripts
-		if !node.IsCompilerOnly() {
-			continue
-		}
-
+	for _, node := range pageModel.TwoScript {
 		lineCommentNodes := lexer.FindNodes[lexer.LineCommentNode](node.Content, lineCommentStartToken, newLineToken)
 		lineCommentRemoved := node.Content
 		for _, commentNode := range lineCommentNodes {

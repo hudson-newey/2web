@@ -40,10 +40,6 @@ func (model *Page) AddTwoScript(tsFile *twoscript.TwoScriptFile) {
 func (model *Page) AddScript(jsFile *javascript.JSFile) {
 	model.JavaScript = append(model.JavaScript, jsFile)
 
-	if jsFile.IsCompilerOnly() {
-		return
-	}
-
 	// Adds a "<script src=></script>" tag to the html document to load the js file
 	// If the JavaScript is not lazy loaded, we want to eagerly evaluate it by not
 	// using the "async" keyword.

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
 	"os"
-	"strings"
 )
 
 type cssCode = string
@@ -40,13 +39,7 @@ type CSSFile struct {
 }
 
 func (model *CSSFile) RawContent() string {
-	result := model.Content
-
-	result = strings.ReplaceAll(result, "<style>", "")
-	result = strings.ReplaceAll(result, "<style compiled>", "")
-	result = strings.ReplaceAll(result, "</style>", "")
-
-	return result
+	return model.Content
 }
 
 func (model *CSSFile) AddContent(newContent cssCode) {

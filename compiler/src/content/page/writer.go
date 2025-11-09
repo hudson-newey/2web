@@ -18,10 +18,6 @@ func (model *Page) WriteAssets() {
 	}
 
 	for _, file := range model.JavaScript {
-		if file.IsCompilerOnly() {
-			continue
-		}
-
 		write(file.RawContent(), file.OutputPath())
 	}
 
