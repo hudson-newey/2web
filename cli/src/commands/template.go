@@ -16,20 +16,31 @@ func template(programName string, command string, args []string) {
 
 	template := args[2]
 
-	switch template {
-	case "serer-side-rendering", "ssr":
-		templates.SsrTemplate()
-	case "database", "db":
-		templates.DatabaseTemplate()
-	case "load-balancer", "lb":
-		templates.LoadBalancerTemplate()
-	case "sitemap", "sitemap.xml":
-		templates.SitemapTemplate()
-	case "robots.txt":
-		templates.RobotsTxtTemplate()
-	case "security.txt":
-		templates.SecurityTemplate()
-	case "llms.txt":
-		templates.LlmsTemplate()
+	templates := map[string]func(){
+		"serer-side-rendering": templates.SsrTemplate,
+		"ssr":                  templates.SsrTemplate,
+
+		"database": templates.DatabaseTemplate,
+		"db":       templates.DatabaseTemplate,
+
+		"load-balancer": templates.LoadBalancerTemplate,
+		"lb":            templates.LoadBalancerTemplate,
+
+		"sitemap":     templates.SitemapTemplate,
+		"sitemap.xml": templates.SitemapTemplate,
+
+		"robots.txt": templates.RobotsTxtTemplate,
+
+		"security.txt": templates.SecurityTemplate,
+
+		"llms.txt": templates.LlmsTemplate,
 	}
+
+	templateFunc, exists := templates[template]
+	if !exists {
+		errorMsg := fmt.Sprintf("unknown template '%s'", template)
+		cli.PrintError(errorMsg)
+	}
+
+	templateFunc()
 }
