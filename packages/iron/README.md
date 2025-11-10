@@ -140,14 +140,12 @@ optional(async () => {
 
 ### Check
 
-Performs an action twice in an attempt to guard against unlikely 1/1,000,000
-error cases.
-
-E.g. hardware errors, idempotency driver bugs, cosmic-ray bit flips
+Performs an action twice and asserts that the results are the same.
 
 ```ts
 // Ensure that the operation inside the callback is something that JIT cannot
 // optimize away by re-using the same value.
+// Additionally, this callback should have no side-effects.
 check(() => {
   fetch("https://example.com");
 });
