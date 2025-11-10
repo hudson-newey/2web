@@ -3,6 +3,10 @@ export interface RetryOptions {
   times?: number;
 }
 
+/**
+ * @description
+ * Retries a statement until it passes
+ */
 export async function retry<ReturnType>(
   fn: () => ReturnType | Promise<ReturnType>,
   options: RetryOptions,
