@@ -24,8 +24,7 @@ func getContent(inputPath string) *[]byte {
 		// If there was an error reading the file, we return an empty byte slice
 		// instead of returning a potentially partially read/corrupted byte slice
 		// from the failed read attempt.
-		emptyFile := []byte{}
-		return &emptyFile
+		return &[]byte{}
 	}
 
 	return &rawData

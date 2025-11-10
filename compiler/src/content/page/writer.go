@@ -35,9 +35,9 @@ func write(content string, outputPath string) {
 	}
 }
 
-func writeBinary(content []byte, outputPath string) {
+func writeBinary(content *[]byte, outputPath string) {
 	if *cli.GetArgs().ToStdout {
-		fmt.Println(string(content))
+		fmt.Println(string(*content))
 	} else {
 		utils.WriteBinaryFile(content, outputPath)
 	}

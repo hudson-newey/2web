@@ -24,17 +24,17 @@ type PdfFile struct {
 	Content   *[]byte
 }
 
-func (model *PdfFile) Data() []byte {
+func (model *PdfFile) Data() *[]byte {
 	if model.Content != nil {
-		return *model.Content
+		return model.Content
 	}
 
 	data, err := os.ReadFile(model.InputPath)
 	if err != nil {
-		return []byte{}
+		return &[]byte{}
 	}
 
-	return data
+	return &data
 }
 
 func (model *PdfFile) OutputPath() string {
