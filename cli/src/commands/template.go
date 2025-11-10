@@ -27,6 +27,8 @@ func template(programName string, command string, args []string) {
 		templates.SitemapTemplate()
 	case "robots.txt":
 		templates.RobotsTxtTemplate()
+	case "security.txt":
+		templates.SecurityTemplate()
 	case "llms.txt":
 		templates.LlmsTemplate()
 	}
