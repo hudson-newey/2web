@@ -45,7 +45,7 @@ func Build() bool {
 				return
 			}
 
-			compileAndWriteFile(
+			compileAndWritePage(
 				filePath,
 				outputFileName(*args.InputPath, *args.OutputPath, filePath),
 			)
@@ -62,7 +62,7 @@ func Build() bool {
 		// such as bundler plugins, linters, etc...
 		site.AfterAll()
 	} else {
-		compileAndWriteFile(*args.InputPath, outputFileName(*args.InputPath, *args.OutputPath, *args.InputPath))
+		compileAndWritePage(*args.InputPath, outputFileName(*args.InputPath, *args.OutputPath, *args.InputPath))
 	}
 
 	// We only print document errors once the entire project has been compiled so

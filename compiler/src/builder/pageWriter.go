@@ -8,7 +8,8 @@ import (
 	"hudson-newey/2web/src/site"
 )
 
-func compileAndWriteFile(inputPath string, outputPath string) {
+// Writes an entry point to the output path.
+func compileAndWritePage(inputPath string, outputPath string) {
 	args := cli.GetArgs()
 	cacheDisabled := *args.DisableCache
 	production := *args.IsProd
