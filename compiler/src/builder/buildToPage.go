@@ -13,8 +13,8 @@ func BuildToPage(inputPath string, isFullPage bool) (page.Page, bool) {
 	// However, I have decided to default to UTF-8 for the initial version.
 	//
 	// TODO: We should add support for other encodings in the future.
-	if utf8.Valid(*data) {
-		return buildFromString(inputPath, string(*data), isFullPage)
+	if utf8.Valid(data) {
+		return buildFromString(inputPath, string(data), isFullPage)
 	} else {
 		return buildFromBinary(inputPath, data, isFullPage)
 	}

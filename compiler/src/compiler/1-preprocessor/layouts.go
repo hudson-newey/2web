@@ -8,7 +8,7 @@ import (
 
 var cachedLayouts = map[string][]byte{}
 
-func expandLayout(filePath string, content *[]byte) {
+func expandLayout(filePath string, content []byte) {
 	layoutDir := filepath.Dir(filePath)
 	layoutFile := filepath.Join(layoutDir, "__layout.html")
 
@@ -32,7 +32,9 @@ func expandLayout(filePath string, content *[]byte) {
 		return
 	}
 
-	replaced := bytes.Replace(layoutBytes, slot, *content, 1)
+	replaced := bytes.Replace(layoutBytes, slot, content, 1)
 
-	*content = replaced
+	// Replace the original content in place
+	content = content[:0]
+	content = append(content, replaced...)
 }

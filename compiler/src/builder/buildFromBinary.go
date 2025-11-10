@@ -14,7 +14,7 @@ import (
 
 func buildFromBinary(
 	inputPath string,
-	data *[]byte,
+	data []byte,
 	isFullPage bool,
 ) (page.Page, bool) {
 	if docx.IsDocxFile(inputPath) {
@@ -74,7 +74,7 @@ func buildOdt(inputPath string, isFullPage bool) (page.Page, bool) {
 	return page, isErrorFree
 }
 
-func buildPdf(inputPath string, data *[]byte) (page.Page, bool) {
+func buildPdf(inputPath string, data []byte) (page.Page, bool) {
 	pageModel := page.NewPage()
 	var pdfModel content.BinaryFile = pdf.FromContent(inputPath, data)
 
