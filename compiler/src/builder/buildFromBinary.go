@@ -12,13 +12,17 @@ import (
 	"hudson-newey/2web/src/models"
 )
 
-func buildFromBinary(inputPath string, data []byte, isFullPage bool) (page.Page, bool) {
+func buildFromBinary(
+	inputPath string,
+	data *[]byte,
+	isFullPage bool,
+) (page.Page, bool) {
 	if docx.IsDocxFile(inputPath) {
 		return buildDocx(inputPath, isFullPage)
 	} else if odt.IsOdtFile(inputPath) {
 		return buildOdt(inputPath, isFullPage)
 	} else if pdf.IsPdfFile(inputPath) {
-		return buildPdf(inputPath)
+		return buildPdf(inputPath, data)
 	}
 
 	compiledPage := page.NewPage()
@@ -70,9 +74,9 @@ func buildOdt(inputPath string, isFullPage bool) (page.Page, bool) {
 	return page, isErrorFree
 }
 
-func buildPdf(inputPath string) (page.Page, bool) {
+func buildPdf(inputPath string, data *[]byte) (page.Page, bool) {
 	pageModel := page.NewPage()
-	var pdfModel content.BinaryFile = pdf.NewPdfFile(inputPath)
+	var pdfModel content.BinaryFile = pdf.FromContent(inputPath, data)
 
 	pageModel.AddAsset(&pdfModel)
 

@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-func getContent(inputPath string) []byte {
+func getContent(inputPath string) *[]byte {
 	rawData, err := getInputContent(inputPath)
 	if err != nil {
 		inputError := models.NewError(
@@ -24,10 +24,11 @@ func getContent(inputPath string) []byte {
 		// If there was an error reading the file, we return an empty byte slice
 		// instead of returning a potentially partially read/corrupted byte slice
 		// from the failed read attempt.
-		return []byte{}
+		emptyFile := []byte{}
+		return &emptyFile
 	}
 
-	return rawData
+	return &rawData
 }
 
 func getInputContent(inputPath string) ([]byte, error) {

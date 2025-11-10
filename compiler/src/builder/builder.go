@@ -6,6 +6,7 @@ import (
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/parallel"
+	"hudson-newey/2web/src/routing"
 	"hudson-newey/2web/src/site"
 	"os"
 )
@@ -40,6 +41,10 @@ func Build() bool {
 		indexedPages := indexPages(*args.InputPath)
 
 		parallel.ForEach(indexedPages, func(filePath string) {
+			if routing.IsLayoutFile(filePath) {
+				return
+			}
+
 			compileAndWriteFile(
 				filePath,
 				outputFileName(*args.InputPath, *args.OutputPath, filePath),

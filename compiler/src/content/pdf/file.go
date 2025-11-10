@@ -6,7 +6,14 @@ import (
 	"os"
 )
 
-func NewPdfFile(inputPath string) *PdfFile {
+func FromContent(inputPath string, data *[]byte) *PdfFile {
+	return &PdfFile{
+		InputPath: inputPath,
+		Content:   data,
+	}
+}
+
+func FromFilePath(inputPath string) *PdfFile {
 	return &PdfFile{
 		InputPath: inputPath,
 	}
@@ -14,9 +21,14 @@ func NewPdfFile(inputPath string) *PdfFile {
 
 type PdfFile struct {
 	InputPath string
+	Content   *[]byte
 }
 
 func (model *PdfFile) Data() []byte {
+	if model.Content != nil {
+		return *model.Content
+	}
+
 	data, err := os.ReadFile(model.InputPath)
 	if err != nil {
 		return []byte{}
