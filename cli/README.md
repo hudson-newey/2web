@@ -59,6 +59,7 @@ once, and do not take a name as an argument.
 | database              | db    | Add a database to a 2web project      |
 | load-balancer         | lb    | Add a load balancer to a 2web project |
 | sitemap               |       | Adds a sitemap.xml file               |
+| robots.txt            |       | Adds a robots.txt file to the project |
 | llms.txt              |       | Adds a llms.txt file to the project   |
 
 ### Database Command

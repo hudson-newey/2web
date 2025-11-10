@@ -25,6 +25,8 @@ func template(programName string, command string, args []string) {
 		templates.LoadBalancerTemplate()
 	case "sitemap", "sitemap.xml":
 		templates.SitemapTemplate()
+	case "robots.txt":
+		templates.RobotsTxtTemplate()
 	case "llms.txt":
 		templates.LlmsTemplate()
 	}
