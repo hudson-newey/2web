@@ -53,11 +53,12 @@ Once installed, you will have access to the `2web` command.
 Template commands differ from the "generate" command as they can only be run
 once, and do not take a name as an argument.
 
-| Command               | Alias | Description                           |
-| --------------------- | ----- | ------------------------------------- |
-| server-side-rendering | ssr   | Add ssr to a 2web project             |
-| database              | db    | Add a database to a 2web project      |
-| load-balancer         | lb    | Add a load balancer to a 2web project |
+| Command               | Alias | Description                                      |
+| --------------------- | ----- | ------------------------------------------------ |
+| server-side-rendering | ssr   | Add ssr to a 2web project                        |
+| database              | db    | Add a database to a 2web project                 |
+| load-balancer         | lb    | Add a load balancer to a 2web project            |
+| llms.txt              |       | Adds an llms.txt file to the root of the project |
 
 ### Database Command
 

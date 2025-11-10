@@ -23,5 +23,7 @@ func template(programName string, command string, args []string) {
 		templates.DatabaseTemplate()
 	case "load-balancer", "lb":
 		templates.LoadBalancerTemplate()
+	case "llms.txt":
+		templates.LlmsTemplate()
 	}
 }
