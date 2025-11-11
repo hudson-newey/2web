@@ -1,4 +1,0 @@
-package art
-
-func PrintAsciiArt() {
-}
