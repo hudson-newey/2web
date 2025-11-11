@@ -15,6 +15,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/hudson-newey/2web-cli/src/builders/build"
+	"github.com/hudson-newey/2web-cli/src/cli"
 )
 
 // TODO: Refactor this entire file because it was LLM generated
@@ -227,12 +228,18 @@ func watchFiles(inPath string, outPath string, relativeOutPath string) {
 
 		modTime := getLatestModTime(inPath)
 		if !lastModTime.IsZero() && modTime.After(lastModTime) {
-			buildAssets(inPath, relativeOutPath)
-			fmt.Println("🔄 Asset build complete, reloading clients...")
-			notifyClients()
+			handleFileChange(inPath, relativeOutPath)
 		}
 		lastModTime = modTime
 	}
+}
+
+func handleFileChange(inPath string, outPath string) {
+	cli.ClearConsole()
+
+	buildAssets(inPath, outPath)
+	fmt.Println("🔄 Asset build complete, reloading clients...")
+	notifyClients()
 }
 
 func buildAssets(inPath string, outPath string) {
