@@ -66,7 +66,7 @@ func runDevServer(inPath string, outPath string) {
 		serveFileWithReload(w, r, absOutPath)
 	})
 
-	port := "8080"
+	port := "2000"
 	addr := fmt.Sprintf(":%s", port)
 
 	// Perform an initial build before starting the server
