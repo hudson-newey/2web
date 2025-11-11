@@ -8,20 +8,23 @@ import (
 
 const twoWebVersion = "latest"
 
-const indexHtmlContent = `<!DOCTYPE html>
-<title>My New Website!</title>
-<link rel="stylesheet" href="styles/home.css" />
+const indexHtmlContent = `<title>My New Website!</title>
 
 <script compiled>
 $ count = 0;
 </script>
 
-<h1>My New 2Web Website</h1>
+<h1>Welcome to 2Web</h1>
 
 <span>{{ $count }}</span>
 
 <button @click="$count = $count + 1">+1</button>
 <button @click="$count = $count - 1">-1</button>
+`
+
+const routeStylesContent = `body {
+	margin: 0;
+}
 `
 
 var packageJsonContent string = fmt.Sprintf(`{
@@ -43,7 +46,6 @@ var packageJsonContent string = fmt.Sprintf(`{
     "@two-web/compiler": "%s",
     "@two-web/cli": "%s",
     "@web/test-runner": "^0.20.2",
-    "vite": "^6.3.5",
     "typescript": "^5.8.3",
     "@biomejs/biome": "^2.2.2"
   }
@@ -64,9 +66,6 @@ $ 2web serve
 >
 ` + "```" + `
 
-Since this environment uses Vite for the development server, reload speeds
-should be extremely fast and have support for  hot module replacement (HMR).
-
 ## Building your project
 
 ` + "```sh" + `
@@ -82,18 +81,74 @@ $ 2web test
 ` + "```" + `
 `
 
-const gitignoreContent = `dist/
+const gitignoreContent = `# 2Web specific ignores
+dist/
+.cache/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
 node_modules/
-tmp/
-.vite/
+jspm_packages/
 
-vite.config.ts.timestamp-*.mjs
+# TypeScript cache
+*.tsbuildinfo
 
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variable files
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+.env.*
+!.env.example
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# Yarn Integrity file
+.yarn-integrity
+
+# yarn v3
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Vite files
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+.vite/
 `
 
 const vscodeSettingsContent = `{
@@ -102,20 +157,36 @@ const vscodeSettingsContent = `{
 	"files.trimTrailingWhitespace": true,
 	"editor.tabSize": 2,
 	"editor.defaultFormatter": "biomejs.biome",
-	["2web"]: {
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "always",
+		"source.sortImports": "always",
+		"source.organizeImports": "always",
+		"source.addMissingImports.ts": "always",
+		"source.removeUnusedImports": "always",
+	},
+	"search.exclude": {
+		"dist/": true,
+	},
+	"[html]": {
 		"files.autoSave": "afterDelay",
 		"files.autoSaveDelay": 0,
 	},
+	"[2web]": {
+		"files.autoSave": "afterDelay",
+		"files.autoSaveDelay": 0,
+	},
+	"recommendations": [
+		"streetsidesoftware.code-spell-checker",
+		"yzhang.markdown-all-in-one",
+		"davidanson.vscode-markdownlint",
+		"visualstudioexptteam.vscodeintellicode",
+		"aaron-bond.better-comments",
+
+		"ms-vscode.vscode-typescript-next",
+		"zignd.html-css-class-completion",
+		"biomejs.biome",
+	]
 }`
-
-const viteSettingsContent = `import { defineConfig } from 'vite'
-import twoWeb from "@two-web/kit/vite-plugin";
-
-export default defineConfig({
-  appType: "mpa",
-	plugins: [twoWeb()],
-})
-`
 
 func NewTemplate(path string) {
 	templateFiles := []files.File{
@@ -149,11 +220,6 @@ func NewTemplate(path string) {
 					IsDirectory: false,
 				},
 				{
-					Path:        path + "/vite.config.ts",
-					Content:     viteSettingsContent,
-					IsDirectory: false,
-				},
-				{
 					Path:        path + "/.vscode/",
 					IsDirectory: true,
 					Children: []files.File{
@@ -174,15 +240,9 @@ func NewTemplate(path string) {
 							IsDirectory: false,
 						},
 						{
-							Path:        path + "/src/styles/",
-							IsDirectory: true,
-							Children: []files.File{
-								{
-									Path:        path + "/src/styles/home.css",
-									Content:     "",
-									IsDirectory: false,
-								},
-							},
+							Path:        path + "/src/__styles.css",
+							Content:     routeStylesContent,
+							IsDirectory: false,
 						},
 					},
 				},

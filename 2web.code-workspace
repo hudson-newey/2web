@@ -13,6 +13,13 @@
       "**/html-report/": true
     },
     "workbench.iconTheme": "material-icon-theme",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always",
+      "source.sortImports": "always",
+      "source.organizeImports": "always",
+      "source.addMissingImports.ts": "always",
+      "source.removeUnusedImports": "always",
+    },
     "editor.inlineSuggest.enabled": true,
     "editor.renderWhitespace": "trailing",
     "editor.defaultFormatter": "biomejs.biome",
