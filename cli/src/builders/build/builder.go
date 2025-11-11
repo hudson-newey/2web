@@ -14,6 +14,10 @@ func BuildSolution(args []string) {
 	inPath := builders.EntryTarget(args)
 	outPath := builders.OutputTarget(args)
 
+	BuildPath(inPath, outPath)
+}
+
+func BuildPath(inPath string, outPath string) {
 	if configs.HasViteConfig() {
 		buildWithVite(inPath)
 		return

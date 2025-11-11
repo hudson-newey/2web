@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/hudson-newey/2web-cli/src/builders/build"
 )
 
 // TODO: Refactor this entire file because it was LLM generated
@@ -34,19 +35,24 @@ var liveReloadTemplate = fmt.Sprintf(`
 <script type="module">%s</script>
 `, liveReloadScript)
 
-func runDevServer(path string) {
-	absPath, err := filepath.Abs(path)
+func runDevServer(inPath string, outPath string) {
+	absInPath, err := filepath.Abs(inPath)
 	if err != nil {
 		log.Fatalf("Failed to resolve path: %v", err)
 	}
 
 	// Check if path exists
-	if _, err := os.Stat(absPath); os.IsNotExist(err) {
-		log.Fatalf("Path does not exist: %s", absPath)
+	if _, err := os.Stat(absInPath); os.IsNotExist(err) {
+		log.Fatalf("Input path does not exist: '%s'", absInPath)
+	}
+
+	absOutPath, err := filepath.Abs(outPath)
+	if err != nil {
+		log.Fatalf("Failed to resolve path: %v", err)
 	}
 
 	// Start file watcher in a separate goroutine
-	go watchFiles(absPath)
+	go watchFiles(absInPath, absOutPath, outPath)
 
 	// Setup HTTP server
 	mux := http.NewServeMux()
@@ -56,14 +62,17 @@ func runDevServer(path string) {
 
 	// Serve static files with HTML injection
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		serveFileWithReload(w, r, absPath)
+		serveFileWithReload(w, r, absOutPath)
 	})
 
-	port := "3000"
+	port := "2000"
 	addr := fmt.Sprintf(":%s", port)
 
+	// Perform an initial build before starting the server
+	buildAssets(inPath, outPath)
+
 	fmt.Printf("🚀 2web dev server running at http://localhost:%s\n", port)
-	fmt.Printf("📁 Serving files from: %s\n", absPath)
+	fmt.Printf("📁 Serving files from: %s\n", absInPath)
 	fmt.Println("👀 Watching for file changes...")
 
 	if err := http.ListenAndServe(addr, mux); err != nil {
@@ -98,7 +107,11 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func serveFileWithReload(w http.ResponseWriter, r *http.Request, rootPath string) {
+func serveFileWithReload(
+	w http.ResponseWriter,
+	r *http.Request,
+	rootPath string,
+) {
 	// Clean the URL path
 	urlPath := r.URL.Path
 	if urlPath == "/" {
@@ -203,19 +216,28 @@ func injectLiveReload(content []byte) []byte {
 	return result
 }
 
-func watchFiles(path string) {
+// TODO: Remove relativeOutPath from here
+// This is needed because there is a bug in the compiler where it does not work
+// with absolute paths properly.
+func watchFiles(inPath string, outPath string, relativeOutPath string) {
 	var lastModTime time.Time
 
 	for {
 		time.Sleep(500 * time.Millisecond)
 
-		modTime := getLatestModTime(path)
+		modTime := getLatestModTime(inPath)
 		if !lastModTime.IsZero() && modTime.After(lastModTime) {
-			fmt.Println("🔄 File change detected, reloading clients...")
+			buildAssets(inPath, relativeOutPath)
+			fmt.Println("🔄 Asset build complete, reloading clients...")
 			notifyClients()
 		}
 		lastModTime = modTime
 	}
+}
+
+func buildAssets(inPath string, outPath string) {
+	fmt.Println("📦 Building assets...")
+	build.BuildPath(inPath, outPath)
 }
 
 func getLatestModTime(root string) time.Time {

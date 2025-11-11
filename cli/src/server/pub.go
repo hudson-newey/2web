@@ -2,10 +2,11 @@ package server
 
 import "fmt"
 
-func Run(path string) {
+func Run(inPath string, outPath string) {
 	fmt.Println(
 		"Running in-built dev server.\n" +
 			"To use Vite (for larger projects), run '2web template vite'.\n",
 	)
-	runDevServer(path)
+
+	runDevServer(inPath, outPath)
 }

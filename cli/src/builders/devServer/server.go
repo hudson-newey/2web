@@ -48,8 +48,10 @@ func serveVite(args []string) {
 }
 
 func serveInbuilt(args []string) {
-	pathTarget := builders.EntryTarget(args)
-	server.Run(pathTarget)
+	inPath := builders.EntryTarget(args)
+	outPath := builders.OutputTarget(args)
+
+	server.Run(inPath, outPath)
 }
 
 func serveSsr() {
