@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+
+	"github.com/hudson-newey/2web-cli/src/cli"
 )
 
 const directoryPerms os.FileMode = os.ModePerm
@@ -37,9 +40,22 @@ func createDirectory(dirModel File) {
 }
 
 func createFile(fileModel File) {
-	err := os.WriteFile(fileModel.Path, []byte(fileModel.Content), filePerms)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
+	// We check if CopyFromPath is set instead of Content because it is possible
+	// to create a file with empty content, however, it's not possible to copy
+	// from an empty path.
+	if fileModel.CopyFromPath != "" {
+		pathSrc, err := exec.LookPath(fileModel.CopyFromPath)
+		if err != nil {
+			errorMsg := fmt.Sprintf("Could not find binary in PATH: '%s'", fileModel.CopyFromPath)
+			cli.PrintWarning(errorMsg)
+		}
+
+		CopyPath(pathSrc, fileModel.Path)
+	} else {
+		err := os.WriteFile(fileModel.Path, []byte(fileModel.Content), filePerms)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
 	}
 }

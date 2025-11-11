@@ -229,6 +229,28 @@ func NewTemplate(path string) {
 						},
 					},
 				},
+				// By providing the 2web binaries inside the project, we can ensure
+				// consistent versions across different environments.
+				// This is primarily needed for lower-complexity apps which do not use
+				// npm or any package management system.
+				// These binaries should probably be removed once node_modules are
+				// installed.
+				{
+					Path:        path + "/bin/",
+					IsDirectory: true,
+					Children: []files.File{
+						{
+							Path:         path + "/bin/2web",
+							CopyFromPath: "2web",
+							IsDirectory:  false,
+						},
+						{
+							Path:         path + "/bin/2webc",
+							CopyFromPath: "2webc",
+							IsDirectory:  false,
+						},
+					},
+				},
 				{
 					Path:        path + "/src/",
 					IsDirectory: true,
