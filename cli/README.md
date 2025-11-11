@@ -20,17 +20,20 @@ Once installed, you will have access to the `2web` command.
 
 ## Commands
 
-- `2web new <project_name>` (alias: n)
-- `2web generate <generator> <name>` (alias: g)
-- `2web template <template>` (alias: t)
-- `2web install <package_name>` (alias: i)
-- `2web serve [path]` (alias: s)
-- `2web build [path]` (alias: b)
-- `2web db <sub_command>`
-- `2web doctor <sub_command>`
-- `2web cms <sub_command>`
-- `2web lint [path]`
-- `2web format [path]`
+| Command                            | Alias |
+| ---------------------------------- | ----- |
+| `2web new <project_name>`          | n     |
+| `2web generate <generator> <name>` | g     |
+| `2web template <template>`         | t     |
+| `2web install <package_name>`      | i     |
+| `2web serve [path]`                | s     |
+| `2web build [path]`                | b     |
+| `2web lint [path]`                 | l     |
+| `2web format [path]`               | f     |
+| `2web test [path]`                 |       |
+| `2web db <sub_command>`            |       |
+| `2web doctor <sub_command>`        |       |
+| `2web cms <sub_command>`           |       |
 
 ### Generate Command
 

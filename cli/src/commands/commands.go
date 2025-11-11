@@ -78,12 +78,12 @@ func ProcessInvocation(args []string) {
 		return
 	}
 
-	if command == "lint" {
+	if command == "lint" || command == "l" {
 		lint.LintSolution(args)
 		return
 	}
 
-	if command == "format" {
+	if command == "format" || command == "f" {
 		format.FormatSolution(args)
 		return
 	}
