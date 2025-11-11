@@ -22,21 +22,58 @@
     "vite-plugin/"
   ],
   "exports": {
-    ".": "./dist/index.js",
-    "./animations": "./dist/animations.js",
-    "./browser-state": "./dist/browser-state.js",
-    "./iron": "./dist/iron.js",
-    "./keyboard": "./dist/keyboard.js",
-    "./named-strings": "./dist/named-strings.js",
-    "./database": "./dist/database.js",
-    "./pre-fetcher": "./dist/pre-fetcher.js",
-    "./route-guards": "./dist/route-guards.js",
-    "./signals": "./dist/signals.js",
-    "./ssr": "./dist/ssr.js",
-    "./typescript": "./dist/typescript.js",
-    "./vdom": "./dist/vdom.js",
-    "./view-transitions": "./dist/view-transitions/transitions/",
-    "./vite-plugin": "./vite-plugin/index.ts"
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./animations": {
+      "import": "./dist/animations.js",
+      "types": "./dist/animations/index.d.ts"
+    },
+    "./iron": {
+      "import": "./dist/iron.js",
+      "types": "./dist/iron/index.d.ts"
+    },
+    "./keyboard": {
+      "import": "./dist/keyboard.js",
+      "types": "./dist/keyboard/index.d.ts"
+    },
+    "./named-strings": {
+      "import": "./dist/named-strings.js",
+      "types": "./dist/named-strings/index.d.ts"
+    },
+    "./pre-fetcher": {
+      "import": "./dist/pre-fetcher.js",
+      "types": "./dist/pre-fetcher/index.d.ts"
+    },
+    "./route-guards": {
+      "import": "./dist/route-guards.js",
+      "types": "./dist/route-guards/index.d.ts"
+    },
+    "./signals": {
+      "import": "./dist/signals.js",
+      "types": "./dist/signals/index.d.ts"
+    },
+    "./ssr": {
+      "import": "./dist/ssr.js",
+      "types": "./dist/ssr/index.d.ts"
+    },
+    "./typescript": {
+      "import": "./dist/typescript.js",
+      "types": "./dist/typescript/index.d.ts"
+    },
+    "./vdom": {
+      "import": "./dist/vdom.js",
+      "types": "./dist/vdom/index.d.ts"
+    },
+    "./view-transitions": {
+      "import": "./dist/view-transitions/transitions/",
+      "types": "./dist/view-transitions/index.d.ts"
+    },
+    "./vite-plugin": {
+      "import": "./vite-plugin/index.ts",
+      "types": "./vite-plugin/index.d.ts"
+    }
   },
   "dependencies": {
     "express": "^5.1.0",

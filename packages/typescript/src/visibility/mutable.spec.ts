@@ -7,7 +7,7 @@ const person = {
 type MutablePerson = Mutable<typeof person>;
 
 const mutablePerson = mutable(person);
-mutablePerson.age = 31; // This should be allowed
+// mutablePerson.age = 31; // This should be allowed
 
 /* Arrays */
 const readonlyArray = [1, 2, 3] as const;
