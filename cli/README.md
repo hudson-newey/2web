@@ -88,10 +88,9 @@ want to install npm or node.js.
 2Web will use the following logic to determine which server to use:
 
 1. If the project has an SSR target (e.g. through `2web template ssr`), use SSR server.
-2. If a `vite.config.js` or `vite.config.ts` file is present in the project root,
-   use Vite. While using the Vite dev server, I assume that if you wanted to
-   use the 2web compiler, you would be explicitly using the Vite plugin for
-   2web.
+2. If a or `vite.config.ts` file is present in the project root, use Vite.
+   While using the Vite dev server, the cli assumes that if you wanted to use
+   the 2web compiler, you would be explicitly using the Vite plugin for 2web.
    1. If Vite is installed as an npm package, use the `node_modules` version
    2. If Vite is installed globally, use the global version
    3. Otherwise, use `npx vite`
@@ -101,6 +100,24 @@ want to install npm or node.js.
    2. Otherwise, use the global `2webc` compiler binary to build the project
       before serving any pages.
    3. If there is no 2web compiler available, serve the static files as-is.
+
+### Build Command
+
+2Web prefers using Vite for building projects, but can directly call the 2web
+compiler (`2webc`) if Vite is not available.
+
+The logic for determining which build tool to use is as follows:
+
+1. If a `vite.config.ts` file is present in the project root,
+   use Vite.
+   1. If Vite is installed as an npm package, use the `node_modules` version
+   2. If Vite is installed globally, use the global version
+   3. Otherwise, use `npx vite`
+2. Otherwise, use the in-built 2web compiler.
+   1. If a local `./bin/2webc` compiler binary is present, use that
+   2. Otherwise, use the global `2webc` compiler binary
+   3. If there is no 2web compiler available, assets are directly copied to the
+      output directory without any compilation and a warning is shown.
 
 #### CMS Sources
 

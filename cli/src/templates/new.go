@@ -11,7 +11,7 @@ const twoWebVersion = "latest"
 const indexHtmlContent = `<title>My New Website!</title>
 
 <script compiled>
-$ count = 0;
+  $ count = 0;
 </script>
 
 <h1>Welcome to 2Web</h1>
@@ -158,8 +158,7 @@ const vscodeSettingsContent = `{
 	"editor.tabSize": 2,
 	"editor.defaultFormatter": "biomejs.biome",
 	"editor.codeActionsOnSave": {
-		"source.fixAll": "always",
-		"source.sortImports": "always",
+		"source.fixAll": "explicit",
 		"source.organizeImports": "always",
 		"source.addMissingImports.ts": "always",
 		"source.removeUnusedImports": "always",
@@ -240,7 +239,7 @@ func NewTemplate(path string) {
 							IsDirectory: false,
 						},
 						{
-							Path:        path + "/src/__styles.css",
+							Path:        path + "/src/__style.css",
 							Content:     routeStylesContent,
 							IsDirectory: false,
 						},

@@ -1,30 +1,47 @@
 package build
 
 import (
+	"os"
+	"os/exec"
+	"path"
+
 	"github.com/hudson-newey/2web-cli/src/builders"
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
-	"github.com/hudson-newey/2web-cli/src/packages"
-	"github.com/hudson-newey/2web-cli/src/ssr"
+	"github.com/hudson-newey/2web-cli/src/constants"
 )
 
 func BuildSolution(args []string) {
-	viteConfig, err := configs.ViteConfigLocation()
-	pathTarget := builders.EntryTarget(args)
+	inPath := builders.EntryTarget(args)
+	outPath := builders.OutputTarget(args)
 
-	if err == nil {
-		if ssr.HasSsrTarget() {
-			packages.ExecutePackage("vite", "build", pathTarget, "./server/", "--config", viteConfig)
-		} else {
-			packages.ExecutePackage("vite", "build", pathTarget, "--config", viteConfig)
-		}
-	} else {
-		// If there is no Vite config, in the current project, we call Vite without
-		// the --config parameter, meaning that it should use the default Vite
-		// config.
-		if ssr.HasSsrTarget() {
-			packages.ExecutePackage("vite", "build", pathTarget, "./server/")
-		} else {
-			packages.ExecutePackage("vite", "build", pathTarget)
-		}
+	if configs.HasViteConfig() {
+		buildWithVite(inPath)
+		return
 	}
+
+	compilerPath, err := twoWebCompilerPath()
+	if err == nil {
+		buildWithInbuiltCompiler(compilerPath, inPath, outPath)
+		return
+	}
+
+	copyAssetsOnly(inPath, outPath)
+}
+
+func twoWebCompilerPath() (string, error) {
+	exeName := "2webc"
+
+	localPath := path.Join(constants.LocalInstallPath, exeName)
+	if _, err := os.Stat(localPath); err == nil {
+		return localPath, nil
+	}
+
+	// Search in the PATH environment variable for a globally installed 2webc
+	// binary.
+	globalPath, err := exec.LookPath(exeName)
+	if err == nil {
+		return globalPath, nil
+	}
+
+	return "", os.ErrNotExist
 }

@@ -15,3 +15,8 @@ func EntryTarget(args []string) string {
 
 	return defaultEntryTarget
 }
+
+// TODO: Make this configurable via a cli flag
+func OutputTarget(_args []string) string {
+	return "./dist/"
+}
