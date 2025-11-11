@@ -25,10 +25,10 @@ Once installed, you will have access to the `2web` command.
 - `2web template <template>` (alias: t)
 - `2web install <package_name>` (alias: i)
 - `2web serve [path]` (alias: s)
+- `2web build [path]` (alias: b)
 - `2web db <sub_command>`
 - `2web doctor <sub_command>`
 - `2web cms <sub_command>`
-- `2web build [path]`
 - `2web lint [path]`
 - `2web format [path]`
 

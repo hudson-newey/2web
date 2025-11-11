@@ -73,7 +73,7 @@ func ProcessInvocation(args []string) {
 		return
 	}
 
-	if command == "build" {
+	if command == "build" || command == "b" {
 		build.BuildSolution(args)
 		return
 	}
