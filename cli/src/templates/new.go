@@ -166,14 +166,14 @@ const vscodeSettingsContent = `{
 	"search.exclude": {
 		"dist/": true,
 	},
-	"[html]": {
-		"files.autoSave": "afterDelay",
-		"files.autoSaveDelay": 0,
-	},
-	"[2web]": {
-		"files.autoSave": "afterDelay",
-		"files.autoSaveDelay": 0,
-	},
+	// "[html]": {
+	// 	"files.autoSave": "afterDelay",
+	// 	"files.autoSaveDelay": 0,
+	// },
+	// "[2web]": {
+	// 	"files.autoSave": "afterDelay",
+	// 	"files.autoSaveDelay": 0,
+	// },
 	"recommendations": [
 		"streetsidesoftware.code-spell-checker",
 		"yzhang.markdown-all-in-one",
