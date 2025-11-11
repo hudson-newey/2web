@@ -66,7 +66,7 @@ func runDevServer(inPath string, outPath string) {
 		serveFileWithReload(w, r, absOutPath)
 	})
 
-	port := "2000"
+	port := "8080"
 	addr := fmt.Sprintf(":%s", port)
 
 	// Perform an initial build before starting the server
@@ -153,9 +153,26 @@ func serveFileWithReload(
 		return
 	}
 
-	// Determine content type
-	contentType := http.DetectContentType(content)
-	w.Header().Set("Content-Type", contentType)
+	ext := filepath.Ext(filePath)
+
+	contentTypeMap := map[string]string{
+		".html": "text/html; charset=utf-8",
+		".css":  "text/css; charset=utf-8",
+		".js":   "application/javascript",
+		".png":  "image/png",
+		".jpg":  "image/jpeg",
+		".gif":  "image/gif",
+		".svg":  "image/svg+xml",
+		".json": "application/json",
+		".txt":  "text/plain; charset=utf-8",
+	}
+
+	contentType, contentTypeExists := contentTypeMap[ext]
+	if contentTypeExists {
+		w.Header().Set("Content-Type", contentType)
+	} else {
+		w.Header().Set("Content-Type", http.DetectContentType(content))
+	}
 
 	// Inject live reload script for HTML files
 	if strings.Contains(contentType, "text/html") {
