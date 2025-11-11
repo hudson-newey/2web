@@ -25,3 +25,8 @@ func ViteConfigLocation() (string, error) {
 	// We therefore use the default config provided by Vite.
 	return "", errors.New("could not find vite config")
 }
+
+func HasViteConfig() bool {
+	_, err := ViteConfigLocation()
+	return err == nil
+}

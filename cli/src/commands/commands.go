@@ -4,7 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hudson-newey/2web-cli/src/builders"
+	"github.com/hudson-newey/2web-cli/src/builders/build"
+	devserver "github.com/hudson-newey/2web-cli/src/builders/devServer"
+	"github.com/hudson-newey/2web-cli/src/builders/format"
+	"github.com/hudson-newey/2web-cli/src/builders/lint"
+	"github.com/hudson-newey/2web-cli/src/builders/test"
 	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/deploy"
 	"github.com/hudson-newey/2web-cli/src/packages"
@@ -65,27 +69,27 @@ func ProcessInvocation(args []string) {
 	// a path to serve as the third optional argument.
 	// If not specified, the "./src/" directory will be the target.
 	if command == "serve" {
-		builders.ServeSolution(args)
+		devserver.ServeSolution(args)
 		return
 	}
 
 	if command == "build" {
-		builders.BuildSolution(args)
+		build.BuildSolution(args)
 		return
 	}
 
 	if command == "lint" {
-		builders.LintSolution(args)
+		lint.LintSolution(args)
 		return
 	}
 
 	if command == "format" {
-		builders.FormatSolution(args)
+		format.FormatSolution(args)
 		return
 	}
 
 	if command == "test" {
-		builders.TestSolution(args)
+		test.TestSolution(args)
 	}
 
 	if command == "deploy" {

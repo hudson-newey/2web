@@ -1,26 +1,35 @@
-package builders
+package devserver
 
 import (
 	"fmt"
 	"os"
 
+	"github.com/hudson-newey/2web-cli/src/builders"
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
 	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/packages"
+	"github.com/hudson-newey/2web-cli/src/server"
 	"github.com/hudson-newey/2web-cli/src/shell"
+	"github.com/hudson-newey/2web-cli/src/ssr"
 )
 
 func ServeSolution(args []string) {
-	if hasSsrTarget() {
+	if ssr.HasSsrTarget() {
 		serveSsr()
-	} else {
-		serveBrowser(args)
+		return
 	}
+
+	if configs.HasViteConfig() {
+		serveVite(args)
+		return
+	}
+
+	serveInbuilt(args)
 }
 
-func serveBrowser(args []string) {
+func serveVite(args []string) {
 	viteConfig, err := configs.ViteConfigLocation()
-	pathTarget := entryTarget(args)
+	pathTarget := builders.EntryTarget(args)
 
 	// Check that the path target actually exists.
 	// If it does not, we want to log a warning.
@@ -36,6 +45,11 @@ func serveBrowser(args []string) {
 		// --config arguments, meaning that Vite should use the default config.
 		packages.ExecutePackage("vite", pathTarget)
 	}
+}
+
+func serveInbuilt(args []string) {
+	pathTarget := builders.EntryTarget(args)
+	server.Run(pathTarget)
 }
 
 func serveSsr() {
