@@ -9,3 +9,11 @@ func AddCmsSource() {
 func ViewCmsSource() {
 	fmt.Println("Not implemented.")
 }
+
+func SyncCmsSources() {
+	fmt.Println("Not implemented.")
+}
+
+func RemoveCmsSource() {
+	fmt.Println("Not implemented.")
+}

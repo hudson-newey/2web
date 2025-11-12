@@ -20,6 +20,10 @@ func cmsCommand(programName string, command string, args []string) {
 		cms.AddCmsSource()
 	case "view", "v":
 		cms.ViewCmsSource()
+	case "sync", "s":
+		cms.SyncCmsSources()
+	case "remove", "rm":
+		cms.RemoveCmsSource()
 	default:
 		errorMsg := fmt.Sprintf("Unknown cms command: '%s'", subCommand)
 		cli.PrintError(errorMsg)

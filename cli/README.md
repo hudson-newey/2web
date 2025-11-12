@@ -79,6 +79,8 @@ once, and do not take a name as an argument.
 | ------- | ----- | ---------------------- |
 | add     | a     | Adds a cms source      |
 | view    | v     | View remote CMS source |
+| sync    | s     | Sync CMS source        |
+| remove  | rm    | Remove CMS source      |
 
 ### Serve Command
 
