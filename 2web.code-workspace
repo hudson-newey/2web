@@ -15,7 +15,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "editor.inlineSuggest.enabled": true,
     "editor.renderWhitespace": "trailing",
-    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.rulers": [80, 120],
     "editor.tabSize": 2,
@@ -34,7 +34,7 @@
       "editor.defaultFormatter": "golang.go"
     },
     "[typescript]": {
-      "editor.defaultFormatter": "oxc.oxc-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[html]": {
       // "files.autoSave": "afterDelay",
@@ -43,10 +43,10 @@
       // Do not foramt HTML of .2web files on save because it tries to make all
       // html tags lowercase which might break imports.
       "editor.formatOnSave": false,
-      "editor.defaultFormatter": "oxc.oxc-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[xhtml]": {
-      "files.autoSave": "afterDelay",
+      // "files.autoSave": "afterDelay",
       "files.autoSaveDelay": 0,
 
       // Do not foramt HTML of .2web files on save because it tries to make all

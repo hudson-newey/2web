@@ -4,10 +4,11 @@ import "strings"
 
 func EscapeHtml(htmlFragment string) string {
 	replacementTable := map[string]string{
-		"{": "&#x7B;",
-		"}": "&#x7D;",
-		"<": "&lt;",
-		">": "&gt;",
+		"&":  "&amp;",
+		"\"": "&quot;",
+		"'":  "&#x27;",
+		"<":  "&lt;",
+		">":  "&gt;",
 	}
 
 	result := htmlFragment

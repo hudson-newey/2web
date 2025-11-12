@@ -48,7 +48,7 @@ var packageJsonContent string = fmt.Sprintf(`{
     "@web/test-runner": "^0.20.2",
     "typescript": "^5.8.3",
     "oxlint": "^1.28.0",
-		"prettier": "^3.6.2"
+    "prettier": "^3.6.2"
   }
 }
 `, twoWebVersion, twoWebVersion, twoWebVersion)
@@ -157,7 +157,7 @@ const vscodeSettingsContent = `{
 	"files.insertFinalNewline": true,
 	"files.trimTrailingWhitespace": true,
 	"editor.tabSize": 2,
-	"editor.defaultFormatter": "oxc.oxc-vscode",
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "explicit",
 		"source.organizeImports": "always",
@@ -167,14 +167,14 @@ const vscodeSettingsContent = `{
 	"search.exclude": {
 		"dist/": true,
 	},
-	// "[html]": {
-	// 	"files.autoSave": "afterDelay",
-	// 	"files.autoSaveDelay": 0,
-	// },
-	// "[2web]": {
-	// 	"files.autoSave": "afterDelay",
-	// 	"files.autoSaveDelay": 0,
-	// }
+	"[html]": {
+		"files.autoSave": "afterDelay",
+		"files.autoSaveDelay": 0,
+	},
+	"[2web]": {
+		"files.autoSave": "afterDelay",
+		"files.autoSaveDelay": 0,
+	}
 }`
 
 const vscodeExtensionsContent = `{
@@ -184,6 +184,7 @@ const vscodeExtensionsContent = `{
 		"davidanson.vscode-markdownlint",
 		"visualstudioexptteam.vscodeintellicode",
 		"aaron-bond.better-comments",
+		"esbenp.prettier-vscode",
 
 		"ms-vscode.vscode-typescript-next",
 		"zignd.html-css-class-completion",
