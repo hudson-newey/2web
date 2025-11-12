@@ -103,7 +103,7 @@ func ProcessInvocation(args []string) {
 	}
 
 	if command == "deploy" {
-		deploy.DeploySolution()
+		deploy.DeploySolution(programName, command, args)
 		return
 	}
 
