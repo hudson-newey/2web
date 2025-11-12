@@ -21,7 +21,7 @@ func cmsCommand(programName string, command string, args []string) {
 	case "view", "v":
 		cms.ViewCmsSource()
 	case "sync", "s":
-		cms.SyncCmsSources()
+		cms.SyncCmsSources(args)
 	case "remove", "rm":
 		cms.RemoveCmsSource()
 	default:

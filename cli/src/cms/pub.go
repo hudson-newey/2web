@@ -2,8 +2,6 @@ package cms
 
 import (
 	"fmt"
-
-	"github.com/hudson-newey/2web-cli/src/shell"
 )
 
 // TODO: I should add an actual implementation that doesn't rely on calling
@@ -19,10 +17,7 @@ func AddCmsSource(args []string) {
 	}
 
 	oneDrivePath := args[3]
-	remotePath := fmt.Sprintf("OneDrive:%s", oneDrivePath)
-	localPath := "./src/"
-
-	shell.ExecuteCommand("rclone", "copy", "-P", remotePath, localPath)
+	syncRemote(oneDrivePath)
 }
 
 // TODO
@@ -30,9 +25,15 @@ func ViewCmsSource() {
 	fmt.Println("Not implemented.")
 }
 
-// TODO
-func SyncCmsSources() {
-	fmt.Println("Not implemented.")
+// TODO: Improve this implementation
+func SyncCmsSources(args []string) {
+	if len(args) < 4 {
+		fmt.Println("Error: Missing argument for SyncCmsSources. Please provide the OneDrive path.")
+		return
+	}
+
+	oneDrivePath := args[3]
+	syncRemote(oneDrivePath)
 }
 
 // TODO
