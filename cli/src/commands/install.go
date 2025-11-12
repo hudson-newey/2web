@@ -7,7 +7,7 @@ import (
 	"github.com/hudson-newey/2web-cli/src/installer"
 )
 
-func install(programName string, command string, args []string) {
+func installCommand(programName string, command string, args []string) {
 	if len(args) < 3 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <package_name>", programName, command)
 		cli.PrintError(errorMsg)

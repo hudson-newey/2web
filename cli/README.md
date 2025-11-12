@@ -30,8 +30,8 @@ Once installed, you will have access to the `2web` command.
 | `2web build [path]`                | b     |
 | `2web lint [path]`                 | l     |
 | `2web format [path]`               | f     |
+| `2web database <sub_command>`      | db    |
 | `2web test [path]`                 |       |
-| `2web db <sub_command>`            |       |
 | `2web doctor <sub_command>`        |       |
 | `2web cms <sub_command>`           |       |
 
@@ -71,13 +71,13 @@ once, and do not take a name as an argument.
 | Command | Alias | Description                  |
 | ------- | ----- | ---------------------------- |
 | init    |       | Initializes a local database |
-| migrate |       | Runs a database migration    |
+| migrate | m     | Runs a database migration    |
 
 ### CMS Command
 
 | Command | Alias | Description            |
 | ------- | ----- | ---------------------- |
-| add     |       | Adds a cms source      |
+| add     | a     | Adds a cms source      |
 | view    | v     | View remote CMS source |
 
 ### Serve Command

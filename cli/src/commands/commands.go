@@ -26,7 +26,7 @@ func ProcessInvocation(args []string) {
 	command := os.Args[1]
 
 	if command == "new" || command == "n" {
-		new(programName, command, args)
+		newCommand(programName, command, args)
 		return
 	}
 
@@ -46,22 +46,32 @@ func ProcessInvocation(args []string) {
 	}
 
 	if command == "generate" || command == "g" {
-		generate(programName, command, args)
+		generateCommand(programName, command, args)
 		return
 	}
 
 	if command == "template" || command == "t" {
-		template(programName, command, args)
+		templateCommand(programName, command, args)
 		return
 	}
 
 	if command == "install" || command == "i" {
-		install(programName, command, args)
+		installCommand(programName, command, args)
 		return
 	}
 
 	if command == "doctor" {
 		doctorCommand(programName, command, args)
+		return
+	}
+
+	if command == "cms" {
+		cmsCommand(programName, command, args)
+		return
+	}
+
+	if command == "database" || command == "db" {
+		dbCommand(programName, command, args)
 		return
 	}
 

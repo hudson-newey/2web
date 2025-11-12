@@ -14,9 +14,8 @@ func doctorCommand(programName string, command string, args []string) {
 		cli.PrintError(errorMsg)
 	}
 
-	doctorCommand := args[2]
-
-	switch doctorCommand {
+	subCommand := args[2]
+	switch subCommand {
 	case "check", "c":
 		doctor.RunDoctor()
 	case "check-dependencies", "cd":
