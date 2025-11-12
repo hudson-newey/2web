@@ -19,6 +19,7 @@ func ParseArguments() models.CliArguments {
 	toStdout := flag.Bool("stdout", false, "Output the build file to stdout instead of to a file location")
 	withFormatting := flag.Bool("format", false, "Formats output assets for readability")
 	ignoreErrors := flag.Bool("ignore-errors", false, "Ignores errors in production builds. This allows you to ship compiler errors.")
+	serial := flag.Bool("serial", false, "Disables parallel compilation of assets")
 
 	verbose := flag.Bool("verbose", false, "Print extra debug information to the console")
 	verboseLexer := flag.Bool("verbose-lexer", false, "Logs the lexer output to the console")
@@ -38,6 +39,7 @@ func ParseArguments() models.CliArguments {
 		ToStdout:               toStdout,
 		WithFormatting:         withFormatting,
 		IgnoreErrors:           ignoreErrors,
+		Serial:                 serial,
 
 		Verbose:      verbose,
 		VerboseLexer: verboseLexer,

@@ -14,6 +14,7 @@
 - `--no-runtime-optimizations` (default: false) Do not ship additional runtime optimizations
 - `--format` (default: false) Formats output assets for readability
 - `--ignore-errors` (default: false) Ignores errors in production builds. This allows you to ship compiler errors.
+- `--serial` (default: false) Disables parallel compilation of assets
 
 ## Sub Commands
 
