@@ -1,0 +1,24 @@
+{
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "always",
+    "source.addMissingImports.ts": "always",
+    "source.removeUnusedImports": "always"
+  },
+  "search.exclude": {
+    "dist/": true
+  },
+  "[html]": {
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 0
+  },
+  "[2web]": {
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 0
+  }
+}

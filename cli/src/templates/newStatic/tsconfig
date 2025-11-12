@@ -1,0 +1,3 @@
+{
+  "extends": "@two-web/cli/templates/tsconfig.json"
+}

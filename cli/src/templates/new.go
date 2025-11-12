@@ -1,32 +1,28 @@
 package templates
 
 import (
+	_ "embed"
 	"fmt"
 
 	"github.com/hudson-newey/2web-cli/src/files"
 )
 
+// We use a lot of embedded strings here to represent the template files.
+// Because the "new" command is typically run before any files exist, we can't
+// use the `two-web/cli/templates` package that we would normally use for
+// templates.
+// I have included them in separate files for easier maintenance and editor /
+// linting support.
+
 const twoWebVersion = "latest"
 
-const indexHtmlContent = `<title>My New Website!</title>
+//go:embed newStatic/index.html
+var indexHtmlContent string
 
-<script compiled>
-  $ count = 0;
-</script>
+//go:embed newStatic/__style.css
+var routeStylesContent string
 
-<h1>Welcome to 2Web</h1>
-
-<span>{{ $count }}</span>
-
-<button @click="$count = $count + 1">+1</button>
-<button @click="$count = $count - 1">-1</button>
-`
-
-const routeStylesContent = `body {
-	margin: 0;
-}
-`
-
+// We cannot use go embed here because we need to inject the version.
 var packageJsonContent string = fmt.Sprintf(`{
   "name": "2web-example-project",
   "version": "0.1.0",
@@ -53,144 +49,26 @@ var packageJsonContent string = fmt.Sprintf(`{
 }
 `, twoWebVersion, twoWebVersion, twoWebVersion)
 
-const tsconfigContent = `{
-  "extends": "@two-web/cli/templates/tsconfig.json",
-}
-`
+// The tsconfig and gitignore files have a weird name because I don't want them
+// interfering with this projects own tsconfig or gitignore.
 
-const readmeContent = `# 2Web Example Project
+//go:embed newStatic/tsconfig
+var tsconfigContent string
 
-## Starting your project
+//go:embed newStatic/gitignore
+var gitignoreContent string
 
-` + "```sh" + `
-$ 2web serve
->
-` + "```" + `
+//go:embed newStatic/README.md
+var readmeContent string
 
-## Building your project
+//go:embed newStatic/.vscode/settings.json
+var vscodeSettingsContent string
 
-` + "```sh" + `
-$ 2web build
->
-` + "```" + `
+//go:embed newStatic/.vscode/extensions.json
+var vscodeExtensionsContent string
 
-## Testing your project
-
-` + "```sh" + `
-$ 2web test
->
-` + "```" + `
-`
-
-const gitignoreContent = `# 2Web specific ignores
-dist/
-.cache/
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# Diagnostic reports (https://nodejs.org/api/report.html)
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-
-# Coverage directory used by tools like istanbul
-coverage
-*.lcov
-
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
-
-# Dependency directories
-node_modules/
-jspm_packages/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional stylelint cache
-.stylelintcache
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# dotenv environment variable files
-.env
-.env.*
-!.env.example
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# Yarn Integrity file
-.yarn-integrity
-
-# yarn v3
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-# Vite files
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
-.vite/
-`
-
-const vscodeSettingsContent = `{
-	"files.eol": "\n",
-	"files.insertFinalNewline": true,
-	"files.trimTrailingWhitespace": true,
-	"editor.tabSize": 2,
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.codeActionsOnSave": {
-		"source.fixAll": "explicit",
-		"source.organizeImports": "always",
-		"source.addMissingImports.ts": "always",
-		"source.removeUnusedImports": "always",
-	},
-	"search.exclude": {
-		"dist/": true,
-	},
-	"[html]": {
-		"files.autoSave": "afterDelay",
-		"files.autoSaveDelay": 0,
-	},
-	"[2web]": {
-		"files.autoSave": "afterDelay",
-		"files.autoSaveDelay": 0,
-	}
-}`
-
-const vscodeExtensionsContent = `{
-	"recommendations": [
-		"streetsidesoftware.code-spell-checker",
-		"yzhang.markdown-all-in-one",
-		"davidanson.vscode-markdownlint",
-		"visualstudioexptteam.vscodeintellicode",
-		"aaron-bond.better-comments",
-		"esbenp.prettier-vscode",
-
-		"ms-vscode.vscode-typescript-next",
-		"zignd.html-css-class-completion",
-		"oxc.oxc-vscode"
-	]
-}`
+//go:embed newStatic/.github/copilot-instructions.md
+var copilotInstructions string
 
 func NewTemplate(path string) {
 	templateFiles := []files.File{
@@ -222,6 +100,17 @@ func NewTemplate(path string) {
 					Path:        path + "/tsconfig.json",
 					Content:     tsconfigContent,
 					IsDirectory: false,
+				},
+				{
+					Path:        path + "/.github/",
+					IsDirectory: true,
+					Children: []files.File{
+						{
+							Path:        path + "/.github/copilot-instructions.md",
+							Content:     copilotInstructions,
+							IsDirectory: false,
+						},
+					},
 				},
 				{
 					Path:        path + "/.vscode/",
