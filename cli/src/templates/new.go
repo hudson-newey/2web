@@ -47,7 +47,8 @@ var packageJsonContent string = fmt.Sprintf(`{
     "@two-web/cli": "%s",
     "@web/test-runner": "^0.20.2",
     "typescript": "^5.8.3",
-    "@biomejs/biome": "^2.2.2"
+    "oxlint": "^1.28.0",
+		"prettier": "^3.6.2"
   }
 }
 `, twoWebVersion, twoWebVersion, twoWebVersion)
@@ -75,7 +76,7 @@ $ 2web build
 
 ## Testing your project
 
-` + "```" + `
+` + "```sh" + `
 $ 2web test
 >
 ` + "```" + `
@@ -156,7 +157,7 @@ const vscodeSettingsContent = `{
 	"files.insertFinalNewline": true,
 	"files.trimTrailingWhitespace": true,
 	"editor.tabSize": 2,
-	"editor.defaultFormatter": "biomejs.biome",
+	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "explicit",
 		"source.organizeImports": "always",
@@ -173,7 +174,10 @@ const vscodeSettingsContent = `{
 	// "[2web]": {
 	// 	"files.autoSave": "afterDelay",
 	// 	"files.autoSaveDelay": 0,
-	// },
+	// }
+}`
+
+const vscodeExtensionsContent = `{
 	"recommendations": [
 		"streetsidesoftware.code-spell-checker",
 		"yzhang.markdown-all-in-one",
@@ -183,7 +187,7 @@ const vscodeSettingsContent = `{
 
 		"ms-vscode.vscode-typescript-next",
 		"zignd.html-css-class-completion",
-		"biomejs.biome",
+		"oxc.oxc-vscode"
 	]
 }`
 
@@ -225,6 +229,11 @@ func NewTemplate(path string) {
 						{
 							Path:        path + "/.vscode/settings.json",
 							Content:     vscodeSettingsContent,
+							IsDirectory: false,
+						},
+						{
+							Path:        path + "/.vscode/extensions.json",
+							Content:     vscodeExtensionsContent,
 							IsDirectory: false,
 						},
 					},

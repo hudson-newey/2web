@@ -53,7 +53,6 @@ export class VDomElement implements FreeformElement {
     this.directives = directives;
     this.children = children;
 
-    // biome-ignore lint/correctness/noConstructorReturn: Proxy-based reactivity is expected
     this.proxy = new Proxy(this, {
       set: (target, property, value) => {
         if (property === "ref") {

@@ -1,6 +1,6 @@
 package builders
 
-// Extracts the directory/file location that builders (vite, biome, etc...)
+// Extracts the directory/file location that builders (vite, oxc, etc...)
 // should target.
 // This is done by passing a third argument to the builder commands.
 //

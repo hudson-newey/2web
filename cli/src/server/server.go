@@ -115,9 +115,18 @@ func serveFileWithReload(
 ) {
 	// Clean the URL path
 	urlPath := r.URL.Path
-	if urlPath == "/" {
-		urlPath = "/index.html"
+
+	// If the url path does not include a .html extension and does not end with a
+	// slash, try to serve the .html file
+	if !strings.HasSuffix(urlPath, "/") && !strings.Contains(filepath.Base(urlPath), ".") {
+		tryPath := urlPath + ".html"
+		fullTryPath := filepath.Join(rootPath, filepath.Clean(tryPath))
+		if _, err := os.Stat(fullTryPath); err == nil {
+			urlPath = tryPath
+		}
 	}
+
+	log.Printf("📄 Serving file: %s", urlPath)
 
 	// Construct file path
 	filePath := filepath.Join(rootPath, filepath.Clean(urlPath))
@@ -240,8 +249,9 @@ func injectLiveReload(content []byte) []byte {
 func watchFiles(inPath string, outPath string, relativeOutPath string) {
 	var lastModTime time.Time
 
+	const fileWatcherInterval = 5 * time.Millisecond
 	for {
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(fileWatcherInterval)
 
 		modTime := getLatestModTime(inPath)
 		if !lastModTime.IsZero() && modTime.After(lastModTime) {

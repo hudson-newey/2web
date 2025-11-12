@@ -15,7 +15,7 @@
     "workbench.iconTheme": "material-icon-theme",
     "editor.inlineSuggest.enabled": true,
     "editor.renderWhitespace": "trailing",
-    "editor.defaultFormatter": "biomejs.biome",
+    "editor.defaultFormatter": "oxc.oxc-vscode",
     "editor.formatOnSave": true,
     "editor.rulers": [80, 120],
     "editor.tabSize": 2,
@@ -34,7 +34,7 @@
       "editor.defaultFormatter": "golang.go"
     },
     "[typescript]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "oxc.oxc-vscode"
     },
     "[html]": {
       // "files.autoSave": "afterDelay",
@@ -43,7 +43,7 @@
       // Do not foramt HTML of .2web files on save because it tries to make all
       // html tags lowercase which might break imports.
       "editor.formatOnSave": false,
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "oxc.oxc-vscode"
     },
     "[xhtml]": {
       "files.autoSave": "afterDelay",
@@ -81,7 +81,7 @@
       "ms-vscode.vscode-typescript-next",
       "zignd.html-css-class-completion",
       "vitest.explorer",
-      "biomejs.biome",
+      "oxc.oxc-vscode",
 
       "bierner.lit-html",
 

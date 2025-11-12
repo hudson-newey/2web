@@ -30,7 +30,8 @@ func CheckDependencies() {
 
 	optionalDependencies := []dependency{
 		{name: "vite", url: "https://vite.dev"},
-		{name: "biome", url: "https://biomejs.dev/"},
+		{name: "oxlint", url: "https://oxc.rs/docs/guide/usage/linter"},
+		{name: "prettier", url: "https://prettier.io"},
 	}
 
 	allDependencies := append(requiredDependencies, optionalDependencies...)

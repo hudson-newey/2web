@@ -8,23 +8,35 @@ import (
 )
 
 func LintSolution(args []string) {
-	biomeConfig, err := configs.BiomeConfigLocation()
+	oxLintConfig, err := configs.OxLintConfigLocation()
 	pathTarget := builders.EntryTarget(args)
-
-	configPathArg := "--configPath=" + biomeConfig
 
 	if err == nil {
 		packages.ExecutePackage(
-			"biome",
+			"oxlint",
 			"lint",
-			configPathArg,
+			"--config",
+			oxLintConfig,
 			pathTarget,
 		)
 	} else {
 		if ssr.HasSsrTarget() {
-			packages.ExecutePackage("biome", "lint", configPathArg, "./src/", "./server/")
+			packages.ExecutePackage(
+				"oxlint",
+				"lint",
+				"--config",
+				oxLintConfig,
+				"./src/",
+				"./server/",
+			)
 		} else {
-			packages.ExecutePackage("biome", "lint", configPathArg, "./src/")
+			packages.ExecutePackage(
+				"oxlint",
+				"lint",
+				"--config",
+				oxLintConfig,
+				"./src/",
+			)
 		}
 	}
 }

@@ -8,35 +8,36 @@ import (
 )
 
 func FormatSolution(args []string) {
-	biomeConfig, err := configs.BiomeConfigLocation()
+	prettierConfig, err := configs.PrettierConfigLocation()
 	pathTarget := builders.EntryTarget(args)
-
-	configPathArg := "--configPath=" + biomeConfig
 
 	if err == nil {
 		packages.ExecutePackage(
-			"biome",
+			"prettier",
 			"format",
 			"--write",
-			configPathArg,
+			"--config",
+			prettierConfig,
 			pathTarget,
 		)
 	} else {
 		if ssr.HasSsrTarget() {
 			packages.ExecutePackage(
-				"biome",
+				"prettier",
 				"format",
 				"--write",
-				configPathArg,
+				"--config",
+				prettierConfig,
 				"./src/",
 				"./server/",
 			)
 		} else {
 			packages.ExecutePackage(
-				"biome",
+				"prettier",
 				"format",
 				"--write",
-				configPathArg,
+				"--config",
+				prettierConfig,
 				"./src/",
 			)
 		}

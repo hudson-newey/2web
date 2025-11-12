@@ -14,6 +14,12 @@ func WriteFile(content string, outputPath string) {
 		panic(err)
 	}
 
+	// Make sure that the files content ends in a newline so that it is POSIX
+	// compliant.
+	// This is needed otherwise the non-blocking write may not write the correct
+	// content because it uses low-level syscalls.
+	content += "\n"
+
 	// We use a lot of un-awaited goroutines here because writing to the files
 	// should not be a blocking operation that stops the compiler from proceeding.
 	writeNonBlocking([]byte(content), outputPath)
@@ -44,6 +50,11 @@ func CreateFile(outputPath string) {
 // using a thread that would better be used for more expensive operations.
 // TODO: Replace AI code
 func writeNonBlocking(content []byte, outputPath string) {
+	// If the file exists already, we delete it first.
+	// TODO: Remove this hack. This was needed so that the old document is not
+	// contaminated with the new document.
+	syscall.Unlink(outputPath)
+
 	fd, err := syscall.Open(outputPath, syscall.O_WRONLY|syscall.O_CREAT|syscall.O_NONBLOCK, 0644)
 	if err != nil {
 		panic(err)
