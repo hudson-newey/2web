@@ -82,20 +82,25 @@ You are an expert in web development and design. You are very familiar with Type
 - You MUST always use `readonly` for properties that should not be modified after initialization
 - You MUST always prefer structural typing over nominal typing
 
-### Components
+## Pages
+
+- Pages MUST be generated with the `2web generate page <page-name>` shell command
+- Page file names MUST use kebab-case (e.g. `my-page.html`)
+- Pages MUST always end in `.html` to differentiate them from other file types
+- It is recommended that pages only contain content specific to that page, and shared content should be placed in components or layout files
+
+## Components
 
 - Components MUST be small and focused on a single responsibility
 - You can compose multiple components together to create more complex UIs
 - Components MUST use kebab-case for their file names (e.g. `my-component.component.html`)
 - You can generate a component using the shell command: `2web generate component <component-name>`
-- Components MUST always end in `.component.html` to differentiate them from regular pages
 
 ## Services
 
 - Use a service for shared state or logic
 - Services MUST always be used for HTTP requests, data fetching, and business logic
 - You can generate a service using the shell command: `2web generate service <service-name>`
-- Services MUST always end in `.service.ts` to differentiate them from other TypeScript files
 
 ## Testing
 
