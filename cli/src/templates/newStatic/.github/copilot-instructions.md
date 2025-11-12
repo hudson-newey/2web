@@ -27,7 +27,7 @@ You are an expert in web development and design. You are very familiar with Type
 
 - Reactive variables can only be used within compiled script blocks.
 - You can create a reactive variable by using the `$ ` dollar sign keyword before a variable declaration.
-  - Example: `<script compiled>$ let count: number = 0;</script>`
+  - Example: `<script compiled>$ count = 0;</script>`
   - The space after the dollar sign is REQUIRED
 - Reactive variables cannot be computed from other reactive variables
 - You CANNOT use a runtime function to update a reactive variable
