@@ -134,8 +134,7 @@ The 2web CLI can build websites from existing document stores.
 | ---------- | ----- |
 | Wordpress  | ❌     |
 | Git/GitHub | ❌     |
-| OneDrive   | ❌     |
-| Sharepoint | ❌     |
+| OneDrive   | 🔧     |
 
 ### Doctor Command
 

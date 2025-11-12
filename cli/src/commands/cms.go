@@ -17,7 +17,7 @@ func cmsCommand(programName string, command string, args []string) {
 	subCommand := args[2]
 	switch subCommand {
 	case "add", "a":
-		cms.AddCmsSource()
+		cms.AddCmsSource(args)
 	case "view", "v":
 		cms.ViewCmsSource()
 	case "sync", "s":
