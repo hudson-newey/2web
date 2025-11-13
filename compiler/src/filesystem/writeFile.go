@@ -4,7 +4,6 @@ import (
 	"os"
 	"path/filepath"
 	"syscall"
-	"time"
 )
 
 // Overwrites or creates a file at the given path with the given content and
@@ -19,47 +18,40 @@ func WriteFile(content []byte, outputPath string) {
 	writeNonBlocking(content, outputPath)
 }
 
-func CreateFile(outputPath string) {
-	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
-		panic(err)
-	}
-
-	file, err := os.Create(outputPath)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-}
-
 // A fast non-blocking file write operation that does NOT spawn a goroutine.
 // This means that we can write to files without blocking the main thread or
 // using a thread that would better be used for more expensive operations.
-// TODO: Replace AI code
 func writeNonBlocking(content []byte, outputPath string) {
-	// If the file exists already, we delete it first.
-	// TODO: Remove this hack. This was needed so that the old document is not
-	// contaminated with the new document.
-	syscall.Unlink(outputPath)
+	fileMode :=
+		// Open in write-only mode
+		syscall.O_WRONLY |
+			// Create the file if it does not exist
+			syscall.O_CREAT |
+			// Truncate the file if it already exists. This ensures that old content
+			// is removed even if the new content is smaller.
+			syscall.O_TRUNC |
+			// We open the file in a non-blocking mode to prevent blocking the main
+			// thread.
+			// Warning: This does not guarantee that the write operation is completed
+			// if another process is holding a lock on the file.
+			// However, it does give use faster writes in most cases for a very small
+			// risk of incomplete writes in rare cases that can usually be explained
+			// by external user-level factors.
+			syscall.O_NONBLOCK
 
-	fd, err := syscall.Open(outputPath, syscall.O_WRONLY|syscall.O_CREAT|syscall.O_NONBLOCK, 0644)
+	file, err := syscall.Open(outputPath, fileMode, 0644)
 	if err != nil {
 		panic(err)
 	}
-	defer syscall.Close(fd)
+	defer syscall.Close(file)
 
 	totalWritten := 0
-
 	for totalWritten < len(content) {
-		n, err := syscall.Write(fd, content[totalWritten:])
+		n, err := syscall.Write(file, content[totalWritten:])
 		if err != nil {
-			if err == syscall.EAGAIN || err == syscall.EWOULDBLOCK {
-				// Resource temporarily unavailable, try again after a pause
-				time.Sleep(100 * time.Millisecond)
-				continue
-			} else {
-				panic(err)
-			}
+			panic(err)
 		}
+
 		totalWritten += n
 	}
 }
