@@ -7,8 +7,8 @@ import (
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/filesystem"
 	"hudson-newey/2web/src/models"
-	"os"
 	"path/filepath"
 
 	"github.com/evanw/esbuild/pkg/api"
@@ -21,7 +21,7 @@ func NewJsFile() *JSFile {
 }
 
 func FromFilePath(filePath string) *JSFile {
-	content, err := os.ReadFile(filePath)
+	content, err := filesystem.ReadFile(filePath)
 	if err != nil {
 		panic(err)
 	}

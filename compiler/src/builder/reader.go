@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/filesystem"
 	"hudson-newey/2web/src/models"
 	"io"
 	"os"
@@ -32,7 +33,7 @@ func getContent(inputPath string) []byte {
 
 func getInputContent(inputPath string) ([]byte, error) {
 	if !*cli.GetArgs().FromStdin {
-		return os.ReadFile(inputPath)
+		return filesystem.ReadFile(inputPath)
 	}
 
 	if !*cli.GetArgs().IsSilent {

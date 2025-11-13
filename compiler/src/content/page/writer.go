@@ -3,7 +3,7 @@ package page
 import (
 	"fmt"
 	"hudson-newey/2web/src/cli"
-	"hudson-newey/2web/src/utils"
+	"hudson-newey/2web/src/filesystem"
 )
 
 func (model *Page) WriteHtml(filePath string) {
@@ -31,7 +31,7 @@ func write(content string, outputPath string) {
 	if *cli.GetArgs().ToStdout {
 		fmt.Println(content)
 	} else {
-		utils.WriteFile(content, outputPath)
+		filesystem.WriteFile(content, outputPath)
 	}
 }
 
@@ -39,6 +39,6 @@ func writeBinary(content []byte, outputPath string) {
 	if *cli.GetArgs().ToStdout {
 		fmt.Println(string(content))
 	} else {
-		utils.WriteBinaryFile(content, outputPath)
+		filesystem.WriteBinaryFile(content, outputPath)
 	}
 }

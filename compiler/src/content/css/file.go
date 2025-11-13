@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"hudson-newey/2web/src/cli"
-	"os"
+	"hudson-newey/2web/src/filesystem"
 )
 
 type cssCode = string
@@ -15,7 +15,7 @@ func NewCssFile() *CSSFile {
 }
 
 func FromFilePath(filePath string) *CSSFile {
-	content, err := os.ReadFile(filePath)
+	content, err := filesystem.ReadFile(filePath)
 	if err != nil {
 		panic(err)
 	}

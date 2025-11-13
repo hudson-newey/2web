@@ -1,29 +1,21 @@
 package preprocessor
 
 import (
-	"os"
+	"hudson-newey/2web/src/filesystem"
 	"path/filepath"
 	"strings"
 )
-
-var cachedLayouts = map[string]string{}
 
 func expandLayout(filePath string, content *string) {
 	layoutDir := filepath.Dir(filePath)
 	layoutFile := filepath.Join(layoutDir, "__layout.html")
 
-	layoutString := ""
-	if _, exists := cachedLayouts[layoutFile]; exists {
-		layoutString = cachedLayouts[layoutFile]
-	} else {
-		layoutBytes, err := os.ReadFile(layoutFile)
-		if err != nil {
-			return
-		}
-
-		layoutString = string(layoutBytes)
-		cachedLayouts[layoutFile] = layoutString
+	layoutBytes, err := filesystem.ReadFile(layoutFile)
+	if err != nil {
+		return
 	}
+
+	layoutString := string(layoutBytes)
 
 	// We work with a lot of byte slices here so that we don't need to convert the
 	// layout to a string and back again multiple times.

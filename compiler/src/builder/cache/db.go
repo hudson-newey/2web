@@ -2,7 +2,7 @@ package cache
 
 import (
 	"database/sql"
-	"hudson-newey/2web/src/utils"
+	"hudson-newey/2web/src/filesystem"
 	"os"
 	"path"
 
@@ -33,7 +33,7 @@ func dbConnection() *sql.DB {
 
 	dbPath := dbLocation()
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
-		utils.CreateFile(dbPath)
+		filesystem.CreateFile(dbPath)
 	}
 
 	db, err := sql.Open("sqlite3", dbPath)

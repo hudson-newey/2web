@@ -5,7 +5,7 @@ import (
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
-	"os"
+	"hudson-newey/2web/src/filesystem"
 	"path/filepath"
 )
 
@@ -18,7 +18,7 @@ func addRouteAssets(page *page.Page) {
 	directory := filepath.Dir(page.InputPath)
 
 	routeCssFile := fmt.Sprintf("%s/__style.css", directory)
-	if file, err := os.ReadFile(routeCssFile); err == nil {
+	if file, err := filesystem.ReadFile(routeCssFile); err == nil {
 		cssFile := css.FromContent(string(file))
 		page.AddStyle(cssFile)
 	}
@@ -29,12 +29,12 @@ func addRouteAssets(page *page.Page) {
 	// languages.
 
 	routeTsFile := fmt.Sprintf("%s/__script.ts", directory)
-	if file, err := os.ReadFile(routeTsFile); err == nil {
+	if file, err := filesystem.ReadFile(routeTsFile); err == nil {
 		tsFile := javascript.FromContent(string(file))
 		page.AddScript(tsFile)
 	} else {
 		routeJsFile := fmt.Sprintf("%s/__script.js", directory)
-		if file, err := os.ReadFile(routeJsFile); err == nil {
+		if file, err := filesystem.ReadFile(routeJsFile); err == nil {
 			jsFile := javascript.FromContent(string(file))
 			page.AddScript(jsFile)
 		}
