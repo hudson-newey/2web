@@ -43,8 +43,8 @@ func (model *PdfFile) Data() []byte {
 }
 
 func (model *PdfFile) OutputPath() string {
-	inPath := *cli.GetArgs().InputPath
-	outPath := *cli.GetArgs().OutputPath
+	inPath := cli.GetArgs().InputPath
+	outPath := cli.GetArgs().OutputPath
 
 	// Remove the input path from the beginning of the file path to get the
 	// relative path.

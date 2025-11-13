@@ -15,7 +15,7 @@ func main() {
 	cli.ParseArguments()
 	isErrorFree := builder.Build()
 
-	if !*cli.GetArgs().IsSilent {
+	if !cli.GetArgs().IsSilent {
 		fmt.Println("\nCompile time:", time.Since(startTime))
 	}
 

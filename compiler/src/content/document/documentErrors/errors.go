@@ -29,7 +29,7 @@ func InjectErrors(content string, pageErrors []*models.Error) string {
 }
 
 func PrintDocumentErrors() {
-	if *cli.GetArgs().IsSilent {
+	if cli.GetArgs().IsSilent {
 		return
 	}
 

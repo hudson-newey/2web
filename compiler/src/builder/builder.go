@@ -14,15 +14,15 @@ import (
 func Build() bool {
 	args := cli.GetArgs()
 
-	if *args.HasDevTools && *args.IsProd {
+	if args.HasDevTools && args.IsProd {
 		cli.PrintWarning("'--dev-tools' is being used with '--production'")
 	}
 
-	cli.PrintBuildLog(*args.InputPath)
+	cli.PrintBuildLog(args.InputPath)
 
-	inputPath, err := os.Stat(*args.InputPath)
+	inputPath, err := os.Stat(args.InputPath)
 	if err != nil {
-		pathError := models.NewError(err.Error(), *args.InputPath, lexer.Position{})
+		pathError := models.NewError(err.Error(), args.InputPath, lexer.Position{})
 		documentErrors.AddErrors(&pathError)
 
 		documentErrors.PrintDocumentErrors()
@@ -31,14 +31,14 @@ func Build() bool {
 
 	// If the output path already exists, delete the output path so that there
 	// are no stale files.
-	if _, err := os.Stat(*args.OutputPath); err != os.ErrNotExist {
+	if _, err := os.Stat(args.OutputPath); err != os.ErrNotExist {
 		// TODO: This has been disabled because it doesn't work with Vite HMR
 		// os.RemoveAll(*args.OutputPath)
 	}
 
 	if inputPath.IsDir() {
 		// recursively find all children of the input directory
-		indexedPages := indexPages(*args.InputPath)
+		indexedPages := indexPages(args.InputPath)
 
 		parallel.ForEach(indexedPages, func(filePath string) {
 			if routing.IsLayoutFile(filePath) {
@@ -47,7 +47,7 @@ func Build() bool {
 
 			compileAndWritePage(
 				filePath,
-				outputFileName(*args.InputPath, *args.OutputPath, filePath),
+				outputFileName(args.InputPath, args.OutputPath, filePath),
 			)
 		})
 
@@ -62,7 +62,7 @@ func Build() bool {
 		// such as bundler plugins, linters, etc...
 		site.AfterAll()
 	} else {
-		compileAndWritePage(*args.InputPath, outputFileName(*args.InputPath, *args.OutputPath, *args.InputPath))
+		compileAndWritePage(args.InputPath, outputFileName(args.InputPath, args.OutputPath, args.InputPath))
 	}
 
 	// We only print document errors once the entire project has been compiled so

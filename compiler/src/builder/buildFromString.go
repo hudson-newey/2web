@@ -23,7 +23,7 @@ func buildFromString(inputPath string, data string, isFullPage bool) (page.Page,
 	contentReader := reader.NewReader(inputPath, preprocessorResult)
 	lexInstance := lexer.NewLexer(contentReader)
 	lexStructure := lexInstance.Execute()
-	if *args.VerboseLexer {
+	if args.VerboseLexer {
 		lexer.PrintVerboseLexer(lexStructure)
 	}
 
@@ -35,7 +35,7 @@ func buildFromString(inputPath string, data string, isFullPage bool) (page.Page,
 
 	// 4. Create AST (parser)
 	ast := parser.CreateAst(lexStructure)
-	if *args.VerboseAst {
+	if args.VerboseAst {
 		parser.PrintVerboseParser(ast)
 	}
 
@@ -50,7 +50,7 @@ func buildFromString(inputPath string, data string, isFullPage bool) (page.Page,
 		)
 	}
 
-	if *args.HasDevTools {
+	if args.HasDevTools {
 		compiledPage.Html.Content = devtools.InjectDevTools(compiledPage.Html.Content)
 	}
 

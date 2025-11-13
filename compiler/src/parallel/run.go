@@ -8,7 +8,7 @@ import (
 // TODO: Replace this with sync.Go when I update to Go 1.25
 // Run multiple functions in parallel and wait for all to complete.
 func Run(fns ...func()) {
-	serial := *cli.GetArgs().Serial
+	serial := cli.GetArgs().Serial
 	if serial {
 		serialRun(fns...)
 	} else {

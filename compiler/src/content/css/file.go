@@ -52,7 +52,7 @@ func (model *CSSFile) AddContent(newContent cssCode) {
 var cssFileIndex int = 0
 
 func (model *CSSFile) OutputPath() string {
-	outPath := *cli.GetArgs().OutputPath
+	outPath := cli.GetArgs().OutputPath
 	return fmt.Sprintf("%s/%s", outPath, model.FileName())
 }
 
@@ -71,7 +71,7 @@ func (model *CSSFile) FileName() string {
 	// quicker development environment.
 	//
 	// TODO: remove this && false and fix browser caching
-	if !*cli.GetArgs().IsProd && false {
+	if !cli.GetArgs().IsProd && false {
 		cssFileIndex++
 		result := fmt.Sprintf("%d.css", cssFileIndex)
 

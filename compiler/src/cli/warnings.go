@@ -3,7 +3,7 @@ package cli
 import "fmt"
 
 func PrintWarning(message string) {
-	if *GetArgs().IsSilent {
+	if GetArgs().IsSilent {
 		return
 	}
 

@@ -15,7 +15,7 @@ func GenerateRobotsTxt() {
 	file := txt.TxtFile{}
 	file.AddContent(defaultRobotsTxtContent)
 
-	outputDirectory := *cli.GetArgs().OutputPath
+	outputDirectory := cli.GetArgs().OutputPath
 	if outputDirectory[len(outputDirectory)-1] != '/' {
 		outputDirectory += "/"
 	}

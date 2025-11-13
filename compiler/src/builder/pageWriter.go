@@ -11,8 +11,8 @@ import (
 // Writes an entry point to the output path.
 func compileAndWritePage(inputPath string, outputPath string) {
 	args := cli.GetArgs()
-	cacheDisabled := *args.DisableCache
-	production := *args.IsProd
+	cacheDisabled := args.DisableCache
+	production := args.IsProd
 
 	site.BeforeEach(outputPath)
 
@@ -46,24 +46,24 @@ func compileAndWritePage(inputPath string, outputPath string) {
 	// optimizations would be applied every time a component is added.
 	// Most optimizations can be applied at the very end of the page build, so
 	// this is the best place to do it.
-	if !(*args.NoRuntimeOptimizations) {
+	if !(args.NoRuntimeOptimizations) {
 		runtimeOptimizer.InjectRuntimeOptimizations(&compiledPage)
 	}
 
-	if *args.WithFormatting {
+	if args.WithFormatting {
 		compiledPage.Format()
 	}
 
 	// We always optimize last so that even the injected content is optimized.
-	if *args.IsProd {
-		if *args.WithFormatting {
+	if args.IsProd {
+		if args.WithFormatting {
 			cli.PrintWarning("Ignoring '--format' because '--production' was specified")
 		}
 
 		optimizer.OptimizePage(&compiledPage)
 	}
 
-	if !success && production && !*args.IgnoreErrors {
+	if !success && production && !args.IgnoreErrors {
 		// Compiler errors should not be ignored in production builds, otherwise, we
 		// start shipping compiler errors to end users, which does not look good.
 		cli.HardError("Build failed for " + inputPath)

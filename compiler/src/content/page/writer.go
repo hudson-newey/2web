@@ -34,7 +34,7 @@ func write(content string, outputPath string) {
 	// content because it uses low-level syscalls.
 	content += "\n"
 
-	if *cli.GetArgs().ToStdout {
+	if cli.GetArgs().ToStdout {
 		fmt.Println(content)
 	} else {
 		filesystem.WriteFile([]byte(content), outputPath)
@@ -42,7 +42,7 @@ func write(content string, outputPath string) {
 }
 
 func writeBinary(content []byte, outputPath string) {
-	if *cli.GetArgs().ToStdout {
+	if cli.GetArgs().ToStdout {
 		fmt.Println(string(content))
 	} else {
 		filesystem.WriteFile(content, outputPath)

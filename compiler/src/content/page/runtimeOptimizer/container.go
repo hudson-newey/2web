@@ -11,8 +11,6 @@ import (
 )
 
 func injectContainerOptimizations(pageModel *page.Page) {
-	args := cli.GetArgs()
-
 	// TODO: Remove the hack: We have a space before the JS element namespace so
 	// that only elements match the replacement target, and not javascript code
 	// that uses the selector.
@@ -32,7 +30,7 @@ func injectContainerOptimizations(pageModel *page.Page) {
 	// "isolated-container".
 	// However, if we are in a production build, we shorten the css class name.
 	isolatedContainerClassName := fmt.Sprintf("%sisolated-container", constants.CompilerNamespace)
-	if *args.IsProd {
+	if cli.GetArgs().IsProd {
 		isolatedContainerClassName = fmt.Sprintf("%so0", constants.CompilerNamespace)
 	}
 

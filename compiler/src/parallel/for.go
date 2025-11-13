@@ -7,7 +7,7 @@ import (
 
 // A for loop that runs each iteration in parallel.
 func ForEach[T any](items []T, fn func(T)) {
-	serial := *cli.GetArgs().Serial
+	serial := cli.GetArgs().Serial
 	if serial {
 		serialForEach(items, fn)
 	} else {

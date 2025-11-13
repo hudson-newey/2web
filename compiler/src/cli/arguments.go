@@ -28,22 +28,22 @@ func ParseArguments() models.CliArguments {
 	flag.Parse()
 
 	parsedArgs = models.CliArguments{
-		InputPath:              inputPath,
-		OutputPath:             outputPath,
-		HasDevTools:            hasDevTools,
-		NoRuntimeOptimizations: noRuntimeOptimizations,
-		IsProd:                 isProd,
-		IsSilent:               isSilent,
-		DisableCache:           disableCache,
-		FromStdin:              fromStdin,
-		ToStdout:               toStdout,
-		WithFormatting:         withFormatting,
-		IgnoreErrors:           ignoreErrors,
-		Serial:                 serial,
+		InputPath:              *inputPath,
+		OutputPath:             *outputPath,
+		HasDevTools:            *hasDevTools,
+		NoRuntimeOptimizations: *noRuntimeOptimizations,
+		IsProd:                 *isProd,
+		IsSilent:               *isSilent,
+		DisableCache:           *disableCache,
+		FromStdin:              *fromStdin,
+		ToStdout:               *toStdout,
+		WithFormatting:         *withFormatting,
+		IgnoreErrors:           *ignoreErrors,
+		Serial:                 *serial,
 
-		Verbose:      verbose,
-		VerboseLexer: verboseLexer,
-		VerboseAst:   verboseAst,
+		Verbose:      *verbose,
+		VerboseLexer: *verboseLexer,
+		VerboseAst:   *verboseAst,
 	}
 
 	return GetArgs()

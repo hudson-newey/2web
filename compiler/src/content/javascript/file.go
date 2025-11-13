@@ -47,7 +47,7 @@ type JSFile struct {
 func (model *JSFile) RawContent() string {
 	result := model.Content
 
-	workingDir, _ := filepath.Abs(*cli.GetArgs().InputPath)
+	workingDir, _ := filepath.Abs(cli.GetArgs().InputPath)
 
 	esbuildOutput := api.Build(api.BuildOptions{
 		Stdin: &api.StdinOptions{
@@ -98,7 +98,7 @@ func (model *JSFile) IsLazy() bool {
 var jsFileIndex int = 0
 
 func (model *JSFile) OutputPath() string {
-	outPath := *cli.GetArgs().OutputPath
+	outPath := cli.GetArgs().OutputPath
 	return fmt.Sprintf("%s/%s", outPath, model.FileName())
 }
 
@@ -117,7 +117,7 @@ func (model *JSFile) FileName() string {
 	// quicker development environment.
 	//
 	// TODO: remove this && false and fix browser caching
-	if !*cli.GetArgs().IsProd && false {
+	if !cli.GetArgs().IsProd && false {
 		jsFileIndex++
 		result := fmt.Sprintf("%d.js", jsFileIndex)
 

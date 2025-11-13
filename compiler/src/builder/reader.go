@@ -32,11 +32,11 @@ func getContent(inputPath string) []byte {
 }
 
 func getInputContent(inputPath string) ([]byte, error) {
-	if !*cli.GetArgs().FromStdin {
+	if !cli.GetArgs().FromStdin {
 		return filesystem.ReadFile(inputPath)
 	}
 
-	if !*cli.GetArgs().IsSilent {
+	if !cli.GetArgs().IsSilent {
 		fmt.Println("Prompting STDIN for file:", inputPath)
 	}
 

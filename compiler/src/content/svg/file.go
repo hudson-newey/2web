@@ -31,7 +31,7 @@ func (model *SvgFile) FileName() string {
 	// computationally expensive), and instead just use an incrementing number.
 	// This is less efficient for the CDN's and browser cache, but provides a
 	// quicker development environment.
-	if !*cli.GetArgs().IsProd {
+	if !cli.GetArgs().IsProd {
 		svgFileIndex++
 		return fmt.Sprintf("%d.css", svgFileIndex)
 	}

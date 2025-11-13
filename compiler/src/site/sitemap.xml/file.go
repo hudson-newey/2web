@@ -22,7 +22,7 @@ func GenerateSitemap(paths []models.SitePath) {
 	file := xml.XmlFile{}
 	file.AddContent(content)
 
-	outputDirectory := *cli.GetArgs().OutputPath
+	outputDirectory := cli.GetArgs().OutputPath
 	if outputDirectory[len(outputDirectory)-1] != '/' {
 		outputDirectory += "/"
 	}
