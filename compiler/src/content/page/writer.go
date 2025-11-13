@@ -31,7 +31,7 @@ func write(content string, outputPath string) {
 	if *cli.GetArgs().ToStdout {
 		fmt.Println(content)
 	} else {
-		filesystem.WriteFile(content, outputPath)
+		filesystem.WriteFile([]byte(content), outputPath)
 	}
 }
 

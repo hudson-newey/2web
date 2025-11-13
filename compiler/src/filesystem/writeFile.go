@@ -9,7 +9,7 @@ import (
 
 // Overwrites or creates a file at the given path with the given content and
 // creates any necessary directories.
-func WriteFile(content string, outputPath string) {
+func WriteFile(content []byte, outputPath string) {
 	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
 		panic(err)
 	}
@@ -18,11 +18,11 @@ func WriteFile(content string, outputPath string) {
 	// compliant.
 	// This is needed otherwise the non-blocking write may not write the correct
 	// content because it uses low-level syscalls.
-	content += "\n"
+	content = append(content, '\n')
 
 	// We use a lot of un-awaited goroutines here because writing to the files
 	// should not be a blocking operation that stops the compiler from proceeding.
-	writeNonBlocking([]byte(content), outputPath)
+	writeNonBlocking(content, outputPath)
 }
 
 func WriteBinaryFile(content []byte, outputPath string) {
