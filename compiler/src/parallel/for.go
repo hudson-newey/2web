@@ -24,13 +24,25 @@ func serialForEach[T any](items []T, fn func(T)) {
 func parallelForEach[T any](items []T, fn func(T)) {
 	waitGroup := sync.WaitGroup{}
 
-	for _, value := range items {
+	// Because this blocks the main thread until all iterations are complete, we
+	// can re-use the main thread for the last iteration to save on a goroutine.
+	// This is useful because creating a goroutine has some overhead which we can
+	// avoid for one iteration.
+	synchronizedIndex := len(items) - 1
+
+	for i, value := range items {
 		waitGroup.Add(1)
 
-		go func(v T) {
-			defer waitGroup.Done()
-			fn(v)
-		}(value)
+		if i < synchronizedIndex {
+			go func(v T) {
+				defer waitGroup.Done()
+				fn(v)
+			}(value)
+			continue
+		}
+
+		fn(value)
+		waitGroup.Done()
 	}
 
 	waitGroup.Wait()
