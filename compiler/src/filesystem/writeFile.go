@@ -14,22 +14,8 @@ func WriteFile(content []byte, outputPath string) {
 		panic(err)
 	}
 
-	// Make sure that the files content ends in a newline so that it is POSIX
-	// compliant.
-	// This is needed otherwise the non-blocking write may not write the correct
-	// content because it uses low-level syscalls.
-	content = append(content, '\n')
-
 	// We use a lot of un-awaited goroutines here because writing to the files
 	// should not be a blocking operation that stops the compiler from proceeding.
-	writeNonBlocking(content, outputPath)
-}
-
-func WriteBinaryFile(content []byte, outputPath string) {
-	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
-		panic(err)
-	}
-
 	writeNonBlocking(content, outputPath)
 }
 

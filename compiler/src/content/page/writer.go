@@ -31,6 +31,11 @@ func write(content string, outputPath string) {
 	if *cli.GetArgs().ToStdout {
 		fmt.Println(content)
 	} else {
+		// Make sure that the files content ends in a newline so that it is POSIX
+		// compliant.
+		// This is needed otherwise the non-blocking write may not write the correct
+		// content because it uses low-level syscalls.
+		content += "\n"
 		filesystem.WriteFile([]byte(content), outputPath)
 	}
 }
@@ -39,6 +44,6 @@ func writeBinary(content []byte, outputPath string) {
 	if *cli.GetArgs().ToStdout {
 		fmt.Println(string(content))
 	} else {
-		filesystem.WriteBinaryFile(content, outputPath)
+		filesystem.WriteFile(content, outputPath)
 	}
 }
