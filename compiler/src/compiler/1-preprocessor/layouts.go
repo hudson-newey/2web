@@ -6,13 +6,13 @@ import (
 	"strings"
 )
 
-func expandLayout(filePath string, content *string) {
+func expandLayout(filePath string, content string) string {
 	layoutDir := filepath.Dir(filePath)
 	layoutFile := filepath.Join(layoutDir, "__layout.html")
 
 	layoutBytes, err := filesystem.ReadFile(layoutFile)
 	if err != nil {
-		return
+		return content
 	}
 
 	layoutString := string(layoutBytes)
@@ -22,15 +22,15 @@ func expandLayout(filePath string, content *string) {
 	slotSelector := "<slot></slot>"
 	slotIndex := strings.Index(layoutString, slotSelector)
 	if slotIndex < 0 {
-		return
+		return content
 	}
 
 	replaced := strings.Replace(
 		layoutString,
 		slotSelector,
-		*content,
+		content,
 		1,
 	)
 
-	*content = replaced
+	return replaced
 }

@@ -32,7 +32,7 @@ func ProcessStaticSite(filePath string, content string, expandPartials bool) str
 		//
 		// TODO: Add support for markdown & xhtml layouts.
 		if !xhtml.IsXhtmlFile(filePath) && !markdown.IsMarkdownFile(filePath) {
-			expandLayout(filePath, &ssgResult)
+			ssgResult = expandLayout(filePath, ssgResult)
 		}
 
 		// 2Web supports partial content, meaning that pages don't need and doctype,
