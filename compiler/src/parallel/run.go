@@ -25,13 +25,23 @@ func serialRun(fns ...func()) {
 func parallelRun(fns ...func()) {
 	waitGroup := sync.WaitGroup{}
 
-	for _, fn := range fns {
+	// We re-use the main thread for the last function to save on a goroutine.
+	// This is useful because creating a goroutine has some overhead which we can
+	// avoid for one callback.
+	synchronizedIndex := len(fns) - 1
+
+	for i, fn := range fns {
 		waitGroup.Add(1)
 
-		go func(f func()) {
-			defer waitGroup.Done()
-			f()
-		}(fn)
+		if i < synchronizedIndex {
+			go func(f func()) {
+				defer waitGroup.Done()
+				f()
+			}(fn)
+		} else {
+			fn()
+			waitGroup.Done()
+		}
 	}
 
 	waitGroup.Wait()
