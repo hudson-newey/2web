@@ -1,0 +1,28 @@
+<script compiled>
+  $ count = 0;
+</script>
+
+<div class="counter-container">
+  <button class="counter-btn" @click="$count = $count + 1">{{ $count }}</button>
+  <button class="reset-btn" @click="$count = 0">Reset</button>
+</div>
+
+<style>
+  .counter-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .counter-btn {
+    padding: 1.2rem 2.4rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  .reset-btn {
+    padding: 1.2rem 2.4rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+</style>

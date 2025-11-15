@@ -1,12 +1,11 @@
-<title>Welcome to 2Web</title>
-
 <script compiled>
-  $ count = 0;
+  import Counter from "./components/counter/counter.component.html";
+
+  $ name = "2Web";
 </script>
 
-<h1>Welcome to 2Web</h1>
+<title>2Web App</title>
 
-<span>{{ $count }}</span>
+<h1>Hello {{ $name }}!</h1>
 
-<button @click="$count = $count + 1">+1</button>
-<button @click="$count = $count - 1">-1</button>
+<Counter />

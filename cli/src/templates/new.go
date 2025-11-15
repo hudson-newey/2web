@@ -25,6 +25,9 @@ var indexTestContent string
 //go:embed newStatic/__style.css
 var routeStylesContent string
 
+//go:embed newStatic/components/counter/counter.component.html
+var counterComponentContent string
+
 // We cannot use go embed here because we need to inject the version.
 var packageJsonContent string = fmt.Sprintf(`{
   "name": "2web-example-project",
@@ -196,6 +199,23 @@ func NewTemplate(path string) {
 					Path:        path + "/src/",
 					IsDirectory: true,
 					Children: []files.File{
+						{
+							Path:        path + "/src/components/",
+							IsDirectory: true,
+							Children: []files.File{
+								{
+									Path:        path + "/src/components/counter/",
+									IsDirectory: true,
+									Children: []files.File{
+										{
+											Path:        path + "/src/components/counter/counter.component.html",
+											Content:     counterComponentContent,
+											IsDirectory: false,
+										},
+									},
+								},
+							},
+						},
 						{
 							Path:        path + "/src/index.html",
 							Content:     indexHtmlContent,
