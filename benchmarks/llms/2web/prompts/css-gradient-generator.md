@@ -1,0 +1,1 @@
+Build a CSS gradient generator. The user should be able to pick two colors and an orientation (e.g., 'to right', 'to bottom right'). The app should display a preview of the gradient and provide the corresponding CSS background code for the user to copy.

@@ -1,0 +1,1 @@
+Create a CSS box-shadow generator. It should have sliders to control the horizontal and vertical offset, blur radius, and spread radius. It should also have a color picker for the shadow color. The application should display a preview and the generated CSS code.

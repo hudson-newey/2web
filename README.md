@@ -85,6 +85,11 @@ application with one command.
 
 A vscode extension to integrate with the 2web cli.
 
+### MCP Server
+
+2Web comes with a built-in MCP server that can be used to directly connect LLMs
+and code editors to your 2Web project for AI-enhanced development.
+
 ## Additional Libraries
 
 2Web is not intended to be a complete solution for web development, and is

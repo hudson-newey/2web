@@ -1,0 +1,1 @@
+Create a daily water intake calculator. It should ask for the user's weight and activity level (e.g., sedentary, active). Based on this mock data, a 'Calculate' button should suggest a recommended daily water intake in liters or ounces.

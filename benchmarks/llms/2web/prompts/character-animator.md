@@ -1,0 +1,1 @@
+Develop a character animator. It should display a character from a sprite sheet. Buttons for "Walk", "Run", and "Idle" should change the CSS background-position to create an animation loop for that action.

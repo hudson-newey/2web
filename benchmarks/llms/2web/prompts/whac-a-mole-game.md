@@ -1,0 +1,1 @@
+Build a Whac-a-Mole game. Create a grid where 'moles' pop up randomly for a short period. The user scores points by clicking on a mole before it disappears. The game should last for a set time (e.g., 30 seconds) and display the final score.

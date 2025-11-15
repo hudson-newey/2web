@@ -1,0 +1,13 @@
+{
+  "name": "@two-web/llm-benchmarks",
+  "private": true,
+  "version": "0.0.1",
+  "description": "LLM benchmarks for 2web",
+  "author": "hudson-newey",
+  "license": "MIT",
+  "scripts": {},
+  "packageManager": "pnpm@10.6.5",
+  "dependencies": {
+    "web-codegen-scorer": "^0.0.31"
+  }
+}

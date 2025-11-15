@@ -1,0 +1,1 @@
+Create a Simon Says memory game. The app will light up a sequence of colored buttons. The user must repeat the sequence by clicking the buttons in the correct order. Each round, the sequence gets longer. The game ends when the user makes a mistake.

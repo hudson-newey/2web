@@ -1,0 +1,1 @@
+Develop a contact form component. It should include fields for Name, Email, and Message. Implement client-side validation to ensure the fields are not empty and the email format is valid. A 'Submit' button should be disabled until the form is valid. On submit, show a success message.

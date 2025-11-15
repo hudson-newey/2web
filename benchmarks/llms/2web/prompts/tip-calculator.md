@@ -1,0 +1,1 @@
+Create a simple web application that functions as a tip calculator. It should have an input for the total bill amount, a slider for the tip percentage (from 5% to 50%), and an input for the number of people to split the bill. The application should display the tip amount, the total amount, the amount per person, and the tip per person.

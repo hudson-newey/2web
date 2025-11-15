@@ -1,0 +1,1 @@
+Generate a web application that converts color codes. It should have input fields for HEX, RGB, and HSL values. When a user enters a valid color code in one format, the other two formats should update automatically. Also, display a preview of the color.

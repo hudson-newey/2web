@@ -1,0 +1,1 @@
+Develop a Minesweeper game. It should have a grid of clickable squares. Some squares contain mines. Clicking a non-mine square reveals a number indicating how many adjacent mines there are. The player wins by revealing all non-mine squares.

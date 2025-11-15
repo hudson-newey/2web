@@ -1,0 +1,1 @@
+Develop an ASCII art generator. It should have a textarea where the user can input text. The app should convert this text into a large, stylized ASCII art representation using a predefined font map. Display the result in a preformatted text block.

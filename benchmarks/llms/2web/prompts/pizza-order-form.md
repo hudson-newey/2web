@@ -1,0 +1,1 @@
+Build a pizza order form. The user should be able to select the pizza size (radio buttons), crust type (dropdown), and toppings (checkboxes). The total price should be calculated and displayed in real-time.

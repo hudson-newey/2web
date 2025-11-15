@@ -1,0 +1,1 @@
+Create a credit card form UI. It should have fields for the cardholder's name, card number, expiration date (month and year), and CVV. The form should include basic validation for the format of the inputs.

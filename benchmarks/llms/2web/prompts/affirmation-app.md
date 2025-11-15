@@ -1,0 +1,1 @@
+Build a daily affirmation display app. The app should display a positive affirmation from a predefined list. A 'New Affirmation' button allows the user to see another one. Include a button to change the background to a calming image from a small, local selection.

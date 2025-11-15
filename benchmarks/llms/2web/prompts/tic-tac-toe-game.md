@@ -1,0 +1,1 @@
+Create a Tic-Tac-Toe game. It should feature a 3x3 grid. Two players can take turns clicking on the squares to place their mark (X or O). The app should detect a win or a draw and display a message. A 'Reset' button should start a new game.

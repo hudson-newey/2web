@@ -1,0 +1,1 @@
+Build a simple greeting card maker. The user can choose a background image from a few predefined options, write a custom message, and choose a font style. The app should display a preview of the final greeting card.

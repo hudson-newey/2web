@@ -1,0 +1,1 @@
+Build a password strength checker. As the user types into a password input field, the app should provide real-time feedback on its strength (e.g., 'Weak', 'Medium', 'Strong') and which criteria have been met (e.g., has uppercase, has number).

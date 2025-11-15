@@ -1,0 +1,1 @@
+Build a story idea generator. A 'Generate Idea' button should randomly combine a character, a setting, and a conflict from three separate predefined lists to create a unique story prompt (e.g., 'A nervous robot in a sunken city must find a lost artifact').

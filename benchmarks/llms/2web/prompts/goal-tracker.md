@@ -1,0 +1,1 @@
+Develop a personal goal tracker. A user can add a goal with a title and a target date. The application should display a list of goals. The user can mark goals as 'In Progress' or 'Completed' and delete them.
