@@ -4,42 +4,27 @@ import (
 	"github.com/hudson-newey/2web-cli/src/builders"
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
 	"github.com/hudson-newey/2web-cli/src/packages"
-	"github.com/hudson-newey/2web-cli/src/ssr"
 )
 
 func FormatSolution(args []string) {
 	prettierConfig, err := configs.PrettierConfigLocation()
-	pathTarget := builders.EntryTarget(args)
+	pathTargets := builders.EntryTargets(args)
 
-	if err == nil {
-		packages.ExecutePackage(
-			"prettier",
-			"format",
-			"--write",
-			"--config",
-			prettierConfig,
-			pathTarget,
+	hasPrettierConfig := err == nil
+	if hasPrettierConfig {
+		args := append(
+			[]string{
+				"prettier",
+				"--write",
+				"--config",
+				prettierConfig,
+			},
+			pathTargets...,
 		)
+
+		packages.ExecutePackage(args...)
 	} else {
-		if ssr.HasSsrTarget() {
-			packages.ExecutePackage(
-				"prettier",
-				"format",
-				"--write",
-				"--config",
-				prettierConfig,
-				"./src/",
-				"./server/",
-			)
-		} else {
-			packages.ExecutePackage(
-				"prettier",
-				"format",
-				"--write",
-				"--config",
-				prettierConfig,
-				"./src/",
-			)
-		}
+		args := append([]string{"prettier", "--write"}, pathTargets...)
+		packages.ExecutePackage(args...)
 	}
 }

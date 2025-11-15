@@ -29,7 +29,7 @@ func ServeSolution(args []string) {
 
 func serveVite(args []string) {
 	viteConfig, err := configs.ViteConfigLocation()
-	pathTarget := builders.EntryTarget(args)
+	pathTarget := builders.EntryTargets(args)[0]
 
 	// Check that the path target actually exists.
 	// If it does not, we want to log a warning.
@@ -48,7 +48,7 @@ func serveVite(args []string) {
 }
 
 func serveInbuilt(args []string) {
-	inPath := builders.EntryTarget(args)
+	inPath := builders.EntryTargets(args)[0]
 	outPath := builders.OutputTarget(args)
 
 	server.Run(inPath, outPath)

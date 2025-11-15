@@ -8,16 +8,13 @@ import (
 
 func TestSolution(args []string) {
 	wtrConfig, err := configs.WtrConfigLocation()
-	pathTarget := builders.EntryTarget(args)
+	pathTargets := builders.EntryTargets(args)
 
 	if err == nil {
-		packages.ExecuteWithoutFallback(
-			"wtr",
-			"--config",
-			wtrConfig,
-			pathTarget,
-		)
+		args := append([]string{"wtr", "--config", wtrConfig}, pathTargets...)
+		packages.ExecuteWithoutFallback(args...)
 	} else {
-		packages.ExecuteWithoutFallback("wtr", "./src/")
+		args := append([]string{"wtr"}, pathTargets...)
+		packages.ExecuteWithoutFallback(args...)
 	}
 }

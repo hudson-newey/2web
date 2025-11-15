@@ -11,10 +11,10 @@ import (
 )
 
 func BuildSolution(args []string) {
-	inPath := builders.EntryTarget(args)
+	inPath := builders.EntryTargets(args)
 	outPath := builders.OutputTarget(args)
 
-	BuildPath(inPath, outPath)
+	BuildPath(inPath[0], outPath)
 }
 
 func BuildPath(inPath string, outPath string) {

@@ -4,39 +4,27 @@ import (
 	"github.com/hudson-newey/2web-cli/src/builders"
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
 	"github.com/hudson-newey/2web-cli/src/packages"
-	"github.com/hudson-newey/2web-cli/src/ssr"
 )
 
 func LintSolution(args []string) {
 	oxLintConfig, err := configs.OxLintConfigLocation()
-	pathTarget := builders.EntryTarget(args)
+	pathTargets := builders.EntryTargets(args)
 
-	if err == nil {
-		packages.ExecutePackage(
-			"oxlint",
-			"lint",
-			"--config",
-			oxLintConfig,
-			pathTarget,
+	hasOxLintConfig := err == nil
+	if hasOxLintConfig {
+		args := append(
+			[]string{
+				"oxlint",
+				"lint",
+				"--config",
+				oxLintConfig,
+			},
+			pathTargets...,
 		)
+
+		packages.ExecutePackage(args...)
 	} else {
-		if ssr.HasSsrTarget() {
-			packages.ExecutePackage(
-				"oxlint",
-				"lint",
-				"--config",
-				oxLintConfig,
-				"./src/",
-				"./server/",
-			)
-		} else {
-			packages.ExecutePackage(
-				"oxlint",
-				"lint",
-				"--config",
-				oxLintConfig,
-				"./src/",
-			)
-		}
+		args := append([]string{"oxlint", "lint"}, pathTargets...)
+		packages.ExecutePackage(args...)
 	}
 }

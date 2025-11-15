@@ -51,5 +51,4 @@ const HelpDocumentation string = `Commands:
   2web doctor <sub_command>
     check
     check-dependencies
-    install-dependencies
-`
+    install-dependencies`
