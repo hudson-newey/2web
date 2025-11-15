@@ -30,8 +30,8 @@ Once installed, you will have access to the `2web` command.
 | `2web build [path]`                | b     |
 | `2web lint [path]`                 | l     |
 | `2web format [path]`               | f     |
-| `2web database <sub_command>`      | db    |
 | `2web test [path]`                 |       |
+| `2web database <sub_command>`      | db    |
 | `2web doctor <sub_command>`        |       |
 | `2web cms <sub_command>`           |       |
 
