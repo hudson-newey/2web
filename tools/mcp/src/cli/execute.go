@@ -34,9 +34,6 @@ func executeCliCommand(command []string) (CommandResult, error) {
 		return CommandResult{}, err
 	}
 
-	// We always use the --no-cache for MCP executions to ensure fresh builds.
-	command = append(command, "--no-cache")
-
 	cmd := exec.Command(cliPath, command...)
 	cmd.Stdin = nil
 
