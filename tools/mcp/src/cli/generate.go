@@ -6,12 +6,18 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func ExecuteTool(command ...string) func(
+func NewGenerationTool(template string) func(
 	ctx context.Context,
 	request mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		res, err := Execute(command...)
+		name, err := request.RequireString("name")
+		if err != nil {
+			return mcp.NewToolResultError(err.Error()), nil
+		}
+
+		command := []string{"generate", template, name}
+		res, err := executeCliCommand(command)
 
 		isError := err != nil || res.Stderr != ""
 		if isError {
@@ -20,10 +26,4 @@ func ExecuteTool(command ...string) func(
 
 		return mcp.NewToolResultText(res.Stdout), nil
 	}
-}
-
-// The "command" argument should NOT include "2web" command or path itself.
-// It should only include the subcommands and flags to be executed.
-func Execute(command ...string) (CommandResult, error) {
-	return executeCliCommand(command)
 }

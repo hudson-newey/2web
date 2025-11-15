@@ -15,30 +15,83 @@ func main() {
 		server.WithToolCapabilities(false),
 	)
 
-	lintTool := mcp.NewTool("lint",
+	lintTool := mcp.NewTool("lint-project",
 		mcp.WithDescription("Lint the current project"),
 	)
 
-	formatTool := mcp.NewTool("format",
+	formatTool := mcp.NewTool("format-project",
 		mcp.WithDescription("Format the current project"),
 	)
 
-	testTool := mcp.NewTool("test",
+	testTool := mcp.NewTool("test-project",
 		mcp.WithDescription("Test the current project"),
 	)
 
-	// newPageTool := mcp.NewTool("new-page",
-	// 	mcp.WithDescription("Create a new page in the current project"),
-	// 	mcp.WithString(
-	// 		"name",
-	// 		mcp.Required(),
-	// 		mcp.Description("The name of the new page"),
-	// 	),
-	// )
+	newPageTool := mcp.NewTool("new-page",
+		mcp.WithDescription("Create a new page in the current project"),
+		mcp.WithString(
+			"name",
+			mcp.Required(),
+			mcp.Description("The name of the page"),
+		),
+	)
 
-	mcpServer.AddTool(lintTool, cli.ExecuteTool("lint"))
-	mcpServer.AddTool(formatTool, cli.ExecuteTool("format"))
-	mcpServer.AddTool(testTool, cli.ExecuteTool("test"))
+	newComponentTool := mcp.NewTool("new-component",
+		mcp.WithDescription("Create a component in the current project"),
+		mcp.WithString(
+			"name",
+			mcp.Required(),
+			mcp.Description("The name of the component"),
+		),
+	)
+
+	newServiceTool := mcp.NewTool("new-service",
+		mcp.WithDescription("Create a service in the current project"),
+		mcp.WithString(
+			"name",
+			mcp.Required(),
+			mcp.Description("The name of the service"),
+		),
+	)
+
+	newModelTool := mcp.NewTool("new-model",
+		mcp.WithDescription("Create a model in the current project"),
+		mcp.WithString(
+			"name",
+			mcp.Required(),
+			mcp.Description("The name of the model"),
+		),
+	)
+
+	newEnumTool := mcp.NewTool("new-enum",
+		mcp.WithDescription("Create an enum in the current project"),
+		mcp.WithString(
+			"name",
+			mcp.Required(),
+			mcp.Description("The name of the enum"),
+		),
+	)
+
+	newInterfaceTool := mcp.NewTool("new-interface",
+		mcp.WithDescription("Create an interface in the current project"),
+		mcp.WithString(
+			"name",
+			mcp.Required(),
+			mcp.Description("The name of the interface"),
+		),
+	)
+
+	mcpServer.AddTool(lintTool, cli.NewExecuteTool("lint"))
+	mcpServer.AddTool(formatTool, cli.NewExecuteTool("format"))
+	mcpServer.AddTool(testTool, cli.NewExecuteTool("test"))
+
+	mcpServer.AddTool(newPageTool, cli.NewGenerationTool("page"))
+	mcpServer.AddTool(newComponentTool, cli.NewGenerationTool("component"))
+	mcpServer.AddTool(newServiceTool, cli.NewGenerationTool("service"))
+
+	mcpServer.AddTool(newModelTool, cli.NewGenerationTool("model"))
+	mcpServer.AddTool(newEnumTool, cli.NewGenerationTool("enum"))
+	mcpServer.AddTool(newInterfaceTool, cli.NewGenerationTool("interface"))
 
 	// Start the stdio server
 	if err := server.ServeStdio(mcpServer); err != nil {
