@@ -18,7 +18,7 @@ func ExecuteCallback(command ...string) ToolCallback {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		res, err := executeCliCommand(command)
 
-		isError := err != nil || res.Stderr != ""
+		isError := err != nil
 		if isError {
 			return mcp.NewToolResultError(res.Stderr), nil
 		}
