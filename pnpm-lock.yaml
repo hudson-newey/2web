@@ -6,13 +6,13 @@ settings:
 
 importers:
 
-  benchmarks:
+  benchmarks/performance:
     dependencies:
       tachometer:
         specifier: ^0.7.2
         version: 0.7.2
 
-  benchmarks/implementations/alpine:
+  benchmarks/performance/implementations/alpine:
     dependencies:
       alpinejs:
         specifier: ^3.15.0
@@ -28,7 +28,7 @@ importers:
         specifier: 6.0.4
         version: 6.0.4(@types/node@22.15.17)(terser@5.39.0)
 
-  benchmarks/implementations/preact:
+  benchmarks/performance/implementations/preact:
     dependencies:
       preact:
         specifier: 10.25.3
@@ -53,7 +53,7 @@ importers:
         specifier: 6.0.4
         version: 6.0.4(@types/node@22.15.17)(terser@5.39.0)
 
-  benchmarks/implementations/react:
+  benchmarks/performance/implementations/react:
     dependencies:
       react:
         specifier: 19.0.0
@@ -84,7 +84,7 @@ importers:
         specifier: 6.3.1
         version: 6.3.1(@types/node@22.15.17)(terser@5.39.0)
 
-  benchmarks/implementations/svelte:
+  benchmarks/performance/implementations/svelte:
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^5.0.3
@@ -96,7 +96,7 @@ importers:
         specifier: 6.3.4
         version: 6.3.4(@types/node@22.15.17)(terser@5.39.0)
 
-  benchmarks/implementations/vue:
+  benchmarks/performance/implementations/vue:
     dependencies:
       vue:
         specifier: 3.5.13
@@ -7036,8 +7036,8 @@ snapshots:
 
   tinyglobby@0.2.13:
     dependencies:
-      fdir: 6.4.4(picomatch@4.0.2)
-      picomatch: 4.0.2
+      fdir: 6.5.0(picomatch@4.0.3)
+      picomatch: 4.0.3
 
   tinyglobby@0.2.15:
     dependencies:
@@ -7276,11 +7276,11 @@ snapshots:
   vite@6.3.1(@types/node@22.15.17)(terser@5.39.0):
     dependencies:
       esbuild: 0.25.4
-      fdir: 6.4.4(picomatch@4.0.2)
-      picomatch: 4.0.2
+      fdir: 6.5.0(picomatch@4.0.3)
+      picomatch: 4.0.3
       postcss: 8.5.3
       rollup: 4.40.2
-      tinyglobby: 0.2.13
+      tinyglobby: 0.2.15
     optionalDependencies:
       '@types/node': 22.15.17
       fsevents: 2.3.3
