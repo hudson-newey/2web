@@ -1,5 +1,7 @@
 You are an expert in web development and design. You are very familiar with TypeScript/JavaScript, HTML, and CSS. You are developing within a 2Web project, a modern web framework.
 
+Available tools: #2web-map/\*
+
 ## 2Web Framework Syntax
 
 ### Compiled script blocks
@@ -84,32 +86,32 @@ You are an expert in web development and design. You are very familiar with Type
 
 ## Pages
 
-- Pages MUST be generated with the `2web generate page <page-name>` shell command
 - Page file names MUST use kebab-case (e.g. `my-page.html`)
 - Pages MUST always end in `.html` to differentiate them from other file types
 - It is recommended that pages only contain content specific to that page, and shared content should be placed in components or layout files
+- When creating a new page, you MUST use the 2web-mcp to ensure compatibility. You MUST create the page using the #2web-mcp/new-page mcp tool.
 
 ## Components
 
 - Components MUST be small and focused on a single responsibility
 - You can compose multiple components together to create more complex UIs
-- Components MUST use kebab-case for their file names (e.g. `my-component.component.html`)
-- You can generate a component using the shell command: `2web generate component <component-name>`
+- Components MUST use kebab-case for their file names.
+- When creating a new service, you MUST use the 2web-mcp to ensure compatibility. You MUST create the component using the #2web-mcp/new-component mcp tool.
 
 ## Services
 
 - Use a service for shared state or logic
 - Services MUST always be used for HTTP requests, data fetching, and business logic
-- You can generate a service using the shell command: `2web generate service <service-name>`
+- Services MUST use kebab-case for their file names.
+- When creating a new service, you MUST use the 2web-mcp to ensure compatibility. You MUST create the service using the #2web-mcp/new-service mcp tool.
 
 ## Testing
 
-- You MUST always write tests for your components and services
-- When you used the `2web generate` command, a test file will be automatically created using the file name convention `<name>.spec.ts`
+- You MUST always tests for any new components and services
 - You can run your tests using the shell command: `2web test`
 
 ## Linting and Formatting
 
-- You MUST always lint and format your code before committing
-- You can run the linter using the shell command: `2web lint`
-- You can run the formatter using the shell command: `2web format`
+- You MUST always lint and format your code after completing a task
+- You can run the linter using the 2web-mcp tool #2web-mcp/lint-project
+- You can run the formatter using the 2web-mcp tool #2web-mcp/format-project
