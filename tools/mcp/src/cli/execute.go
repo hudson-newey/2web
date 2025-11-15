@@ -14,10 +14,7 @@ type CommandResult struct {
 
 // The "command" argument should NOT include "2web" command or path itself.
 // It should only include the subcommands and flags to be executed.
-func NewExecuteTool(command ...string) func(
-	ctx context.Context,
-	request mcp.CallToolRequest,
-) (*mcp.CallToolResult, error) {
+func ExecuteCallback(command ...string) ToolCallback {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		res, err := executeCliCommand(command)
 
