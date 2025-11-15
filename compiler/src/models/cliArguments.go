@@ -13,6 +13,7 @@ type CliArguments struct {
 	WithFormatting         bool
 	IgnoreErrors           bool
 	Serial                 bool
+	DryRun                 bool
 
 	// I only expect end users to use the "Verbose" cli argument.
 	// However, I have still exposed lower-level verbosity levels so that debug

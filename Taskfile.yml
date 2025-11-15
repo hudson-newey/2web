@@ -1,7 +1,29 @@
 version: "3"
 
 tasks:
-  install-dev:
+  "build":
+    deps:
+      - "build:cli"
+      - "build:compiler"
+      - "build:mcp"
+
+  install:
     cmds:
       - sudo cp ./compiler/bin/2webc /usr/local/bin/2webc
       - sudo cp ./cli/bin/2web /usr/local/bin/2web
+      - sudo cp ./tools/mcp/bin/2web-mcp /usr/local/bin/2web-mcp
+
+  "build:cli":
+    dir: "./cli"
+    cmds:
+      - go build -o ./bin/2web ./src/main.go
+
+  "build:compiler":
+    dir: "./compiler"
+    cmds:
+      - go build -o ./bin/2webc ./src/main.go
+
+  "build:mcp":
+    dir: "./tools/mcp"
+    cmds:
+      - go build -o ./bin/2web-mcp ./src/main.go

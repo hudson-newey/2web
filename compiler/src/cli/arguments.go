@@ -20,6 +20,7 @@ func ParseArguments() models.CliArguments {
 	withFormatting := flag.Bool("format", false, "Formats output assets for readability")
 	ignoreErrors := flag.Bool("ignore-errors", false, "Ignores errors in production builds. This allows you to ship compiler errors.")
 	serial := flag.Bool("serial", false, "Disables parallel compilation of assets")
+	dryRun := flag.Bool("dry-run", false, "Simulates a build without writing any files to disk")
 
 	verbose := flag.Bool("verbose", false, "Print extra debug information to the console")
 	verboseLexer := flag.Bool("verbose-lexer", false, "Logs the lexer output to the console")
@@ -40,6 +41,7 @@ func ParseArguments() models.CliArguments {
 		WithFormatting:         *withFormatting,
 		IgnoreErrors:           *ignoreErrors,
 		Serial:                 *serial,
+		DryRun:                 *dryRun,
 
 		Verbose:      *verbose,
 		VerboseLexer: *verboseLexer,

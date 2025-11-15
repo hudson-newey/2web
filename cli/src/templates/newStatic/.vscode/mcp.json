@@ -1,0 +1,7 @@
+{
+  "servers": {
+    "2web-mcp": {
+      "command": "./bin/2web-mcp"
+    }
+  }
+}

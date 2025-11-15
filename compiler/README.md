@@ -15,6 +15,7 @@
 - `--format` (default: false) Formats output assets for readability
 - `--ignore-errors` (default: false) Ignores errors in production builds. This allows you to ship compiler errors.
 - `--serial` (default: false) Disables parallel compilation of assets
+- `--dry-run` (default: false) Simulates a build without writing any files to disk
 
 ## Sub Commands
 

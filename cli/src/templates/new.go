@@ -31,7 +31,9 @@ var packageJsonContent string = fmt.Sprintf(`{
   "scripts": {
     "dev": "2web serve",
     "build": "2web build",
-    "lint": "2web lint"
+    "lint": "2web lint",
+    "format": "2web format",
+    "test": "2web test"
   },
   "author": "your-name",
   "license": "your-license",
@@ -66,6 +68,9 @@ var vscodeSettingsContent string
 
 //go:embed newStatic/.vscode/extensions.json
 var vscodeExtensionsContent string
+
+//go:embed newStatic/.vscode/mcp.json
+var vscodeMcpContent string
 
 //go:embed newStatic/.github/copilot-instructions.md
 var copilotInstructions string
@@ -126,6 +131,11 @@ func NewTemplate(path string) {
 							Content:     vscodeExtensionsContent,
 							IsDirectory: false,
 						},
+						{
+							Path:        path + "/.vscode/mcp.json",
+							Content:     vscodeMcpContent,
+							IsDirectory: false,
+						},
 					},
 				},
 				// By providing the 2web binaries inside the project, we can ensure
@@ -146,6 +156,11 @@ func NewTemplate(path string) {
 						{
 							Path:         path + "/bin/2webc",
 							CopyFromPath: "2webc",
+							IsDirectory:  false,
+						},
+						{
+							Path:         path + "/bin/2web-mcp",
+							CopyFromPath: "2web-mcp",
 							IsDirectory:  false,
 						},
 					},

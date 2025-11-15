@@ -1,6 +1,7 @@
 package filesystem
 
 import (
+	"hudson-newey/2web/src/cli"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -9,6 +10,12 @@ import (
 // Overwrites or creates a file at the given path with the given content and
 // creates any necessary directories.
 func WriteFile(content []byte, outputPath string) {
+	// Because this WriteFile function should be used by all parts of the
+	// compiler, I can suppress any writes here when the --dry-run flag is set.
+	if cli.GetArgs().DryRun {
+		return
+	}
+
 	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
 		panic(err)
 	}
