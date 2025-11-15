@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Dev Server Task Only",
+      "type": "node",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "run-dev-server",
+      // Launch a no-op Node process that immediately exits so the configuration
+      // only runs the task.
+      // TODO: Find a better way to do this.
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "process.exit(0)"]
+    }
+  ]
+}

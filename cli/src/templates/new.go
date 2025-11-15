@@ -66,6 +66,12 @@ var readmeContent string
 //go:embed newStatic/.vscode/settings.json
 var vscodeSettingsContent string
 
+//go:embed newStatic/.vscode/launch.json
+var vscodeLaunchContent string
+
+//go:embed newStatic/.vscode/tasks.json
+var vscodeTasksContent string
+
 //go:embed newStatic/.vscode/extensions.json
 var vscodeExtensionsContent string
 
@@ -122,18 +128,28 @@ func NewTemplate(path string) {
 					IsDirectory: true,
 					Children: []files.File{
 						{
-							Path:        path + "/.vscode/settings.json",
-							Content:     vscodeSettingsContent,
-							IsDirectory: false,
-						},
-						{
 							Path:        path + "/.vscode/extensions.json",
 							Content:     vscodeExtensionsContent,
 							IsDirectory: false,
 						},
 						{
+							Path:        path + "/.vscode/launch.json",
+							Content:     vscodeLaunchContent,
+							IsDirectory: false,
+						},
+						{
 							Path:        path + "/.vscode/mcp.json",
 							Content:     vscodeMcpContent,
+							IsDirectory: false,
+						},
+						{
+							Path:        path + "/.vscode/settings.json",
+							Content:     vscodeSettingsContent,
+							IsDirectory: false,
+						},
+						{
+							Path:        path + "/.vscode/tasks.json",
+							Content:     vscodeTasksContent,
 							IsDirectory: false,
 						},
 					},
