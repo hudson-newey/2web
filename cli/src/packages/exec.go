@@ -25,17 +25,6 @@ func ExecutePackage(args ...string) {
 	internalExecute(args, true)
 }
 
-// This behaves the same as the "ExecutePackage" command except that if the
-// package doesn't exist locally, we don't execute the "npx" command.
-// This should be used if the package name and the executable do not match.
-// E.g. "web-test-runner" is exported by the @web/test-runner package, but is
-// invoked through the "wtr" command.
-// In this case, if we downloaded and invoked the "wtr" package, we would
-// download a random package from npm and execute it.
-func ExecuteWithoutFallback(args ...string) {
-	internalExecute(args, false)
-}
-
 func internalExecute(args []string, allowFallback bool) {
 	packageManager := DeterminePackageManager()
 

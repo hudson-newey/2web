@@ -3,12 +3,12 @@
     "streetsidesoftware.code-spell-checker",
     "yzhang.markdown-all-in-one",
     "davidanson.vscode-markdownlint",
-    "visualstudioexptteam.vscodeintellicode",
     "aaron-bond.better-comments",
-    "esbenp.prettier-vscode",
 
     "ms-vscode.vscode-typescript-next",
     "zignd.html-css-class-completion",
-    "oxc.oxc-vscode"
+    "oxc.oxc-vscode",
+    "esbenp.prettier-vscode",
+    "ms-playwright.playwright"
   ]
 }

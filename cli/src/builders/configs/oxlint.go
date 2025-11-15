@@ -11,7 +11,7 @@ func OxLintConfigLocation() (string, error) {
 		return overridePath, nil
 	}
 
-	sdkPath := "node_modules/@two-web/cli/templates/.oxlintrc.json"
+	sdkPath := "./node_modules/@two-web/cli/templates/.oxlintrc.json"
 	if _, err := os.Stat(sdkPath); err == nil {
 		return sdkPath, nil
 	}

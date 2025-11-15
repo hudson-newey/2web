@@ -7,24 +7,24 @@ import (
 )
 
 func FormatSolution(args []string) {
-	prettierConfig, err := configs.PrettierConfigLocation()
+	config, err := configs.PrettierConfigLocation()
 	pathTargets := builders.EntryTargets(args)
 
-	hasPrettierConfig := err == nil
-	if hasPrettierConfig {
-		args := append(
+	hasFormatConfig := err == nil
+	if hasFormatConfig {
+		cliArgs := append(
 			[]string{
 				"prettier",
 				"--write",
 				"--config",
-				prettierConfig,
+				config,
 			},
 			pathTargets...,
 		)
 
-		packages.ExecutePackage(args...)
+		packages.ExecutePackage(cliArgs...)
 	} else {
-		args := append([]string{"prettier", "--write"}, pathTargets...)
-		packages.ExecutePackage(args...)
+		cliArgs := append([]string{"prettier", "--write"}, pathTargets...)
+		packages.ExecutePackage(cliArgs...)
 	}
 }

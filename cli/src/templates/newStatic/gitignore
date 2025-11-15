@@ -1,6 +1,7 @@
 # 2Web specific ignores
 dist/
 .cache/
+test-results/
 
 # Logs
 logs

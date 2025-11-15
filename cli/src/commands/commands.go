@@ -100,6 +100,7 @@ func ProcessInvocation(args []string) {
 
 	if command == "test" {
 		test.TestSolution(args)
+		return
 	}
 
 	if command == "deploy" {

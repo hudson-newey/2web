@@ -7,24 +7,24 @@ import (
 )
 
 func LintSolution(args []string) {
-	oxLintConfig, err := configs.OxLintConfigLocation()
+	config, err := configs.OxLintConfigLocation()
 	pathTargets := builders.EntryTargets(args)
 
-	hasOxLintConfig := err == nil
-	if hasOxLintConfig {
-		args := append(
+	hasLintConfig := err == nil
+	if hasLintConfig {
+		cliArgs := append(
 			[]string{
 				"oxlint",
 				"lint",
 				"--config",
-				oxLintConfig,
+				config,
 			},
 			pathTargets...,
 		)
 
-		packages.ExecutePackage(args...)
+		packages.ExecutePackage(cliArgs...)
 	} else {
-		args := append([]string{"oxlint", "lint"}, pathTargets...)
-		packages.ExecutePackage(args...)
+		cliArgs := append([]string{"oxlint", "lint"}, pathTargets...)
+		packages.ExecutePackage(cliArgs...)
 	}
 }

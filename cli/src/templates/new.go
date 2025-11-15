@@ -19,6 +19,9 @@ const twoWebVersion = "latest"
 //go:embed newStatic/index.html
 var indexHtmlContent string
 
+//go:embed newStatic/index.spec.ts
+var indexTestContent string
+
 //go:embed newStatic/__style.css
 var routeStylesContent string
 
@@ -43,8 +46,8 @@ var packageJsonContent string = fmt.Sprintf(`{
   "devDependencies": {
     "@two-web/compiler": "%s",
     "@two-web/cli": "%s",
-    "@web/test-runner": "^0.20.2",
-    "typescript": "^5.8.3",
+    "playwright": "^1.56.1",
+    "typescript": "^5.9.3",
     "oxlint": "^1.28.0",
     "prettier": "^3.6.2"
   }
@@ -62,6 +65,9 @@ var gitignoreContent string
 
 //go:embed newStatic/README.md
 var readmeContent string
+
+//go:embed newStatic/playwright.config.ts
+var playwrightConfigContent string
 
 //go:embed newStatic/.vscode/settings.json
 var vscodeSettingsContent string
@@ -105,6 +111,11 @@ func NewTemplate(path string) {
 				{
 					Path:        path + "/README.md",
 					Content:     readmeContent,
+					IsDirectory: false,
+				},
+				{
+					Path:        path + "/playwright.config.ts",
+					Content:     playwrightConfigContent,
 					IsDirectory: false,
 				},
 				{
@@ -188,6 +199,11 @@ func NewTemplate(path string) {
 						{
 							Path:        path + "/src/index.html",
 							Content:     indexHtmlContent,
+							IsDirectory: false,
+						},
+						{
+							Path:        path + "/src/index.spec.ts",
+							Content:     indexTestContent,
 							IsDirectory: false,
 						},
 						{

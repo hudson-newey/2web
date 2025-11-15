@@ -11,7 +11,7 @@ func PrettierConfigLocation() (string, error) {
 		return overridePath, nil
 	}
 
-	sdkPath := "node_modules/@two-web/cli/templates/.prettierrc"
+	sdkPath := "./node_modules/@two-web/cli/templates/.prettierrc"
 	if _, err := os.Stat(sdkPath); err == nil {
 		return sdkPath, nil
 	}

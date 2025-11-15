@@ -14,11 +14,6 @@ func ViteConfigLocation() (string, error) {
 		return overridePath, nil
 	}
 
-	sdkPath := "node_modules/@two-web/cli/templates/vite.config.ts"
-	if _, err := os.Stat(sdkPath); err == nil {
-		return sdkPath, nil
-	}
-
 	// If an empty path is returned, we can determine that a vite config does not
 	// exist in the current project, either in the current directory or in the
 	// sdk path.
