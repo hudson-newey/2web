@@ -25,6 +25,9 @@ var indexTestContent string
 //go:embed newStatic/__style.css
 var routeStylesContent string
 
+//go:embed newStatic/__layout.html
+var routeLayoutContent string
+
 //go:embed newStatic/components/counter/counter.component.html
 var counterComponentContent string
 
@@ -217,6 +220,16 @@ func NewTemplate(path string) {
 							},
 						},
 						{
+							Path:        path + "/src/__layout.html",
+							Content:     routeLayoutContent,
+							IsDirectory: false,
+						},
+						{
+							Path:        path + "/src/__style.css",
+							Content:     routeStylesContent,
+							IsDirectory: false,
+						},
+						{
 							Path:        path + "/src/index.html",
 							Content:     indexHtmlContent,
 							IsDirectory: false,
@@ -224,11 +237,6 @@ func NewTemplate(path string) {
 						{
 							Path:        path + "/src/index.spec.ts",
 							Content:     indexTestContent,
-							IsDirectory: false,
-						},
-						{
-							Path:        path + "/src/__style.css",
-							Content:     routeStylesContent,
 							IsDirectory: false,
 						},
 					},

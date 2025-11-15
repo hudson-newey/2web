@@ -2,27 +2,132 @@
   $ count = 0;
 </script>
 
-<div class="counter-container">
-  <button class="counter-btn" @click="$count = $count + 1">{{ $count }}</button>
-  <button class="reset-btn" @click="$count = 0">Reset</button>
-</div>
+<section class="demo-card" aria-live="polite">
+  <div class="demo-chip">Counter Demo</div>
+
+  <div class="counter-value">
+    <span class="counter-value__label">Current value</span>
+    <span class="counter-value__number">{{ $count }}</span>
+  </div>
+
+  <div class="counter-actions">
+    <button
+      class="counter-btn counter-btn--primary"
+      @click="$count = $count + 1"
+    >
+      Add 1
+    </button>
+    <button class="counter-btn counter-btn--ghost" @click="$count = 0">
+      Reset
+    </button>
+  </div>
+</section>
 
 <style>
-  .counter-container {
+  .demo-card {
+    width: min(420px, 100%);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background: linear-gradient(
+      145deg,
+      var(--color-surface),
+      var(--color-surface-strong)
+    );
+    box-shadow: 0 30px 45px var(--color-shadow);
+    backdrop-filter: blur(18px);
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .demo-chip {
+    align-self: flex-start;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .counter-value {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .counter-value__label {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .counter-value__number {
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+
+  .counter-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
   }
 
   .counter-btn {
-    padding: 1.2rem 2.4rem;
-    font-size: 1.2rem;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0.95rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
+    transition:
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast),
+      background var(--transition-fast),
+      color var(--transition-fast);
+
+    &:hover {
+      transform: translateY(-2px);
+    }
   }
 
-  .reset-btn {
-    padding: 1.2rem 2.4rem;
-    font-size: 1.2rem;
-    cursor: pointer;
+  .counter-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .counter-btn--primary {
+    background: linear-gradient(
+      120deg,
+      var(--color-accent),
+      var(--color-accent-strong)
+    );
+    color: var(--color-text-primary);
+    box-shadow: 0 15px 25px rgba(14, 165, 233, 0.35);
+  }
+
+  .counter-btn--primary:hover {
+    box-shadow: 0 20px 30px rgba(14, 165, 233, 0.4);
+  }
+
+  .counter-btn--ghost {
+    background: transparent;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+  }
+
+  .counter-btn--ghost:hover {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .counter-btn {
+      transition: none;
+    }
   }
 </style>

@@ -1,3 +1,57 @@
+:root {
+  --color-page-bg: #050b1e;
+  --color-surface: rgba(15, 23, 42, 0.8);
+  --color-surface-strong: #111a2e;
+  --color-border: rgba(148, 163, 184, 0.2);
+  --color-text-primary: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-accent: #38bdf8;
+  --color-accent-strong: #0ea5e9;
+  --color-danger: #fb7185;
+  --color-shadow: rgba(8, 20, 46, 0.45);
+  --font-family-sans:
+    "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    "Helvetica Neue", sans-serif;
+  --radius-lg: 1.5rem;
+  --radius-md: 0.75rem;
+  --transition-fast: 200ms ease;
+}
+
 body {
+  position: relative;
+
   margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-family-sans);
+  background:
+    radial-gradient(circle at top, rgba(14, 116, 144, 0.35), transparent 55%),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(56, 189, 248, 0.25),
+      transparent 40%
+    ),
+    var(--color-page-bg);
+  color: var(--color-text-primary);
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 2.5rem;
+  letter-spacing: -0.02em;
+
+  text-align: center;
+  color: var(--color-text-primary);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+
+  font-size: 1.2em;
+  letter-spacing: 0.05em;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
