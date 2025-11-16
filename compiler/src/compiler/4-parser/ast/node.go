@@ -16,6 +16,8 @@ type Node interface {
 	JsContent() *javascript.JSFile
 	CssContent() *css.CSSFile
 	TwoScriptContent() *twoscript.TwoScriptFile
+
+	Children() *[]Node
 }
 
 func HasHtmlContent(node Node) bool {

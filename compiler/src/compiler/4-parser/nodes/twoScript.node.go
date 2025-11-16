@@ -3,6 +3,7 @@ package nodes
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
@@ -48,4 +49,8 @@ func (model *twoScriptNode) CssContent() *css.CSSFile {
 
 func (model *twoScriptNode) TwoScriptContent() *twoscript.TwoScriptFile {
 	return twoscript.FromContent(model.content)
+}
+
+func (model *twoScriptNode) Children() *[]ast.Node {
+	return &[]ast.Node{}
 }
