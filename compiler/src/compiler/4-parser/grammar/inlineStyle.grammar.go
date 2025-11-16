@@ -6,12 +6,12 @@ import (
 )
 
 var inlineStyles = grammar{
-	Def: definition{
+	Def: newDefinition(
 		lexerTokens.LessAngle,
 		lexerTokens.StyleStartTag,
 		lexerTokens.GreaterAngle,
 		lexerTokens.StyleSource,
 		lexerTokens.StyleEndTag,
-	},
+	),
 	Constructor: wrapConstructor(nodes.NewStyleNode),
 }

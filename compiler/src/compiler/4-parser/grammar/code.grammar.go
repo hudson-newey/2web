@@ -6,12 +6,12 @@ import (
 )
 
 var codeBlock = grammar{
-	Def: definition{
+	Def: newDefinition(
 		lexerTokens.LessAngle,
 		lexerTokens.CodeStartTag,
 		lexerTokens.GreaterAngle,
 		lexerTokens.CodeSource,
 		lexerTokens.CodeEndTag,
-	},
+	),
 	Constructor: wrapConstructor(nodes.NewCodeNode),
 }

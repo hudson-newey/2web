@@ -2,12 +2,9 @@ package grammar
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"strings"
 )
-
-type definition []lexerTokens.LexToken
 
 type grammar struct {
 	// A sequence of tokens that define the reactive variable

@@ -6,12 +6,12 @@ import (
 )
 
 var inlineScripts = grammar{
-	Def: definition{
+	Def: newDefinition(
 		lexerTokens.LessAngle,
 		lexerTokens.ScriptStartTag,
 		lexerTokens.GreaterAngle,
 		lexerTokens.ScriptSource,
 		lexerTokens.ScriptEndTag,
-	},
+	),
 	Constructor: wrapConstructor(nodes.NewScriptNode),
 }
