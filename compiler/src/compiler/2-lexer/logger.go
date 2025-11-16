@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"fmt"
 	"os"
 	"text/tabwriter"
 )
@@ -25,4 +26,8 @@ func PrintVerboseLexer(structure []*V2LexNode) {
 			panic(err)
 		}
 	}
+
+	// Draw an empty line at the end for better readability and to visually
+	// separate this log section from any subsequent logs.
+	fmt.Print("\n\n")
 }
