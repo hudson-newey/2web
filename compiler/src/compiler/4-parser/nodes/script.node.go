@@ -48,6 +48,6 @@ func (model *scriptNode) TwoScriptContent() *twoscript.TwoScriptFile {
 	return twoscript.NewTwoScriptFile()
 }
 
-func (model *scriptNode) Children() *[]ast.Node {
-	return &[]ast.Node{}
+func (model *scriptNode) Children() ast.AbstractSyntaxTree {
+	return ast.AbstractSyntaxTree{}
 }

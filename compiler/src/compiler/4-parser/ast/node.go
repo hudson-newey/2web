@@ -17,7 +17,7 @@ type Node interface {
 	CssContent() *css.CSSFile
 	TwoScriptContent() *twoscript.TwoScriptFile
 
-	Children() *[]Node
+	Children() AbstractSyntaxTree
 }
 
 func HasHtmlContent(node Node) bool {

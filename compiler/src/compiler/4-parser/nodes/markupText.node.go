@@ -39,6 +39,6 @@ func (model *markupTextNode) TwoScriptContent() *twoscript.TwoScriptFile {
 	return twoscript.NewTwoScriptFile()
 }
 
-func (model *markupTextNode) Children() *[]ast.Node {
-	return &[]ast.Node{}
+func (model *markupTextNode) Children() ast.AbstractSyntaxTree {
+	return ast.AbstractSyntaxTree{}
 }

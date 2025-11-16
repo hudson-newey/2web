@@ -69,6 +69,6 @@ func (model *codeNode) TwoScriptContent() *twoscript.TwoScriptFile {
 	return twoscript.NewTwoScriptFile()
 }
 
-func (model *codeNode) Children() *[]ast.Node {
-	return &[]ast.Node{}
+func (model *codeNode) Children() ast.AbstractSyntaxTree {
+	return ast.AbstractSyntaxTree{}
 }
