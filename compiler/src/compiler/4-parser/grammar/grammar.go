@@ -12,6 +12,10 @@ type grammar struct {
 
 	// A constructor function to create a node from the tokens
 	Constructor func(lexNodes []*lexer.V2LexNode) *ast.Node
+
+	// Any child grammar definitions that should be recursively applied within
+	// this grammar once matched.
+	ChildDefs []grammar
 }
 
 func (model *grammar) Matches(lexNodes []*lexer.V2LexNode) bool {

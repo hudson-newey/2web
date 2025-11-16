@@ -67,11 +67,15 @@ const (
 	// import
 	KeywordImport LexToken = "KeywordImport"
 
+	// from
+	// This is typically used together with the import keyword.
+	KeywordFrom LexToken = "KeywordFrom"
+
 	// $
 	DollarSign LexToken = "DollarSign"
 
 	// ;
-	SemiColon LexToken = "SemiColon"
+	Semicolon LexToken = "Semicolon"
 
 	// <style>
 	StyleStartTag LexToken = "StyleStartTag"

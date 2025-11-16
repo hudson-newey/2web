@@ -14,4 +14,5 @@ var inlineStyles = grammar{
 		lexerTokens.StyleEndTag,
 	),
 	Constructor: wrapConstructor(nodes.NewStyleNode),
+	ChildDefs:   []grammar{},
 }

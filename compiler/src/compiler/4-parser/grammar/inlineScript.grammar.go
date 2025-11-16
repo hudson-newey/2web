@@ -8,10 +8,13 @@ import (
 var inlineScripts = grammar{
 	Def: newDefinition(
 		lexerTokens.LessAngle,
-		lexerTokens.ScriptStartTag,
 		lexerTokens.GreaterAngle,
 		lexerTokens.ScriptSource,
 		lexerTokens.ScriptEndTag,
 	),
 	Constructor: wrapConstructor(nodes.NewScriptNode),
+	ChildDefs: []grammar{
+		scriptImport,
+		scriptVariable,
+	},
 }
