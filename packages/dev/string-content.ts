@@ -12,6 +12,7 @@ export const content = html`
       border-radius: 0.5rem;
       border: 2px solid red;
     `}"
+    onclick="alert('Button clicked!')"
   >
     Click Me
   </button>
