@@ -71,6 +71,7 @@
       "davidanson.vscode-markdownlint",
       "aaron-bond.better-comments",
       "pkief.material-icon-theme",
+      "esbenp.prettier-vscode",
 
       "golang.go",
       "premparihar.gotestexplorer",
