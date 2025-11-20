@@ -31,6 +31,7 @@ func NewScriptReactiveVariableNode(lexNodes []*lexer.V2LexNode) *scriptReactiveV
 type scriptReactiveVariableNode struct {
 	variableName string
 	initialValue string
+	children     ast.AbstractSyntaxTree
 }
 
 func (model *scriptReactiveVariableNode) Type() string {
@@ -54,5 +55,18 @@ func (model *scriptReactiveVariableNode) TwoScriptContent() *twoscript.TwoScript
 }
 
 func (model *scriptReactiveVariableNode) Children() ast.AbstractSyntaxTree {
-	return ast.AbstractSyntaxTree{}
+	return model.children
+}
+
+func (model *scriptReactiveVariableNode) AddChild(child ast.Node) {
+	model.children = append(model.children, child)
+}
+
+func (model *scriptReactiveVariableNode) RemoveChild(child ast.Node) {
+	for i, c := range model.children {
+		if c == child {
+			model.children = append(model.children[:i], model.children[i+1:]...)
+			return
+		}
+	}
 }

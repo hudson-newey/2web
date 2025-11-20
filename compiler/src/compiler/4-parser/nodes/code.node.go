@@ -44,6 +44,7 @@ type codeNode struct {
 	startingCodeTagContent string
 	lexerNodes             []*lexer.V2LexNode
 	content                string
+	children               ast.AbstractSyntaxTree
 }
 
 func (model *codeNode) Type() string {
@@ -70,5 +71,18 @@ func (model *codeNode) TwoScriptContent() *twoscript.TwoScriptFile {
 }
 
 func (model *codeNode) Children() ast.AbstractSyntaxTree {
-	return ast.AbstractSyntaxTree{}
+	return model.children
+}
+
+func (model *codeNode) AddChild(child ast.Node) {
+	model.children = append(model.children, child)
+}
+
+func (model *codeNode) RemoveChild(child ast.Node) {
+	for i, c := range model.children {
+		if c == child {
+			model.children = append(model.children[:i], model.children[i+1:]...)
+			return
+		}
+	}
 }

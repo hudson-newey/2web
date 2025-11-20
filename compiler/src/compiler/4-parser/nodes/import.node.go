@@ -35,6 +35,8 @@ type scriptImportNode struct {
 
 	// What is the path of the import?
 	importPath string
+
+	children ast.AbstractSyntaxTree
 }
 
 func (model *scriptImportNode) Type() string {
@@ -58,5 +60,18 @@ func (model *scriptImportNode) TwoScriptContent() *twoscript.TwoScriptFile {
 }
 
 func (model *scriptImportNode) Children() ast.AbstractSyntaxTree {
-	return ast.AbstractSyntaxTree{}
+	return model.children
+}
+
+func (model *scriptImportNode) AddChild(child ast.Node) {
+	model.children = append(model.children, child)
+}
+
+func (model *scriptImportNode) RemoveChild(child ast.Node) {
+	for i, c := range model.children {
+		if c == child {
+			model.children = append(model.children[:i], model.children[i+1:]...)
+			return
+		}
+	}
 }

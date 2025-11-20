@@ -18,6 +18,8 @@ type Node interface {
 	TwoScriptContent() *twoscript.TwoScriptFile
 
 	Children() AbstractSyntaxTree
+	AddChild(child Node)
+	RemoveChild(child Node)
 }
 
 func HasHtmlContent(node Node) bool {

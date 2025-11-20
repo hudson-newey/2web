@@ -26,6 +26,7 @@ func NewScriptNode(lexNodes []*lexer.V2LexNode) *scriptNode {
 type scriptNode struct {
 	lexerNodes []*lexer.V2LexNode
 	content    string
+	children   ast.AbstractSyntaxTree
 }
 
 func (model *scriptNode) Type() string {
@@ -49,5 +50,18 @@ func (model *scriptNode) TwoScriptContent() *twoscript.TwoScriptFile {
 }
 
 func (model *scriptNode) Children() ast.AbstractSyntaxTree {
-	return ast.AbstractSyntaxTree{}
+	return model.children
+}
+
+func (model *scriptNode) AddChild(child ast.Node) {
+	model.children = append(model.children, child)
+}
+
+func (model *scriptNode) RemoveChild(child ast.Node) {
+	for i, c := range model.children {
+		if c == child {
+			model.children = append(model.children[:i], model.children[i+1:]...)
+			return
+		}
+	}
 }

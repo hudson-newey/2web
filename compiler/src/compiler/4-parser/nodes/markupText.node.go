@@ -16,7 +16,8 @@ func NewMarkupTextNode(lexNode []*lexer.V2LexNode) *markupTextNode {
 }
 
 type markupTextNode struct {
-	content string
+	content  string
+	children ast.AbstractSyntaxTree
 }
 
 func (model *markupTextNode) Type() string {
@@ -40,5 +41,18 @@ func (model *markupTextNode) TwoScriptContent() *twoscript.TwoScriptFile {
 }
 
 func (model *markupTextNode) Children() ast.AbstractSyntaxTree {
-	return ast.AbstractSyntaxTree{}
+	return model.children
+}
+
+func (model *markupTextNode) AddChild(child ast.Node) {
+	model.children = append(model.children, child)
+}
+
+func (model *markupTextNode) RemoveChild(child ast.Node) {
+	for i, c := range model.children {
+		if c == child {
+			model.children = append(model.children[:i], model.children[i+1:]...)
+			return
+		}
+	}
 }
