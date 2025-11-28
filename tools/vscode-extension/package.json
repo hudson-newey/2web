@@ -5,7 +5,10 @@
   "version": "0.0.1",
   "publisher": "hudson-newey",
   "icon": "./icons/2web.png",
-  "categories": ["Programming Languages"],
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
   "engines": {
     "vscode": "^1.92.0"
   },
@@ -13,7 +16,10 @@
     "languages": [
       {
         "id": "2web",
-        "aliases": ["2Web", "2web"],
+        "aliases": [
+          "2Web",
+          "2web"
+        ],
         "extensions": [
           ".2web"
         ],
@@ -29,6 +35,12 @@
         "language": "2web",
         "scopeName": "source.2web",
         "path": "./syntaxes/2web.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "2web",
+        "path": "./snippets/2web.json"
       }
     ]
   }

@@ -1,0 +1,26 @@
+{
+  "Compiled Script Block": {
+    "prefix": "2-script-compiled",
+    "body": [
+      "<script compiled>",
+      "\t${1:// Your compiled code here}",
+      "</script>"
+    ],
+    "description": "Create a compiled script block"
+  },
+  "Reactive Variable": {
+    "prefix": "2-var",
+    "body": ["$ ${1:variableName} = ${2:value};"],
+    "description": "Create a reactive variable that can be used in a compiled script block"
+  },
+  "Reactive Property": {
+    "prefix": "2-prop",
+    "body": ["*${1:propertyName}=\"${2:value};\""],
+    "description": "Create a reactive property that can be used on an element"
+  },
+  "Event Listener": {
+    "prefix": "2-event-listener",
+    "body": ["@${1:eventName}=\"${2:reducer};\""],
+    "description": "Create an event listener on an element"
+  }
+}
