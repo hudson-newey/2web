@@ -161,16 +161,16 @@ export class TwoElement implements FreeformElement {
   // state.
 
   private setProperty(key: string | symbol, value: unknown) {
+    const currentValue = this.properties.get(key);
+    if (currentValue === value) {
+      return;
+    }
+
     change(() => {
       if (this.ref) {
         (this.ref as any)[key] = value;
       }
     });
-
-    const currentValue = this.properties.get(key);
-    if (currentValue === value) {
-      return;
-    }
 
     // Note that we update the internal state before the actual DOM is updated
     // meaning that we can perform sub-frame updates that are dependent on each
@@ -180,6 +180,10 @@ export class TwoElement implements FreeformElement {
   }
 
   private setAttribute(key: string, value: string) {
+    if (this.attributes.get(key) === value) {
+      return;
+    }
+
     change(() => {
       if (this.ref) {
         this.ref.setAttribute(key, value);
@@ -191,6 +195,10 @@ export class TwoElement implements FreeformElement {
   }
 
   private setTextContent(value: string) {
+    if (this.textContent === value) {
+      return;
+    }
+
     change(() => {
       if (this.ref) {
         this.ref.textContent = value;
