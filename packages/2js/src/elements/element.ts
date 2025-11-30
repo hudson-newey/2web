@@ -16,9 +16,13 @@ interface TwoElementConstructor {
   children?: TwoElement[];
 }
 
-interface FreeformElement {
-  [key: string]: unknown;
-}
+// type FreeformElement<T extends Partial<HTMLElement> = Partial<HTMLElement>> = {
+//   [K in keyof T]: T[K] | unknown;
+// };
+
+type FreeformElement = {
+  [key: string]: any;
+};
 
 export class TwoElement implements FreeformElement {
   private readonly tagName: string;
@@ -28,7 +32,7 @@ export class TwoElement implements FreeformElement {
   private readonly directives: Directive[];
   private readonly children: TwoElement[];
   private readonly proxy: typeof this;
-  [key: string]: unknown;
+  [key: string]: any;
 
   private textContent: string;
   private ref: HTMLElement | null = null;
@@ -73,6 +77,27 @@ export class TwoElement implements FreeformElement {
 
         this.setProperty(property, value);
         return true;
+      },
+      get: (target, property) => {
+        const reflectedValue = Reflect.get(target, property);
+        if (reflectedValue !== undefined) {
+          return reflectedValue;
+        }
+
+        // If we do not currently track this property in the virtual model, we
+        // return the real "live" value from the actual DOM element and start
+        // tracking the property so that any future updates will not need to
+        // directly access the DOM.
+        if (!this.ref) {
+          return undefined;
+        }
+
+        // Note that because we are directly accessing the DOM here, this may
+        // cause a reflow.
+        const initialValue = (this.ref as any)[property];
+        this.setProperty(property, initialValue);
+
+        return initialValue;
       },
     });
 

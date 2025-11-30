@@ -4,3 +4,4 @@ export type { Directive } from "./src/directives/directive.ts";
 
 // Inbuilt directives
 export { iif } from "./src/directives/iif.directive.ts";
+export { classMap } from "./src/directives/classMap.directive.ts";
