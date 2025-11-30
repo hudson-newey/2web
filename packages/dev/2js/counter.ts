@@ -1,10 +1,11 @@
 import { TwoElement, iif, classMap, styleMap } from "../../2js/index.ts";
 
 export const counterButton: any = new TwoElement({
+  id: "counter",
+  className: "big-button",
   tagName: "button",
   textContent: "0",
   attributes: {
-    id: "counter",
     "aria-label": "Increment count",
   },
   directives: [

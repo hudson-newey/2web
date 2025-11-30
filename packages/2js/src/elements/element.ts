@@ -14,6 +14,8 @@ interface TwoElementConstructor {
   directives?: Directive[];
 
   children?: TwoElement[];
+
+  [key: string]: any;
 }
 
 // type FreeformElement<T extends Partial<HTMLElement> = Partial<HTMLElement>> = {
@@ -45,6 +47,7 @@ export class TwoElement implements FreeformElement {
     events = {},
     directives = [],
     children = [],
+    ...initialProps
   }: TwoElementConstructor) {
     this.tagName = tagName;
     this.textContent = textContent;
@@ -99,6 +102,12 @@ export class TwoElement implements FreeformElement {
 
         return initialValue;
       },
+    });
+
+    change(() => {
+      for (const [key, value] of Object.entries(initialProps)) {
+        this.proxy[key] = value;
+      }
     });
 
     return this.proxy;

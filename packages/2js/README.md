@@ -21,6 +21,7 @@ read/manipulated in the live DOM.
 import { TwoElement, render, iif } from "@two-web/kit/2js";
 
 const counterButton = new TwoElement({
+  className: "counter-button",
   tagName: "button",
   textContent: "0",
   attributes: { "aria-label": "Increment count" },
