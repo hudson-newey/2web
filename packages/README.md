@@ -13,7 +13,7 @@ A collection of packages to enhance your 2web application
 | [signals](signals/README.md)                   | 🔧     |
 | [ssr](ssr/README.md)                           | 🔧     |
 | [typescript](typescript/README.md)             | 🔧     |
-| [vdom](vdom/README.md)                         | 🔧     |
+| [2js](2js/README.md)                           | 🔧     |
 | [view-transitions](view-transitions/README.md) | 🔧     |
 | [vite-plugin](vite-plugin/README.md)           | 🔧     |
 

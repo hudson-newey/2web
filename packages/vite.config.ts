@@ -34,7 +34,7 @@ export default defineConfig({
         signals: "./signals/index.ts",
         ssr: "./ssr/index.ts",
         typescript: "./typescript/index.ts",
-        vdom: "./vdom/index.ts",
+        "2js": "./2js/index.ts",
 
         // the "vite-plugin" and "typescript" packages are not compiled here
         // because they are intended to be consumed by development environments

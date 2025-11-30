@@ -10,7 +10,7 @@
     "route-guards/**/*",
     "signals/**/*",
     "ssr/**/*",
-    "vdom/**/*",
+    "2js/**/*",
     "view-transitions/**/*",
 
     "typescript/**/*",

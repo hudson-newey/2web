@@ -1,20 +1,20 @@
-import { VDomElement } from "../../vdom/index.ts";
+import { TwoElement } from "../../2js/index.ts";
 
-export const article = new VDomElement({
+export const article = new TwoElement({
   tagName: "article",
   children: [
-    new VDomElement({
+    new TwoElement({
       tagName: "h1",
       textContent: "My Blog",
     }),
-    new VDomElement({
+    new TwoElement({
       tagName: "article",
       children: [
-        new VDomElement({
+        new TwoElement({
           tagName: "h2",
           textContent: "Hello World",
         }),
-        new VDomElement({
+        new TwoElement({
           tagName: "p",
           textContent: "This is my first blog post.",
         }),

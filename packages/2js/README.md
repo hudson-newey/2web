@@ -1,12 +1,13 @@
-# 2Web Kit - Virtual DOM
+# 2Web Kit - 2JS
 
-A lightweight virtual DOM.
+A lightweight JavaScript runtime.
 
 ---
 
-Before you use this package, please first consider if you need a virtual DOM.
+Before you use this package, please first consider if you need a runtime
+library for your website.
 
-A virtual DOM is useful for virtually rendering elements before committing to
+A runtime is useful for virtually rendering elements before committing to
 the live DOM.
 
 You should only really need this if you are making high-frequency DOM
@@ -17,9 +18,9 @@ read/manipulated in the live DOM.
 ## Usage
 
 ```ts
-import { VDomElement, render, vDomIf } from "@two-web/kit/vdom";
+import { TwoElement, render, iif } from "@two-web/kit/2js";
 
-const counterButton = new VDomElement({
+const counterButton = new TwoElement({
   tagName: "button",
   textContent: "0",
   attributes: { "aria-label": "Increment count" },
@@ -27,7 +28,7 @@ const counterButton = new VDomElement({
     "click": () => counterButton.textContent++,
   },
   directives: [
-    vDomIf(true),
+    iif(true),
   ],
 });
 

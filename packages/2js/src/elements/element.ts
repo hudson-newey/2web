@@ -3,7 +3,7 @@
 import type { Directive } from "../directives/directive";
 
 // but internally we use Maps for easier updates.
-interface VDomElementConstructor {
+interface TwoElementConstructor {
   tagName: string;
   textContent?: string;
   attributes?: Record<string, string>;
@@ -12,37 +12,35 @@ interface VDomElementConstructor {
 
   directives?: Directive[];
 
-  children?: VDomElement[];
+  children?: TwoElement[];
 }
 
 interface FreeformElement {
   [key: string]: unknown;
 }
 
-export class VDomElement implements FreeformElement {
+export class TwoElement implements FreeformElement {
   private readonly tagName: string;
   private readonly attributes: Map<string, string>;
   private readonly properties: Map<string | symbol, unknown>;
   private readonly events: Map<string, (event: Event) => void>;
   private readonly directives: Directive[];
-  private readonly children: VDomElement[];
+  private readonly children: TwoElement[];
   private readonly proxy: typeof this;
-  [key: string]: any;
+  [key: string]: unknown;
 
   private textContent: string;
   private ref: HTMLElement | null = null;
 
-  public constructor(
-    {
-      tagName,
-      textContent = "",
-      attributes = {},
-      properties = {},
-      events = {},
-      directives = [],
-      children = [],
-    } = {} as VDomElementConstructor,
-  ) {
+  public constructor({
+    tagName,
+    textContent = "",
+    attributes = {},
+    properties = {},
+    events = {},
+    directives = [],
+    children = [],
+  }: TwoElementConstructor) {
     this.tagName = tagName;
     this.textContent = textContent;
 
@@ -82,10 +80,10 @@ export class VDomElement implements FreeformElement {
 
   /**
    * @returns
-   * A read-only HTMLElement constructed from the VDomElement's properties.
+   * A read-only HTMLElement constructed from the TwoElement's properties.
    * This element is not attached to the DOM.
-   * We use a readonly type so that consumers don't accidentally modify vdom
-   * elements VDom outside of the VDom system.
+   * We use a readonly type so that consumers don't accidentally modify 2js
+   * elements 2js outside of the 2js system.
    */
   public toElement(): Readonly<HTMLElement> {
     const element = document.createElement(this.tagName);
@@ -118,7 +116,7 @@ export class VDomElement implements FreeformElement {
   }
 
   // Note that in all of these "update" methods, we update the actual DOM first
-  // so if updating the DOM throws an error, we don't update the VDomElement
+  // so if updating the DOM throws an error, we don't update the TwoElement
   // state.
 
   private setProperty(key: string | symbol, value: unknown) {

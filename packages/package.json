@@ -62,9 +62,9 @@
       "import": "./dist/typescript.js",
       "types": "./dist/typescript/index.d.ts"
     },
-    "./vdom": {
-      "import": "./dist/vdom.js",
-      "types": "./dist/vdom/index.d.ts"
+    "./2js": {
+      "import": "./dist/2js.js",
+      "types": "./dist/2js/index.d.ts"
     },
     "./view-transitions": {
       "import": "./dist/view-transitions/transitions/",

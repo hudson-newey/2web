@@ -22,6 +22,7 @@ export * from "./src/datatypes/numbers.ts";
 export * from "./src/datatypes/objects.ts";
 export * from "./src/datatypes/json.ts";
 
+export * from "./src/helpers/require.ts";
 export * from "./src/helpers/typeFunctions.ts";
 export * from "./src/helpers/without.ts";
 
