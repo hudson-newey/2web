@@ -1,4 +1,5 @@
 import type { TwoElement } from "../elements/element";
+import { change } from "./updates";
 
 export function render(
   target: HTMLElement,
@@ -6,7 +7,10 @@ export function render(
 ): void {
   twoElements.forEach((twoEl) => {
     const el = twoEl.toElement();
-    target.appendChild(el);
+
+    change(() => {
+      target.appendChild(el);
+    });
 
     twoEl.onUpdate();
   });

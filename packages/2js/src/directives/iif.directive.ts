@@ -1,4 +1,5 @@
 import type { TwoElement } from "../elements/element";
+import { change } from "../renderer/updates";
 import type { Directive } from "./directive";
 
 export const iif = (
@@ -8,10 +9,12 @@ export const iif = (
     const predicatePasses =
       typeof predicate === "function" ? predicate() : predicate;
 
-    if (predicatePasses) {
-      elementRef.hidden = undefined;
-    } else {
-      elementRef.hidden = true;
-    }
+    change(() => {
+      if (predicatePasses) {
+        elementRef.hidden = undefined;
+      } else {
+        elementRef.hidden = true;
+      }
+    });
   };
 };
