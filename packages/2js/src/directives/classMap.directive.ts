@@ -3,15 +3,15 @@ import type { ElementProperty } from "../elements/properties";
 import { change } from "../renderer/updates";
 import type { Directive } from "./directive";
 
-type ClassPredicate = (element?: TwoElement) => boolean;
+type ClassPredicate = () => boolean;
 type ClassMap = Readonly<Record<string, ElementProperty | ClassPredicate>>;
 
 export const classMap = (map: ClassMap): Directive => {
   return (elementRef: TwoElement) => {
     Object.entries(map).forEach(([className, propertyOrPredicate]) => {
-      let shouldHaveClass =
+      const shouldHaveClass =
         typeof propertyOrPredicate === "function"
-          ? propertyOrPredicate(elementRef)
+          ? propertyOrPredicate()
           : Boolean(propertyOrPredicate);
 
       change(() => {
