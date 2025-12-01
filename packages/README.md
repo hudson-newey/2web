@@ -5,7 +5,7 @@ A collection of packages to enhance your 2web application
 | Package                                        | State |
 | ---------------------------------------------- | ----- |
 | [animations](animations/README.md)             | 🔧     |
-| [iron](iron/README.md)                         | ❌     |
+| [iron](iron/README.md)                         | 🔧     |
 | [keyboard](keyboard/README.md)                 | 🔧     |
 | [named-strings](named-strings/README.md)       | 🔧     |
 | [pre-fetcher](pre-fetcher/README.md)           | 🔧     |

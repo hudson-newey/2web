@@ -57,6 +57,8 @@ const x = {};
 // The following would throw an error with a normal "if" condition (because
 // "person" is undefined), causing the program to hard-fail.
 // If you do not want the program to hard fail, you probably want iif.
+//
+// If your conditional callback is async, you can await the iif call.
 iif(() => x.person.age > 0)({
   then: () => {},
   else: () => {},
@@ -77,66 +79,7 @@ function () {
 }
 ```
 
-### "When" decorators
-
-"when decorators" document a functions expected calling state, and will
-**reject** if the pre-conditions are not reached.
-
-This function will **reject** because it turns the return type into a `Promise`.
-
-```ts
-@when([
-  assert((person) => iif(() => person.age > 0)),
-])
-function sayHello(person: Person) {
-}
-```
-
 ## Actions
-
-### "Required" actions
-
-An async callback that MUST be executed within a given timeframe.
-
-If the async queue is in the process of breaking down / crashing / stuck in an
-infinite loop, the "required" action will be forcefully moved to the main thread
-to prioritize execution.
-
-If the system reaches a critical condition, "optional" actions will be culled in
-an attempt to delay system failure.
-
-```ts
-async function crashAsyncQueue() {
-  setInterval(() => {
-    crashAsyncQueue();
-  }, 5);
-}
-
-crashAsyncQueue();
-
-await new Promise((res) => {
-  setTimeout(() => res(), 1_000);
-});
-
-// Under normal conditions, this callback would never be invoked, in a realistic
-// timeframe.
-// However, because it's wrapped in a "required" callback, it will be moved to
-// the main thread after 1 second of not being executed.
-required(async () => {
-  fetch("https://example.com");
-});
-```
-
-### "Optional" actions
-
-Non-critical functionality that can be culled if the system reaches a "critical"
-condition (e.g. overheating, out of memory, etc...)
-
-```ts
-optional(async () => {
-  console.log(new Date());
-});
-```
 
 ### Check
 
