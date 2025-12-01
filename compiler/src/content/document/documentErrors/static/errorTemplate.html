@@ -20,6 +20,23 @@
       <div class="__2_error">
         <h2 class="__2_error_file">{{ .FilePath }}</h2>
         <pre class="__2_error_message">{{ .Message }}</pre>
+
+        <div class="__2_error_actions">
+          <a
+            class="__2_error_action_button"
+            href="vscode://file/{{ .FilePath }}:1"
+          >
+            Open in Editor
+          </a>
+
+          <button
+            class="__2_error_action_button"
+            data-clipboard-text="{{ .Message }}"
+            onclick="navigator.clipboard.writeText(this.dataset.clipboardText)"
+          >
+            Copy Error
+          </button>
+        </div>
       </div>
       {{ end }}
     </div>
