@@ -1,4 +1,4 @@
-import { TwoElement, iif, classMap, styleMap } from "../../2js/index.ts";
+import { TwoElement, when, classMap, styleMap } from "../../2js/index.ts";
 
 export const counterButton: any = new TwoElement({
   id: "counter",
@@ -9,7 +9,7 @@ export const counterButton: any = new TwoElement({
     "aria-label": "Increment count",
   },
   directives: [
-    iif(() => parseInt(counterButton.textContent) < 20),
+    when(() => parseInt(counterButton.textContent) < 20),
     classMap({
       danger: () => parseInt(counterButton.textContent) >= 5,
     }),

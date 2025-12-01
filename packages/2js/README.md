@@ -18,7 +18,7 @@ read/manipulated in the live DOM.
 ## Usage
 
 ```ts
-import { TwoElement, render, iif } from "@two-web/kit/2js";
+import { TwoElement, render, when } from "@two-web/kit/2js";
 
 const counterButton = new TwoElement({
   className: "counter-button",
@@ -29,7 +29,7 @@ const counterButton = new TwoElement({
     "click": () => counterButton.textContent++,
   },
   directives: [
-    iif(true),
+    when(true),
   ],
 });
 
