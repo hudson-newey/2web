@@ -67,7 +67,7 @@
       "types": "./dist/2js/index.d.ts"
     },
     "./view-transitions": {
-      "import": "./dist/view-transitions/transitions/transitions.css",
+      "import": "./dist/view-transitions/*",
       "types": "./dist/view-transitions/index.d.ts"
     },
     "./vite-plugin": {

@@ -5,6 +5,5 @@ export { tryCatch } from "./src/errors/tryCatch.ts";
 export { iif } from "./src/conditionals/iif.ts";
 
 export { assert } from "./src/assert/assert.ts";
-export { when } from "./src/assert/when.ts";
 
 export { check } from "./src/actions/check.ts";
