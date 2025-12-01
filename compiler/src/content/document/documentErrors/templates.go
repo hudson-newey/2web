@@ -12,6 +12,15 @@ var errorTemplate string
 var errorTemplateCSS string
 
 func errorHtmlSource() string {
+	// We make all of the css rules important to ensure they override any user
+	// styles and so that the user cannot accidentally break the error page
+	// styles by indirectly adding styles to elements like a h2 or p tag.
+	templateCssWithOverrides := strings.ReplaceAll(
+		errorTemplateCSS,
+		";",
+		" !important;",
+	)
+
 	// To include the CSS in the HTML template, I hacked together a solution
 	// where I replace a substring placeholder with the actual CSS content.
 	//
@@ -20,7 +29,7 @@ func errorHtmlSource() string {
 	finalTemplate := strings.Replace(
 		errorTemplate,
 		replacementTarget,
-		errorTemplateCSS,
+		templateCssWithOverrides,
 		1,
 	)
 
