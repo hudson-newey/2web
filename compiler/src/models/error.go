@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	"os"
 	"strings"
 )
 
@@ -39,4 +40,16 @@ func (model *Error) PrintError() {
 	// emphasized in the compiler logs.
 	fmt.Printf("\n\033[31m[Error] \033[36m%s\033[33m%s\033[0m\n", model.FilePath, formattedLineNumber)
 	fmt.Printf("\t%s\n", formattedErrorMessage)
+}
+
+func (model *Error) AbsoluteFilePath() string {
+	// This prefixes the file path with the current working directory.
+	// TODO: This is not a permanent solution. We probably want some sort of path
+	// struct that handles this for us.
+	currentDir, err := os.Getwd()
+	if err == nil {
+		return fmt.Sprintf("%s/%s", currentDir, model.FilePath)
+	}
+
+	return model.FilePath
 }
