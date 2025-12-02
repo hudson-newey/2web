@@ -1,7 +1,12 @@
+export interface TimelineOptions {}
+
 export class Timeline {
   private intervalRef: ReturnType<typeof setInterval> | null = null;
 
-  constructor(private readonly callback: () => void) {}
+  constructor(
+    private readonly callback: () => void,
+    private readonly options?: TimelineOptions
+  ) {}
 
   public get isRunning(): boolean {
     return this.intervalRef !== null;
