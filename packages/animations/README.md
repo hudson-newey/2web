@@ -5,7 +5,7 @@ Vsynced animations that debounces double enqueues.
 ## Usage
 
 ```ts
-import { animate } from "@two-web/kit/animations";
+import { animate, timeline } from "@two-web/kit/animations";
 
 const animationTarget = document.getElementById("ball");
 
@@ -18,12 +18,12 @@ function bounce() {
   progress += 0.01;
 }
 
-setInterval(() => {
+timeline(() => {
   // Notice that although we perform 16 calls to `animate` per frame
   // (assuming 60fps), the animation callback is only invoked once per
   // frame, because the values are debounced per animation identifier.
   animate(bounce);
-}, 1);
+});
 ```
 
 ![Video of bouncing ball demo](../media/bouncing-ball.gif)
@@ -34,7 +34,7 @@ Animation identifiers can be used for complex animations that might have
 multiple different callers or go across multiple component boundaries.
 
 ```ts
-import { animation, animate } from "@two-web/kit/animations";
+import { animation, animate, timeline } from "@two-web/kit/animations";
 
 const moveAnimation = animation("move");
 
@@ -42,7 +42,7 @@ function move() {
   // Do something
 }
 
-setTimeout(() => {
+timeline(() => {
   animate(move, moveAnimation);
-}, 1);
+});
 ```
