@@ -1,8 +1,8 @@
 # 2Web Kit - Animations
 
-## Usage
-
 Vsynced animations that debounces double enqueues.
+
+## Usage
 
 ```ts
 import { animate } from "@two-web/kit/animations";
@@ -25,6 +25,8 @@ setInterval(() => {
   animate(bounce);
 }, 1);
 ```
+
+![Video of bouncing ball demo](../media/bouncing-ball.gif)
 
 ### Animation Identifiers
 

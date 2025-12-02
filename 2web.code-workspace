@@ -72,6 +72,7 @@
       "aaron-bond.better-comments",
       "pkief.material-icon-theme",
       "esbenp.prettier-vscode",
+      "github.vscode-github-actions",
 
       "golang.go",
       "premparihar.gotestexplorer",
