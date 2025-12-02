@@ -14,7 +14,7 @@
 
   <body>
     <script type="module">
-      import { animate, timeline } from "../animations/index.ts";
+      import { animate, Timeline } from "../animations/index.ts";
 
       const animationTarget = document.getElementById("ball");
 
@@ -27,12 +27,14 @@
         progress += 0.01;
       }
 
-      timeline(() => {
+      const timeline = new Timeline(() => {
         // Notice that although we perform 16 calls to `animate` per frame
         // (assuming 60fps), the animation callback is only invoked once per
         // frame, because the values are debounced per animation identifier.
         animate(bounce);
       });
+
+      timeline.start();
     </script>
 
     <style>
