@@ -103,3 +103,4 @@ You should **consider** using the following libraries with 2Web.
 - [Injection-js (for DI)](https://github.com/mgechev/injection-js)
 - [Lion](https://lion.js.org/)
 - [Lodash](https://lodash.com/)
+- [deno std library](https://jsr.io/@std)
