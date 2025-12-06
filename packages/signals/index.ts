@@ -5,6 +5,7 @@ export { FormSignal } from "./src/sources/form.ts";
 export { QuerySignal } from "./src/sources/query.ts";
 export { ResizeObserverSignal } from "./src/sources/resizeObserver.ts";
 export { ResourceSignal } from "./src/sources/resource.ts";
+export { TimerSignal } from "./src/sources/timer.ts";
 
 // Transforms
 export { ComputedSignal } from "./src/computed/computed.ts";

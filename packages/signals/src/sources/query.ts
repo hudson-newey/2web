@@ -6,24 +6,20 @@ import { ReadonlySignal } from "../readonlySignal";
  * changes or the queried element changes.
  */
 export class QuerySignal<
-  ElementType extends HTMLElement,
+  ElementType extends HTMLElement
 > extends ReadonlySignal<ElementType | null> {
-  private readonly querySelector: string;
-
-  public constructor(querySelector: string) {
+  public constructor(private readonly querySelector: string) {
     const initialElement = document.querySelector<ElementType>(querySelector);
     super(initialElement);
 
-    this.querySelector = querySelector;
-
     const observerConfig = {
       attributes: true,
-      attributeFilter: ['class', 'style'],
+      attributeFilter: ["class", "style"],
       attributeOldValue: true,
     };
 
     const callback = () => {
-      this.set(this.getElement());
+      this.value = this.getElement();
     };
 
     const observer = new MutationObserver(callback);

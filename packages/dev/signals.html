@@ -15,6 +15,8 @@
         effect,
         textContent,
         queryParameter,
+        TimerSignal,
+        QuerySignal,
       } from "../signals/index.ts";
 
       const counter = new Signal(0);
@@ -43,6 +45,13 @@
           doubleCount.value
         );
       }, [counter]);
+
+      // TimerSignal that updates every second
+      const timer = new TimerSignal({ interval: 1_000 });
+      textContent(
+        new QuerySignal("#elapsed-time").value,
+        timer,
+      );
     </script>
 
     <button id="counter-button">0</button>
@@ -52,7 +61,17 @@
       <span id="double-count">0</span>
     </div>
 
+    <div>
+      Elapsed Time:
+      <span id="elapsed-time">0</span> milliseconds
+    </div>
+
     <style>
+      #elapsed-time {
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
       #counter-button {
         font-size: 2rem;
         padding: 1rem 2rem;

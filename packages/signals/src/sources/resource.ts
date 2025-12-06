@@ -18,7 +18,7 @@ type Resource<T> = Response & T;
 
 class InternalResourceSignal<
   T,
-  ResourceUrl extends string,
+  ResourceUrl extends string
 > extends ReadonlySignal<Resource<T> | null> {
   public constructor(
     private readonly url: ResourceUrl,
@@ -33,7 +33,7 @@ class InternalResourceSignal<
 
   private async refreshResource() {
     const response = await fetch(this.url, this.options);
-    this.set(response);
+    this.value = response as any;
   }
 }
 
@@ -49,5 +49,5 @@ export const ResourceSignal = new Proxy(InternalResourceSignal, {
   async construct(target, args) {
     const data = await Reflect.apply(target, this, args).init();
     return new target(data);
-  }
+  },
 });

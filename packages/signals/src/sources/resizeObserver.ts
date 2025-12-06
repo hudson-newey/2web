@@ -11,8 +11,10 @@ export class ResizeObserverSignal<
   public constructor(observedElements: ObservedElements) {
     super([]);
 
-    const callback: ResizeObserverCallback = (entries: ResizeObserverEntry[]) => {
-      this.set(entries);
+    const callback: ResizeObserverCallback = (
+      entries: ResizeObserverEntry[]
+    ) => {
+      this.value = entries;
     };
 
     const observer = new ResizeObserver(callback);

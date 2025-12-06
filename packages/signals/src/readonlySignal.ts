@@ -1,7 +1,9 @@
 import { Signal } from "./signal";
 
 export class ReadonlySignal<T> extends Signal<T> {
-  private static setError = new Error("Cannot set value of a ReadonlySignal");
+  private static readonly setError = new Error(
+    "Cannot set value of a ReadonlySignal"
+  );
 
   // Both of these methods throw an error to prevent changing the value of a
   // ComputedSignal directly.

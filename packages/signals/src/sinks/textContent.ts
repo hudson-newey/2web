@@ -6,7 +6,7 @@ import type { Signal } from "../signal";
  * of a signal.
  * This signal automatically escapes problematic characters to prevent XSS.
  */
-export function textContent<T>(node: Node, signal: Signal<T>) {
+export function textContent<const T>(node: Node, signal: Signal<T>) {
   signal.subscribe((value) => {
     node.textContent = String(value);
   });
