@@ -49,7 +49,7 @@
       // TimerSignal that updates every second
       const timer = new TimerSignal({ interval: 1_000 });
       textContent(
-        new QuerySignal("#elapsed-time").value,
+        new QuerySignal("#elapsed-time"),
         timer,
       );
     </script>

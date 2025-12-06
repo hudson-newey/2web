@@ -1,4 +1,5 @@
 import type { Signal } from "../signal";
+import { isSignal } from "../utils/isSignal";
 
 /**
  * @description
@@ -6,8 +7,14 @@ import type { Signal } from "../signal";
  * of a signal.
  * This signal automatically escapes problematic characters to prevent XSS.
  */
-export function textContent<const T>(node: Node, signal: Signal<T>) {
+export function textContent<const T>(
+  node: Node | Signal<Node>,
+  signal: Signal<T>
+) {
+  // TODO: Fix this horrible typing
+  const target: Node = isSignal(node) ? (node.value as Node) : (node as Node);
+
   signal.subscribe((value) => {
-    node.textContent = String(value);
+    target.textContent = String(value);
   });
 }
