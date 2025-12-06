@@ -33,6 +33,7 @@ export { onClose } from "./src/lifecycle/onClose.ts";
 // Utilities
 export { isSignal } from "./src/utils/isSignal.ts";
 export { isReadonlySignal } from "./src/utils/isReadonlySignal.ts";
+export { unwrapSignal } from "./src/utils/unwrapSignal.ts";
 
 // Sinks
 export { effect } from "./src/sinks/effect.ts";

@@ -1,4 +1,5 @@
 import { ReadonlySignal } from "../readonlySignal";
+import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
 /**
  * @description
@@ -6,7 +7,7 @@ import { ReadonlySignal } from "../readonlySignal";
  * of the queried element changes.
  */
 export class ResizeObserverSignal<
-  ObservedElements extends Element[]
+  ObservedElements extends MaybeSignal<Element[]>
 > extends ReadonlySignal<ResizeObserverEntry[]> {
   public constructor(observedElements: ObservedElements) {
     super([]);
@@ -17,8 +18,9 @@ export class ResizeObserverSignal<
       this.value = entries;
     };
 
+    const targets = unwrapSignal(observedElements);
     const observer = new ResizeObserver(callback);
-    for (const element of observedElements) {
+    for (const element of targets) {
       observer.observe(element);
     }
   }

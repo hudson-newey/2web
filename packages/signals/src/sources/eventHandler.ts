@@ -2,7 +2,7 @@ import { ReadonlySignal } from "../readonlySignal";
 
 export type EventHandlerReducer<EventType extends Event, T> = (
   event: EventType,
-  currentValue: T | null,
+  currentValue: T | null
 ) => T | null;
 
 /**
@@ -25,13 +25,12 @@ export type EventHandlerReducer<EventType extends Event, T> = (
  */
 export class EventHandler<
   T,
-  EventType extends Event,
+  EventType extends Event
 > extends ReadonlySignal<T | null> {
-  private readonly reducer: EventHandlerReducer<EventType, T>;
-
-  public constructor(reducer: EventHandlerReducer<EventType, T>) {
+  public constructor(
+    private readonly reducer: EventHandlerReducer<EventType, T>
+  ) {
     super(null);
-    this.reducer = reducer;
   }
 
   // handleEvent is a special method that allows this class to be passed

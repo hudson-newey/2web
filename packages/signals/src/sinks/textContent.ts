@@ -1,5 +1,5 @@
 import type { Signal } from "../signal";
-import { isSignal } from "../utils/isSignal";
+import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
 /**
  * @description
@@ -8,11 +8,10 @@ import { isSignal } from "../utils/isSignal";
  * This signal automatically escapes problematic characters to prevent XSS.
  */
 export function textContent<const T>(
-  node: Node | Signal<Node>,
+  node: MaybeSignal<Node>,
   signal: Signal<T>
 ) {
-  // TODO: Fix this horrible typing
-  const target: Node = isSignal(node) ? (node.value as Node) : (node as Node);
+  const target = unwrapSignal(node);
 
   signal.subscribe((value) => {
     target.textContent = String(value);

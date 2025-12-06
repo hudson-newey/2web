@@ -1,16 +1,24 @@
 import type { Signal } from "../signal";
+import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
 export function attribute<
   Target extends HTMLElement,
   Attribute extends string,
-  T,
->(element: Target, name: Attribute, signal: Signal<T>) {
+  T
+>(
+  element: MaybeSignal<Target>,
+  name: MaybeSignal<Attribute>,
+  signal: Signal<T>
+) {
+  const target = unwrapSignal(element);
+  const attributeName = unwrapSignal(name);
+
   signal.subscribe((value) => {
     if (value === null || value === undefined) {
-      element.removeAttribute(name);
+      target.removeAttribute(attributeName);
       return;
     }
 
-    element.setAttribute(name, String(value));
+    target.setAttribute(attributeName, String(value));
   });
 }

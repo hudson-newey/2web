@@ -1,4 +1,5 @@
 import { ReadonlySignal } from "../readonlySignal";
+import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
 interface ResourceSignalOptions extends RequestInit {
   /**
@@ -20,11 +21,20 @@ class InternalResourceSignal<
   T,
   ResourceUrl extends string
 > extends ReadonlySignal<Resource<T> | null> {
+  private readonly url: ResourceUrl;
+  private readonly options?: ResourceSignalOptions;
+
   public constructor(
-    private readonly url: ResourceUrl,
-    private readonly options?: ResourceSignalOptions
+    urlInput: MaybeSignal<ResourceUrl>,
+    optionsInput?: MaybeSignal<ResourceSignalOptions>
   ) {
     super(null);
+
+    this.url = unwrapSignal(urlInput);
+
+    if (optionsInput !== undefined) {
+      this.options = unwrapSignal(optionsInput);
+    }
   }
 
   public async init() {

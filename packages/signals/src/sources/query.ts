@@ -1,4 +1,5 @@
 import { ReadonlySignal } from "../readonlySignal";
+import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
 /**
  * @description
@@ -8,10 +9,16 @@ import { ReadonlySignal } from "../readonlySignal";
 export class QuerySignal<
   ElementType extends HTMLElement
 > extends ReadonlySignal<ElementType | null> {
-  public constructor(private readonly querySelector: string) {
-    const initialElement = document.querySelector<ElementType>(querySelector);
+  private readonly selector: string;
+
+  public constructor(querySelector: MaybeSignal<string>) {
+    const initialElement = document.querySelector<ElementType>(
+      unwrapSignal(querySelector)
+    );
+
     super(initialElement);
 
+    this.selector = unwrapSignal(querySelector);
     const observerConfig = {
       attributes: true,
       attributeFilter: ["class", "style"],
@@ -27,6 +34,6 @@ export class QuerySignal<
   }
 
   private getElement(): ElementType | null {
-    return document.querySelector<ElementType>(this.querySelector);
+    return document.querySelector<ElementType>(this.selector);
   }
 }
