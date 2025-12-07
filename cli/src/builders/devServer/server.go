@@ -3,6 +3,8 @@ package devserver
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 
 	"github.com/hudson-newey/2web-cli/src/builders"
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
@@ -50,8 +52,27 @@ func serveVite(args []string) {
 func serveInbuilt(args []string) {
 	inPath := builders.EntryTargets(args)[0]
 	outPath := builders.OutputTarget(args)
+	pollTime := getPollTime(args)
 
-	server.Run(inPath, outPath)
+	server.Run(inPath, outPath, pollTime)
+}
+
+// getPollTime extracts the --pollTime flag value from args.
+// Returns the default value of 100ms if not specified.
+func getPollTime(args []string) int {
+	for i, arg := range args {
+		if strings.HasPrefix(arg, "--pollTime=") {
+			valueStr := strings.TrimPrefix(arg, "--pollTime=")
+			if value, err := strconv.Atoi(valueStr); err == nil && value > 0 {
+				return value
+			}
+		} else if arg == "--pollTime" && i+1 < len(args) {
+			if value, err := strconv.Atoi(args[i+1]); err == nil && value > 0 {
+				return value
+			}
+		}
+	}
+	return 100 // Default value in milliseconds
 }
 
 func serveSsr() {

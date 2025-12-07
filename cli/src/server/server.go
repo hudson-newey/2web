@@ -36,7 +36,7 @@ var liveReloadTemplate = fmt.Sprintf(`
 <script type="module">%s</script>
 `, liveReloadScript)
 
-func runDevServer(inPath string, outPath string) {
+func runDevServer(inPath string, outPath string, pollTimeMs int) {
 	absInPath, err := filepath.Abs(inPath)
 	if err != nil {
 		log.Fatalf("Failed to resolve path: %v", err)
@@ -53,7 +53,7 @@ func runDevServer(inPath string, outPath string) {
 	}
 
 	// Start file watcher in a separate goroutine
-	go watchFiles(absInPath, absOutPath, outPath)
+	go watchFiles(absInPath, absOutPath, outPath, pollTimeMs)
 
 	// Setup HTTP server
 	mux := http.NewServeMux()
@@ -246,13 +246,10 @@ func injectLiveReload(content []byte) []byte {
 // TODO: Remove relativeOutPath from here
 // This is needed because there is a bug in the compiler where it does not work
 // with absolute paths properly.
-func watchFiles(inPath string, outPath string, relativeOutPath string) {
+func watchFiles(inPath string, outPath string, relativeOutPath string, pollTimeMs int) {
 	var lastModTime time.Time
 
-	// Reduced from 5ms to 100ms to significantly lower CPU usage during development.
-	// 100ms provides a good balance between responsiveness and resource efficiency.
-	// This reduces file system polling from 200/sec to 10/sec (95% reduction).
-	const fileWatcherInterval = 100 * time.Millisecond
+	fileWatcherInterval := time.Duration(pollTimeMs) * time.Millisecond
 	for {
 		time.Sleep(fileWatcherInterval)
 

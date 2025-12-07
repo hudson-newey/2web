@@ -42,11 +42,9 @@ func dbConnection() *sql.DB {
 		panic(err)
 	}
 
-	// Configure connection pool for better performance and concurrency
-	// These settings help prevent bottlenecks during parallel builds
-	db.SetMaxOpenConns(25)                 // Limit concurrent connections
-	db.SetMaxIdleConns(5)                  // Keep connections ready
-	db.SetConnMaxLifetime(5 * time.Minute) // Recycle connections periodically
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(5)
+	db.SetConnMaxLifetime(5 * time.Minute)
 
 	cachedConnection = db
 
