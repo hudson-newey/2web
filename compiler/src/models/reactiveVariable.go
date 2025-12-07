@@ -136,8 +136,7 @@ type ReactiveVariable struct {
 	Node               *lexer.LexNode[lexer.VarNode]
 	Reactive           bool
 	DependentVariables []*ReactiveVariable
-	cachedType         *ReactivityLevel // Cache for Type() computation
-	typeComputed       bool             // Flag to track if type has been computed
+	cachedType         *ReactivityLevel // Cache for Type() computation; nil means not yet computed
 }
 
 func (model *ReactiveVariable) AddProp(property *ReactiveProperty) {
@@ -152,7 +151,6 @@ func (model *ReactiveVariable) AddEvent(event *ReactiveEvent) {
 
 // invalidateTypeCache resets the cached type when the variable is modified
 func (model *ReactiveVariable) invalidateTypeCache() {
-	model.typeComputed = false
 	model.cachedType = nil
 }
 
@@ -162,7 +160,7 @@ func (model *ReactiveVariable) invalidateTypeCache() {
 // modified via AddProp() or AddEvent().
 func (model *ReactiveVariable) Type() ReactivityLevel {
 	// Return cached type if already computed
-	if model.typeComputed && model.cachedType != nil {
+	if model.cachedType != nil {
 		return *model.cachedType
 	}
 
@@ -186,7 +184,6 @@ func (model *ReactiveVariable) Type() ReactivityLevel {
 
 	// Cache the computed type
 	model.cachedType = &computedType
-	model.typeComputed = true
 
 	return computedType
 }

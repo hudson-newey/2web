@@ -27,8 +27,9 @@ func indexPages(inputPath string) []string {
 		}
 
 		// Pre-allocate slice with estimated capacity to reduce reallocations.
-		// This improves performance for projects with many files.
-		estimatedCapacity := len(currentDirFiles) * 2 // Rough estimate
+		// Multiplier of 2 accounts for recursive directory traversal and assumes
+		// roughly equal numbers of directories and files at each level.
+		estimatedCapacity := len(currentDirFiles) * 2
 		totalFiles := make([]string, 0, estimatedCapacity)
 
 		for _, file := range currentDirFiles {
