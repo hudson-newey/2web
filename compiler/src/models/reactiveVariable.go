@@ -136,33 +136,59 @@ type ReactiveVariable struct {
 	Node               *lexer.LexNode[lexer.VarNode]
 	Reactive           bool
 	DependentVariables []*ReactiveVariable
+	cachedType         *ReactivityLevel // Cache for Type() computation
+	typeComputed       bool             // Flag to track if type has been computed
 }
 
 func (model *ReactiveVariable) AddProp(property *ReactiveProperty) {
 	model.Props = append(model.Props, property)
+	model.invalidateTypeCache()
 }
 
 func (model *ReactiveVariable) AddEvent(event *ReactiveEvent) {
 	model.Events = append(model.Events, event)
+	model.invalidateTypeCache()
+}
+
+// invalidateTypeCache resets the cached type when the variable is modified
+func (model *ReactiveVariable) invalidateTypeCache() {
+	model.typeComputed = false
+	model.cachedType = nil
 }
 
 // TODO: expand this out to reactive types
-// TODO: this should probably cache the type for faster compile times
+// Type returns the reactivity level of this variable, with caching for improved
+// compilation performance. The cached value is invalidated when the variable is
+// modified via AddProp() or AddEvent().
 func (model *ReactiveVariable) Type() ReactivityLevel {
+	// Return cached type if already computed
+	if model.typeComputed && model.cachedType != nil {
+		return *model.cachedType
+	}
+
+	// Compute the type
+	var computedType ReactivityLevel
+
 	// If a variable is being modified in an event, it is reasonable to assume
 	// that there is an associated prop. Because why would you want a reactive
 	// variable that never modifies the ODM?
 	// However, we have this condition so that we can tree shake the variable
 	// to a static variable if it doesn't have any output.
 	if model.doesSelfReference() {
-		return Reactive
+		computedType = Reactive
 	} else if len(model.Events) > 0 {
-		return Assignment
+		computedType = Assignment
 	} else if len(model.Props) == 0 {
-		return Static
+		computedType = Static
+	} else {
+		computedType = StaticProperty
 	}
 
-	return StaticProperty
+	// Cache the computed type
+	model.cachedType = &computedType
+	model.typeComputed = true
+
+	return computedType
 }
 
 func (model *ReactiveVariable) doesSelfReference() bool {

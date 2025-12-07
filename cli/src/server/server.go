@@ -249,7 +249,10 @@ func injectLiveReload(content []byte) []byte {
 func watchFiles(inPath string, outPath string, relativeOutPath string) {
 	var lastModTime time.Time
 
-	const fileWatcherInterval = 5 * time.Millisecond
+	// Reduced from 5ms to 100ms to significantly lower CPU usage during development.
+	// 100ms provides a good balance between responsiveness and resource efficiency.
+	// This reduces file system polling from 200/sec to 10/sec (95% reduction).
+	const fileWatcherInterval = 100 * time.Millisecond
 	for {
 		time.Sleep(fileWatcherInterval)
 

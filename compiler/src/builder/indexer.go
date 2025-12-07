@@ -21,11 +21,15 @@ func indexPages(inputPath string) []string {
 			dirInputPath += string(os.PathSeparator)
 		}
 
-		totalFiles := []string{}
 		currentDirFiles, err := os.ReadDir(inputPath)
 		if err != nil {
 			panic(err)
 		}
+
+		// Pre-allocate slice with estimated capacity to reduce reallocations.
+		// This improves performance for projects with many files.
+		estimatedCapacity := len(currentDirFiles) * 2 // Rough estimate
+		totalFiles := make([]string, 0, estimatedCapacity)
 
 		for _, file := range currentDirFiles {
 			pages := indexPages(dirInputPath + file.Name())
@@ -50,7 +54,8 @@ func indexPages(inputPath string) []string {
 		// Filter out all paths that are not markup files.
 		// This means that any non-markup files will be tree-shaken if they are not
 		// used by any markup files.
-		filteredFiles := []string{}
+		// Pre-allocate with the current length as upper bound
+		filteredFiles := make([]string, 0, len(totalFiles))
 		for _, file := range totalFiles {
 			if assets.IsMarkupFile(file) {
 				filteredFiles = append(filteredFiles, file)
