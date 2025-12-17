@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/filesystem"
 	"os"
 	"path"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -43,6 +44,9 @@ func dbConnection() *sql.DB {
 
 	cachedConnection = db
 
+	db.SetMaxOpenConns(8)
+	db.SetMaxIdleConns(5)
+	db.SetConnMaxLifetime(5 * time.Minute)
 	createDbTables()
 
 	return db

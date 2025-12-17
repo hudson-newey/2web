@@ -249,7 +249,7 @@ func injectLiveReload(content []byte) []byte {
 func watchFiles(inPath string, outPath string, relativeOutPath string) {
 	var lastModTime time.Time
 
-	const fileWatcherInterval = 5 * time.Millisecond
+	const fileWatcherInterval = time.Duration(5) * time.Millisecond
 	for {
 		time.Sleep(fileWatcherInterval)
 
