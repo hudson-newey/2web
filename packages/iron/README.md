@@ -93,3 +93,18 @@ check(() => {
   fetch("https://example.com");
 });
 ```
+
+## Ephemeral
+
+Creates an ephemeral stack frame to that is automatically zeroed out after use.
+
+This is useful for handling sensitive data such as passwords or cryptographic
+keys where you don't want the data to linger in memory longer than necessary.
+
+```ts
+// After this scope ends, the secret variable will be zeroed out.
+{
+  const secret = using ephemeral("my super secret password");
+  // Use the secret here
+}
+```
