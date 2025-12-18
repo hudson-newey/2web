@@ -35,7 +35,8 @@ func templateCommand(programName string, command string, args []string) {
 
 		"llms.txt": templates.LlmsTemplate,
 
-		"vite": templates.ViteTemplate,
+		"vite":     templates.ViteTemplate,
+		"tailwind": templates.TailwindTemplate,
 	}
 
 	templateFunc, exists := templates[template]

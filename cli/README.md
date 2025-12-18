@@ -65,7 +65,8 @@ once, and do not take a name as an argument.
 | robots.txt            |       | Adds a robots.txt file to the project   |
 | security.txt          |       | Adds a security.txt file to the project |
 | llms.txt              |       | Adds a llms.txt file to the project     |
-| vite                  |       | Add a Vite builder to a 2web project    |
+| vite                  |       | Add a Vite builder to the project       |
+| tailwind              |       | Add a Tailwind to the project           |
 
 ### Database Command
 
