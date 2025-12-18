@@ -51,6 +51,27 @@ declare module "@two-web/compiler" {
    * ```
    */
   export function $env(key: string): string | undefined;
+
+  /**
+   * @description
+   * Reads the contents of a file at compile time.
+   * This function will return `undefined` if the file does not exist or the
+   * file cannot be read.
+   *
+   * @example
+   * ```ts
+   * import { $readFile } from "@two-web/compiler";
+   *
+   * const configFileContents = $readFile("./config.json");
+   * if (configFileContents) {
+   *   const config = JSON.parse(configFileContents);
+   *   console.log("Config:", config);
+   * } else {
+   *   console.log("Config file not found.");
+   * }
+   * ```
+   */
+  export function $readFile(path: string): string | undefined;
 }
 
 declare global {
