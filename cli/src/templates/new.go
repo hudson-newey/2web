@@ -90,8 +90,8 @@ var vscodeExtensionsContent string
 //go:embed newStatic/.vscode/mcp.json
 var vscodeMcpContent string
 
-//go:embed newStatic/.github/copilot-instructions.md
-var copilotInstructions string
+//go:embed newStatic/AGENTS.md
+var agentInstructions string
 
 func NewTemplate(path string) {
 	templateFiles := []files.File{
@@ -130,15 +130,9 @@ func NewTemplate(path string) {
 					IsDirectory: false,
 				},
 				{
-					Path:        path + "/.github/",
-					IsDirectory: true,
-					Children: []files.File{
-						{
-							Path:        path + "/.github/copilot-instructions.md",
-							Content:     copilotInstructions,
-							IsDirectory: false,
-						},
-					},
+					Path:        path + "/AGENTS.md",
+					Content:     agentInstructions,
+					IsDirectory: false,
 				},
 				{
 					Path:        path + "/.vscode/",
