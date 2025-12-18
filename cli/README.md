@@ -77,12 +77,13 @@ once, and do not take a name as an argument.
 
 ### CMS Command
 
-| Command | Alias | Description            |
-| ------- | ----- | ---------------------- |
-| add     | a     | Adds a cms source      |
-| view    | v     | View remote CMS source |
-| sync    | s     | Sync CMS source        |
-| remove  | rm    | Remove CMS source      |
+| Command    | Alias | Description            |
+| ---------- | ----- | ---------------------- |
+| add        | a     | Adds a cms source      |
+| view       | v     | View remote CMS source |
+| list-files | ls    | List CMS source files  |
+| sync       | s     | Sync CMS source        |
+| remove     | rm    | Remove CMS source      |
 
 ### Serve Command
 
