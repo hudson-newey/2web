@@ -3,15 +3,15 @@ import type { Signal } from "../signal";
 
 export function computed<T>(
   reducer: ComputedSignalReducer<T>,
-  dependencies: Signal<unknown>[],
+  dependencies: Signal<unknown>[]
 ) {
   return new ComputedSignal(reducer, dependencies);
 }
 
-export class ComputedSignal<T> extends ReadonlySignal<T> {
+class ComputedSignal<T> extends ReadonlySignal<T> {
   public constructor(
     reducer: ComputedSignalReducer<T>,
-    dependencies: Signal<unknown>[],
+    dependencies: Signal<unknown>[]
   ) {
     super(reducer());
 
