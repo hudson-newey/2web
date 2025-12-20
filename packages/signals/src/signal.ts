@@ -1,5 +1,14 @@
-type Subscription<T> = (value: T) => unknown;
+/**
+ * @description
+ * Reactive signal that holds a value and notifies subscribers on changes.
+ */
+export function signal<T>(value: T) {
+  return new Signal(value);
+}
 
+/**
+ * @private
+ */
 export class Signal<T> {
   private readonly subscribers = new Set<Subscription<T>>();
   private _value!: Readonly<T>;
@@ -57,3 +66,5 @@ export class Signal<T> {
     }
   }
 }
+
+type Subscription<T> = (value: T) => unknown;

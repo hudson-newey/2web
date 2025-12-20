@@ -1,14 +1,17 @@
 // Sources
-export { Signal } from "./src/signal.ts";
-export { EventHandler } from "./src/sources/eventHandler.ts";
-export { FormSignal } from "./src/sources/form.ts";
-export { QuerySignal } from "./src/sources/query.ts";
-export { ResizeObserverSignal } from "./src/sources/resizeObserver.ts";
-export { ResourceSignal } from "./src/sources/resource.ts";
-export { TimerSignal } from "./src/sources/timer.ts";
+export { signal } from "./src/signal.ts";
+export { eventHandler } from "./src/sources/eventHandler.ts";
+export { form } from "./src/sources/form.ts";
+export { query } from "./src/sources/query.ts";
+export { resizeObserver } from "./src/sources/resizeObserver.ts";
+export {
+  resource,
+  type ResourceSignalOptions,
+} from "./src/sources/resource.ts";
+export { timer, type TimerSignalOptions } from "./src/sources/timer.ts";
 
 // Transforms
-export { ComputedSignal } from "./src/computed/computed.ts";
+export { computed } from "./src/computed/computed.ts";
 
 // Pipes
 export { batch } from "./src/pipes/batch.ts";

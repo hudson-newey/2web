@@ -1,6 +1,6 @@
 import { ReadonlySignal } from "../readonlySignal";
 
-interface TimerSignalOptions {
+export interface TimerSignalOptions {
   /**
    * @description
    * How often the timer should emit a new value.
@@ -28,7 +28,11 @@ interface TimerSignalOptions {
   autoStart?: boolean;
 }
 
-export class TimerSignal extends ReadonlySignal<number> {
+export function timer(options?: TimerSignalOptions) {
+  return new TimerSignal(options);
+}
+
+class TimerSignal extends ReadonlySignal<number> {
   private readonly options: Required<TimerSignalOptions>;
   private intervalId: ReturnType<typeof setInterval> | null = null;
   private elapsed = 0;

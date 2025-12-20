@@ -6,7 +6,13 @@ import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
  * A signal that queries the DOM and updates whenever either the query result
  * changes or the queried element changes.
  */
-export class QuerySignal<
+export function query<ElementType extends HTMLElement>(
+  querySelector: MaybeSignal<string>
+) {
+  return new QuerySignal<ElementType>(querySelector);
+}
+
+class QuerySignal<
   ElementType extends HTMLElement
 > extends ReadonlySignal<ElementType | null> {
   private readonly selector: string;

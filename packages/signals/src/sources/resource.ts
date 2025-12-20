@@ -1,7 +1,22 @@
 import { ReadonlySignal } from "../readonlySignal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
-interface ResourceSignalOptions extends RequestInit {
+/**
+ * @description
+ * A signal that fetches a resource and updates whenever the parameters change.
+ *
+ * If the resource is a WebSocket, it will automatically connect and emit a
+ * new value whenever a message is received.
+ * If one of the dependencies changes, a new connection will be established.
+ */
+export function resource<T, ResourceUrl extends string>(
+  urlInput: MaybeSignal<ResourceUrl>,
+  optionsInput?: MaybeSignal<ResourceSignalOptions>
+) {
+  return new ResourceSignal<T, ResourceUrl>(urlInput, optionsInput);
+}
+
+export interface ResourceSignalOptions extends RequestInit {
   /**
    * @default 5000
    */
@@ -47,15 +62,7 @@ class InternalResourceSignal<
   }
 }
 
-/**
- * @description
- * A signal that fetches a resource and updates whenever the parameters change.
- *
- * If the resource is a WebSocket, it will automatically connect and emit a
- * new value whenever a message is received.
- * If one of the dependencies changes, a new connection will be established.
- */
-export const ResourceSignal = new Proxy(InternalResourceSignal, {
+const ResourceSignal = new Proxy(InternalResourceSignal, {
   async construct(target, args) {
     const data = await Reflect.apply(target, this, args).init();
     return new target(data);

@@ -6,7 +6,13 @@ import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
  * A signal that hooks into a ResizeObserver and updates whenever the size
  * of the queried element changes.
  */
-export class ResizeObserverSignal<
+export function resizeObserver<ObservedElements extends MaybeSignal<Element[]>>(
+  observedElements: ObservedElements
+) {
+  return new ResizeObserverSignal(observedElements);
+}
+
+class ResizeObserverSignal<
   ObservedElements extends MaybeSignal<Element[]>
 > extends ReadonlySignal<ResizeObserverEntry[]> {
   public constructor(observedElements: ObservedElements) {

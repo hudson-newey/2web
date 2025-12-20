@@ -1,7 +1,12 @@
 import { ReadonlySignal } from "../readonlySignal";
 import type { Signal } from "../signal";
 
-export type ComputedSignalReducer<T> = () => T;
+export function computed<T>(
+  reducer: ComputedSignalReducer<T>,
+  dependencies: Signal<unknown>[],
+) {
+  return new ComputedSignal(reducer, dependencies);
+}
 
 export class ComputedSignal<T> extends ReadonlySignal<T> {
   public constructor(
@@ -17,3 +22,5 @@ export class ComputedSignal<T> extends ReadonlySignal<T> {
     }
   }
 }
+
+type ComputedSignalReducer<T> = () => T;

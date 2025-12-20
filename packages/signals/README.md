@@ -24,22 +24,17 @@ following script tag to your documents `<head>`.
 
 ```html
 <script type="module">
-  import { Signal, ComputedSignal, effect } from "@two-web/kit/signals";
+  import { signal, computed, effect, textContent } from "@two-web/kit/signals";
 
-  const count = new Signal(0);
-  const doubledCount = new ComputedSignal(() => count.value * 2, [count]);
+  const count = signal(0);
+  const doubledCount = computed(() => count.value * 2, [count]);
 
   effect(() => {
-    console.log("New value is ${count.value}");
+    console.log(`New value is ${count.value}`);
   }, [count]);
 
-  count.subscribe(() => {
-    document.getElementById("count-outlet").innerText = value;
-  });
-
-  doubledCount.subscribe((value) => {
-    document.getElementById("double-count-outlet").innerText = value;
-  });
+  textContent(document.getElementById("count-outlet"), count);
+  textContent(document.getElementById("double-count-outlet"), doubledCount);
 </script>
 
 <button onclick="count.set(count.value + 1)">Increment</button>
@@ -56,17 +51,17 @@ method that will be triggered whenever the event handlers value changes.
 
 ```html
 <script type="module">
-  import { EventHandler } from "@two-web/kit/signals";
+  import { eventHandler, computed } from "@two-web/kit/signals";
 
   const target = document.getElementById("counter");
-  const countHandler = new EventHandler((event, value) => {
+  const countHandler = eventHandler((event, value) => {
     const count = value + 1;
 
     event.target.textContent = count;
     return count;
   });
 
-  const doubleCount = new ComputedSignal(() => countHandler.value * 2);
+  const doubleCount = computed(() => countHandler.value * 2);
 
   target.addEventListener("click", countHandler);
 </script>
@@ -78,15 +73,15 @@ method that will be triggered whenever the event handlers value changes.
 
 ```html
 <script type="module">
-  import { EventHandler, ComputedSignal, attribute } from "@two-web/kit/signals";
+  import { eventHandler, computed, attribute } from "@two-web/kit/signals";
 
   const usernameInput = document.getElementById("username");
   const registerButton = document.getElementById("register-button");
 
-  const username = new EventHandler((event) => event.target.value);
+  const username = eventHandler((event) => event.target.value);
   usernameInput.addEventListener("input", username);
 
-  const isUsernameInvalid = new ComputedSignal(() => {
+  const isUsernameInvalid = computed(() => {
     username.value.length < 10,
   }, [username]);
 
@@ -103,7 +98,7 @@ method that will be triggered whenever the event handlers value changes.
 correctly, signal state can be known at compile time.
 
 ```ts
-const greeting = new Signal("Hello");
+const greeting = signal("Hello");
 // ^? Signal<"Hello">;
 
 greeting.set("World!");

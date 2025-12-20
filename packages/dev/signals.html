@@ -10,28 +10,28 @@
   <body>
     <script type="module">
       import {
-        Signal,
-        ComputedSignal,
+        signal,
+        computed,
         effect,
         textContent,
         queryParameter,
-        TimerSignal,
-        QuerySignal,
+        timer,
+        query,
       } from "../signals/index.ts";
 
-      const counter = new Signal(0);
+      const count = signal(0);
 
       const targetButton = document.getElementById("counter-button");
-      textContent(targetButton, counter);
-      queryParameter("count", counter);
+      textContent(targetButton, count);
+      queryParameter("count", count);
 
       targetButton.addEventListener("click", () => {
-        counter.set(counter.value + 1);
+        count.set(count.value + 1);
       });
 
-      const doubleCount = new ComputedSignal(
-        () => counter.value * 2,
-        [counter]
+      const doubleCount = computed(
+        () => count.value * 2,
+        [count]
       );
 
       const doubleCountElement = document.getElementById("double-count");
@@ -40,17 +40,17 @@
       effect(() => {
         console.debug(
           "Counter:",
-          counter.value,
+          count.value,
           "Double Count:",
           doubleCount.value
         );
-      }, [counter]);
+      }, [count]);
 
       // TimerSignal that updates every second
-      const timer = new TimerSignal({ interval: 1_000 });
+      const elapsedTime = timer({ interval: 1_000 });
       textContent(
-        new QuerySignal("#elapsed-time"),
-        timer,
+        query("#elapsed-time"),
+        elapsedTime,
       );
     </script>
 

@@ -1,10 +1,5 @@
 import { ReadonlySignal } from "../readonlySignal";
 
-export type EventHandlerReducer<EventType extends Event, T> = (
-  event: EventType,
-  currentValue: T | null
-) => T | null;
-
 /**
  * A signal that can also be passed directly to addEventListener.
  *
@@ -23,7 +18,13 @@ export type EventHandlerReducer<EventType extends Event, T> = (
  * target.addEventListener("click", clickHandler);
  * ```
  */
-export class EventHandler<
+export function eventHandler<T, EventType extends Event>(
+  reducer: EventHandlerReducer<EventType, T>
+): EventHandler<T, EventType> {
+  return new EventHandler<T, EventType>(reducer);
+}
+
+class EventHandler<
   T,
   EventType extends Event
 > extends ReadonlySignal<T | null> {
@@ -40,3 +41,8 @@ export class EventHandler<
     this.value = this.reducer(event, this.value);
   }
 }
+
+type EventHandlerReducer<EventType extends Event, T> = (
+  event: EventType,
+  currentValue: T | null
+) => T | null;

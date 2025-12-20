@@ -9,21 +9,18 @@
 
   <body>
     <script type="module">
-      import { EventHandler, ComputedSignal } from "../signals/index.ts";
+      import { eventHandler, textContent, query } from "../signals/index.ts";
 
-      const targetButton = document.getElementById("counter-button");
-      const clickHandler = new EventHandler((event, value) => {
-        const count = value + 1;
-
-        event.target.textContent = count;
-        return count;
-      });
+      const target = query("#counter-button");
+      const clickHandler = eventHandler((_, value) => value + 1);
 
       clickHandler.subscribe((value) => {
         console.log("Button clicked, new count:", value);
       });
 
-      targetButton.addEventListener("click", clickHandler);
+      target.value.addEventListener("click", clickHandler);
+
+      textContent(target.value, clickHandler);
     </script>
 
     <button id="counter-button">0</button>
