@@ -1,7 +1,8 @@
 type Change = () => void;
+type RafRef = ReturnType<typeof requestAnimationFrame>;
 
 const updateQueue = new Set<Change>();
-let queuedUpdate: ReturnType<typeof requestAnimationFrame> | null = null;
+let queuedUpdate: RafRef | null = null;
 
 /**
  * @description
@@ -10,7 +11,7 @@ let queuedUpdate: ReturnType<typeof requestAnimationFrame> | null = null;
  *
  * @param mod - The update callback to be executed.
  */
-export function change(mod: Change): void {
+export function updateDom(mod: Change): RafRef {
   updateQueue.add(mod);
 
   // We only enqueue an update frame if one isn't already queued.
@@ -19,10 +20,12 @@ export function change(mod: Change): void {
   queuedUpdate ??= requestAnimationFrame(() => {
     runUpdate();
   });
+
+  return queuedUpdate;
 }
 
 function runUpdate(): void {
-  updateQueue.forEach((update) => {
+  for (const update of updateQueue) {
     try {
       update();
     } catch (cause) {
@@ -30,8 +33,13 @@ function runUpdate(): void {
       // of the updates in the queue.
       console.error(cause);
     }
-  });
+  }
 
+  // We perform one big cleanup at the end instead of removing items as we go to
+  // avoid mutating the set while iterating over it and to reduce the number of
+  // operations.
+  // Although this does mean that if an update fails, the failed update will be
+  // removed from the queue and not retried.
   updateQueue.clear();
   queuedUpdate = null;
 }

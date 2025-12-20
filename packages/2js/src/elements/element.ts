@@ -1,7 +1,7 @@
 // In the constructor we use a plain object for easier construction
 
 import type { Directive } from "../directives/directive";
-import { change } from "../renderer/updates";
+import { updateDom } from "../../../_shared/updateDom";
 
 // but internally we use Maps for easier updates.
 interface TwoElementConstructor {
@@ -104,7 +104,7 @@ export class TwoElement implements FreeformElement {
       },
     });
 
-    change(() => {
+    updateDom(() => {
       for (const [key, value] of Object.entries(initialProps)) {
         this.proxy[key] = value;
       }
@@ -137,7 +137,7 @@ export class TwoElement implements FreeformElement {
     // updates if you directly read/write to the TwoElement properties.
     this.ref = element;
 
-    change(() => {
+    updateDom(() => {
       element.textContent = this.textContent;
       this.attributes.forEach((value, key) => {
         element.setAttribute(key, value);
@@ -175,7 +175,7 @@ export class TwoElement implements FreeformElement {
       return;
     }
 
-    change(() => {
+    updateDom(() => {
       if (this.ref) {
         (this.ref as any)[key] = value;
       }
@@ -193,7 +193,7 @@ export class TwoElement implements FreeformElement {
       return;
     }
 
-    change(() => {
+    updateDom(() => {
       if (this.ref) {
         this.ref.setAttribute(key, value);
       }
@@ -208,7 +208,7 @@ export class TwoElement implements FreeformElement {
       return;
     }
 
-    change(() => {
+    updateDom(() => {
       if (this.ref) {
         this.ref.textContent = value;
       }

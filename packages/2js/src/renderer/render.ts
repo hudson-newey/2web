@@ -1,5 +1,5 @@
 import type { TwoElement } from "../elements/element";
-import { change } from "./updates";
+import { updateDom } from "../../../_shared/updateDom";
 
 export function render(
   target: HTMLElement,
@@ -8,7 +8,7 @@ export function render(
   twoElements.forEach((twoEl) => {
     const el = twoEl.toElement();
 
-    change(() => {
+    updateDom(() => {
       target.appendChild(el);
     });
 

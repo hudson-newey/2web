@@ -1,6 +1,6 @@
 import type { TwoElement } from "../elements/element";
 import type { ElementProperty } from "../elements/properties";
-import { change } from "../renderer/updates";
+import { updateDom } from "../../../_shared/updateDom";
 import type { Directive } from "./directive";
 
 type ClassPredicate = () => boolean;
@@ -14,7 +14,7 @@ export const classMap = (map: ClassMap): Directive => {
           ? propertyOrPredicate()
           : Boolean(propertyOrPredicate);
 
-      change(() => {
+      updateDom(() => {
         if (shouldHaveClass) {
           elementRef.classList.add(className);
         } else {

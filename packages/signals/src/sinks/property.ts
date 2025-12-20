@@ -1,3 +1,4 @@
+import { updateDom } from "../../../_shared/updateDom";
 import type { Signal } from "../signal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
@@ -14,6 +15,8 @@ export function property<
   const propName = unwrapSignal(name);
 
   signal.subscribe((value) => {
-    target[propName] = value;
+    updateDom(() => {
+      target[propName] = value;
+    });
   });
 }

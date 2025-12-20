@@ -1,3 +1,4 @@
+import { updateDom } from "../../../_shared/updateDom";
 import type { Signal } from "../signal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
@@ -15,10 +16,15 @@ export function attribute<
 
   signal.subscribe((value) => {
     if (value === null || value === undefined) {
-      target.removeAttribute(attributeName);
+      updateDom(() => {
+        target.removeAttribute(attributeName);
+      });
+
       return;
     }
 
-    target.setAttribute(attributeName, String(value));
+    updateDom(() => {
+      target.setAttribute(attributeName, String(value));
+    });
   });
 }

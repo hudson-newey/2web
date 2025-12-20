@@ -1,3 +1,4 @@
+import { updateDom } from "../../../_shared/updateDom";
 import type { Signal } from "../signal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
@@ -14,6 +15,8 @@ export function textContent<const T>(
   const target = unwrapSignal(node);
 
   signal.subscribe((value) => {
-    target.textContent = String(value);
+    updateDom(() => {
+      target.textContent = String(value);
+    });
   });
 }

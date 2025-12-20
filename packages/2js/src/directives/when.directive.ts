@@ -1,5 +1,5 @@
 import type { TwoElement } from "../elements/element";
-import { change } from "../renderer/updates";
+import { updateDom } from "../../../_shared/updateDom";
 import type { Directive } from "./directive";
 
 export const when = (
@@ -9,7 +9,7 @@ export const when = (
     const predicatePasses =
       typeof predicate === "function" ? predicate() : predicate;
 
-    change(() => {
+    updateDom(() => {
       if (predicatePasses) {
         elementRef.hidden = undefined;
       } else {

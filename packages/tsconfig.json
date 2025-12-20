@@ -14,7 +14,8 @@
     "view-transitions/**/*",
 
     "typescript/**/*",
-    "vite-plugin/**/*"
+    "vite-plugin/**/*",
+    "_shared/updateDom.ts"
   ],
   "compilerOptions": {
     "allowImportingTsExtensions": true

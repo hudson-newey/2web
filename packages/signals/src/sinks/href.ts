@@ -1,4 +1,5 @@
 import { unwrapSignal } from "../..";
+import { updateDom } from "../../../_shared/updateDom";
 import type { Signal } from "../signal";
 import type { MaybeSignal } from "../utils/unwrapSignal";
 
@@ -10,6 +11,8 @@ export function href<const T>(node: MaybeSignal<WithHref>, signal: Signal<T>) {
   const target = unwrapSignal(node);
 
   signal.subscribe((value) => {
-    target.href = String(value);
+    updateDom(() => {
+      target.href = String(value);
+    });
   });
 }
