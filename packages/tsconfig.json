@@ -15,7 +15,7 @@
 
     "typescript/**/*",
     "vite-plugin/**/*",
-    "_shared/updateDom.ts"
+    "_shared/**/*"
   ],
   "compilerOptions": {
     "allowImportingTsExtensions": true
