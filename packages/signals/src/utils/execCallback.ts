@@ -5,7 +5,7 @@ type ExecSubscriber = Signal<any>;
 
 type ExecReturnType<T> = {
   returnValue: T;
-  subscribers: Set<ExecSubscriber>;
+  dependencies: Set<ExecSubscriber>;
 };
 
 const signalBufferNamespace = "__2_web_kit_signalBuffer";
@@ -20,7 +20,7 @@ export function execCallback<T>(callback: ExecCallback<T>): ExecReturnType<T> {
 
   return {
     returnValue: returnValue,
-    subscribers: globalThis[signalBufferNamespace],
+    dependencies: globalThis[signalBufferNamespace],
   };
 }
 

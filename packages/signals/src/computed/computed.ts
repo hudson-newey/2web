@@ -1,18 +1,14 @@
 import { ReadonlySignal } from "../readonlySignal";
-import type { Signal } from "../signal";
 import { execCallback } from "../utils/execCallback";
 
 export function computed<T>(reducer: ComputedSignalReducer<T>) {
-  const { subscribers } = execCallback(reducer);
-
-  return new ComputedSignal(reducer, subscribers);
+  return new ComputedSignal(reducer);
 }
 
 class ComputedSignal<T> extends ReadonlySignal<T> {
-  public constructor(
-    reducer: ComputedSignalReducer<T>,
-    dependencies: ReadonlySet<Signal<unknown>>
-  ) {
+  public constructor(reducer: ComputedSignalReducer<T>) {
+    const { dependencies } = execCallback(reducer);
+
     super(reducer());
 
     for (const dependency of dependencies) {
