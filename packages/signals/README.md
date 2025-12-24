@@ -27,7 +27,7 @@ following script tag to your documents `<head>`.
   import { signal, computed, effect, textContent } from "@two-web/kit/signals";
 
   const count = signal(0);
-  const doubledCount = computed(() => count.value * 2, [count]);
+  const doubledCount = computed(() => count.value * 2);
 
   effect(() => {
     console.log(`New value is ${count.value}`);
@@ -81,9 +81,7 @@ method that will be triggered whenever the event handlers value changes.
   const username = eventHandler((event) => event.target.value);
   usernameInput.addEventListener("input", username);
 
-  const isUsernameInvalid = computed(() => {
-    username.value.length < 10,
-  }, [username]);
+  const isUsernameInvalid = computed(() => username.value.length < 10);
 
   attribute(registerButton, "disabled", isUsernameInvalid);
 </script>

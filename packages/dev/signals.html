@@ -29,10 +29,7 @@
         count.set(count.value + 1);
       });
 
-      const doubleCount = computed(
-        () => count.value * 2,
-        [count]
-      );
+      const doubleCount = computed(() => count.value * 2);
 
       const doubleCountElement = document.getElementById("double-count");
       textContent(doubleCountElement, doubleCount);
@@ -44,7 +41,7 @@
           "Double Count:",
           doubleCount.value
         );
-      }, [count]);
+      });
 
       // TimerSignal that updates every second
       const elapsedTime = timer({ interval: 1_000 });

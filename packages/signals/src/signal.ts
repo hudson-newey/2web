@@ -1,3 +1,5 @@
+import { addExecSubscriber } from "./utils/execCallback";
+
 /**
  * @description
  * Reactive signal that holds a value and notifies subscribers on changes.
@@ -18,6 +20,8 @@ export class Signal<T> {
   }
 
   public get value(): T {
+    addExecSubscriber(this);
+
     return this._value;
   }
 

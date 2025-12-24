@@ -41,11 +41,11 @@ can import the sub-package as a an esm module.
 
 ```html
 <script type="module">
-import { EventHandler, QuerySelector, textContent } from "@two-web/kit/signals";
+import { eventHandler, query, textContent } from "@two-web/kit/signals";
 
-const target = new QuerySignal("#counter");
+const target = query("#counter");
 
-const countHandler = new EventHandler((event, value) => value + 1);
+const countHandler = eventHandler((event, value) => value + 1);
 target.value.addEventListener("click", countHandler);
 
 textContent(target.value, countHandler);
