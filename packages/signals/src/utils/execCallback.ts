@@ -1,10 +1,11 @@
 import type { Signal } from "../signal";
 
 type ExecCallback<T> = () => T;
+type ExecSubscriber = Signal<any>;
 
 type ExecReturnType<T> = {
   returnValue: T;
-  subscribers: Set<Signal<any>>;
+  subscribers: Set<ExecSubscriber>;
 };
 
 const signalBufferNamespace = "__2_web_kit_signalBuffer";
@@ -23,13 +24,13 @@ export function execCallback<T>(callback: ExecCallback<T>): ExecReturnType<T> {
   };
 }
 
-export function addExecSubscriber(signal: Signal<any>) {
+export function addExecSubscriber(signal: ExecSubscriber) {
   globalThis[signalBufferNamespace].add(signal);
 }
 
 // This is a side effect to initialize the global signal buffer.
-globalThis[signalBufferNamespace] ??= new Set<Signal<any>>();
+globalThis[signalBufferNamespace] ??= new Set<ExecSubscriber>();
 
 declare global {
-  var __2_web_kit_signalBuffer: Set<Signal<any>>;
+  var __2_web_kit_signalBuffer: Set<ExecSubscriber>;
 }
