@@ -1,3 +1,4 @@
+import type { Pipe } from "./pipes/pipe";
 import { addExecSubscriber } from "./utils/execCallback";
 
 /**
@@ -13,6 +14,7 @@ export function signal<T>(value: T) {
  */
 export class Signal<T> {
   private readonly subscribers = new Set<Subscription<T>>();
+  private readonly pipes: Pipe<T>[] = [];
   private _value!: Readonly<T>;
 
   public constructor(initialValue: T) {
@@ -60,6 +62,11 @@ export class Signal<T> {
 
   public unsubscribe(callback: Subscription<T>): this {
     this.subscribers.delete(callback);
+    return this;
+  }
+
+  public pipe(...pipeFns: Pipe<T>[]): this {
+    this.pipes.push(...pipeFns);
     return this;
   }
 

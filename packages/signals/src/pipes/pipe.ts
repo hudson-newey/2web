@@ -1,3 +1,1 @@
-import type { Signal } from "../signal";
-
-export function pipe<T>(signal: Signal<T>, ...fns: Array<(value: T) => T>) {}
+export type Pipe<T> = (value: T) => T;
