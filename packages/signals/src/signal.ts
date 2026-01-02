@@ -99,7 +99,7 @@ export class Signal<T> {
   /**
    * Runs before the signal is created and before any value is set.
    */
-  public beforeCreate(...callbacks: BeforeCreateCallback<T>[]): this {
+  public beforeCreate(...callbacks: BeforeCreateCallback[]): this {
     for (const fn of callbacks) {
       this.onCreateCallbacks.add(fn);
     }
