@@ -42,11 +42,11 @@ export class Signal<T> {
     // stored in signals. This ensures that updates to signals are explicit
     // through the set() or update() methods.
     this._value = Object.freeze(newValue);
-    this.afterChange(newValue);
   }
 
   public set<U extends T>(newValue: U): this {
     this.value = newValue;
+    this.afterChange(newValue);
     return this;
   }
 
