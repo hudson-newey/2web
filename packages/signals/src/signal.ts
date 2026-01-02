@@ -31,14 +31,14 @@ export class Signal<T> {
 
     // We use a Promise to defer the initialization to that onCreation and pipes
     // can be set up before the first value is assigned.
-    new Promise(() => {
+    setTimeout(() => {
       this.value = Object.freeze(initialValue);
 
       // Run onCreate callbacks
       for (const callback of this.onCreateCallbacks) {
         callback(this.value);
       }
-    });
+    }, 0);
   }
 
   public get value(): T {
