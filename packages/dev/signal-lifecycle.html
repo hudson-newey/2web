@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@two-web/signals</title>
+    <link rel="stylesheet" href="dev-styles.css" />
+  </head>
+
+  <body>
+    <script type="module">
+      import { signal } from "../signals/index.ts";
+
+      using count = signal(0)
+        .onCreate((value) => {
+          console.log(`Count signal created with value ${value}`)
+        })
+        .onDestroy(() => {
+          console.log("Count signal destroyed");
+        })
+        .subscribe((value) => {
+          console.log("new value: ", value);
+        })
+
+      count.set(1);
+      count.set(2);
+      count.set(3);
+    </script>
+  </body>
+</html>

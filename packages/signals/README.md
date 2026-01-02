@@ -26,8 +26,8 @@ following script tag to your documents `<head>`.
 <script type="module">
   import { signal, computed, effect, textContent } from "@two-web/kit/signals";
 
-  const count = signal(0);
-  const doubledCount = computed(() => count.value * 2);
+  using count = signal(0);
+  using doubledCount = computed(() => count.value * 2);
 
   effect(() => {
     console.log(`New value is ${count.value}`);
@@ -54,14 +54,14 @@ method that will be triggered whenever the event handlers value changes.
   import { eventHandler, computed } from "@two-web/kit/signals";
 
   const target = document.getElementById("counter");
-  const countHandler = eventHandler((event, value) => {
+  using countHandler = eventHandler((event, value) => {
     const count = value + 1;
 
     event.target.textContent = count;
     return count;
   });
 
-  const doubleCount = computed(() => countHandler.value * 2);
+  using doubleCount = computed(() => countHandler.value * 2);
 
   target.addEventListener("click", countHandler);
 </script>
@@ -78,10 +78,10 @@ method that will be triggered whenever the event handlers value changes.
   const usernameInput = document.getElementById("username");
   const registerButton = document.getElementById("register-button");
 
-  const username = eventHandler((event) => event.target.value);
+  using username = eventHandler((event) => event.target.value);
   usernameInput.addEventListener("input", username);
 
-  const isUsernameInvalid = computed(() => username.value.length < 10);
+  using isUsernameInvalid = computed(() => username.value.length < 10);
 
   attribute(registerButton, "disabled", isUsernameInvalid);
 </script>
@@ -96,7 +96,7 @@ method that will be triggered whenever the event handlers value changes.
 correctly, signal state can be known at compile time.
 
 ```ts
-const greeting = signal("Hello");
+using greeting = signal("Hello");
 // ^? Signal<"Hello">;
 
 greeting.set("World!");
@@ -104,4 +104,26 @@ greeting.set("World!");
 
 greeting.update((value) => `Hello ${value}`);
 // ^? Signal<"Hello World">
+```
+
+## Lifecycle hooks
+
+We use the "using" keyword so that the onDestroy lifecycle hook is automatically
+called when the signal goes out of scope.
+
+```ts
+using count = signal(0)
+  .onCreate((value) => {
+    console.log(`Count signal created with value ${value}`)
+  })
+  .onDestroy(() => {
+    console.log("Count signal destroyed");
+  })
+  .subscribe((value) => {
+    console.log("new value: ", value);
+  })
+
+count.set(1);
+count.set(2);
+count.set(3);
 ```

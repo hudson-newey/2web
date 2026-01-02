@@ -19,7 +19,7 @@
         query,
       } from "../signals/index.ts";
 
-      const count = signal(0);
+      using count = signal(0);
 
       const targetButton = document.getElementById("counter-button");
       textContent(targetButton, count);
@@ -29,7 +29,7 @@
         count.set(count.value + 1);
       });
 
-      const doubleCount = computed(() => count.value * 2);
+      using doubleCount = computed(() => count.value * 2);
 
       const doubleCountElement = document.getElementById("double-count");
       textContent(doubleCountElement, doubleCount);
@@ -44,7 +44,7 @@
       });
 
       // TimerSignal that updates every second
-      const elapsedTime = timer({ interval: 1_000 });
+      using elapsedTime = timer({ interval: 1_000 });
       textContent(
         query("#elapsed-time"),
         elapsedTime,
