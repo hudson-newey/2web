@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "express": "^5.1.0",
-    "happy-dom": "17.4.7"
+    "happy-dom": "20.0.2"
   },
   "devDependencies": {
     "@total-typescript/tsconfig": "^1.0.4",
@@ -92,7 +92,7 @@
   },
   "peerDependencies": {
     "express": "^5.1.0",
-    "happy-dom": "17.4.7",
+    "happy-dom": "20.0.2",
     "vite": "^6.3.4"
   },
   "packageManager": "pnpm@10.8.0"
