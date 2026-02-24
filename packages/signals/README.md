@@ -113,7 +113,7 @@ called when the signal goes out of scope.
 
 ```ts
 using count = signal(0)
-  .onCreate((value) => {
+  .onFirstUpdate((value) => {
     console.log(`Count signal created with value ${value}`)
   })
   .onDestroy(() => {

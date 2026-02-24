@@ -57,11 +57,11 @@ class TimerSignal extends ReadonlySignal<number> {
 
     this.intervalId = setInterval(() => {
       this.elapsed += interval;
-      this.value = this.elapsed;
-
-      if (this.elapsed >= duration) {
-        this.stop();
-      }
+      this._internalSet(this.elapsed).then(() => {
+        if (this.elapsed >= duration) {
+          this.stop();
+        }
+      });
     }, interval);
 
     return this;

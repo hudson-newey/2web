@@ -12,8 +12,8 @@
       import { signal } from "../signals/index.ts";
 
       using count = signal(0)
-        .onCreate((value) => {
-          console.log(`Count signal created with value ${value}`)
+        .onFirstUpdate((value) => {
+          console.log(`Count signal first updated with value ${value}`)
         })
         .onDestroy(() => {
           console.log("Count signal destroyed");

@@ -1,8 +1,9 @@
 import { updateDom } from "../../../_shared/updateDom";
 import type { Signal } from "../signal";
+import { isSignal } from "../utils/isSignal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
-export function attribute<
+export async function attribute<
   Target extends HTMLElement,
   Attribute extends string,
   T
@@ -11,10 +12,10 @@ export function attribute<
   name: MaybeSignal<Attribute>,
   signal: Signal<T>
 ) {
-  const target = unwrapSignal(element);
-  const attributeName = unwrapSignal(name);
+  const fn = async (value: T | null) => {
+    const target = await unwrapSignal(element);
+    const attributeName = await unwrapSignal(name);
 
-  signal.subscribe((value) => {
     if (value === null || value === undefined) {
       updateDom(() => {
         target.removeAttribute(attributeName);
@@ -26,5 +27,15 @@ export function attribute<
     updateDom(() => {
       target.setAttribute(attributeName, String(value));
     });
-  });
+  };
+
+  signal.subscribe(fn);
+
+  if (isSignal(element)) {
+    element.subscribe(() => fn(signal.value));
+  }
+
+  if (isSignal(name)) {
+    name.subscribe(() => fn(signal.value));
+  }
 }

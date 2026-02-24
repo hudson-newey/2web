@@ -1,5 +1,6 @@
 import { updateDom } from "../../../_shared/updateDom";
 import type { Signal } from "../signal";
+import { isSignal } from "../utils/isSignal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
 /**
@@ -8,15 +9,20 @@ import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
  * of a signal.
  * This signal automatically escapes problematic characters to prevent XSS.
  */
-export function textContent<const T>(
+export async function textContent<const T>(
   node: MaybeSignal<Node>,
   signal: Signal<T>
 ) {
-  const target = unwrapSignal(node);
-
-  signal.subscribe((value) => {
-    updateDom(() => {
+  const fn = (value: T | null) => {
+    updateDom(async () => {
+      const target = await unwrapSignal(node);
       target.textContent = String(value);
     });
-  });
+  };
+
+  signal.subscribe(fn);
+
+  if (isSignal(node)) {
+    node.subscribe(() => fn(signal.value));
+  }
 }

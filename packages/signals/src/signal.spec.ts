@@ -1,19 +1,22 @@
 import { expect, test } from "vitest";
-import { Signal } from "./signal";
+import { signal } from "./signal";
+import { onFirstUpdate } from "./lifecycle/onFirstUpdate";
 
-test("should be able to change a signals value", () => {
-  const mySignal = new Signal(0);
+test("should be able to change a signals value", async () => {
+  const mySignal = signal(0);
+  await onFirstUpdate(mySignal);
 
-  mySignal.set(1);
+  await mySignal.set(1);
   expect(mySignal.value).toBe(1);
 
   // Test updating through the "update" method
-  mySignal.update((v) => v + 1);
+  await mySignal.update((v) => v + 1);
   expect(mySignal.value).toBe(2);
 });
 
-test("should notify subscribers when the value changes", () => {
-  const mySignal = new Signal("abc");
+test("should notify subscribers when the value changes", async () => {
+  const mySignal = signal("abc");
+  await onFirstUpdate(mySignal);
 
   let notifiedValue: string | null = null;
   const subscription = (value: string) => {
@@ -21,12 +24,12 @@ test("should notify subscribers when the value changes", () => {
   };
 
   mySignal.subscribe(subscription);
-  mySignal.set("def");
+  await mySignal.set("def");
 
   expect(notifiedValue).toBe("def");
 
   // Test that unsubscribe works
   mySignal.unsubscribe(subscription);
-  mySignal.set("ghi");
+  await mySignal.set("ghi");
   expect(notifiedValue).toBe("def"); // Should not have changed
 });

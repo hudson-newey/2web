@@ -19,9 +19,10 @@ import { ReadonlySignal } from "../readonlySignal";
  * ```
  */
 export function eventHandler<T, EventType extends Event>(
+  initialValue: T | null,
   reducer: EventHandlerReducer<EventType, T>
 ): EventHandler<T, EventType> {
-  return new EventHandler<T, EventType>(reducer);
+  return new EventHandler<T, EventType>(initialValue, reducer);
 }
 
 class EventHandler<
@@ -29,16 +30,17 @@ class EventHandler<
   EventType extends Event
 > extends ReadonlySignal<T | null> {
   public constructor(
+    initialValue: T | null,
     private readonly reducer: EventHandlerReducer<EventType, T>
   ) {
-    super(null);
+    super(initialValue);
   }
 
   // handleEvent is a special method that allows this class to be passed
   // directly to addEventListener as the event listener.
   // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback
   public handleEvent(event: EventType) {
-    this.value = this.reducer(event, this.value);
+    this._internalSet(this.reducer(event, this.value));
   }
 }
 

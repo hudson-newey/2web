@@ -18,9 +18,11 @@ const signalBufferNamespace = "__2_web_kit_signalBuffer";
 export function execCallback<T>(callback: ExecCallback<T>): ExecReturnType<T> {
   const returnValue = callback();
 
+  const signalBuffer = globalThis[signalBufferNamespace];
+
   return {
     returnValue: returnValue,
-    dependencies: globalThis[signalBufferNamespace],
+    dependencies: signalBuffer,
   };
 }
 

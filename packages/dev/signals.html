@@ -44,7 +44,7 @@
       });
 
       // TimerSignal that updates every second
-      using elapsedTime = timer({ interval: 1_000 });
+      using elapsedTime = timer({ interval: 100 });
       textContent(
         query("#elapsed-time"),
         elapsedTime,

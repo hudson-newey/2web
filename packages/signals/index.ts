@@ -33,7 +33,18 @@ export { timeout } from "./src/pipes/timeout.ts";
 export { until } from "./src/pipes/until.ts";
 
 // Lifecycle
-export { onError } from "./src/lifecycle/onError.ts";
+export {
+  type OnFirstUpdateCallback,
+  onFirstUpdate,
+} from "./src/lifecycle/onFirstUpdate.ts";
+export {
+  type OnDestroyCallback,
+  onDestroy,
+} from "./src/lifecycle/onDestroy.ts";
+export {
+  type OnCreateCallback,
+  onCreate,
+} from "./src/lifecycle/onBeforeCreate.ts";
 
 // Utilities
 export { isSignal } from "./src/utils/isSignal.ts";
@@ -47,3 +58,4 @@ export { property } from "./src/sinks/property.ts";
 export { textContent } from "./src/sinks/textContent.ts";
 export { href } from "./src/sinks/href.ts";
 export { queryParameter } from "./src/sinks/queryParameters.ts";
+export { eventListener } from "./src/sources/eventListener.ts";

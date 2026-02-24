@@ -13,7 +13,7 @@ export function resource<T, ResourceUrl extends string>(
   urlInput: MaybeSignal<ResourceUrl>,
   optionsInput?: MaybeSignal<ResourceSignalOptions>
 ) {
-  return new ResourceSignal<T, ResourceUrl>(urlInput, optionsInput);
+  return new ResourceSignal<T, ResourceUrl>().init(urlInput, optionsInput);
 }
 
 export interface ResourceSignalOptions extends RequestInit {
@@ -36,19 +36,17 @@ class InternalResourceSignal<
   T,
   ResourceUrl extends string
 > extends ReadonlySignal<Resource<T> | null> {
-  private readonly url: ResourceUrl;
-  private readonly options?: ResourceSignalOptions;
+  private url: ResourceUrl | null = null;
+  private options?: ResourceSignalOptions;
 
-  public constructor(
+  public async _init(
     urlInput: MaybeSignal<ResourceUrl>,
     optionsInput?: MaybeSignal<ResourceSignalOptions>
   ) {
-    super(null);
-
-    this.url = unwrapSignal(urlInput);
+    this.url = await unwrapSignal(urlInput);
 
     if (optionsInput !== undefined) {
-      this.options = unwrapSignal(optionsInput);
+      this.options = await unwrapSignal(optionsInput);
     }
   }
 
@@ -57,8 +55,12 @@ class InternalResourceSignal<
   }
 
   private async refreshResource() {
+    if (this.url === null) {
+      return null;
+    }
+
     const response = await fetch(this.url, this.options);
-    this.value = response as any;
+    this._internalSet(response as any);
   }
 }
 

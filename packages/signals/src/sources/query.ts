@@ -1,4 +1,5 @@
 import { ReadonlySignal } from "../readonlySignal";
+import { isSignal } from "../utils/isSignal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
 /**
@@ -9,37 +10,46 @@ import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 export function query<ElementType extends HTMLElement>(
   querySelector: MaybeSignal<string>
 ) {
-  return new QuerySignal<ElementType>(querySelector);
+  return new QuerySignal<ElementType>().init(querySelector);
 }
 
 class QuerySignal<
   ElementType extends HTMLElement
 > extends ReadonlySignal<ElementType | null> {
-  private readonly selector: string;
+  private selector: string | null = null;
 
-  public constructor(querySelector: MaybeSignal<string>) {
-    const initialElement = document.querySelector<ElementType>(
-      unwrapSignal(querySelector)
-    );
+  public async init(querySelector: MaybeSignal<string>): Promise<this> {
+    this.selector = await unwrapSignal(querySelector);
 
-    super(initialElement);
+    const initialElement = this.getElement();
+    this._internalSet(initialElement);
 
-    this.selector = unwrapSignal(querySelector);
     const observerConfig = {
       attributes: true,
       attributeFilter: ["class", "style"],
       attributeOldValue: true,
     };
 
-    const callback = () => {
-      this.value = this.getElement();
+    const fn = async () => {
+      this.selector = await unwrapSignal(querySelector);
+      this._internalSet(this.getElement());
     };
 
-    const observer = new MutationObserver(callback);
+    const observer = new MutationObserver(fn);
     observer.observe(initialElement ?? document, observerConfig);
+
+    if (isSignal(querySelector)) {
+      querySelector.subscribe(fn);
+    }
+
+    return this;
   }
 
   private getElement(): ElementType | null {
+    if (!this.selector) {
+      return null;
+    }
+
     return document.querySelector<ElementType>(this.selector);
   }
 }

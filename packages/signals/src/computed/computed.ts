@@ -13,7 +13,7 @@ class ComputedSignal<T> extends ReadonlySignal<T> {
 
     for (const dependency of dependencies) {
       dependency.subscribe(() => {
-        this.value = reducer();
+        this._internalSet(reducer());
       });
     }
   }

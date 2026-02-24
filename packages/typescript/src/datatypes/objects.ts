@@ -4,7 +4,7 @@
  * This type is a more accurate representation of a plain JavaScript objects
  * that also supports structural typing.
  */
-export type ObjectType<Keys extends PropertyKey = string, Values = unknown> = {
+export type ObjectType<Keys extends PropertyKey = PropertyKey, Values = unknown> = {
   [key in Keys]: Values;
 };
 

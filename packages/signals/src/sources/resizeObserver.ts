@@ -1,4 +1,5 @@
 import { ReadonlySignal } from "../readonlySignal";
+import { isSignal } from "../utils/isSignal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
 /**
@@ -7,27 +8,47 @@ import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
  * of the queried element changes.
  */
 export function resizeObserver<ObservedElements extends MaybeSignal<Element[]>>(
-  observedElements: ObservedElements
+  observedElements: ObservedElements,
 ) {
-  return new ResizeObserverSignal(observedElements);
+  return new ResizeObserverSignal().init(observedElements);
 }
 
 class ResizeObserverSignal<
-  ObservedElements extends MaybeSignal<Element[]>
+  ObservedElements extends MaybeSignal<Element[]>,
 > extends ReadonlySignal<ResizeObserverEntry[]> {
-  public constructor(observedElements: ObservedElements) {
+  public constructor() {
     super([]);
+  }
 
-    const callback: ResizeObserverCallback = (
-      entries: ResizeObserverEntry[]
-    ) => {
-      this.value = entries;
+  public async init(observedElements: ObservedElements) {
+    const observedTargets = new Set<Element>;
+
+    const observer = new ResizeObserver(
+      async (entries: ResizeObserverEntry[]) => {
+        this._internalSet(entries);
+      },
+    );
+
+    const observe = (element: Element) => {
+      if (observedTargets.has(element)) return;
+
+      observedTargets.add(element);
+      observer.observe(element);
     };
 
-    const targets = unwrapSignal(observedElements);
-    const observer = new ResizeObserver(callback);
+    const targets = await unwrapSignal(observedElements);
     for (const element of targets) {
-      observer.observe(element);
+      observe(element);
+    }
+
+    if (isSignal(observedElements)) {
+      observedElements.subscribe((elements) => {
+        if (!elements) return;
+
+        for (const element of elements) {
+          observe(element);
+        }
+      });
     }
   }
 }

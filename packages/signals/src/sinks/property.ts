@@ -1,8 +1,9 @@
 import { updateDom } from "../../../_shared/updateDom";
 import type { Signal } from "../signal";
+import { isSignal } from "../utils/isSignal";
 import { unwrapSignal, type MaybeSignal } from "../utils/unwrapSignal";
 
-export function property<
+export async function property<
   Target extends HTMLElement,
   Property extends keyof Target,
   T extends Target[Property]
@@ -11,12 +12,22 @@ export function property<
   name: MaybeSignal<Property>,
   signal: Signal<T>
 ) {
-  const target = unwrapSignal(element);
-  const propName = unwrapSignal(name);
+  const fn = async (value: T | null) => {
+    const target = await unwrapSignal(element);
+    const propName = await unwrapSignal(name);
 
-  signal.subscribe((value) => {
     updateDom(() => {
-      target[propName] = value;
+      (target[propName] as unknown) = value;
     });
-  });
+  }
+
+  signal.subscribe(fn);
+
+  if (isSignal(element)) {
+    element.subscribe(() => fn(signal.value));
+  }
+
+  if (isSignal(name)) {
+    name.subscribe(() => fn(signal.value));
+  }
 }
