@@ -1,4 +1,3 @@
-import type { Pipe } from "./pipes/pipe";
 import { addExecSubscriber } from "./utils/execCallback";
 
 /**
@@ -14,36 +13,17 @@ export function signal<T>(value: T) {
  */
 export class Signal<T> {
   private readonly subscribers = new Set<Subscription<T>>();
-  private readonly beforeCreateCallbacks = new Set<BeforeCreateCallback>();
-  private readonly onCreateCallbacks = new Set<OnCreateCallback<T>>();
-  private readonly onDestroyCallbacks = new Set<OnDestroyCallback<T>>();
 
-  // Pipes are an array instead of a Set to preserve order of execution and so
-  // that duplicates are allowed.
-  private readonly pipes: Pipe<T>[] = [];
   private _value!: Readonly<T>;
 
   public constructor(initialValue: T) {
-    // Before we set any value, we run the beforeCreate callbacks
-    for (const callback of this.beforeCreateCallbacks) {
-      callback();
-    }
-
     // We use a Promise to defer the initialization to that onCreation and pipes
     // can be set up before the first value is assigned.
-    new Promise(() => {
-      this.value = Object.freeze(initialValue);
-
-      // Run onCreate callbacks
-      for (const callback of this.onCreateCallbacks) {
-        callback(this.value);
-      }
-    });
+    this.value = Object.freeze(initialValue);
   }
 
   public get value(): T {
     addExecSubscriber(this);
-
     return this._value;
   }
 
@@ -62,7 +42,6 @@ export class Signal<T> {
     // stored in signals. This ensures that updates to signals are explicit
     // through the set() or update() methods.
     this._value = Object.freeze(newValue);
-    this.afterChange(newValue);
   }
 
   public set<U extends T>(newValue: U): this {
@@ -79,7 +58,6 @@ export class Signal<T> {
     for (const fn of callbacks) {
       this.subscribers.add(fn);
     }
-
     return this;
   }
 
@@ -90,66 +68,8 @@ export class Signal<T> {
 
     return this;
   }
-
-  public pipe(...pipeFns: Pipe<T>[]): this {
-    this.pipes.push(...pipeFns);
-    return this;
-  }
-
-  /**
-   * Runs before the signal is created and before any value is set.
-   */
-  public beforeCreate(...callbacks: BeforeCreateCallback[]): this {
-    for (const fn of callbacks) {
-      this.onCreateCallbacks.add(fn);
-    }
-
-    return this;
-  }
-
-  /**
-   * Executed only once, the first time the signal's value is accessed.
-   * The signal is returned to allow method chaining.
-   */
-  public onCreate(...callbacks: OnCreateCallback<T>[]): this {
-    for (const fn of callbacks) {
-      this.onCreateCallbacks.add(fn);
-    }
-
-    return this;
-  }
-
-  /**
-   * Executed only once, when the signal is destroyed.
-   * The signal is returned to allow method chaining.
-   * You will need to use the "using" keyword to hook into the signal's
-   * onDestroy lifecycle.
-   */
-  public onDestroy(...callbacks: OnDestroyCallback<T>[]): this {
-    for (const fn of callbacks) {
-      this.subscribers.delete(fn);
-    }
-
-    return this;
-  }
-
-  // Lifecycle hook that can be overridden by subclasses
-  protected afterChange(newValue: T): void {
-    for (const subscription of this.subscribers) {
-      subscription(newValue);
-    }
-  }
-
-  protected [Symbol.dispose]() {
-    for (const callback of this.onDestroyCallbacks) {
-      callback(this.value);
-    }
-  }
 }
 
 // These void types allow any return type from the callback functions, but will
 // enforce that the return type is not used.
 type Subscription<T> = (value: T) => void;
-type BeforeCreateCallback = () => void;
-type OnCreateCallback<T> = (value: T) => void;
-type OnDestroyCallback<T> = (value: T) => void;
