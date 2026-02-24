@@ -97,7 +97,6 @@ instead supposed to patch quirks.
 
 You should **consider** using the following libraries with 2Web.
 
-- [htmx](https://htmx.org/)
 - [Tailwind preflight (for css reset)](https://tailwindcss.com/docs/preflight)
 - [zod (for form/input validation)](https://zod.dev/)
 - [Injection-js (for DI)](https://github.com/mgechev/injection-js)
