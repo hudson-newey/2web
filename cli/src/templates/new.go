@@ -54,8 +54,8 @@ var packageJsonContent string = fmt.Sprintf(`{
     "@two-web/cli": "%s",
     "playwright": "^1.56.1",
     "typescript": "^5.9.3",
-    "oxlint": "^1.28.0",
-    "prettier": "^3.6.2"
+    "oxlint": "^1.50.0",
+    "oxfmt": "^0.35.0"
   }
 }
 `, twoWebVersion, twoWebVersion, twoWebVersion)

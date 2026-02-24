@@ -8,7 +8,6 @@
     "ms-vscode.vscode-typescript-next",
     "zignd.html-css-class-completion",
     "oxc.oxc-vscode",
-    "esbenp.prettier-vscode",
     "ms-playwright.playwright"
   ]
 }

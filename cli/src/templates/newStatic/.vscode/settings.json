@@ -3,7 +3,9 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "editor.tabSize": 2,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
     "source.organizeImports": "always",

@@ -183,8 +183,8 @@ These dependencies can be temporarily downloaded when needed (e.g. through npx)
 although, it is recommended to install these dependencies globally if used
 frequently, and in the projects `node_modules/` for larger projects.
 
-| Dependency                                       | Required for  |
-| ------------------------------------------------ | ------------- |
-| [Vite](https://vite.dev)                         | `2web serve`  |
-| [oxlint](https://oxc.rs/docs/guide/usage/linter) | `2web lint`   |
-| [prettier](https://prettier.io/)                 | `2web format` |
+| Dependency                                         | Required for  |
+| -------------------------------------------------- | ------------- |
+| [Vite](https://vite.dev)                           | `2web serve`  |
+| [oxlint](https://oxc.rs/docs/guide/usage/linter)   | `2web lint`   |
+| [oxfmt](https://oxc.rs/docs/guide/usage/formatter) | `2web format` |

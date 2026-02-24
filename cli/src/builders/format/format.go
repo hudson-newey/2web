@@ -7,24 +7,16 @@ import (
 )
 
 func FormatSolution(args []string) {
-	config, err := configs.PrettierConfigLocation()
+	config, err := configs.OxFmtConfigLocation()
 	pathTargets := builders.EntryTargets(args)
 
 	hasFormatConfig := err == nil
 	if hasFormatConfig {
-		cliArgs := append(
-			[]string{
-				"prettier",
-				"--write",
-				"--config",
-				config,
-			},
-			pathTargets...,
-		)
+		cliArgs := append([]string{"oxfmt", "-c", config}, pathTargets...)
 
 		packages.ExecutePackage(cliArgs...)
 	} else {
-		cliArgs := append([]string{"prettier", "--write"}, pathTargets...)
+		cliArgs := append([]string{"oxfmt"}, pathTargets...)
 		packages.ExecutePackage(cliArgs...)
 	}
 }
