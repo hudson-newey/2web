@@ -102,3 +102,4 @@ You should **consider** using the following libraries with 2Web.
 - [Injection-js (for DI)](https://github.com/mgechev/injection-js)
 - [Lion](https://lion.js.org/)
 - [deno std library](https://jsr.io/@std)
+- [ts-toolbelt](https://github.com/millsp/ts-toolbelt)
