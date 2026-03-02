@@ -34,10 +34,6 @@
       "import": "./dist/iron.js",
       "types": "./dist/iron/index.d.ts"
     },
-    "./keyboard": {
-      "import": "./dist/keyboard.js",
-      "types": "./dist/keyboard/index.d.ts"
-    },
     "./named-strings": {
       "import": "./dist/named-strings.js",
       "types": "./dist/named-strings/index.d.ts"

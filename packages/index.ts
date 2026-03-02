@@ -6,7 +6,6 @@ console.warn(
 
 export * from "./animations/index.ts";
 export * from "./iron/index.ts";
-export * from "./keyboard/index.ts";
 export * from "./named-strings/index.ts";
 export * from "./pre-fetcher/index.ts";
 export * from "./route-guards/index.ts";

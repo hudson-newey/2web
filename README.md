@@ -103,3 +103,4 @@ You should **consider** using the following libraries with 2Web.
 - [Lion](https://lion.js.org/)
 - [deno std library](https://jsr.io/@std)
 - [ts-toolbelt](https://github.com/millsp/ts-toolbelt)
+- [tanstack/hotkeys](https://tanstack.com/hotkeys/latest)

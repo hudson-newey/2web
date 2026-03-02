@@ -6,7 +6,6 @@ A collection of packages to enhance your 2web application
 | ---------------------------------------------- | ----- |
 | [animations](animations/README.md)             | 🔧     |
 | [iron](iron/README.md)                         | 🔧     |
-| [keyboard](keyboard/README.md)                 | 🔧     |
 | [named-strings](named-strings/README.md)       | 🔧     |
 | [pre-fetcher](pre-fetcher/README.md)           | 🔧     |
 | [route-guards](route-guards/README.md)         | 🔧     |
