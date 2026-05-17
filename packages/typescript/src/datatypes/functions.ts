@@ -17,3 +17,11 @@ export type FunctionType<
 export type Synchronous<F> = F extends (...args: any[]) => Promise<unknown>
   ? never
   : F;
+
+/**
+  * @description
+  * A function that MUST be asynchronous.
+  */
+export type Asynchronous<F> = F extends (...args: any[]) => Promise<unknown>
+  ? F
+  : never;
