@@ -11,6 +11,7 @@ const (
 	Pnpm
 	Yarn
 	Bun
+	Deno
 	None
 )
 
@@ -23,6 +24,8 @@ func DeterminePackageManager() PackageManager {
 		return Yarn
 	} else if fileExists("bun.lock") {
 		return Bun
+	} else if fileExists("deno.lock") {
+		return Deno
 	}
 
 	return None

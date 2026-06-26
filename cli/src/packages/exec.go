@@ -22,10 +22,13 @@ import (
 // up changing the format, they will provide enough time for me to adjust
 // the shell command.
 func ExecutePackage(args ...string) {
-	internalExecute(args, true)
+	nodeModulesExecute(args, true)
 }
 
-func internalExecute(args []string, allowFallback bool) {
+func ExecuteFile(args ...string) {
+}
+
+func nodeModulesExecute(args []string, allowFallback bool) {
 	packageManager := DeterminePackageManager()
 
 	if packageManager == None {
@@ -88,6 +91,9 @@ func packageManagerPath(packageManager PackageManager) string {
 		return "yarn"
 	case Bun:
 		return "bun"
+	case Deno:
+		cli.PrintError("Deno support for this operation is not supported.")
+		panic("unreachable")
 	}
 
 	cli.PrintError("unknown package manager")
