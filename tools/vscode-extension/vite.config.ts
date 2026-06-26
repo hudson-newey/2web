@@ -8,6 +8,11 @@ const nodeExternals = [
 ];
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      ws: resolve(__dirname, "node_modules/ws/index.js"),
+    },
+  },
   build: {
     target: "node18",
     outDir: "dist",

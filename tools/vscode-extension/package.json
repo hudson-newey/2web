@@ -7,9 +7,9 @@
   "displayName": "2web",
   "description": "2Web support for VSCode",
   "version": "0.0.1",
+  "type": "commonjs",
   "publisher": "hudson-newey",
   "icon": "./icons/2web.png",
-  "main": "./dist/extension.js",
   "categories": [
     "Programming Languages",
     "Snippets"
@@ -17,6 +17,14 @@
   "engines": {
     "vscode": "^1.125.0"
   },
+  "activationEvents": [
+    "onLanguage:html",
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascriptreact"
+  ],
+  "main": "./dist/extension.js",
   "contributes": {
     "languages": [
       {
@@ -49,9 +57,13 @@
       }
     ]
   },
+  "dependencies": {
+    "ws": "^8.21.0"
+  },
   "devDependencies": {
     "@types/node": "^22.15.17",
     "@types/vscode": "^1.125.0",
+    "@types/ws": "^8.18.1",
     "@vscode/vsce": "^3.9.2",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"

@@ -320,14 +320,12 @@ func watchFiles(inPath string, outPath string, relativeOutPath string) {
 }
 
 func handleFileChange(inPath string, outPath string) {
-	cli.ClearConsole()
-
 	buildAssets(inPath, outPath)
-	fmt.Println("🔄 Asset build complete, reloading clients...")
 	notifyClients()
 }
 
 func buildAssets(inPath string, outPath string) {
+	cli.ClearConsole()
 	fmt.Println("📦 Building assets...")
 	build.BuildPath(inPath, outPath)
 }
@@ -377,4 +375,7 @@ func notifyClients() {
 			delete(clients, client)
 		}
 	}
+
+	// Log after complete so hot path is clear of logs to reduce perf hit.
+	fmt.Println("📣 Sent reload client notification")
 }
