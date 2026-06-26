@@ -6,6 +6,7 @@ tasks:
       - "build:cli"
       - "build:compiler"
       - "build:mcp"
+      - "build:vscode-extension"
 
   install:
     cmds:
@@ -27,3 +28,8 @@ tasks:
     dir: "./tools/mcp"
     cmds:
       - go build -o ./bin/2web-mcp ./src/main.go
+
+  "build:vscode-extension":
+    dir: "./tools/vscode-extension"
+    cmds:
+      - pnpm build
