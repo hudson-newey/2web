@@ -20,7 +20,7 @@ func DeterminePackageManager() PackageManager {
 		return Npm
 	} else if fileExists("pnpm-lock.yaml") || fileExists("pnpm-lock.yml") {
 		return Pnpm
-	} else if fileExists("yarn.lock") {
+	} else if fileExists("yarn.lock") || fileExists(".pnp.js") || fileExists(".pnp.cjs") {
 		return Yarn
 	} else if fileExists("bun.lock") {
 		return Bun
