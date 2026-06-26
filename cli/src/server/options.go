@@ -1,5 +1,6 @@
 package server
 
 type Options struct {
-	NoWatch bool
+	WatchFiles bool
+	AutoReload bool
 }

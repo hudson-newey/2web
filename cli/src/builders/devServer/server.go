@@ -54,7 +54,8 @@ func serveInbuilt(args []string) {
 
 	server.Run(inPath, outPath, server.Options{
 		// TODO: Refactor to use go flags package
-		NoWatch: slices.Contains(args, "--no-watch"),
+		WatchFiles: !slices.Contains(args, "--no-watch"),
+		AutoReload: !slices.Contains(args, "--no-auto-reload"),
 	})
 }
 

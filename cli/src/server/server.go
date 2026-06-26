@@ -58,7 +58,7 @@ func runDevServer(inPath string, outPath string, options Options) {
 	// updated and the file watcher being notified.
 	// To get around this, we've created a notification system so that IDE's can
 	// directly talk to the server and notify them when they finish saving a file.
-	if !options.NoWatch {
+	if options.WatchFiles {
 		// Start file watcher in a separate goroutine
 		go watchFiles(absInPath, absOutPath, outPath)
 	}
@@ -66,12 +66,15 @@ func runDevServer(inPath string, outPath string, options Options) {
 	// Setup HTTP server
 	mux := http.NewServeMux()
 
-	// WebSocket endpoint for live reload
+	// We always attach the websocket just in case third paries want to use the
+	// notification socket.
+	// When you use the --no-auto-reload, it only stops injecting the listener
+	// into the returned dev page.
 	mux.HandleFunc("/__2web_updates", handleWebSocket)
 
 	// Serve static files with HTML injection
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		serveFileWithReload(w, r, absOutPath)
+		serveFile(w, r, absOutPath, options.AutoReload)
 	})
 
 	port := "2000"
@@ -116,16 +119,17 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func serveFileWithReload(
+func serveFile(
 	w http.ResponseWriter,
 	r *http.Request,
 	rootPath string,
+	injectAutoReload bool,
 ) {
 	// Clean the URL path
 	urlPath := r.URL.Path
 
-	// If the url path does not include a .html extension and does not end with a
-	// slash, try to serve the .html file
+	// If the url path does not include a file extension and does not end with a
+	// slash, try to serve a .html file under the same route.
 	if !strings.HasSuffix(urlPath, "/") && !strings.Contains(filepath.Base(urlPath), ".") {
 		tryPath := urlPath + ".html"
 		fullTryPath := filepath.Join(rootPath, filepath.Clean(tryPath))
@@ -136,7 +140,6 @@ func serveFileWithReload(
 
 	log.Printf("📄 Serving file: %s", urlPath)
 
-	// Construct file path
 	filePath := filepath.Join(rootPath, filepath.Clean(urlPath))
 
 	// Security check: ensure the file is within the root path
@@ -192,7 +195,7 @@ func serveFileWithReload(
 	}
 
 	// Inject live reload script for HTML files
-	if strings.Contains(contentType, "text/html") {
+	if strings.Contains(contentType, "text/html") && injectAutoReload {
 		content = injectLiveReload(content)
 	}
 

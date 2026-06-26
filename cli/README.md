@@ -111,9 +111,10 @@ want to install npm or node.js.
 
 #### Serve Command Flags & Arguments
 
-| Command      | Alias | Description                    |
-| ------------ | ----- | ------------------------------ |
-| `--no-watch` |       | Do not watch files for changes |
+| Command            | Alias | Description                           |
+| ------------------ | ----- | ------------------------------------- |
+| `--no-watch`       |       | Do not watch files for changes        |
+| `--no-auto-reload` |       | Do not automatically reload dev pages |
 
 ### Build Command
 
