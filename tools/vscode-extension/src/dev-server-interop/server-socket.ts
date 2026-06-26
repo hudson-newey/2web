@@ -10,7 +10,13 @@ export function connectDevServer(
 ): void {
   connectWebSocket();
 
-  const supportedLanguages = ["2web", "html", "typescript", "javascript"];
+  const supportedLanguages = [
+    "2web",
+    "html",
+    "css",
+    "typescript",
+    "javascript",
+  ];
 
   const disposable = vscode.workspace.onDidSaveTextDocument(
     (document: vscode.TextDocument) => {

@@ -19,6 +19,7 @@
   },
   "activationEvents": [
     "onLanguage:html",
+    "onLanguage:css",
     "onLanguage:typescript",
     "onLanguage:javascript",
     "onLanguage:typescriptreact",
