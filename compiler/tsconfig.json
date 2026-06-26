@@ -1,15 +1,8 @@
 {
+  "extends": "../tsconfig.base.json",
   "include": ["src", "dev", "types"],
   "compilerOptions": {
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "target": "ESNext",
-    "newLine": "lf",
-    "module": "ESNext",
     "types": ["vite/client", "./types/index"],
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "checkJs": true,
-    "allowJs": true
   }
 }

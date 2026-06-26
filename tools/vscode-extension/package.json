@@ -1,16 +1,21 @@
 {
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build && vsce package --no-dependencies --allow-missing-repository --skip-license -o dist/$npm_package_name-$npm_package_version.vsix"
+  },
   "name": "2web",
   "displayName": "2web",
   "description": "2Web support for VSCode",
   "version": "0.0.1",
   "publisher": "hudson-newey",
   "icon": "./icons/2web.png",
+  "main": "./dist/extension.js",
   "categories": [
     "Programming Languages",
     "Snippets"
   ],
   "engines": {
-    "vscode": "^1.92.0"
+    "vscode": "^1.125.0"
   },
   "contributes": {
     "languages": [
@@ -43,5 +48,12 @@
         "path": "./snippets/2web.json"
       }
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "@types/vscode": "^1.125.0",
+    "@vscode/vsce": "^3.9.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
   }
 }

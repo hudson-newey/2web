@@ -1,0 +1,17 @@
+{
+  "exclude": ["node_modules", ".vscode-test"],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext"],
+    "newLine": "lf",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "checkJs": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+  }
+}

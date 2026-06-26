@@ -1,4 +1,15 @@
-.vscode/**
-.vscode-test/**
-.gitignore
-vsc-extension-quickstart.md
+# Start from excluding everything, then opt-in required extension files.
+**/*
+
+!package.json
+!README.md
+!LICENSE*
+
+!snippets/**
+
+!icons/**
+
+!language-configuration.json
+!syntaxes/**
+
+!dist/**
