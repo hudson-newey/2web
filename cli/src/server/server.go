@@ -31,6 +31,8 @@ var (
 
 //go:embed static/liveReload.js
 var liveReloadScript string
+var actionSocketInPath string
+var actionSocketOutPath string
 
 var liveReloadTemplate = fmt.Sprintf(`
 <script type="module">%s</script>
@@ -78,6 +80,8 @@ func runDevServer(inPath string, outPath string, options Options) {
 	// When listened to, the __2web_actions socket allows consumers to dispatch
 	// actions to the sever in real time.
 	// E.g. reload clients, re-compile source, stop server, etc...
+	actionSocketInPath = inPath
+	actionSocketOutPath = outPath
 	mux.HandleFunc("/__2web_actions", actionSocket)
 
 	// Serve static files with HTML injection
@@ -145,7 +149,8 @@ func actionSocket(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	// Purposely start at 1 so that an empty message is a noop
-	const RELOAD_CLIENTS byte = 0o1
+	const RECOMPILE_SOURCE byte = 0o1
+	const RELOAD_CLIENTS byte = 0o2
 
 	for {
 		_, body, err := conn.ReadMessage()
@@ -155,10 +160,12 @@ func actionSocket(w http.ResponseWriter, r *http.Request) {
 
 		// First 8 bits (byte) of an action request is the command.
 		// This lets us quickly determine the handler.
-		// start with the RELOAD_CLIENTS handler first so that realtime reloads is
+		// start with the recompile handler first so that realtime reloads is
 		// the first codepath checked.
 		command := body[0]
-		if (command & RELOAD_CLIENTS) > 0 {
+		if (command & RECOMPILE_SOURCE) > 0 {
+			handleFileChange(actionSocketInPath, actionSocketOutPath)
+		} else if (command & RELOAD_CLIENTS) > 0 {
 			notifyClients()
 		}
 	}

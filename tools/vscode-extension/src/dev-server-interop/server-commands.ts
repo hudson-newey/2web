@@ -5,7 +5,10 @@ export interface DevServerAction {
 }
 
 export const DEV_SERVER_ACTIONS = {
-  RELOAD_CLIENTS: {
+  RECOMPILE_SOURCE: {
     command: 0o1,
+  },
+  RELOAD_CLIENTS: {
+    command: 0o2,
   },
 } as const satisfies Record<string, DevServerAction>;

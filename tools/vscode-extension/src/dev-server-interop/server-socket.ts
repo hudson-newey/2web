@@ -15,12 +15,7 @@ export function connectDevServer(
   const disposable = vscode.workspace.onDidSaveTextDocument(
     (document: vscode.TextDocument) => {
       if (supportedLanguages.includes(document.languageId)) {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          ws.send(DEV_SERVER_ACTIONS.RELOAD_CLIENTS.command);
-          console.log("");
-        } else {
-          console.warn("WebSocket is not open. Cannot send message.");
-        }
+        dispatchAction(DEV_SERVER_ACTIONS.RECOMPILE_SOURCE);
       }
     },
   );
@@ -54,7 +49,7 @@ function connectWebSocket(): void {
 function dispatchAction(action: Readonly<DevServerAction>): void {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
 
-  ws.send(DEV_SERVER_ACTIONS.RELOAD_CLIENTS.command, (error) => {
+  ws.send(action.command, (error) => {
     console.error("failed to dispatch dev server action", { action, error });
   });
 }
