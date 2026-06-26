@@ -10,7 +10,6 @@ import (
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/content/txt"
-	"hudson-newey/2web/src/content/xml"
 	"hudson-newey/2web/src/content/xslt"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/models/reactiveEvent"
@@ -30,6 +29,14 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	pageModel.Html.AddContent(htmlContent)
 
 	addRouteAssets(&pageModel)
+
+	// Raw text files should be returned without modification since they are "raw"
+	// data formats.
+	// Adding additional functionality on top of these formats is nonsensical and
+	// would only increase the surface for bugs.
+	if txt.IsTxtFile(filePath) {
+		return pageModel
+	}
 
 	for _, node := range parsedAst {
 		if ast.HasCssContent(node) {
@@ -55,9 +62,7 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	// files.
 	if assets.IsMarkupFile(filePath) &&
 		!markdown.IsMarkdownFile(filePath) &&
-		!xml.IsXmlFile(filePath) &&
-		!xslt.IsXsltFile(filePath) &&
-		!txt.IsTxtFile(filePath) {
+		!xslt.IsXsltFile(filePath) {
 		pageModel.Html.Content = expandElementRefs(pageModel.Html.Content)
 	}
 

@@ -87,6 +87,11 @@ once, and do not take a name as an argument.
 
 ### Serve Command
 
+```sh
+$ 2web serve [path] <arguments>
+>
+```
+
 2Web can use Vite or an in-built development server to serve projects locally.
 
 Vite is recommended for larger projects, while the in-built server is sufficient

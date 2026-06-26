@@ -70,7 +70,15 @@ func runDevServer(inPath string, outPath string, options Options) {
 	// notification socket.
 	// When you use the --no-auto-reload, it only stops injecting the listener
 	// into the returned dev page.
-	mux.HandleFunc("/__2web_updates", handleWebSocket)
+	//
+	// When listened to, the __2web_updates socket will notify consumers when the
+	// web page source changes.
+	mux.HandleFunc("/__2web_updates", autoReloadSocket)
+
+	// When listened to, the __2web_actions socket allows consumers to dispatch
+	// actions to the sever in real time.
+	// E.g. reload clients, re-compile source, stop server, etc...
+	mux.HandleFunc("/__2web_actions", actionSocket)
 
 	// Serve static files with HTML injection
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -85,17 +93,16 @@ func runDevServer(inPath string, outPath string, options Options) {
 
 	fmt.Printf("🚀 2web dev server running at http://localhost:%s\n", port)
 	fmt.Printf("📁 Serving files from: %s\n", absInPath)
-	fmt.Println("👀 Watching for file changes...")
 
 	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
 }
 
-func handleWebSocket(w http.ResponseWriter, r *http.Request) {
+func autoReloadSocket(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Printf("WebSocket upgrade failed: %v", err)
+		log.Printf("[auto reload] WebSocket upgrade failed: %v", err)
 		return
 	}
 
@@ -115,6 +122,44 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		_, _, err := conn.ReadMessage()
 		if err != nil {
 			break
+		}
+	}
+}
+
+func actionSocket(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("[action socket] WebSocket upgrade failed: %v", err)
+		return
+	}
+
+	clientsMu.Lock()
+	clients[conn] = true
+	clientsMu.Unlock()
+
+	defer func() {
+		clientsMu.Lock()
+		delete(clients, conn)
+		clientsMu.Unlock()
+		conn.Close()
+	}()
+
+	// Purposely start at 1 so that an empty message is a noop
+	const RELOAD_CLIENTS byte = 0o1
+
+	for {
+		_, body, err := conn.ReadMessage()
+		if err != nil {
+			break
+		}
+
+		// First 8 bits (byte) of an action request is the command.
+		// This lets us quickly determine the handler.
+		// start with the RELOAD_CLIENTS handler first so that realtime reloads is
+		// the first codepath checked.
+		command := body[0]
+		if (command & RELOAD_CLIENTS) > 0 {
+			notifyClients()
 		}
 	}
 }
@@ -258,6 +303,8 @@ func injectLiveReload(content []byte) []byte {
 // This is needed because there is a bug in the compiler where it does not work
 // with absolute paths properly.
 func watchFiles(inPath string, outPath string, relativeOutPath string) {
+	fmt.Println("👀 Watching for file changes...")
+
 	var lastModTime time.Time
 
 	const fileWatcherInterval = time.Duration(5) * time.Millisecond
