@@ -8,8 +8,8 @@ import (
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
 	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/packages"
+	"github.com/hudson-newey/2web-cli/src/runner"
 	"github.com/hudson-newey/2web-cli/src/server"
-	"github.com/hudson-newey/2web-cli/src/shell"
 	"github.com/hudson-newey/2web-cli/src/ssr"
 )
 
@@ -55,5 +55,5 @@ func serveInbuilt(args []string) {
 }
 
 func serveSsr() {
-	shell.ExecuteCommand("node", "./server/ssr.ts")
+	runner.ExecuteScript("./server/ssr.ts")
 }

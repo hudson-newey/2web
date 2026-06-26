@@ -16,16 +16,16 @@ const (
 )
 
 func DeterminePackageManager() PackageManager {
-	if fileExists("package-lock.json") {
+	if fileExists("bun.lock") {
+		return Bun
+	} else if fileExists("deno.lock") {
+		return Deno
+	} else if fileExists("package-lock.json") {
 		return Npm
 	} else if fileExists("pnpm-lock.yaml") || fileExists("pnpm-lock.yml") {
 		return Pnpm
 	} else if fileExists("yarn.lock") || fileExists(".pnp.js") || fileExists(".pnp.cjs") {
 		return Yarn
-	} else if fileExists("bun.lock") {
-		return Bun
-	} else if fileExists("deno.lock") {
-		return Deno
 	}
 
 	return None

@@ -25,9 +25,6 @@ func ExecutePackage(args ...string) {
 	nodeModulesExecute(args, true)
 }
 
-func ExecuteFile(args ...string) {
-}
-
 func nodeModulesExecute(args []string, allowFallback bool) {
 	packageManager := DeterminePackageManager()
 
@@ -55,10 +52,7 @@ func nodeModulesExecute(args []string, allowFallback bool) {
 	shellCommand := []string{packageManagerPath(packageManager), "exec"}
 	shellCommand = append(shellCommand, args...)
 
-	_, err := shell.ExecuteCommand(shellCommand...)
-	if err == nil {
-		return
-	}
+	shell.ExecuteCommand(shellCommand...)
 }
 
 // If no local package manager is installed, we can run most commands using the
