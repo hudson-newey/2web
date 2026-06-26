@@ -109,6 +109,12 @@ want to install npm or node.js.
       before serving any pages.
    3. If there is no 2web compiler available, serve the static files as-is.
 
+#### Serve Command Flags & Arguments
+
+| Command      | Alias | Description                    |
+| ------------ | ----- | ------------------------------ |
+| `--no-watch` |       | Do not watch files for changes |
+
 ### Build Command
 
 2Web prefers using Vite for building projects, but can directly call the 2web

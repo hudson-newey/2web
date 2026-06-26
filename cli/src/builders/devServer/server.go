@@ -3,6 +3,7 @@ package devserver
 import (
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/hudson-newey/2web-cli/src/builders"
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
@@ -51,7 +52,10 @@ func serveInbuilt(args []string) {
 	inPath := builders.EntryTargets(args)[0]
 	outPath := builders.OutputTarget(args)
 
-	server.Run(inPath, outPath)
+	server.Run(inPath, outPath, server.Options{
+		// TODO: Refactor to use go flags package
+		NoWatch: slices.Contains(args, "--no-watch"),
+	})
 }
 
 func serveSsr() {

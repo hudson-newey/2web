@@ -36,7 +36,7 @@ var liveReloadTemplate = fmt.Sprintf(`
 <script type="module">%s</script>
 `, liveReloadScript)
 
-func runDevServer(inPath string, outPath string) {
+func runDevServer(inPath string, outPath string, options Options) {
 	absInPath, err := filepath.Abs(inPath)
 	if err != nil {
 		log.Fatalf("Failed to resolve path: %v", err)
@@ -52,8 +52,16 @@ func runDevServer(inPath string, outPath string) {
 		log.Fatalf("Failed to resolve path: %v", err)
 	}
 
-	// Start file watcher in a separate goroutine
-	go watchFiles(absInPath, absOutPath, outPath)
+	// Sometimes we don't want to watch the files.
+	// This can actually improve performance in certain scenarios because one of
+	// the largest performance bottlenecks is the delay between file system being
+	// updated and the file watcher being notified.
+	// To get around this, we've created a notification system so that IDE's can
+	// directly talk to the server and notify them when they finish saving a file.
+	if !options.NoWatch {
+		// Start file watcher in a separate goroutine
+		go watchFiles(absInPath, absOutPath, outPath)
+	}
 
 	// Setup HTTP server
 	mux := http.NewServeMux()
