@@ -1,3 +1,3 @@
 package constants
 
-const EnvCacheOverride = "__2_CACHE_PATH"
+const EnvCacheOverride string = "__2WEB_CACHE_PATH"
