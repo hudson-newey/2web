@@ -65,11 +65,6 @@ func ProcessInvocation(args []string) {
 		return
 	}
 
-	if command == "cms" {
-		cmsCommand(programName, command, args)
-		return
-	}
-
 	if command == "database" || command == "db" {
 		dbCommand(programName, command, args)
 		return

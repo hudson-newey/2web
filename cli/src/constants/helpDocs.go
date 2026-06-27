@@ -14,7 +14,6 @@ const HelpDocumentation string = `Commands:
 
   2web database <sub_command>
   2web doctor <sub_command>
-  2web cms <sub_command>
 
   2web generate <template_name>
     component
@@ -41,12 +40,6 @@ const HelpDocumentation string = `Commands:
   2web database <sub_command>
     init
     migrate
-
-  2web cms <sub_command>
-    add
-    view
-    sync
-    remove
 
   2web doctor <sub_command>
     check

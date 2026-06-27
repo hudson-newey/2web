@@ -33,7 +33,6 @@ Once installed, you will have access to the `2web` command.
 | `2web test [path]`                 |       |
 | `2web database <sub_command>`      | db    |
 | `2web doctor <sub_command>`        |       |
-| `2web cms <sub_command>`           |       |
 
 ### Generate Command
 
@@ -74,16 +73,6 @@ once, and do not take a name as an argument.
 | ------- | ----- | ---------------------------- |
 | init    |       | Initializes a local database |
 | migrate | m     | Runs a database migration    |
-
-### CMS Command
-
-| Command    | Alias | Description            |
-| ---------- | ----- | ---------------------- |
-| add        | a     | Adds a cms source      |
-| view       | v     | View remote CMS source |
-| list-files | ls    | List CMS source files  |
-| sync       | s     | Sync CMS source        |
-| remove     | rm    | Remove CMS source      |
 
 ### Serve Command
 
@@ -138,18 +127,6 @@ The logic for determining which build tool to use is as follows:
    2. Otherwise, use the global `2webc` compiler binary
    3. If there is no 2web compiler available, assets are directly copied to the
       output directory without any compilation and a warning is shown.
-
-#### CMS Sources
-
-The 2web CLI can build websites from existing document stores.
-
-❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
-
-| Source     | State |
-| ---------- | ----- |
-| Wordpress  | ❌     |
-| Git/GitHub | ❌     |
-| OneDrive   | 🔧     |
 
 ### Doctor Command
 
