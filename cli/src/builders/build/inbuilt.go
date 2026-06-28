@@ -7,6 +7,5 @@ func buildWithInbuiltCompiler(
 	inPath string,
 	outPath string,
 ) {
-	// TODO: Remove this --no-cache flag once caching is stable
-	shell.ExecuteCommand(compilerPath, "-i", inPath, "-o", outPath, "--no-cache")
+	shell.ExecuteCommand(compilerPath, "-i", inPath, "-o", outPath)
 }
