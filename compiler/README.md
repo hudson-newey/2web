@@ -31,15 +31,6 @@
 - Performs code minification
 - Performs a handful of runtime [optimizations](../docs/README.md)
 
-## Compiler Development Options
-
-These flags are not intended to be used by compiler consumers.
-They provide some nice debug information that can be helpful when developing the
-compiler.
-
-- `--verbose-lexer` (default: false) Logs the lexer output to the console
-- `--verbose-ast` (default: false) Logs the abstract syntax tree to the console
-
 ## Language Support
 
 ❌ = Not working, 🔧 = Developer preview, ✅ = Production ready, ➖ = Not Planned
@@ -103,3 +94,26 @@ The following frameworks can be used in component islands.
 | Vue     | ❌     | `.vue`                     |
 | Svelte  | ❌     | `.svelte`                  |
 | hugo    | ❌     | `.hugo.html`               |
+
+## Compiler Developer Options
+
+These flags are not intended to be used by compiler consumers.
+They provide some nice debug information that can be helpful when developing the
+compiler.
+
+### Developer CLI Options
+
+- `--verbose-lexer` (default: false) Logs the lexer output to the console
+- `--verbose-ast` (default: false) Logs the abstract syntax tree to the console
+- `--listen` (default: false) Instead of automatically exiting after compilation, open a websocket connection that can accept commands.
+
+### Listener Commands
+
+If the `--listen` flag is used, the compiler does not automatically exit and
+will instead open up websocket endpoints where you can send commands.
+Using listener commands can improve the performance of the 2web compiler since
+the compiler doesn't need to exit / reopen after every compilation.
+
+| Command   | Description             | Action | Body   |
+| --------- | ----------------------- | ------ | ------ |
+| Recompile | Re-compiles application | 0o1    | _N.A._ |

@@ -14,11 +14,10 @@ type CliArguments struct {
 	IgnoreErrors           bool
 	Serial                 bool
 	DryRun                 bool
+	Verbose                bool
 
-	// I only expect end users to use the "Verbose" cli argument.
-	// However, I have still exposed lower-level verbosity levels so that debug
-	// information can also be generated from end-users.
-	Verbose      bool
+	// Developer command line flags
 	VerboseLexer bool
 	VerboseAst   bool
+	Listen       bool
 }

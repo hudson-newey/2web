@@ -21,10 +21,11 @@ func ParseArguments() models.CliArguments {
 	ignoreErrors := flag.Bool("ignore-errors", false, "Ignores errors in production builds. This allows you to ship compiler errors.")
 	serial := flag.Bool("serial", false, "Disables parallel compilation of assets")
 	dryRun := flag.Bool("dry-run", false, "Simulates a build without writing any files to disk")
-
 	verbose := flag.Bool("verbose", false, "Print extra debug information to the console")
+
 	verboseLexer := flag.Bool("verbose-lexer", false, "Logs the lexer output to the console")
 	verboseAst := flag.Bool("verbose-ast", false, "Logs the ast output to the console")
+	listen := flag.Bool("listen", false, "Instead of automatically exiting after compilation, open a websocket connection that can accept commands")
 
 	flag.Parse()
 
@@ -42,6 +43,7 @@ func ParseArguments() models.CliArguments {
 		IgnoreErrors:           *ignoreErrors,
 		Serial:                 *serial,
 		DryRun:                 *dryRun,
+		Listen:                 *listen,
 
 		Verbose:      *verbose,
 		VerboseLexer: *verboseLexer,

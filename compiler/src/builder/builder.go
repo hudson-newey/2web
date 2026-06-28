@@ -1,6 +1,7 @@
 package builder
 
 import (
+	"fmt"
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
@@ -9,9 +10,12 @@ import (
 	"hudson-newey/2web/src/routing"
 	"hudson-newey/2web/src/site"
 	"os"
+	"time"
 )
 
 func Build() bool {
+	startTime := time.Now()
+
 	args := cli.GetArgs()
 
 	if args.HasDevTools && args.IsProd {
@@ -69,6 +73,11 @@ func Build() bool {
 	// that all of the errors are located in the same section, and are the most
 	// recent output when compilation finishes.
 	documentErrors.PrintDocumentErrors()
+
+	// We only print out compile times once the entire app as been built.
+	if !cli.GetArgs().IsSilent {
+		fmt.Println("\nCompile time:", time.Since(startTime))
+	}
 
 	return documentErrors.IsErrorFree()
 }
