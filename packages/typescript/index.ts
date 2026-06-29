@@ -14,18 +14,6 @@ export * from "./src/conditions/or.ts";
 export * from "./src/conditions/xor.ts";
 export * from "./src/conditions/and.ts";
 
-export * from "./src/datatypes/arrays.ts";
-export * from "./src/datatypes/booleanish.ts";
-export * from "./src/datatypes/bigint.ts";
-export * from "./src/datatypes/characters.ts";
-export * from "./src/datatypes/enums.ts";
-export * from "./src/datatypes/functions.ts";
-export * from "./src/datatypes/memory.ts";
-export * from "./src/datatypes/numbers.ts";
-export * from "./src/datatypes/objects.ts";
-export * from "./src/datatypes/json.ts";
-export * from "./src/datatypes/strings.ts";
-
 export * from "./src/helpers/require.ts";
 export * from "./src/helpers/typeFunctions.ts";
 export * from "./src/helpers/without.ts";
