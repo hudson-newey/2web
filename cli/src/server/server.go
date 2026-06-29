@@ -310,7 +310,7 @@ func injectLiveReload(content []byte) []byte {
 // This is needed because there is a bug in the compiler where it does not work
 // with absolute paths properly.
 func watchFiles(inPath string, outPath string, relativeOutPath string) {
-	fmt.Println("👀 Watching for file changes...")
+	logger.Println("\tWatching for file changes...")
 
 	var lastModTime time.Time
 
@@ -333,7 +333,7 @@ func handleFileChange(inPath string, outPath string) {
 
 func buildAssets(inPath string, outPath string) {
 	logger.ClearConsole()
-	fmt.Println("📦 Building assets...")
+	logger.Println("\tBuilding assets...")
 	build.BuildPath(inPath, outPath)
 }
 
@@ -384,5 +384,5 @@ func notifyClients() {
 	}
 
 	// Log after complete so hot path is clear of logs to reduce perf hit.
-	fmt.Println("📣 Sent reload client notification")
+	logger.Println("\tSent reload client notification")
 }

@@ -1,7 +1,9 @@
 package netlify
 
-import "fmt"
+import (
+	"github.com/hudson-newey/2web/_shared/logger"
+)
 
 func Deploy() {
-	fmt.Println("Not implemented.")
+	logger.PrintError("Not implemented.")
 }

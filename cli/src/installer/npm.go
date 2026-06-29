@@ -16,5 +16,5 @@ func installNpmPackage(name string) {
 		logger.PrintError(errorMsg)
 	}
 
-	fmt.Println(string(stdout))
+	logger.Println(string(stdout))
 }

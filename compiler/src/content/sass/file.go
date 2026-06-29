@@ -1,10 +1,10 @@
 package scss
 
 import (
-	"fmt"
 	"hudson-newey/2web/src/content/css"
 
 	sass "github.com/bep/godartsass/v2"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 type sassCode = string
@@ -21,8 +21,7 @@ func (model *SassFile) ToCss(filePath string) css.CSSFile {
 func (model *SassFile) cssContent(filePath string) string {
 	transpiler, err := sass.Start(sass.Options{})
 	if err != nil {
-		fmt.Println("dart sass may not be installed on your system. Try 'npm install -g sass'")
-		panic(err)
+		logger.PrintError("dart sass may not be installed on your system. Try 'npm install -g sass'")
 	}
 
 	cssContent, err := transpiler.Execute(sass.Args{

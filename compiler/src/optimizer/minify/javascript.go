@@ -1,10 +1,10 @@
 package minify
 
 import (
-	"fmt"
 	"os/exec"
 	"regexp"
 
+	"github.com/hudson-newey/2web/_shared/logger"
 	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/js"
 )
@@ -21,7 +21,7 @@ func MinifyJs(content string) string {
 			exec.Command("uglifyjs"),
 		)
 	} else {
-		fmt.Println("Warning: 'uglifyjs' not found in PATH. Using the built-in minifier may cause larger file sizes.")
+		logger.PrintWarning("'uglifyjs' not found in PATH. Using the built-in minifier may cause larger file sizes.")
 		m.AddFunc("application/javascript", js.Minify)
 	}
 

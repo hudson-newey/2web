@@ -1,13 +1,15 @@
 package db
 
-import "fmt"
+import (
+	"github.com/hudson-newey/2web/_shared/logger"
+)
 
 // TODO
 func InitDatabase() {
-	fmt.Println("Not implemented.")
+	logger.PrintError("Not implemented.")
 }
 
 // TODO
 func RunMigration() {
-	fmt.Println("Not implemented.")
+	logger.PrintError("Not implemented.")
 }

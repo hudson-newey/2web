@@ -3,6 +3,8 @@ package shell
 import (
 	"fmt"
 	"os"
+
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 // To use this function, you need to run the following command in your terminal:
@@ -41,5 +43,5 @@ func InstallAutocomplete() {
 		}
 	}
 
-	fmt.Println("Autocomplete installed. Please restart your terminal or run 'source ~/.bashrc' or 'source ~/.zshrc'.")
+	logger.Println("Autocomplete installed. Please restart your terminal or run 'source ~/.bashrc' or 'source ~/.zshrc'.")
 }

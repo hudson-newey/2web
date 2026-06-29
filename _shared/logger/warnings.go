@@ -1,7 +1,9 @@
 package logger
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func PrintWarning(message string) {
-	fmt.Printf("\033[33m[Warning]\033[0m %s\n", message)
+func PrintWarning(msg string) (n int, err error) {
+	return fmt.Printf("\033[33m[Warning]\033[0m %s\n", msg)
 }
