@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/shell"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 // Allows you to run a package managers "exec" command.
@@ -30,7 +30,7 @@ func nodeModulesExecute(args []string, allowFallback bool) {
 
 	if packageManager == None {
 		if !allowFallback {
-			cli.PrintError("could not find a package manager in the current solution.")
+			logger.PrintError("could not find a package manager in the current solution.")
 			return
 		}
 
@@ -42,7 +42,7 @@ func nodeModulesExecute(args []string, allowFallback bool) {
 			shell.ExecuteCommand(args...)
 		} else {
 			warningMsg := fmt.Sprintf("could not find global install of package '%s'.\n This may result in slow execution.", packageName)
-			cli.PrintWarning(warningMsg)
+			logger.PrintWarning(warningMsg)
 			executeNpx(args)
 		}
 
@@ -86,10 +86,10 @@ func packageManagerPath(packageManager PackageManager) string {
 	case Bun:
 		return "bun"
 	case Deno:
-		cli.PrintError("Deno support for this operation is not supported.")
+		logger.PrintError("Deno support for this operation is not supported.")
 		panic("unreachable")
 	}
 
-	cli.PrintError("unknown package manager")
+	logger.PrintError("unknown package manager")
 	panic("unreachable")
 }

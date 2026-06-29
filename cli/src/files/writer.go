@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/hudson-newey/2web-cli/src/cli"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 const directoryPerms os.FileMode = os.ModePerm
@@ -47,7 +47,7 @@ func createFile(fileModel File) {
 		pathSrc, err := exec.LookPath(fileModel.CopyFromPath)
 		if err != nil {
 			errorMsg := fmt.Sprintf("Could not find binary in PATH: '%s'", fileModel.CopyFromPath)
-			cli.PrintWarning(errorMsg)
+			logger.PrintWarning(errorMsg)
 		}
 
 		CopyPath(pathSrc, fileModel.Path)

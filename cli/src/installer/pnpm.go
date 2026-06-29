@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/hudson-newey/2web-cli/src/cli"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 func installPnpmPackage(name string) {
@@ -13,7 +13,7 @@ func installPnpmPackage(name string) {
 
 	if err != nil {
 		errorMsg := fmt.Sprintf("failed to install package '%s': %s", name, err)
-		cli.PrintError(errorMsg)
+		logger.PrintError(errorMsg)
 	}
 
 	fmt.Println(string(stdout))

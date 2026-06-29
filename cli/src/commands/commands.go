@@ -9,9 +9,9 @@ import (
 	"github.com/hudson-newey/2web-cli/src/builders/format"
 	"github.com/hudson-newey/2web-cli/src/builders/lint"
 	"github.com/hudson-newey/2web-cli/src/builders/test"
-	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/deploy"
 	"github.com/hudson-newey/2web-cli/src/packages"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 func ProcessInvocation(args []string) {
@@ -20,7 +20,7 @@ func ProcessInvocation(args []string) {
 
 	if argsLen < 2 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s <command> [arguments]", programName)
-		cli.PrintError(errorMsg)
+		logger.PrintError(errorMsg)
 	}
 
 	command := os.Args[1]
@@ -42,7 +42,7 @@ func ProcessInvocation(args []string) {
 
 	// all commands below this point must be run in an npm project
 	if !packages.HasPackageJson() {
-		cli.PrintWarning("you are running the 2web cli in a directory that does not have a package.json. This may result in unpredictable state.")
+		logger.PrintWarning("you are running the 2web cli in a directory that does not have a package.json. This may result in unpredictable state.")
 	}
 
 	if command == "generate" || command == "g" {
@@ -104,5 +104,5 @@ func ProcessInvocation(args []string) {
 	}
 
 	errorMsg := fmt.Sprintf("unrecognized command: '%s'", command)
-	cli.PrintError(errorMsg)
+	logger.PrintError(errorMsg)
 }

@@ -1,9 +1,9 @@
 package runner
 
 import (
-	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/packages"
 	"github.com/hudson-newey/2web-cli/src/shell"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 // Executes a JavaScript / TypeScript file
@@ -11,7 +11,7 @@ func ExecuteScript(filePath string, args ...string) {
 	packageManager := packages.DeterminePackageManager()
 
 	if packageManager == packages.None {
-		cli.PrintError("could not find a package manager in the current solution.")
+		logger.PrintError("could not find a package manager in the current solution.")
 		return
 	}
 
@@ -41,6 +41,6 @@ func runtimeCommand(pm packages.PackageManager) []string {
 		return []string{"node"}
 	}
 
-	cli.PrintError("Could not determine runtime")
+	logger.PrintError("Could not determine runtime")
 	panic("unreachable")
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hudson-newey/2web-cli/src/cli"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 func MigrateFiles(migrations []Migration) {
@@ -12,7 +12,7 @@ func MigrateFiles(migrations []Migration) {
 		fileContent, err := os.ReadFile(migration.TargetPath)
 		if err != os.ErrNotExist {
 			warningMsg := fmt.Sprintf("could find file '%s' to migrate", migration.TargetPath)
-			cli.PrintWarning(warningMsg)
+			logger.PrintWarning(warningMsg)
 			continue
 		}
 
@@ -20,7 +20,7 @@ func MigrateFiles(migrations []Migration) {
 
 		if err := os.WriteFile(migration.TargetPath, []byte(newContent), filePerms); err != nil {
 			warningMsg := fmt.Sprintf("could write migration to '%s'", migration.TargetPath)
-			cli.PrintWarning(warningMsg)
+			logger.PrintWarning(warningMsg)
 			continue
 		}
 

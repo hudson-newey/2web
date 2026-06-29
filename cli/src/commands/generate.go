@@ -3,21 +3,21 @@ package commands
 import (
 	"fmt"
 
-	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/generators"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 func generateCommand(programName string, command string, args []string) {
 	argsLen := len(args)
 	if argsLen < 3 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <generator> <name>", programName, command)
-		cli.PrintError(errorMsg)
+		logger.PrintError(errorMsg)
 	}
 
 	generator := args[2]
 	if argsLen < 4 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s %s <name>", programName, command, generator)
-		cli.PrintError(errorMsg)
+		logger.PrintError(errorMsg)
 	}
 
 	templateName := args[3]
@@ -45,6 +45,6 @@ func generateCommand(programName string, command string, args []string) {
 	case "interface":
 		generators.InterfaceGenerator(templateName)
 	default:
-		cli.PrintError(fmt.Sprintf("unrecognized generate template: '%s'", generator))
+		logger.PrintError(fmt.Sprintf("unrecognized generate template: '%s'", generator))
 	}
 }

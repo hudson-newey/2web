@@ -7,11 +7,11 @@ import (
 
 	"github.com/hudson-newey/2web-cli/src/builders"
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
-	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/packages"
 	"github.com/hudson-newey/2web-cli/src/runner"
 	"github.com/hudson-newey/2web-cli/src/server"
 	"github.com/hudson-newey/2web-cli/src/ssr"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 func ServeSolution(args []string) {
@@ -36,7 +36,7 @@ func serveVite(args []string) {
 	// If it does not, we want to log a warning.
 	if _, err := os.Stat(pathTarget); os.IsNotExist(err) {
 		warningMsg := fmt.Sprintf("the specified path target does not exist: '%s'", pathTarget)
-		cli.PrintWarning(warningMsg)
+		logger.PrintWarning(warningMsg)
 	}
 
 	if err == nil {

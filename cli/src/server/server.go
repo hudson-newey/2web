@@ -15,7 +15,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/hudson-newey/2web-cli/src/builders/build"
-	"github.com/hudson-newey/2web-cli/src/cli"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 // TODO: Refactor this entire file because it was LLM generated
@@ -332,7 +332,7 @@ func handleFileChange(inPath string, outPath string) {
 }
 
 func buildAssets(inPath string, outPath string) {
-	cli.ClearConsole()
+	logger.ClearConsole()
 	fmt.Println("📦 Building assets...")
 	build.BuildPath(inPath, outPath)
 }

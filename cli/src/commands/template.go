@@ -3,15 +3,15 @@ package commands
 import (
 	"fmt"
 
-	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/templates"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 func templateCommand(programName string, command string, args []string) {
 	argsLen := len(args)
 	if argsLen < 3 {
 		errorMsg := fmt.Sprintf("invalid arguments:\n\texpected: %s %s <template>", programName, command)
-		cli.PrintError(errorMsg)
+		logger.PrintError(errorMsg)
 	}
 
 	template := args[2]
@@ -42,7 +42,7 @@ func templateCommand(programName string, command string, args []string) {
 	templateFunc, exists := templates[template]
 	if !exists {
 		errorMsg := fmt.Sprintf("unknown template '%s'", template)
-		cli.PrintError(errorMsg)
+		logger.PrintError(errorMsg)
 	}
 
 	templateFunc()

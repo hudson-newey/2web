@@ -2,12 +2,12 @@ package templates
 
 import (
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
-	"github.com/hudson-newey/2web-cli/src/cli"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 func TailwindTemplate() {
 	if !configs.HasViteConfig() {
-		cli.PrintError(
+		logger.PrintError(
 			"2Web support for Tailwind is currently limited to Vite builds.\n" +
 				"Please run '2web template vite' to add a Vite builder.",
 		)

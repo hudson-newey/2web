@@ -1,0 +1,8 @@
+go 1.26.4
+
+use (
+	./_shared
+	./cli
+	./compiler
+	./tools/mcp
+)

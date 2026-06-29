@@ -3,8 +3,8 @@ package installer
 import (
 	"fmt"
 
-	"github.com/hudson-newey/2web-cli/src/cli"
 	"github.com/hudson-newey/2web-cli/src/shell"
+	"github.com/hudson-newey/2web/_shared/logger"
 )
 
 func installBunPackage(name string) {
@@ -12,6 +12,6 @@ func installBunPackage(name string) {
 
 	if err != nil {
 		errorMsg := fmt.Sprintf("failed to install package '%s': %s", name, err)
-		cli.PrintError(errorMsg)
+		logger.PrintError(errorMsg)
 	}
 }
