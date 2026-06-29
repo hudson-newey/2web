@@ -6,6 +6,6 @@ import (
 )
 
 func PrintError(msg string) {
-	fmt.Printf("\033[31m[Error]\033[0m: %s\n", msg)
+	fmt.Fprintf(os.Stderr, "\033[31m[Error]\033[0m: %s", msg)
 	os.Exit(1)
 }
