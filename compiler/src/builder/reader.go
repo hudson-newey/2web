@@ -15,7 +15,7 @@ func getContent(inputPath string) []byte {
 	rawData, err := getInputContent(inputPath)
 	if err != nil {
 		inputError := models.NewError(
-			fmt.Sprintf("Failed to read file: %s\n%s", inputPath, err.Error()),
+			fmt.Sprintf("failed to read file: %s\n%s", inputPath, err.Error()),
 			inputPath,
 			lexer.StartingPosition,
 		)

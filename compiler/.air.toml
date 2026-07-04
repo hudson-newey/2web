@@ -3,10 +3,11 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
+  full_bin = "./tmp/main"
+  # full_bin = "CI=true ./tmp/main"
   # The cache works over the modified time of input files.
   # However, during builds, the binary might change without the input files
   # changing
-  bin = "./tmp/main"
   # args_bin = ["-i", "dev/", "-o", "dist/"]
   args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache"]
   # Using a small file is helpful for debugging the lexer and parser because
@@ -22,7 +23,6 @@ tmp_dir = "tmp"
   exclude_regex = ["_test.go"]
   exclude_unchanged = false
   follow_symlink = false
-  full_bin = ""
   include_dir = ["src", "dev", "public"]
   include_ext = [
     "go",

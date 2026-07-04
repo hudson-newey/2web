@@ -73,15 +73,12 @@ func compileAndWritePage(inputPath string, outputPath string) {
 	compiledPage.WriteHtml(outputPath)
 
 	if success {
-		if cacheDisabled {
-			cli.PrintBuildLog("\t- " + inputPath)
-		} else {
-			cli.PrintBuildLog("\t- " + inputPath + " \033[33m(MODIFIED)\033[0m")
-		}
-
-		if !cacheDisabled {
-			cache.CacheAsset(inputPath, outputPath)
-		}
+			if cacheDisabled {
+				cli.PrintBuildLog("\t- " + inputPath)
+			} else {
+				cli.PrintBuildLog("\t- " + inputPath + " \033[33m(MODIFIED)\033[0m")
+				cache.CacheAsset(inputPath, outputPath)
+			}
 	} else {
 		cli.PrintBuildLog("\t- " + inputPath + " \033[31m(ERROR)\033[0m")
 	}
