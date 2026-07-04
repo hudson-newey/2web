@@ -1,9 +1,9 @@
 package cli
 
-import "log"
+import "github.com/hudson-newey/2web/_shared/logger"
 
 func PrintBuildLog(message string) {
 	if !GetArgs().IsSilent {
-		log.Println(message)
+		logger.Println(message)
 	}
 }

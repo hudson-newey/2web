@@ -1,6 +1,10 @@
 package cli
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/hudson-newey/2web/_shared/logger"
+)
 
 // HardError prints a fatal error message and panics to stop execution.
 // If the program is erroring because of a document/source error, you should use
@@ -13,6 +17,7 @@ import "fmt"
 func HardError(message string) {
 	// Add a double new line so that the error messages are emphasized in the
 	// compiler logs.
-	fmt.Printf("\n\033[31m[FATAL ERROR]\033[0m %s\n", message)
+	fmt.Println()
+	logger.PrintError(message)
 	panic("FATAL ERROR")
 }
