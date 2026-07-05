@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/content/xml"
 	"hudson-newey/2web/src/models"
+	"strings"
 )
 
 // TODO: refactor this so that the file writing is performed inside of the
@@ -38,10 +39,11 @@ func GenerateSitemap(paths []models.SitePath) {
 }
 
 func generateURLTags(paths []models.SitePath) string {
-	tags := ""
+	var locSb strings.Builder
 	for _, path := range paths {
-		tags += "<url><loc>" + path.Path + "</loc></url>\n"
+		locSb.WriteString("<url><loc>")
+		locSb.WriteString(path.Path)
+		locSb.WriteString("</loc></url>\n")
 	}
-
-	return tags
+	return locSb.String()
 }
