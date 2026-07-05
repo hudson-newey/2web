@@ -1,7 +1,9 @@
 package site
 
 import (
+	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/models"
+	debugjson "hudson-newey/2web/src/site/debug.json"
 	robotstxt "hudson-newey/2web/src/site/robots.txt"
 	sitemapxml "hudson-newey/2web/src/site/sitemap.xml"
 )
@@ -17,6 +19,12 @@ func AfterAll() {
 	containsRobotsTxt := pathsContain(paths, "robots.txt")
 	if !containsRobotsTxt {
 		robotstxt.GenerateRobotsTxt()
+	}
+
+	// We don't want to publish debug info to production as it might contain
+	// sensitive information about the source code.
+	if !cli.GetArgs().IsProd {
+		debugjson.GenerateDebugJson()
 	}
 }
 

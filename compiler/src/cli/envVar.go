@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"fmt"
 	"hudson-newey/2web/src/constants"
 	"os"
 	"path"
@@ -8,6 +9,7 @@ import (
 
 type envVars struct {
 	CacheOverride string
+	DebugOverride string
 	IsCi          bool
 }
 
@@ -17,6 +19,17 @@ func GetEnvVars() envVars {
 		currentDir, _ := os.Getwd()
 		defaultCachePath := path.Join(currentDir, "/.cache/")
 		cacheOverride = defaultCachePath
+	}
+
+	debugOverride, hasOverride := os.LookupEnv(constants.EnvDebugOverride)
+	if !hasOverride {
+		outputDirectory := GetArgs().OutputPath
+		if outputDirectory[len(outputDirectory)-1] != '/' {
+			outputDirectory += "/"
+		}
+		// Default to {output_path}/__2web.debug.json so that it's accessible
+		// to third party extensions that look at the build output.
+		debugOverride = fmt.Sprintf("%s/__2web.debug.json", outputDirectory)
 	}
 
 	isCiString, hasOverride := os.LookupEnv(constants.EnvCiOverride)
@@ -32,6 +45,7 @@ func GetEnvVars() envVars {
 
 	return envVars{
 		CacheOverride: cacheOverride,
+		DebugOverride: debugOverride,
 		IsCi: isCiBool,
 	}
 }

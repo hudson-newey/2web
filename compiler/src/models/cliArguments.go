@@ -6,6 +6,7 @@ type CliArguments struct {
 	HasDevTools            bool
 	NoRuntimeOptimizations bool
 	IsProd                 bool
+	WriteDebugAssets       bool
 	IsSilent               bool
 	DisableCache           bool
 	FromStdin              bool

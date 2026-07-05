@@ -25,6 +25,7 @@
 ## Environment Variables
 
 - `__2WEB_CACHE_PATH` (default: ./.cache/) A path that will be used for the build cache
+- `__2WEB_DEBUG_PATH` (default: {output_path}/__2web.debug.json) Where debug info will be written
 - `CI` (default: false) An environment variable to toggle CI integration
 
 ## Production Builds
