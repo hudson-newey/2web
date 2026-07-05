@@ -85,6 +85,10 @@ application with one command.
 
 A vscode extension to integrate with the 2web cli.
 
+### Chrome Extension
+
+Chrome dev tool integration for 2Web.
+
 ### MCP Server
 
 2Web comes with a built-in MCP server that can be used to directly connect LLMs

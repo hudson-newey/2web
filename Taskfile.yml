@@ -7,6 +7,7 @@ tasks:
       - "build:compiler"
       - "build:mcp"
       - "build:vscode-extension"
+      - "build:chrome-extension"
 
   install:
     cmds:
@@ -31,5 +32,10 @@ tasks:
 
   "build:vscode-extension":
     dir: "./tools/vscode-extension"
+    cmds:
+      - pnpm build
+
+  "build:chrome-extension":
+    dir: "./tools/chrome-extension"
     cmds:
       - pnpm build

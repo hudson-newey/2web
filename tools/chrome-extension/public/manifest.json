@@ -1,0 +1,7 @@
+{
+  "name": "2web-chrome-extension",
+  "description": "2Web integration for Chrome",
+  "version": "0.1",
+  "manifest_version": 3,
+  "devtools_page": "devtools.html"
+}
