@@ -9,5 +9,3 @@ export const testedFrameworks = [
   "react",
   "alpine",
 ] as const satisfies FrameworkName[];
-
-
