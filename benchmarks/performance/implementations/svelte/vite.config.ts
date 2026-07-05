@@ -6,6 +6,7 @@ export default defineConfig({
     rollupOptions: {
       input: ["./index.html"],
     },
+    minify: "terser",
   },
   plugins: [
     svelte(),
