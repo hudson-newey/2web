@@ -1,8 +1,7 @@
-// In the constructor we use a plain object for easier construction
-
 import type { Directive } from "../directives/directive";
 import { updateDom } from "../../../_shared/updateDom";
 
+// In the constructor we use a plain object for easier construction
 // but internally we use Maps for easier updates.
 interface TwoElementConstructor {
   tagName: string;

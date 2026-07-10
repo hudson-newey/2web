@@ -10,5 +10,8 @@
     "@types/chrome": "^0.1.40",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "@two-web/kit": "workspace:*"
   }
 }

@@ -3,9 +3,10 @@
   "include": ["src"],
   "compilerOptions": {
     "types": ["vite/client", "chrome"],
+    "lib": ["DOM", "DOM.Iterable"],
     "outDir": "dist",
     "rootDir": "src",
     "sourceMap": true,
     "noEmit": true,
-  }
+  },
 }
