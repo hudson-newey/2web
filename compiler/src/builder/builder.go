@@ -6,8 +6,6 @@ import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/models"
-	"hudson-newey/2web/src/parallel"
-	"hudson-newey/2web/src/routing"
 	"hudson-newey/2web/src/site"
 	"os"
 	"time"
@@ -52,20 +50,17 @@ func Build() bool {
 		logger.Println("Begin 2webc compilation...")
 	}
 
+	startBuildPool()
+
 	if inputPath.IsDir() {
 		// recursively find all children of the input directory
 		indexedPages := indexPages(args.InputPath)
 
-		parallel.ForEach(indexedPages, func(filePath string) {
-			if routing.IsLayoutFile(filePath) {
-				return
-			}
+		for _, filePath := range indexedPages {
+			AddCompilationStep(filePath)
+		}
 
-			compileAndWritePage(
-				filePath,
-				outputFileName(args.InputPath, args.OutputPath, filePath),
-			)
-		})
+		buildPool.Wait()
 
 		// TODO: These AfterAll hooks should use the output asset models as the
 		// input so if any files implicitly create any site-wide assets, the
