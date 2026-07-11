@@ -7,11 +7,11 @@ func UseDoubleQuotes(content string) bool {
 	// we want to find out if we have to use single or double quotes
 	// depending on what quote type the reducer uses
 	firstDoubleQuoteLocation := strings.Index(content, "\"")
-	firstSingleQuoteLocation := strings.Index(content, "'")
-
 	if firstDoubleQuoteLocation == -1 {
 		return true
 	}
+
+	firstSingleQuoteLocation := strings.Index(content, "'")
 	if firstSingleQuoteLocation == -1 {
 		return false
 	}
