@@ -4,7 +4,6 @@ import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
-	"hudson-newey/2web/src/compiler/5-templating/controlFlow"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
 	"hudson-newey/2web/src/content/assets"
 	"hudson-newey/2web/src/content/markdown"
@@ -51,8 +50,6 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 			pageModel.AddTwoScript(node.TwoScriptContent())
 		}
 	}
-
-	pageModel.Html.Content = controlFlow.ProcessControlFlow(filePath, pageModel.Html.Content)
 
 	// We want to exclude Markdown, xml, and xslt files from this processing step
 	// because our element ref symbol is a hashtag which has meaning in these

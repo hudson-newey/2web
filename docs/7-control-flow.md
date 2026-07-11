@@ -1,4 +1,4 @@
-# Control Flow
+# Control Flow (Removed)
 
 Note that control flow is currently only available for static conditions that
 can be evaluated at compile time.
