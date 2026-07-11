@@ -19,19 +19,21 @@ func compileAssignmentVar(
 
 	content := pageModel.Html.Content
 
-	functionContent := ""
+	var sb strings.Builder
 	for _, propNode := range uniquePropSelectors {
 		elementSelector := javascript.CreateJsElementName()
 		content = strings.ReplaceAll(content, propNode.Node.Selector, propNode.Node.Selector+" "+elementSelector)
 
 		selectorCount := strings.Count(content, propNode.Node.Selector)
 		if selectorCount > 1 {
-			functionContent += fmt.Sprintf(
+			fmt.Fprintf(
+				&sb,
 				`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
 				elementSelector, propNode.PropName, javascript.ValueVar,
 			)
 		} else {
-			functionContent += fmt.Sprintf(
+			fmt.Fprintf(
+				&sb,
 				`document.querySelector("[%s]")["%s"] = %s;`,
 				elementSelector, propNode.PropName, javascript.ValueVar,
 			)
@@ -46,7 +48,7 @@ func compileAssignmentVar(
         %s
       }
     </script>`,
-		callbackName, javascript.ValueVar, functionContent,
+		callbackName, javascript.ValueVar, sb.String(),
 	)
 
 	injectableTemplate, err := document.BuildTemplate(updateJsSource, *varNode)

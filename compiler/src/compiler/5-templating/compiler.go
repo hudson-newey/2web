@@ -19,14 +19,14 @@ import (
 )
 
 func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
-	htmlContent := ""
+	var sb strings.Builder
 	for _, node := range parsedAst {
-		htmlContent += node.HtmlContent().Content
+		sb.WriteString(node.HtmlContent().Content)
 	}
 
 	pageModel := page.NewPage()
 	pageModel.InputPath = filePath
-	pageModel.Html.AddContent(htmlContent)
+	pageModel.Html.AddContent(sb.String())
 
 	addRouteAssets(&pageModel)
 
