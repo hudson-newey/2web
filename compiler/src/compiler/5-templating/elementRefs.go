@@ -13,13 +13,14 @@ import (
 func expandElementRefs(content string) string {
 	refNodes := lexer.FindPropNodes[lexer.RefNode](content, elementRefToken)
 
+	replacements := []string{}
 	for _, node := range refNodes {
 		// Remove the first character from the node selector because it will be the
 		// hash (#) symbol. The id that we want to produce does not include this
 		// character.
 		idAttribute := fmt.Sprintf(`id="%s"`, node.Selector[1:])
-		content = strings.ReplaceAll(content, node.Selector, idAttribute)
+		replacements = append(replacements, []string{node.Selector, idAttribute}...)
 	}
 
-	return content
+	return strings.NewReplacer(replacements...).Replace(content)
 }

@@ -53,9 +53,13 @@ func CompileReactivity(
 
 		// after this point, all of the reactive properties have been processed
 		// so therefore we can strip them from the result content
+		replacements := []string{}
 		for _, reactiveProp := range varNode.Props {
-			pageModel.Html.Content = strings.ReplaceAll(pageModel.Html.Content, reactiveProp.Node.Selector, "")
+			// pageModel.Html.Content = strings.ReplaceAll(pageModel.Html.Content, reactiveProp.Node.Selector, "")
+			replacements = append(replacements, []string{reactiveProp.Node.Selector, ""}...)
 		}
+
+		pageModel.Html.Content = strings.NewReplacer(replacements...).Replace(pageModel.Html.Content)
 
 		compileStatic(pageModel, varNode)
 	}

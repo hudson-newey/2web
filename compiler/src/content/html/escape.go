@@ -2,14 +2,14 @@ package html
 
 import "strings"
 
-func EscapeHtml(htmlFragment string) string {
-	sr := strings.NewReplacer(
-		"&", "&amp;",
-		"\"", "&quot;",
-		"'", "&#x27;",
-		"<", "&lt;",
-		">", "&gt;",
-	)
+var escapeReplacer = strings.NewReplacer(
+	"&", "&amp;",
+	"\"", "&quot;",
+	"'", "&#x27;",
+	"<", "&lt;",
+	">", "&gt;",
+)
 
-	return sr.Replace(htmlFragment)
+func EscapeHtml(htmlFragment string) string {
+	return escapeReplacer.Replace(htmlFragment)
 }
