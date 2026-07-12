@@ -58,10 +58,6 @@ func compileReactiveVar(
 		panic(err)
 	}
 
-	// TODO: remove this stupid hack once the reactive compiler doesn't rely
-	// on the static compiler to make element references
-	injectableTemplate = strings.ReplaceAll(injectableTemplate, "\\u0022", "\"")
-
 	// If there is no body tag, we just append to the end of the content.
 	// TODO: This should be improved once we start using lazy loaded scripts
 	// instead of inlining reactivity as scripts in HTML content.
