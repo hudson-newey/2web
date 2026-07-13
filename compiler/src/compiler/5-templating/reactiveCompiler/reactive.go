@@ -43,7 +43,7 @@ func compileReactiveVar(
 
 	// There's a newline at the start of this script tag so that when it is
 	// appended to the body, it's on its own line, and semantically distinct.
-	updateJsSource := fmt.Sprintf(`
+	injectableTemplate := fmt.Sprintf(`
 		<script type="module">
       globalThis.%s = %s;
       globalThis.%s = (%s) => {
@@ -52,11 +52,6 @@ func compileReactiveVar(
     </script>`,
 		variableName, varNode.InitialValue, callbackName, javascript.ValueVar, sb.String(),
 	)
-
-	injectableTemplate, err := document.BuildTemplate(updateJsSource, *varNode)
-	if err != nil {
-		panic(err)
-	}
 
 	// If there is no body tag, we just append to the end of the content.
 	// TODO: This should be improved once we start using lazy loaded scripts
