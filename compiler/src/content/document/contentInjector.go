@@ -30,14 +30,13 @@ const (
 // injects content into the bottom of the document while maintaining correct
 // HTML structure
 func InjectContent(content string, injectable string, level InjectableLevel) string {
-	if level == Leading {
-		return injectable + content
-	} else if level == Trailing {
-		return content + injectable
-	}
-
 	targetSelector := ""
 	switch level {
+	case Leading:
+		return injectable + content
+	case Trailing:
+		return content + injectable
+
 	case Html:
 		targetSelector = "</html>"
 
