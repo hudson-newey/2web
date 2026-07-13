@@ -5,6 +5,7 @@ import (
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/filesystem"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/site"
 	"os"
@@ -50,6 +51,7 @@ func Build() bool {
 		logger.Println("Begin 2webc compilation...")
 	}
 
+	filesystem.InitFileWriter()
 	startBuildPool()
 
 	if inputPath.IsDir() {
