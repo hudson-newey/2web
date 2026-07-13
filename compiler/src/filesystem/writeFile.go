@@ -26,42 +26,54 @@ func WriteFile(content []byte, outputPath string) {
 		return
 	}
 
-	fileQueue <- fileJob{
+	job := fileJob{
 		content,
 		outputPath,
+	}
+
+	if cli.GetArgs().Serial {
+		writeFileSync(job)
+	} else {
+		fileQueue <- job
 	}
 }
 
 func InitFileWriter() {
-	go fileWriterWorker()
+	if !cli.GetArgs().Serial {
+		go fileWriterWorker()
+	}
 }
 
 func fileWriterWorker() {
 	for job := range fileQueue {
-		const dirMode os.FileMode = os.ModeDir | 0755
-		if err := os.MkdirAll(filepath.Dir(job.OutputPath), dirMode); err != nil {
-			log.Printf("Error creating directory for %s: %v", job.OutputPath, err)
-			continue
-		}
-
-		const openMode int =
-		// Open in write-only mode
-		syscall.O_WRONLY |
-			// Create the file if it does not exist
-			syscall.O_CREAT |
-			// Truncate the file if it already exists. This ensures that old content
-			// is removed even if the new content is smaller.
-			syscall.O_TRUNC
-
-		file, err := os.OpenFile(job.OutputPath, openMode, 0644)
-		if err != nil {
-			log.Printf("Error opening file %s: %v", job.OutputPath, err)
-			continue
-		}
-
-		if _, err = file.Write(job.Content); err != nil {
-			log.Printf("Error writing to file %s: %v", job.OutputPath, err)
-		}
-		defer file.Close()
+		writeFileSync(job)
 	}
+}
+
+func writeFileSync(job fileJob) {
+	const dirMode os.FileMode = os.ModeDir | 0755
+	if err := os.MkdirAll(filepath.Dir(job.OutputPath), dirMode); err != nil {
+		log.Printf("Error creating directory for %s: %v", job.OutputPath, err)
+		return
+	}
+
+	const openMode int =
+	// Open in write-only mode
+	syscall.O_WRONLY |
+		// Create the file if it does not exist
+		syscall.O_CREAT |
+		// Truncate the file if it already exists. This ensures that old content
+		// is removed even if the new content is smaller.
+		syscall.O_TRUNC
+
+	file, err := os.OpenFile(job.OutputPath, openMode, 0644)
+	if err != nil {
+		log.Printf("Error opening file %s: %v", job.OutputPath, err)
+		return
+	}
+
+	if _, err = file.Write(job.Content); err != nil {
+		log.Printf("Error writing to file %s: %v", job.OutputPath, err)
+	}
+	defer file.Close()
 }
