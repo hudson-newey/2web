@@ -44,10 +44,10 @@ func isFullDocument(content string) bool {
 func splitContent(content string) (headElement, bodyElement) {
 	headElementTags := []string{"<meta", "<title", "<link", "<base"}
 
-	headContent := ""
-	bodyContent := ""
+	var headSb strings.Builder
+	var bodySb strings.Builder
 
-	lines := strings.SplitSeq(content, "\n")
+	lines := strings.SplitAfterSeq(content, "\n")
 	for line := range lines {
 		// TODO: This doesn't cover the edge case where there are two elements
 		// inside a single line.
@@ -64,11 +64,11 @@ func splitContent(content string) (headElement, bodyElement) {
 		// Because we originally split the content by new lines, we need to re-add
 		// the new lines to preserve the original document structure.
 		if foundHeadElement {
-			headContent += line + "\n"
+			headSb.WriteString(line)
 		} else {
-			bodyContent += line + "\n"
+			bodySb.WriteString(line)
 		}
 	}
 
-	return headContent, bodyContent
+	return headSb.String(), bodySb.String()
 }
