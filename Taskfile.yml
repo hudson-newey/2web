@@ -18,17 +18,17 @@ tasks:
   "build:cli":
     dir: "./cli"
     cmds:
-      - go build -o ./bin/2web ./src/main.go
+      - go build -ldflags "-s -w" -o ./bin/2web ./src/main.go
 
   "build:compiler":
     dir: "./compiler"
     cmds:
-      - go build -o ./bin/2webc ./src/main.go
+      - go build -ldflags "-s -w" -o ./bin/2webc ./src/main.go
 
   "build:mcp":
     dir: "./tools/mcp"
     cmds:
-      - go build -o ./bin/2web-mcp ./src/main.go
+      - go build -ldflags "-s -w" -o ./bin/2web-mcp ./src/main.go
 
   "build:vscode-extension":
     dir: "./tools/vscode-extension"
