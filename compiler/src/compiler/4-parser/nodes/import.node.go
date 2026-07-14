@@ -6,13 +6,13 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
-	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
 // import importName from "importPath";
-func NewScriptImportNode(lexNodes []*lexer.V2LexNode) *scriptImportNode {
+func NewscriptImportNode(lexNodes []*lexer.V2LexNode) *scriptImportNode {
 	importNameNode, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 1)
 	if err != nil {
 		panic(err)
@@ -43,22 +43,6 @@ func (m *scriptImportNode) Type() string {
 	return "importNode"
 }
 
-func (m *scriptImportNode) HtmlContent() *html.HTMLFile {
-	return html.NewHtmlFile()
-}
-
-func (m *scriptImportNode) JsContent() *javascript.JSFile {
-	return javascript.NewJsFile()
-}
-
-func (m *scriptImportNode) CssContent() *css.CSSFile {
-	return css.NewCssFile()
-}
-
-func (m *scriptImportNode) TwoScriptContent() *twoscript.TwoScriptFile {
-	return twoscript.NewTwoScriptFile()
-}
-
 func (m *scriptImportNode) Children() ast.AbstractSyntaxTree {
 	return m.children
 }
@@ -73,5 +57,14 @@ func (m *scriptImportNode) RemoveChild(child ast.Node) {
 			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
+	}
+}
+
+func (m *scriptImportNode) Content(page *page.Page) ast.NodeContent {
+	return ast.NodeContent{
+		HtmlContent:      page.Html,
+		JsContent:        javascript.NewJsFile(),
+		CssContent:       css.NewCssFile(),
+		TwoScriptContent: twoscript.NewTwoScriptFile(),
 	}
 }

@@ -24,9 +24,6 @@ type SsgNode LexNodeType[SsgNode]
 // #elementRef
 type RefNode LexNodeType[RefNode]
 
-// import Component from "components/footer.component.html"
-type ImportNode LexNode[ImportNode]
-
 // A comment starting with "//"
 type LineCommentNode LexNode[LineCommentNode]
 

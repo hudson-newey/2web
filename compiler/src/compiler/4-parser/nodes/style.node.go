@@ -6,8 +6,8 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
-	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
@@ -33,22 +33,6 @@ func (m *styleNode) Type() string {
 	return "StyleNode"
 }
 
-func (m *styleNode) HtmlContent() *html.HTMLFile {
-	return html.NewHtmlFile()
-}
-
-func (m *styleNode) JsContent() *javascript.JSFile {
-	return javascript.NewJsFile()
-}
-
-func (m *styleNode) CssContent() *css.CSSFile {
-	return css.FromContent(m.content)
-}
-
-func (m *styleNode) TwoScriptContent() *twoscript.TwoScriptFile {
-	return twoscript.NewTwoScriptFile()
-}
-
 func (m *styleNode) Children() ast.AbstractSyntaxTree {
 	return m.children
 }
@@ -63,5 +47,14 @@ func (m *styleNode) RemoveChild(child ast.Node) {
 			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
+	}
+}
+
+func (m *styleNode) Content(page *page.Page) ast.NodeContent {
+	return ast.NodeContent{
+		HtmlContent:      page.Html,
+		JsContent:        javascript.NewJsFile(),
+		CssContent:       css.FromContent(m.content),
+		TwoScriptContent: twoscript.NewTwoScriptFile(),
 	}
 }

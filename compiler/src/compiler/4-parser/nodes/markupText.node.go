@@ -7,6 +7,7 @@ import (
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
@@ -25,22 +26,6 @@ func (m *markupTextNode) Type() string {
 	return fmt.Sprintf("MarkupTextNode [content: '%s']", m.content)
 }
 
-func (m *markupTextNode) HtmlContent() *html.HTMLFile {
-	return html.FromContent(m.content)
-}
-
-func (m *markupTextNode) JsContent() *javascript.JSFile {
-	return javascript.NewJsFile()
-}
-
-func (m *markupTextNode) CssContent() *css.CSSFile {
-	return css.NewCssFile()
-}
-
-func (m *markupTextNode) TwoScriptContent() *twoscript.TwoScriptFile {
-	return twoscript.NewTwoScriptFile()
-}
-
 func (m *markupTextNode) Children() ast.AbstractSyntaxTree {
 	return m.children
 }
@@ -55,5 +40,15 @@ func (m *markupTextNode) RemoveChild(child ast.Node) {
 			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
+	}
+}
+
+func (m *markupTextNode) Content(page *page.Page) ast.NodeContent {
+	HtmlContent := html.FromContent(page.Html.Content + m.content)
+	return ast.NodeContent{
+		HtmlContent:      HtmlContent,
+		JsContent:        javascript.NewJsFile(),
+		CssContent:       css.NewCssFile(),
+		TwoScriptContent: twoscript.NewTwoScriptFile(),
 	}
 }

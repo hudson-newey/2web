@@ -13,6 +13,6 @@ var scriptImport = Grammar{
 		lexerTokens.CompiledScriptSource,
 		lexerTokens.Semicolon,
 	),
-	Constructor: wrapConstructor(nodes.NewScriptImportNode),
+	Constructor: wrapConstructor(nodes.NewscriptImportNode),
 	ChildDefs:   []Grammar{},
 }

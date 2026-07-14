@@ -18,13 +18,13 @@ import (
 )
 
 func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
-	var sb strings.Builder
-	for _, node := range parsedAst {
-		sb.WriteString(node.HtmlContent().Content)
-	}
-
 	pageModel := page.NewPage()
 	pageModel.InputPath = filePath
+
+	var sb strings.Builder
+	for _, node := range parsedAst {
+		sb.WriteString(node.Content(&pageModel).HtmlContent.Content)
+	}
 	pageModel.Html.AddContent(sb.String())
 
 	addRouteAssets(&pageModel)
@@ -55,7 +55,6 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	// reactive property tokens
 	pageModel.Html.Content = expandTextNodes(pageModel.Html.Content)
 
-	importNodes := []lexer.LexNode[lexer.ImportNode]{}
 	reactiveVariables := []*models.ReactiveVariable{}
 
 	propertyNodes := lexer.FindPropNodes[lexer.PropNode](pageModel.Html.Content, propertyPrefix)
@@ -94,9 +93,6 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 
 			reactiveVariables = append(reactiveVariables, &variableModel)
 		}
-
-		newImportNodes := lexer.FindNodes[lexer.ImportNode](node.Content, importPrefix, statementEndToken)
-		importNodes = append(importNodes, newImportNodes...)
 	}
 
 	for _, node := range propertyNodes {
@@ -173,22 +169,12 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	}
 
 	for _, node := range parsedAst {
-		if ast.HasCssContent(node) {
-			pageModel.AddStyle(node.CssContent())
-		}
-
-		if ast.HasJsContent(node) {
-			pageModel.AddScript(node.JsContent())
-		}
-
-		if ast.HasTwoScriptContent(node) {
-			pageModel.AddTwoScript(node.TwoScriptContent())
-		}
+		nodeContent := node.Content(&pageModel)
+		pageModel.SetContent(nodeContent.HtmlContent)
+		pageModel.AddStyle(nodeContent.CssContent)
+		pageModel.AddScript(nodeContent.JsContent)
+		pageModel.AddTwoScript(nodeContent.TwoScriptContent)
 	}
-
-	// Because we pass a reference in here, any changes made to the pageModel
-	// inside of expandImports will be reflected outside of this function.
-	expandImports(filePath, &pageModel, importNodes)
 
 	reactiveCompiler.CompileReactivity(filePath, &pageModel, reactiveVariables)
 

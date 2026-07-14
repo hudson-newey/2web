@@ -19,10 +19,6 @@ var eventPrefix = lexer.LexerSelector{"@"}
 // e.g. *innerText="$count"
 var propertyPrefix = lexer.LexerSelector{"*"}
 
-// Import suffixes use the "statementEndToken"
-// This means that all imports MUST have trailing semi-columns
-var importPrefix = lexer.LexerSelector{"import"}
-
 var lineCommentStartToken = lexer.LexerSelector{"//"}
 
 var blockCommentStartToken = lexer.LexerSelector{"/*"}

@@ -7,6 +7,7 @@ import (
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
@@ -51,23 +52,9 @@ func (m *codeNode) Type() string {
 	return "codeNode"
 }
 
-func (m *codeNode) HtmlContent() *html.HTMLFile {
+func (m *codeNode) escapedHtml() string {
 	escapedContent := html.EscapeHtml(m.content)
-	withCodeTags := m.startingCodeTagContent + escapedContent + "</code>"
-
-	return html.FromContent(withCodeTags)
-}
-
-func (m *codeNode) JsContent() *javascript.JSFile {
-	return javascript.NewJsFile()
-}
-
-func (m *codeNode) CssContent() *css.CSSFile {
-	return css.NewCssFile()
-}
-
-func (m *codeNode) TwoScriptContent() *twoscript.TwoScriptFile {
-	return twoscript.NewTwoScriptFile()
+	return m.startingCodeTagContent + escapedContent + "</code>"
 }
 
 func (m *codeNode) Children() ast.AbstractSyntaxTree {
@@ -84,5 +71,16 @@ func (m *codeNode) RemoveChild(child ast.Node) {
 			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
+	}
+}
+
+func (m *codeNode) Content(page *page.Page) ast.NodeContent {
+	HtmlContent := html.FromContent(page.Html.Content + m.escapedHtml())
+
+	return ast.NodeContent{
+		HtmlContent:      HtmlContent,
+		TwoScriptContent: twoscript.NewTwoScriptFile(),
+		CssContent:       css.NewCssFile(),
+		JsContent:        javascript.NewJsFile(),
 	}
 }

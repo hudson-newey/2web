@@ -5,8 +5,8 @@ import (
 	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/content/css"
-	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
@@ -36,22 +36,6 @@ func (m *twoScriptNode) Type() string {
 	return "twoScriptNode"
 }
 
-func (m *twoScriptNode) HtmlContent() *html.HTMLFile {
-	return html.NewHtmlFile()
-}
-
-func (m *twoScriptNode) JsContent() *javascript.JSFile {
-	return javascript.NewJsFile()
-}
-
-func (m *twoScriptNode) CssContent() *css.CSSFile {
-	return css.NewCssFile()
-}
-
-func (m *twoScriptNode) TwoScriptContent() *twoscript.TwoScriptFile {
-	return twoscript.FromContent(m.content)
-}
-
 func (m *twoScriptNode) Children() ast.AbstractSyntaxTree {
 	return m.children
 }
@@ -66,5 +50,14 @@ func (m *twoScriptNode) RemoveChild(child ast.Node) {
 			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
+	}
+}
+
+func (m *twoScriptNode) Content(page *page.Page) ast.NodeContent {
+	return ast.NodeContent{
+		HtmlContent:      page.Html,
+		JsContent:        javascript.NewJsFile(),
+		CssContent:       css.NewCssFile(),
+		TwoScriptContent: twoscript.FromContent(m.content),
 	}
 }

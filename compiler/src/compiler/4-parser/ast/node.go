@@ -4,6 +4,7 @@ import (
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
+	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
@@ -12,28 +13,17 @@ type nodeType = string
 type Node interface {
 	Type() nodeType
 
-	HtmlContent() *html.HTMLFile
-	JsContent() *javascript.JSFile
-	CssContent() *css.CSSFile
-	TwoScriptContent() *twoscript.TwoScriptFile
+	Content(page *page.Page) NodeContent
 
 	Children() AbstractSyntaxTree
 	AddChild(child Node)
 	RemoveChild(child Node)
 }
 
-func HasHtmlContent(node Node) bool {
-	return node.HtmlContent().Content != ""
-}
-
-func HasJsContent(node Node) bool {
-	return node.JsContent().Content != ""
-}
-
-func HasCssContent(node Node) bool {
-	return node.CssContent().Content != ""
-}
-
-func HasTwoScriptContent(node Node) bool {
-	return node.TwoScriptContent().Content != ""
+type NodeContent struct {
+	// Overwrites all html of the existing page
+	HtmlContent      *html.HTMLFile
+	JsContent        *javascript.JSFile
+	CssContent       *css.CSSFile
+	TwoScriptContent *twoscript.TwoScriptFile
 }
