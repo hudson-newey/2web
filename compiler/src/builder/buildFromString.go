@@ -6,6 +6,7 @@ import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	validator "hudson-newey/2web/src/compiler/3-validator"
 	parser "hudson-newey/2web/src/compiler/4-parser"
+	"hudson-newey/2web/src/compiler/4-parser/grammar"
 	templating "hudson-newey/2web/src/compiler/5-templating"
 	"hudson-newey/2web/src/compiler/io/reader"
 	"hudson-newey/2web/src/content/document/devtools"
@@ -34,7 +35,7 @@ func buildFromString(inputPath string, data string, isFullPage bool) (page.Page,
 	}
 
 	// 4. Create AST (parser)
-	ast := parser.CreateAst(lexStructure)
+	ast := parser.CreateAst(lexStructure, grammar.TextRules)
 	if args.VerboseAst {
 		parser.PrintVerboseParser(ast)
 	}

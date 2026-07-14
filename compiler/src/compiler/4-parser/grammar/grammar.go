@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type grammar struct {
+type Grammar struct {
 	// A sequence of tokens that define the reactive variable
 	Def definition
 
@@ -17,14 +17,16 @@ type grammar struct {
 
 	// Any child grammar definitions that should be recursively applied within
 	// this grammar once matched.
-	ChildDefs []grammar
+	ChildDefs []Grammar
 }
 
-func (model *grammar) Matches(lexNodes []*lexer.V2LexNode) bool {
+// Matches lexer nodes against the given grammar.
+// Returns the matched subset.
+func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode {
 	// If we have not processed enough tokens to have a match yet, we can quickly
 	// return false.
 	if len(lexNodes) < len(model.Def) {
-		return false
+		return []*lexer.V2LexNode{}
 	}
 
 	// Because a grammar definition can sometimes come after multiple non-matching
@@ -32,6 +34,8 @@ func (model *grammar) Matches(lexNodes []*lexer.V2LexNode) bool {
 	// the grammar definition.
 	matchingSubset := lexNodes
 	// matchingSubset := lexNodes[len(lexNodes)-len(model.Def):]
+
+	matchedSubset := []*lexer.V2LexNode{}
 
 	// Use an outer index token so that it can increment independently of the
 	// loop iteration (e.g. so we can increment the index in the captureUntil
@@ -56,26 +60,28 @@ func (model *grammar) Matches(lexNodes []*lexer.V2LexNode) bool {
 			for matchingSubset[index].Token != breakCondition {
 				// We can skip the first itteration since we know that it'll be
 				// the initial capture token.
+				matchedSubset = append(matchedSubset, matchingSubset[index])
 				index += 1
 
 				// If we reach the end of the file while searching for the break
 				// condition, we probably want to log an error.
 				if index == len(matchingSubset) {
 					cli.PrintWarning("Parser finished inside of capture block")
-					return true
+					return matchedSubset
 				}
 			}
 			continue
 		}
 
 		if matchingSubset[index].Token != token {
-			return false
+			return []*lexer.V2LexNode{}
 		}
 
+		matchedSubset = append(matchedSubset, matchingSubset[index])
 		index += 1
 	}
 
-	return true
+	return matchedSubset
 }
 
 func (model *definition) String() string {

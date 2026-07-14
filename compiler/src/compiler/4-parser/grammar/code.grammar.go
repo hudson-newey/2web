@@ -5,7 +5,7 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-var codeBlock = grammar{
+var codeBlock = Grammar{
 	Def: newDefinition(
 		lexerTokens.LessAngle,
 		lexerTokens.CodeStartTag,

@@ -7,7 +7,7 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-func CreateAst(lexNodes []*lexer.V2LexNode) ast.AbstractSyntaxTree {
+func CreateAst(lexNodes []*lexer.V2LexNode, grammars []grammar.Grammar) ast.AbstractSyntaxTree {
 	var ast ast.AbstractSyntaxTree
 	skipCount := 0
 
@@ -17,7 +17,7 @@ func CreateAst(lexNodes []*lexer.V2LexNode) ast.AbstractSyntaxTree {
 			continue
 		}
 
-		nextNode, skipNext := processNode(i, lexNodes)
+		nextNode, skipNext := processNode(i, lexNodes, grammars)
 		skipCount = skipNext
 
 		ast = append(ast, nextNode)
@@ -29,8 +29,7 @@ func CreateAst(lexNodes []*lexer.V2LexNode) ast.AbstractSyntaxTree {
 // TODO: Because the parser is VERY basic at the moment, we default to emitting
 // a text node so that the old compiler can still process the text through the
 // old string manipulation methods.
-func processNode(index int, lexNodes []*lexer.V2LexNode) (ast.Node, int) {
-	grammars := grammar.TextRules
+func processNode(index int, lexNodes []*lexer.V2LexNode, grammars []grammar.Grammar) (ast.Node, int) {
 	for _, rule := range grammars {
 		// Searches ahead of the current position in the lexed tokens to see if the
 		// grammar definition matches.
@@ -46,9 +45,17 @@ func processNode(index int, lexNodes []*lexer.V2LexNode) (ast.Node, int) {
 		// peekBuffer := lexNodes[index:peekBufferEnd]
 		peekBuffer := lexNodes[index:]
 
-		if rule.Matches(peekBuffer) {
-			newNode := rule.Constructor(peekBuffer)
-			return *newNode, len(rule.Def) - 1
+		matchedSubset := rule.Match(peekBuffer)
+		if len(matchedSubset) > 0 {
+			newNode := *rule.Constructor(peekBuffer)
+
+			// Recurisvely match the ChildDef's
+			childAst := CreateAst(matchedSubset, rule.ChildDefs)
+			for _, child := range childAst {
+				newNode.AddChild(child)
+			}
+
+			return newNode, len(rule.Def) - 1
 		}
 	}
 

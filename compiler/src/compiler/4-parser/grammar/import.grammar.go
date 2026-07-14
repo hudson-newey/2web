@@ -5,7 +5,7 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-var scriptImport = grammar{
+var scriptImport = Grammar{
 	Def: newDefinition(
 		lexerTokens.KeywordImport,
 		lexerTokens.TextContent,
@@ -16,5 +16,5 @@ var scriptImport = grammar{
 		lexerTokens.Semicolon,
 	),
 	Constructor: wrapConstructor(nodes.NewScriptImportNode),
-	ChildDefs:   []grammar{},
+	ChildDefs:   []Grammar{},
 }

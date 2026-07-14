@@ -5,7 +5,7 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-var inlineStyles = grammar{
+var inlineStyles = Grammar{
 	Def: newDefinition(
 		lexerTokens.LessAngle,
 		lexerTokens.StyleStartTag,
@@ -14,5 +14,5 @@ var inlineStyles = grammar{
 		lexerTokens.StyleEndTag,
 	),
 	Constructor: wrapConstructor(nodes.NewStyleNode),
-	ChildDefs:   []grammar{},
+	ChildDefs:   []Grammar{},
 }

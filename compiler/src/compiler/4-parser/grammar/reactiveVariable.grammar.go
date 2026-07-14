@@ -5,7 +5,7 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-var scriptVariable = grammar{
+var scriptVariable = Grammar{
 	Def: newDefinition(
 		lexerTokens.DollarSign,
 		lexerTokens.CompiledScriptSource, // variable name

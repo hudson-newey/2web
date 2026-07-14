@@ -12,12 +12,12 @@ import (
 )
 
 func NewScriptReactiveVariableNode(lexNodes []*lexer.V2LexNode) *scriptReactiveVariableNode {
-	variableName, err := scanners.NthToken(lexNodes, lexerTokens.TextContent, 1)
+	variableName, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 1)
 	if err != nil {
 		panic(err)
 	}
 
-	initialValue, err := scanners.NthToken(lexNodes, lexerTokens.TextContent, 2)
+	initialValue, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 2)
 	if err != nil {
 		panic(err)
 	}
