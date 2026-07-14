@@ -14,4 +14,8 @@ var compiledScripts = grammar{
 		lexerTokens.ScriptEndTag,
 	),
 	Constructor: wrapConstructor(nodes.NewTwoScriptNode),
+	ChildDefs: []grammar{
+		scriptImport,
+		scriptVariable,
+	},
 }

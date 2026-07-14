@@ -14,5 +14,4 @@ var scriptVariable = grammar{
 		lexerTokens.Semicolon,
 	),
 	Constructor: wrapConstructor(nodes.NewScriptReactiveVariableNode),
-	ChildDefs:   []grammar{},
 }

@@ -13,8 +13,4 @@ var inlineScripts = grammar{
 		lexerTokens.ScriptEndTag,
 	),
 	Constructor: wrapConstructor(nodes.NewScriptNode),
-	ChildDefs: []grammar{
-		scriptImport,
-		scriptVariable,
-	},
 }
