@@ -29,38 +29,38 @@ type styleNode struct {
 	children   ast.AbstractSyntaxTree
 }
 
-func (model *styleNode) Type() string {
+func (m *styleNode) Type() string {
 	return "StyleNode"
 }
 
-func (model *styleNode) HtmlContent() *html.HTMLFile {
+func (m *styleNode) HtmlContent() *html.HTMLFile {
 	return html.NewHtmlFile()
 }
 
-func (model *styleNode) JsContent() *javascript.JSFile {
+func (m *styleNode) JsContent() *javascript.JSFile {
 	return javascript.NewJsFile()
 }
 
-func (model *styleNode) CssContent() *css.CSSFile {
-	return css.FromContent(model.content)
+func (m *styleNode) CssContent() *css.CSSFile {
+	return css.FromContent(m.content)
 }
 
-func (model *styleNode) TwoScriptContent() *twoscript.TwoScriptFile {
+func (m *styleNode) TwoScriptContent() *twoscript.TwoScriptFile {
 	return twoscript.NewTwoScriptFile()
 }
 
-func (model *styleNode) Children() ast.AbstractSyntaxTree {
-	return model.children
+func (m *styleNode) Children() ast.AbstractSyntaxTree {
+	return m.children
 }
 
-func (model *styleNode) AddChild(child ast.Node) {
-	model.children = append(model.children, child)
+func (m *styleNode) AddChild(child ast.Node) {
+	m.children = append(m.children, child)
 }
 
-func (model *styleNode) RemoveChild(child ast.Node) {
-	for i, c := range model.children {
+func (m *styleNode) RemoveChild(child ast.Node) {
+	for i, c := range m.children {
 		if c == child {
-			model.children = append(model.children[:i], model.children[i+1:]...)
+			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
 	}

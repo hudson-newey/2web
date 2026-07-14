@@ -41,7 +41,10 @@ func processNode(index int, lexNodes []*lexer.V2LexNode) (ast.Node, int) {
 			continue
 		}
 
-		peekBuffer := lexNodes[index:peekBufferEnd]
+		// TODO: Instead of passing the entire file into the Matches()
+		// we should allow the Matches() call to progressively pull in tokens
+		// peekBuffer := lexNodes[index:peekBufferEnd]
+		peekBuffer := lexNodes[index:]
 
 		if rule.Matches(peekBuffer) {
 			newNode := rule.Constructor(peekBuffer)

@@ -10,7 +10,7 @@ var compiledScripts = grammar{
 		lexerTokens.LessAngle,
 		lexerTokens.CompiledScriptStartTag,
 		lexerTokens.GreaterAngle,
-		lexerTokens.CompiledScriptSource,
+		lexerTokens.NewCaptureUntil(),
 		lexerTokens.ScriptEndTag,
 	),
 	Constructor: wrapConstructor(nodes.NewTwoScriptNode),

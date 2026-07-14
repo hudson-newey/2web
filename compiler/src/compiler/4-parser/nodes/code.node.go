@@ -47,41 +47,41 @@ type codeNode struct {
 	children               ast.AbstractSyntaxTree
 }
 
-func (model *codeNode) Type() string {
+func (m *codeNode) Type() string {
 	return "codeNode"
 }
 
-func (model *codeNode) HtmlContent() *html.HTMLFile {
-	escapedContent := html.EscapeHtml(model.content)
-	withCodeTags := model.startingCodeTagContent + escapedContent + "</code>"
+func (m *codeNode) HtmlContent() *html.HTMLFile {
+	escapedContent := html.EscapeHtml(m.content)
+	withCodeTags := m.startingCodeTagContent + escapedContent + "</code>"
 
 	return html.FromContent(withCodeTags)
 }
 
-func (model *codeNode) JsContent() *javascript.JSFile {
+func (m *codeNode) JsContent() *javascript.JSFile {
 	return javascript.NewJsFile()
 }
 
-func (model *codeNode) CssContent() *css.CSSFile {
+func (m *codeNode) CssContent() *css.CSSFile {
 	return css.NewCssFile()
 }
 
-func (model *codeNode) TwoScriptContent() *twoscript.TwoScriptFile {
+func (m *codeNode) TwoScriptContent() *twoscript.TwoScriptFile {
 	return twoscript.NewTwoScriptFile()
 }
 
-func (model *codeNode) Children() ast.AbstractSyntaxTree {
-	return model.children
+func (m *codeNode) Children() ast.AbstractSyntaxTree {
+	return m.children
 }
 
-func (model *codeNode) AddChild(child ast.Node) {
-	model.children = append(model.children, child)
+func (m *codeNode) AddChild(child ast.Node) {
+	m.children = append(m.children, child)
 }
 
-func (model *codeNode) RemoveChild(child ast.Node) {
-	for i, c := range model.children {
+func (m *codeNode) RemoveChild(child ast.Node) {
+	for i, c := range m.children {
 		if c == child {
-			model.children = append(model.children[:i], model.children[i+1:]...)
+			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
 	}

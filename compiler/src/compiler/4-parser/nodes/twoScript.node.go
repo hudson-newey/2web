@@ -32,38 +32,38 @@ type twoScriptNode struct {
 	children   ast.AbstractSyntaxTree
 }
 
-func (model *twoScriptNode) Type() string {
+func (m *twoScriptNode) Type() string {
 	return "twoScriptNode"
 }
 
-func (model *twoScriptNode) HtmlContent() *html.HTMLFile {
+func (m *twoScriptNode) HtmlContent() *html.HTMLFile {
 	return html.NewHtmlFile()
 }
 
-func (model *twoScriptNode) JsContent() *javascript.JSFile {
+func (m *twoScriptNode) JsContent() *javascript.JSFile {
 	return javascript.NewJsFile()
 }
 
-func (model *twoScriptNode) CssContent() *css.CSSFile {
+func (m *twoScriptNode) CssContent() *css.CSSFile {
 	return css.NewCssFile()
 }
 
-func (model *twoScriptNode) TwoScriptContent() *twoscript.TwoScriptFile {
-	return twoscript.FromContent(model.content)
+func (m *twoScriptNode) TwoScriptContent() *twoscript.TwoScriptFile {
+	return twoscript.FromContent(m.content)
 }
 
-func (model *twoScriptNode) Children() ast.AbstractSyntaxTree {
-	return model.children
+func (m *twoScriptNode) Children() ast.AbstractSyntaxTree {
+	return m.children
 }
 
-func (model *twoScriptNode) AddChild(child ast.Node) {
-	model.children = append(model.children, child)
+func (m *twoScriptNode) AddChild(child ast.Node) {
+	m.children = append(m.children, child)
 }
 
-func (model *twoScriptNode) RemoveChild(child ast.Node) {
-	for i, c := range model.children {
+func (m *twoScriptNode) RemoveChild(child ast.Node) {
+	for i, c := range m.children {
 		if c == child {
-			model.children = append(model.children[:i], model.children[i+1:]...)
+			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
 	}

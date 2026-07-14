@@ -8,9 +8,9 @@ import (
 var scriptVariable = grammar{
 	Def: newDefinition(
 		lexerTokens.DollarSign,
-		lexerTokens.TextContent, // variable name
+		lexerTokens.CompiledScriptSource, // variable name
 		lexerTokens.Equals,
-		lexerTokens.TextContent, // initial value
+		lexerTokens.CompiledScriptSource, // initial value
 		lexerTokens.Semicolon,
 	),
 	Constructor: wrapConstructor(nodes.NewScriptReactiveVariableNode),
