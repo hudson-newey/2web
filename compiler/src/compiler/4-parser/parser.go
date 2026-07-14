@@ -55,7 +55,7 @@ func processNode(index int, lexNodes []*lexer.V2LexNode, grammars []grammar.Gram
 				newNode.AddChild(child)
 			}
 
-			return newNode, len(rule.Def) - 1
+			return newNode, len(matchedSubset) - 1
 		}
 	}
 
