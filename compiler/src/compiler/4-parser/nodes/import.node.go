@@ -13,12 +13,12 @@ import (
 
 // import importName from "importPath";
 func NewScriptImportNode(lexNodes []*lexer.V2LexNode) *scriptImportNode {
-	importNameNode, err := scanners.NthToken(lexNodes, lexerTokens.TextContent, 1)
+	importNameNode, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 1)
 	if err != nil {
 		panic(err)
 	}
 
-	importPathNode, err := scanners.NthToken(lexNodes, lexerTokens.TextContent, 2)
+	importPathNode, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 2)
 	if err != nil {
 		panic(err)
 	}

@@ -8,11 +8,9 @@ import (
 var scriptImport = Grammar{
 	Def: newDefinition(
 		lexerTokens.KeywordImport,
-		lexerTokens.TextContent,
+		lexerTokens.CompiledScriptSource,
 		lexerTokens.KeywordFrom,
-		anyQuote,
-		lexerTokens.TextContent,
-		anyQuote,
+		lexerTokens.CompiledScriptSource,
 		lexerTokens.Semicolon,
 	),
 	Constructor: wrapConstructor(nodes.NewScriptImportNode),

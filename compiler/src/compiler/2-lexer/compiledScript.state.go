@@ -54,7 +54,7 @@ func reactiveVarAssignmentLexer(model *Lexer) (V2LexNode, LexFunc) {
 
 func esmImportLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"from": {token: lexerTokens.Equals, next: esmImportLexer},
+		"from": {token: lexerTokens.KeywordFrom, next: esmImportLexer},
 		";":    {token: lexerTokens.Semicolon, next: compiledScriptContentLexer},
 	}
 	cases = withScriptExitCase(cases)
