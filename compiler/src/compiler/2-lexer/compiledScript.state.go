@@ -63,7 +63,7 @@ func esmImportLexer(model *Lexer) (V2LexNode, LexFunc) {
 
 func esmLineCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"*/": {token: lexerTokens.BlockCommentEnd, next: compiledScriptContentLexer},
+		"\n": {token: lexerTokens.BlockCommentEnd, next: compiledScriptContentLexer},
 	}
 	cases = withScriptExitCase(cases)
 	return lexerFactory(cases, states.CompiledScriptSource)(model)
