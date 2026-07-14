@@ -62,21 +62,6 @@ const (
 	// \
 	Escape LexToken = "Escape"
 
-	//? JS Tokens
-
-	// import
-	KeywordImport LexToken = "KeywordImport"
-
-	// from
-	// This is typically used together with the import keyword.
-	KeywordFrom LexToken = "KeywordFrom"
-
-	// $
-	DollarSign LexToken = "DollarSign"
-
-	// ;
-	Semicolon LexToken = "Semicolon"
-
 	// <style>
 	StyleStartTag LexToken = "StyleStartTag"
 
@@ -92,10 +77,25 @@ const (
 	// </script>
 	ScriptEndTag LexToken = "ScriptEndTag"
 
+	//? JS Tokens
+
+	// import
+	KeywordImport LexToken = "KeywordImport"
+
+	// from
+	// This is typically used together with the import keyword.
+	KeywordFrom LexToken = "KeywordFrom"
+
+	// $
+	DollarSign LexToken = "DollarSign"
+
+	// ;
+	Semicolon LexToken = "Semicolon"
+
 	// //
 	ScriptLineCommentStart LexToken = "ScriptLineCommentStart"
 
-	// //
+	// newline
 	ScriptLineCommentEnd LexToken = "ScriptLineCommentEnd"
 
 	// /*

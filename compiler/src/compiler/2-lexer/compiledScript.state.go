@@ -32,10 +32,14 @@ func withScriptExitCase(src lexDefMap) lexDefMap {
 
 func compiledScriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"$": {token: lexerTokens.DollarSign, next: reactiveVarAssignmentLexer},
+		// process comments first so that commenting out a code block can
+		// disable the code (the commented out code never gets lexed output).
+		"//":     {token: lexerTokens.MarkupCommentStart, next: esmLineCommentLexer},
+		"/*":     {token: lexerTokens.ScriptBlockCommentStart, next: esmBlockCommentLexer},
+		"$":      {token: lexerTokens.DollarSign, next: reactiveVarAssignmentLexer},
+		"import": {token: lexerTokens.KeywordImport, next: esmImportLexer},
 	}
 	cases = withScriptExitCase(cases)
-
 	return lexerFactory(cases, states.CompiledScriptSource)(model)
 }
 
@@ -43,6 +47,31 @@ func reactiveVarAssignmentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
 		"=": {token: lexerTokens.Equals, next: reactiveVarAssignmentLexer},
 		";": {token: lexerTokens.Semicolon, next: compiledScriptContentLexer},
+	}
+	cases = withScriptExitCase(cases)
+	return lexerFactory(cases, states.CompiledScriptSource)(model)
+}
+
+func esmImportLexer(model *Lexer) (V2LexNode, LexFunc) {
+	cases := lexDefMap{
+		"from": {token: lexerTokens.Equals, next: esmImportLexer},
+		";":    {token: lexerTokens.Semicolon, next: compiledScriptContentLexer},
+	}
+	cases = withScriptExitCase(cases)
+	return lexerFactory(cases, states.CompiledScriptSource)(model)
+}
+
+func esmLineCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
+	cases := lexDefMap{
+		"*/": {token: lexerTokens.BlockCommentEnd, next: compiledScriptContentLexer},
+	}
+	cases = withScriptExitCase(cases)
+	return lexerFactory(cases, states.CompiledScriptSource)(model)
+}
+
+func esmBlockCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
+	cases := lexDefMap{
+		"*/": {token: lexerTokens.BlockCommentEnd, next: compiledScriptContentLexer},
 	}
 	cases = withScriptExitCase(cases)
 	return lexerFactory(cases, states.CompiledScriptSource)(model)

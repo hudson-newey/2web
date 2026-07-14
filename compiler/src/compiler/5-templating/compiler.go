@@ -37,20 +37,6 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 		return pageModel
 	}
 
-	for _, node := range parsedAst {
-		if ast.HasCssContent(node) {
-			pageModel.AddStyle(node.CssContent())
-		}
-
-		if ast.HasJsContent(node) {
-			pageModel.AddScript(node.JsContent())
-		}
-
-		if ast.HasTwoScriptContent(node) {
-			pageModel.AddTwoScript(node.TwoScriptContent())
-		}
-	}
-
 	// We want to exclude Markdown, xml, and xslt files from this processing step
 	// because our element ref symbol is a hashtag which has meaning in these
 	// formats.
@@ -183,6 +169,20 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 
 			pageModel.Errors.AddError(&varError)
 			continue
+		}
+	}
+
+	for _, node := range parsedAst {
+		if ast.HasCssContent(node) {
+			pageModel.AddStyle(node.CssContent())
+		}
+
+		if ast.HasJsContent(node) {
+			pageModel.AddScript(node.JsContent())
+		}
+
+		if ast.HasTwoScriptContent(node) {
+			pageModel.AddTwoScript(node.TwoScriptContent())
 		}
 	}
 
