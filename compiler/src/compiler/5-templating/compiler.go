@@ -6,6 +6,7 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
 	"hudson-newey/2web/src/content/assets"
+	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/content/txt"
@@ -14,23 +15,29 @@ import (
 	"hudson-newey/2web/src/models/reactiveEvent"
 	"hudson-newey/2web/src/models/reactiveProperty"
 	"hudson-newey/2web/src/models/reactiveVariable"
+	"os"
 	"strings"
 )
 
 func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
-	pageModel := page.NewPage()
-	pageModel.InputPath = filePath
-
-	recurseAst(&pageModel, parsedAst)
-	addRouteAssets(&pageModel)
-
 	// Raw text files should be returned without modification since they are "raw"
 	// data formats.
 	// Adding additional functionality on top of these formats is nonsensical and
 	// would only increase the surface for bugs.
 	if txt.IsTxtFile(filePath) {
+		fileContent, _ := os.ReadFile(filePath)
+		pageModel := page.NewPage()
+		pageModel.SetContent(
+			html.FromContent(string(fileContent)),
+		)
 		return pageModel
 	}
+
+	pageModel := page.NewPage()
+	pageModel.InputPath = filePath
+
+	recurseAst(&pageModel, parsedAst)
+	addRouteAssets(&pageModel)
 
 	// We want to exclude Markdown, xml, and xslt files from this processing step
 	// because our element ref symbol is a hashtag which has meaning in these
