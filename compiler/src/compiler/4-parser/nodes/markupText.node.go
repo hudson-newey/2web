@@ -1,7 +1,6 @@
 package nodes
 
 import (
-	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/content/css"
@@ -23,7 +22,7 @@ type markupTextNode struct {
 }
 
 func (m *markupTextNode) Type() string {
-	return fmt.Sprintf("MarkupTextNode [content: '%s']", m.content)
+	return "MarkupTextNode"
 }
 
 func (m *markupTextNode) Children() ast.AbstractSyntaxTree {

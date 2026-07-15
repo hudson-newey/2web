@@ -8,6 +8,7 @@ import (
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 	twoscript "hudson-newey/2web/src/content/twoScript"
+	"strings"
 )
 
 func NewPage() Page {
@@ -40,6 +41,10 @@ func (model *Page) AddTwoScript(tsFile *twoscript.TwoScriptFile) {
 }
 
 func (model *Page) AddScript(jsFile *javascript.JSFile) {
+	if strings.TrimSpace(jsFile.Content) == "" {
+		return
+	}
+
 	model.JavaScript = append(model.JavaScript, jsFile)
 
 	// Adds a "<script src=></script>" tag to the html document to load the js file
@@ -75,6 +80,10 @@ func (model *Page) AddScript(jsFile *javascript.JSFile) {
 }
 
 func (model *Page) AddStyle(cssFile *css.CSSFile) {
+	if strings.TrimSpace(cssFile.Content) == "" {
+		return
+	}
+
 	model.Css = append(model.Css, cssFile)
 
 	// Adds a "<link>" tag to the html document to load the css file

@@ -21,12 +21,7 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	pageModel := page.NewPage()
 	pageModel.InputPath = filePath
 
-	var sb strings.Builder
-	for _, node := range parsedAst {
-		sb.WriteString(node.Content(&pageModel).HtmlContent.Content)
-	}
-	pageModel.Html.AddContent(sb.String())
-
+	recurseAst(&pageModel, parsedAst)
 	addRouteAssets(&pageModel)
 
 	// Raw text files should be returned without modification since they are "raw"
@@ -168,15 +163,41 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 		}
 	}
 
-	for _, node := range parsedAst {
-		nodeContent := node.Content(&pageModel)
-		pageModel.SetContent(nodeContent.HtmlContent)
-		pageModel.AddStyle(nodeContent.CssContent)
-		pageModel.AddScript(nodeContent.JsContent)
-		pageModel.AddTwoScript(nodeContent.TwoScriptContent)
-	}
-
 	reactiveCompiler.CompileReactivity(filePath, &pageModel, reactiveVariables)
 
 	return pageModel
+}
+
+func recurseAst(page *page.Page, parsedAst ast.AbstractSyntaxTree) {
+	// First pass to establish page content
+	// We need this so that when we get to ast nodes that replace page content,
+	// it has the full page context.
+	for _, node := range parsedAst {
+		if node.Type() != "MarkupTextNode" {
+			continue
+		}
+
+		nodeContent := node.Content(page)
+		page.SetContent(nodeContent.HtmlContent)
+		page.AddStyle(nodeContent.CssContent)
+		page.AddScript(nodeContent.JsContent)
+		page.AddTwoScript(nodeContent.TwoScriptContent)
+
+		recurseAst(page, node.Children())
+	}
+
+	// Second pass reactive content
+	for _, node := range parsedAst {
+		if node.Type() == "MarkupTextNode" {
+			continue
+		}
+
+		nodeContent := node.Content(page)
+		page.SetContent(nodeContent.HtmlContent)
+		page.AddStyle(nodeContent.CssContent)
+		page.AddScript(nodeContent.JsContent)
+		page.AddTwoScript(nodeContent.TwoScriptContent)
+
+		recurseAst(page, node.Children())
+	}
 }
