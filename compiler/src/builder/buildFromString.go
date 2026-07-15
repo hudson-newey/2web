@@ -35,7 +35,7 @@ func buildFromString(inputPath string, data string, isFullPage bool) (page.Page,
 	}
 
 	// 4. Create AST (parser)
-	ast := parser.CreateAst(lexStructure, grammar.TextRules)
+	ast := parser.CreateAst(lexStructure, grammar.TextRules, true)
 	if args.VerboseAst {
 		parser.PrintVerboseParser(ast)
 	}

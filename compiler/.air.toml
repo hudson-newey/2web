@@ -12,8 +12,8 @@ tmp_dir = "tmp"
   # args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache"]
   # Using a small file is helpful for debugging the lexer and parser because
   # there is less debug info to sift through.
-  # args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--verbose-lexer", "--verbose-ast"]
-  args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache"]
+  args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--verbose-lexer", "--verbose-ast"]
+  # args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache"]
   # args_bin = ["-i", "dev/", "-o", "dist/", "--production", "--ignore-errors"]
   # args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache", "--listen"]
   cmd = "go build -o ./tmp/main ./src"

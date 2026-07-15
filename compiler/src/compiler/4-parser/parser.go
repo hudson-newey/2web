@@ -7,7 +7,11 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-func CreateAst(lexNodes []*lexer.V2LexNode, grammars []grammar.Grammar) ast.AbstractSyntaxTree {
+func CreateAst(
+	lexNodes []*lexer.V2LexNode,
+	grammars []grammar.Grammar,
+	withTextMatcher bool,
+) ast.AbstractSyntaxTree {
 	var ast ast.AbstractSyntaxTree
 	skipCount := 0
 
@@ -17,10 +21,12 @@ func CreateAst(lexNodes []*lexer.V2LexNode, grammars []grammar.Grammar) ast.Abst
 			continue
 		}
 
-		nextNode, skipNext := processNode(i, lexNodes, grammars)
+		nextNode, skipNext := processNode(i, lexNodes, grammars, withTextMatcher)
 		skipCount = skipNext
 
-		ast = append(ast, nextNode)
+		if nextNode != nil {
+			ast = append(ast, nextNode)
+		}
 	}
 
 	return ast
@@ -29,7 +35,12 @@ func CreateAst(lexNodes []*lexer.V2LexNode, grammars []grammar.Grammar) ast.Abst
 // TODO: Because the parser is VERY basic at the moment, we default to emitting
 // a text node so that the old compiler can still process the text through the
 // old string manipulation methods.
-func processNode(index int, lexNodes []*lexer.V2LexNode, grammars []grammar.Grammar) (ast.Node, int) {
+func processNode(
+	index int,
+	lexNodes []*lexer.V2LexNode,
+	grammars []grammar.Grammar,
+	withTextMatcher bool,
+) (ast.Node, int) {
 	for _, rule := range grammars {
 		// Searches ahead of the current position in the lexed tokens to see if the
 		// grammar definition matches.
@@ -50,7 +61,7 @@ func processNode(index int, lexNodes []*lexer.V2LexNode, grammars []grammar.Gram
 			newNode := *rule.Constructor(peekBuffer)
 
 			// Recurisvely match the ChildDef's
-			childAst := CreateAst(matchedSubset, rule.ChildDefs)
+			childAst := CreateAst(matchedSubset, rule.ChildDefs, false)
 			for _, child := range childAst {
 				newNode.AddChild(child)
 			}
@@ -59,6 +70,9 @@ func processNode(index int, lexNodes []*lexer.V2LexNode, grammars []grammar.Gram
 		}
 	}
 
-	currentNode := lexNodes[index]
-	return nodes.NewMarkupTextNode([]*lexer.V2LexNode{currentNode}), 0
+	if withTextMatcher {
+		currentNode := lexNodes[index]
+		return nodes.NewMarkupTextNode([]*lexer.V2LexNode{currentNode}), 0
+	}
+	return nil, 0
 }
