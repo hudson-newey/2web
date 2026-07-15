@@ -11,7 +11,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewReactivePropertyNode(lexNodes []*lexer.V2LexNode) *reactivePropertyNode {
+func NewReactiveEventNode(lexNodes []*lexer.V2LexNode) *reactiveEventNode {
 	propName, err := scanners.NthToken(lexNodes, lexerTokens.TextContent, 1)
 	if err != nil {
 		panic(err)
@@ -22,31 +22,31 @@ func NewReactivePropertyNode(lexNodes []*lexer.V2LexNode) *reactivePropertyNode 
 		panic(err)
 	}
 
-	return &reactivePropertyNode{
-		propName: propName.Content,
-		reducer:  reducer.Content,
+	return &reactiveEventNode{
+		eventName: propName.Content,
+		reducer:   reducer.Content,
 	}
 }
 
-type reactivePropertyNode struct {
-	propName string
-	reducer  string
-	children ast.AbstractSyntaxTree
+type reactiveEventNode struct {
+	eventName string
+	reducer   string
+	children  ast.AbstractSyntaxTree
 }
 
-func (m *reactivePropertyNode) Type() string {
-	return "reactivePropertyNode"
+func (m *reactiveEventNode) Type() string {
+	return "reactiveEventNode"
 }
 
-func (m *reactivePropertyNode) Children() ast.AbstractSyntaxTree {
+func (m *reactiveEventNode) Children() ast.AbstractSyntaxTree {
 	return m.children
 }
 
-func (m *reactivePropertyNode) AddChild(child ast.Node) {
+func (m *reactiveEventNode) AddChild(child ast.Node) {
 	m.children = append(m.children, child)
 }
 
-func (m *reactivePropertyNode) RemoveChild(child ast.Node) {
+func (m *reactiveEventNode) RemoveChild(child ast.Node) {
 	for i, c := range m.children {
 		if c == child {
 			m.children = append(m.children[:i], m.children[i+1:]...)
@@ -55,7 +55,7 @@ func (m *reactivePropertyNode) RemoveChild(child ast.Node) {
 	}
 }
 
-func (m *reactivePropertyNode) Content(page *page.Page) ast.NodeContent {
+func (m *reactiveEventNode) Content(page *page.Page) ast.NodeContent {
 	return ast.NodeContent{
 		HtmlContent:      page.Html,
 		JsContent:        javascript.NewJsFile(),

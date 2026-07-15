@@ -11,4 +11,5 @@ var TextRules = []Grammar{
 	codeBlock,
 
 	reactiveProperty,
+	reactiveEvent,
 }

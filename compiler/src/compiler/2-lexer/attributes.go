@@ -17,13 +17,13 @@ func withAttributes(src lexDefMap) lexDefMap {
 		"/":  {token: lexerTokens.Slash, next: elementLexer},
 		"'":  {token: lexerTokens.QuoteSingle, next: elementLexer},
 		"\"": {token: lexerTokens.QuoteDouble, next: elementLexer},
-		"@":  {token: lexerTokens.AtSymbol, next: elementLexer},
 		"#":  {token: lexerTokens.Hash, next: elementLexer},
 		"=":  {token: lexerTokens.Equals, next: elementLexer},
 		"!":  {token: lexerTokens.Exclamation, next: textLexer},
 		">":  {token: lexerTokens.GreaterAngle, next: textLexer},
 
 		"*": {token: lexerTokens.Star, next: reactivePropertyLexer},
+		"@": {token: lexerTokens.AtSymbol, next: reactiveEventLexer},
 	}
 
 	return src.with(attributeStates)
@@ -32,6 +32,14 @@ func withAttributes(src lexDefMap) lexDefMap {
 func reactivePropertyLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
 		"=": {token: lexerTokens.Equals, next: reactivePropertyLexer},
+	}
+	cases = withStrings(cases, elementLexer)
+	return lexerFactory(cases, states.Element)(model)
+}
+
+func reactiveEventLexer(model *Lexer) (V2LexNode, LexFunc) {
+	cases := lexDefMap{
+		"=": {token: lexerTokens.Equals, next: reactiveEventLexer},
 	}
 	cases = withStrings(cases, elementLexer)
 	return lexerFactory(cases, states.Element)(model)
