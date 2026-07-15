@@ -107,7 +107,7 @@ const (
 	//? General
 
 	// TextContent content that is displayed on the screen
-	TextContent LexToken = "Text"
+	TextContent LexToken = "TextContent"
 
 	// Inside a <script compiled> tag or in an external .js file
 	CompiledScriptSource LexToken = "CompiledScriptSource"

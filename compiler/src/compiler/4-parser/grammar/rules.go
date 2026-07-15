@@ -9,4 +9,6 @@ var TextRules = []Grammar{
 	compiledScripts,
 
 	codeBlock,
+
+	reactiveProperty,
 }
