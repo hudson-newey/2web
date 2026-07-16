@@ -29,12 +29,12 @@
     </div>
 
     <script type="module">
-      import { bootstrapLinkPrefetch } from "../pre-fetcher/index.ts";
+      import { bootstrapLinkPrefetch, prefetch } from "../pre-fetcher/index.ts";
 
       bootstrapLinkPrefetch();
-      // bootstrapLinkPrefetch({ trigger: "hover" });
-      // bootstrapLinkPrefetch({ trigger: "focus" });
-      // bootstrapLinkPrefetch({ trigger: "click" });
+
+      prefetch("/signals");
+      prefetch("https://www.google.com");
     </script>
 
     <style>

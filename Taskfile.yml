@@ -6,6 +6,7 @@ tasks:
       - "build:cli"
       - "build:compiler"
       - "build:mcp"
+      - "build:packages"
       - "build:vscode-extension"
       - "build:chrome-extension"
 
@@ -29,6 +30,11 @@ tasks:
     dir: "./tools/mcp"
     cmds:
       - go build -ldflags "-s -w" -o ./bin/2web-mcp ./src/main.go
+
+  "build:packages":
+    dir: "./packages"
+    cmds:
+      - pnpm build
 
   "build:vscode-extension":
     dir: "./tools/vscode-extension"
