@@ -86,7 +86,9 @@ async function runBenchmark() {
 
   const buildOutputs = await results;
 
-  const buildTimes: Partial<Record<keyof typeof testedFrameworks, Milliseconds>> = {};
+  const buildTimes: Partial<
+    Record<keyof typeof testedFrameworks, Milliseconds>
+  > = {};
   for (const build of buildOutputs) {
     buildTimes[build.name] = build.buildTime;
   }
@@ -107,9 +109,13 @@ async function runBenchmark() {
   // I write to a csv so that I can do some cool graphs in the future and so
   // that loading into excel is easy
   const assetSizeFileName = reportsDirectory + "build_report.csv";
-  await Deno.writeTextFile(assetSizeFileName, "Framework,size (KB),Build Time (ms)\n", {
-    append: true,
-  });
+  await Deno.writeTextFile(
+    assetSizeFileName,
+    "Framework,size (KB),Build Time (ms)\n",
+    {
+      append: true,
+    },
+  );
 
   // we do this in async because I'm too tired to code it otherwise
   for (const implementation of testedFrameworks) {

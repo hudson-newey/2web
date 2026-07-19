@@ -45,3 +45,8 @@ tasks:
     dir: "./tools/chrome-extension"
     cmds:
       - pnpm build
+
+  "run:benchmarks":
+    dir: "./benchmarks/performance"
+    cmds:
+      - pnpm start
