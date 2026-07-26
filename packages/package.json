@@ -46,10 +46,6 @@
       "import": "./dist/route-guards.js",
       "types": "./dist/route-guards/index.d.ts"
     },
-    "./signals": {
-      "import": "./dist/signals.js",
-      "types": "./dist/signals/index.d.ts"
-    },
     "./ssr": {
       "import": "./dist/ssr.js",
       "types": "./dist/ssr/index.d.ts"

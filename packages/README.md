@@ -4,17 +4,16 @@ A collection of packages to enhance your 2web application
 
 | Package                                        | State |
 | ---------------------------------------------- | ----- |
-| [animations](animations/README.md)             | 🔧     |
-| [iron](iron/README.md)                         | 🔧     |
-| [named-strings](named-strings/README.md)       | 🔧     |
-| [pre-fetcher](pre-fetcher/README.md)           | 🔧     |
-| [route-guards](route-guards/README.md)         | 🔧     |
-| [signals](signals/README.md)                   | 🔧     |
-| [ssr](ssr/README.md)                           | 🔧     |
-| [typescript](typescript/README.md)             | 🔧     |
-| [2js](2js/README.md)                           | 🔧     |
-| [view-transitions](view-transitions/README.md) | 🔧     |
-| [vite-plugin](vite-plugin/README.md)           | 🔧     |
+| [animations](animations/README.md)             | 🔧    |
+| [iron](iron/README.md)                         | 🔧    |
+| [named-strings](named-strings/README.md)       | 🔧    |
+| [pre-fetcher](pre-fetcher/README.md)           | 🔧    |
+| [route-guards](route-guards/README.md)         | 🔧    |
+| [ssr](ssr/README.md)                           | 🔧    |
+| [typescript](typescript/README.md)             | 🔧    |
+| [2js](2js/README.md)                           | 🔧    |
+| [view-transitions](view-transitions/README.md) | 🔧    |
+| [vite-plugin](vite-plugin/README.md)           | 🔧    |
 
 ❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
 
@@ -38,17 +37,19 @@ $ npm install @two-web/kit
 To use a package from this repository (either through node_modules or CDN), you
 can import the sub-package as a an esm module.
 
-```html
-<script type="module">
-import { eventHandler, query, textContent } from "@two-web/kit/signals";
+```ts
+import { TwoElement, render, when } from "@two-web/kit/2js";
 
-const target = query("#counter");
+const counterButton = new TwoElement({
+  className: "counter-button",
+  tagName: "button",
+  textContent: "0",
+  attributes: { "aria-label": "Increment count" },
+  events: {
+    click: () => counterButton.textContent++,
+  },
+  directives: [when(true)],
+});
 
-const countHandler = eventHandler((event, value) => value + 1);
-target.value.addEventListener("click", countHandler);
-
-textContent(target.value, countHandler);
-</script>
-
-<button id="counter">0</button>
+render(document.body, counterButton);
 ```

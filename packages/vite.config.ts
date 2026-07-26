@@ -30,7 +30,6 @@ export default defineConfig({
         "named-strings": "./named-strings/index.ts",
         "pre-fetcher": "./pre-fetcher/index.ts",
         "route-guards": "./route-guards/index.ts",
-        signals: "./signals/index.ts",
         ssr: "./ssr/index.ts",
         typescript: "./typescript/index.ts",
         "2js": "./2js/index.ts",

@@ -26,11 +26,9 @@ const counterButton = new TwoElement({
   textContent: "0",
   attributes: { "aria-label": "Increment count" },
   events: {
-    "click": () => counterButton.textContent++,
+    click: () => counterButton.textContent++,
   },
-  directives: [
-    when(true),
-  ],
+  directives: [when(true)],
 });
 
 render(document.body, counterButton);
