@@ -2,6 +2,7 @@ package cache
 
 import (
 	"database/sql"
+	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/filesystem"
 	"os"
 	"path"
@@ -28,6 +29,10 @@ func dbLocation() string {
 }
 
 func dbConnection() *sql.DB {
+	if cli.GetArgs().DisableCache {
+		panic("Attempted to establish database connection with DisabledCache")
+	}
+
 	if cachedConnection != nil {
 		return cachedConnection
 	}
