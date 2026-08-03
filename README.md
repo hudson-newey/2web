@@ -14,7 +14,7 @@ I am to make all reactivity compiled so that there is minimal runtime overhead.
 
 ```html
 <script compiled>
-  $ count = 0;
+  $count = 0;
 </script>
 
 <h1>{{ $count }}</h1>

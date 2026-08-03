@@ -16,7 +16,7 @@ No code snippets will be shown out of context.
 <html>
   <body>
     <script compiled>
-      $ count = 0;
+      $count = 0;
     </script>
 
     <h1 *innerText="$count"></h1>

@@ -31,7 +31,7 @@ Angular templates.
 
 ```html
 <script compiled>
-  $ count = 0;
+  $count = 0;
 </script>
 
 <h1>Current Count: {{ $count }}</h1>
