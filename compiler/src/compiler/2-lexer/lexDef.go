@@ -1,8 +1,8 @@
 package lexer
 
 import (
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/2-lexer/states"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"slices"
 	"strings"
 )
@@ -12,7 +12,7 @@ type LexMatcher = string
 type V2Lexer func(l *Lexer) (V2LexNode, LexFunc)
 
 type lexDef struct {
-	token lexerTokens.LexToken
+	token lexeme.Lexeme
 	next  LexFunc
 }
 

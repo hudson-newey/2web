@@ -2,7 +2,7 @@ package nodes
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
@@ -12,7 +12,7 @@ import (
 )
 
 func NewScriptNode(lexNodes []*lexer.V2LexNode) *scriptNode {
-	sourceNode, err := scanners.FirstToken(lexNodes, lexerTokens.ScriptSource)
+	sourceNode, err := scanners.FirstToken(lexNodes, lexeme.ScriptSource)
 	if err != nil {
 		panic(err)
 	}

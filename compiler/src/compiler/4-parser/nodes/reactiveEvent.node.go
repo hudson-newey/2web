@@ -2,7 +2,7 @@ package nodes
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
@@ -12,12 +12,12 @@ import (
 )
 
 func NewReactiveEventNode(lexNodes []*lexer.V2LexNode) *reactiveEventNode {
-	propName, err := scanners.NthToken(lexNodes, lexerTokens.TextContent, 1)
+	propName, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
 		panic(err)
 	}
 
-	reducer, err := scanners.NthToken(lexNodes, lexerTokens.TextContent, 4)
+	reducer, err := scanners.NthToken(lexNodes, lexeme.TextContent, 4)
 	if err != nil {
 		panic(err)
 	}

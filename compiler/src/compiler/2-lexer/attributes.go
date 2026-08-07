@@ -1,8 +1,8 @@
 package lexer
 
 import (
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/2-lexer/states"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 )
 
 // Attribute lexing is shared between multiple states.
@@ -12,18 +12,18 @@ import (
 func withAttributes(src lexDefMap) lexDefMap {
 	attributeStates := lexDefMap{
 		// I treat tabs like spaces so that they are treated the same in attributes
-		" ":  {token: lexerTokens.Space, next: elementLexer},
-		"\t": {token: lexerTokens.Space, next: elementLexer},
-		"/":  {token: lexerTokens.Slash, next: elementLexer},
-		"'":  {token: lexerTokens.QuoteSingle, next: elementLexer},
-		"\"": {token: lexerTokens.QuoteDouble, next: elementLexer},
-		"#":  {token: lexerTokens.Hash, next: elementLexer},
-		"=":  {token: lexerTokens.Equals, next: elementLexer},
-		"!":  {token: lexerTokens.Exclamation, next: textLexer},
-		">":  {token: lexerTokens.GreaterAngle, next: textLexer},
+		" ":  {token: lexeme.Space, next: elementLexer},
+		"\t": {token: lexeme.Space, next: elementLexer},
+		"/":  {token: lexeme.Slash, next: elementLexer},
+		"'":  {token: lexeme.QuoteSingle, next: elementLexer},
+		"\"": {token: lexeme.QuoteDouble, next: elementLexer},
+		"#":  {token: lexeme.Hash, next: elementLexer},
+		"=":  {token: lexeme.Equals, next: elementLexer},
+		"!":  {token: lexeme.Exclamation, next: textLexer},
+		">":  {token: lexeme.GreaterAngle, next: textLexer},
 
-		"*": {token: lexerTokens.Star, next: reactivePropertyLexer},
-		"@": {token: lexerTokens.AtSymbol, next: reactiveEventLexer},
+		"*": {token: lexeme.Star, next: reactivePropertyLexer},
+		"@": {token: lexeme.AtSymbol, next: reactiveEventLexer},
 	}
 
 	return src.with(attributeStates)
@@ -31,7 +31,7 @@ func withAttributes(src lexDefMap) lexDefMap {
 
 func reactivePropertyLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"=": {token: lexerTokens.Equals, next: reactivePropertyLexer},
+		"=": {token: lexeme.Equals, next: reactivePropertyLexer},
 	}
 	cases = withStrings(cases, elementLexer)
 	return lexerFactory(cases, states.Element)(model)
@@ -39,7 +39,7 @@ func reactivePropertyLexer(model *Lexer) (V2LexNode, LexFunc) {
 
 func reactiveEventLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"=": {token: lexerTokens.Equals, next: reactiveEventLexer},
+		"=": {token: lexeme.Equals, next: reactiveEventLexer},
 	}
 	cases = withStrings(cases, elementLexer)
 	return lexerFactory(cases, states.Element)(model)

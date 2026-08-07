@@ -1,17 +1,17 @@
 package grammar
 
 import (
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
 var inlineScripts = Grammar{
 	Def: newDefinition(
-		lexerTokens.LessAngle,
-		lexerTokens.ScriptStartTag,
-		lexerTokens.GreaterAngle,
-		lexerTokens.ScriptSource,
-		lexerTokens.ScriptEndTag,
+		lexeme.LessAngle,
+		lexeme.ScriptStartTag,
+		lexeme.GreaterAngle,
+		lexeme.ScriptSource,
+		lexeme.ScriptEndTag,
 	),
 	Constructor: wrapConstructor(nodes.NewScriptNode),
 	ChildDefs:   []Grammar{},

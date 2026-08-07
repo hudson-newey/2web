@@ -1,4 +1,4 @@
-package lexerTokens
+package lexeme
 
 const (
 	// A special lexer token that can be used in grammars to match against any
@@ -9,22 +9,22 @@ const (
 	//
 	// This token is purposely not exported so that people can use the more
 	// stable lexerTokens.CaptureUntil() function.
-	CaptureUntil LexToken = "CAPTURE_UNTIL"
+	CaptureUntil Lexeme = "CAPTURE_UNTIL"
 )
 
 // By using a function here, we provide a more stable interface to the anything
 // token.
 // It also makes the Anything() call stand out more in syntax highlighting.
-func NewCaptureUntil() LexToken {
+func NewCaptureUntil() Lexeme {
 	return newSpecialToken(CaptureUntil)
 }
 
-func IsSpecialToken(token LexToken, match LexToken) bool {
+func IsSpecialToken(token Lexeme, match Lexeme) bool {
 	return token == newSpecialToken(match)
 }
 
 const specialPrefix string = "__special__"
 
-func newSpecialToken(readableStr LexToken) LexToken {
-	return LexToken(specialPrefix) + readableStr
+func newSpecialToken(readableStr Lexeme) Lexeme {
+	return Lexeme(specialPrefix) + readableStr
 }

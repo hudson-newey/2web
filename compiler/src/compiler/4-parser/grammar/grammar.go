@@ -3,7 +3,7 @@ package grammar
 import (
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"strings"
 )
@@ -44,7 +44,7 @@ func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode {
 	for _, token := range model.Def {
 		// If we come across a CaptureUntil token, we want to continue looping
 		// (and incrementing i) until we find the next token (break condition).
-		if lexerTokens.IsSpecialToken(token, lexerTokens.CaptureUntil) {
+		if lexeme.IsSpecialToken(token, lexeme.CaptureUntil) {
 			// If the CaptureUntil is the very last token in the definition,
 			// the parser would end up in an infinite loop.
 			// It's ok to use a panic here since if we panic here, the program

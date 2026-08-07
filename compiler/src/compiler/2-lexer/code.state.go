@@ -1,13 +1,13 @@
 package lexer
 
 import (
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/2-lexer/states"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 )
 
 func inlineCodeTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		">": {token: lexerTokens.GreaterAngle, next: codeContentLexer},
+		">": {token: lexeme.GreaterAngle, next: codeContentLexer},
 	}
 
 	cases = withAttributes(cases)
@@ -18,7 +18,7 @@ func inlineCodeTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 
 func codeContentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"</code>": {token: lexerTokens.CodeEndTag, next: textLexer},
+		"</code>": {token: lexeme.CodeEndTag, next: textLexer},
 	}
 
 	return lexerFactory(cases, states.CodeSource)(model)

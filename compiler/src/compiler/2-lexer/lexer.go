@@ -1,7 +1,7 @@
 package lexer
 
 import (
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/io/reader"
 	"io"
 )
@@ -27,7 +27,7 @@ func (model *Lexer) Execute() []*V2LexNode {
 		lexNode := model.lex()
 		representation = append(representation, &lexNode)
 
-		if lexNode.Token == lexerTokens.EOF {
+		if lexNode.Token == lexeme.EOF {
 			return representation
 		}
 	}

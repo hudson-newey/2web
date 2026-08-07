@@ -1,13 +1,13 @@
 package grammar
 
-import lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+import "hudson-newey/2web/src/compiler/2-lexer/lexeme"
 
-var anyQuote = or(lexerTokens.QuoteDouble, lexerTokens.QuoteSingle)
+var anyQuote = or(lexeme.QuoteDouble, lexeme.QuoteSingle)
 
-func optional(def lexerTokens.LexToken) lexerTokens.LexToken {
+func optional(def lexeme.Lexeme) lexeme.Lexeme {
 	return def
 }
 
-func or(tokens ...lexerTokens.LexToken) lexerTokens.LexToken {
+func or(tokens ...lexeme.Lexeme) lexeme.Lexeme {
 	return tokens[0]
 }

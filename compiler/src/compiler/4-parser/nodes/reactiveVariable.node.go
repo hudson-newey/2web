@@ -2,7 +2,7 @@ package nodes
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
@@ -12,12 +12,12 @@ import (
 )
 
 func NewScriptReactiveVariableNode(lexNodes []*lexer.V2LexNode) *scriptReactiveVariableNode {
-	variableName, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 1)
+	variableName, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 1)
 	if err != nil {
 		panic(err)
 	}
 
-	initialValue, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 2)
+	initialValue, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 2)
 	if err != nil {
 		panic(err)
 	}

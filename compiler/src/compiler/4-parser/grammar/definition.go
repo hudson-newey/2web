@@ -1,11 +1,9 @@
 package grammar
 
-import (
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
-)
+import "hudson-newey/2web/src/compiler/2-lexer/lexeme"
 
-type definition []lexerTokens.LexToken
+type definition []lexeme.Lexeme
 
-func newDefinition(tokens ...lexerTokens.LexToken) definition {
+func newDefinition(tokens ...lexeme.Lexeme) definition {
 	return definition(tokens)
 }

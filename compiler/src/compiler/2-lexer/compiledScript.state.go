@@ -1,15 +1,15 @@
 package lexer
 
 import (
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/2-lexer/states"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 )
 
 // The lexer for when the <script> tag has been opened and before the first >
 // meaning that we are technically still in an element tag.
 func inlineCompiledScriptTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		">": {token: lexerTokens.GreaterAngle, next: compiledScriptContentLexer},
+		">": {token: lexeme.GreaterAngle, next: compiledScriptContentLexer},
 	}
 
 	cases = withAttributes(cases)
@@ -25,7 +25,7 @@ func inlineCompiledScriptTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 // for more errors in the document unrelated to the script.
 func withScriptExitCase(src lexDefMap) lexDefMap {
 	exitCases := lexDefMap{
-		"</script>": {token: lexerTokens.ScriptEndTag, next: textLexer},
+		"</script>": {token: lexeme.ScriptEndTag, next: textLexer},
 	}
 	return src.with(exitCases)
 }
@@ -34,10 +34,10 @@ func compiledScriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
 		// process comments first so that commenting out a code block can
 		// disable the code (the commented out code never gets lexed output).
-		"//":     {token: lexerTokens.MarkupCommentStart, next: esmLineCommentLexer},
-		"/*":     {token: lexerTokens.ScriptBlockCommentStart, next: esmBlockCommentLexer},
-		"$":      {token: lexerTokens.DollarSign, next: reactiveVarAssignmentLexer},
-		"import": {token: lexerTokens.KeywordImport, next: esmImportLexer},
+		"//":     {token: lexeme.MarkupCommentStart, next: esmLineCommentLexer},
+		"/*":     {token: lexeme.ScriptBlockCommentStart, next: esmBlockCommentLexer},
+		"$":      {token: lexeme.DollarSign, next: reactiveVarAssignmentLexer},
+		"import": {token: lexeme.KeywordImport, next: esmImportLexer},
 	}
 	cases = withScriptExitCase(cases)
 	return lexerFactory(cases, states.CompiledScriptSource)(model)
@@ -45,8 +45,8 @@ func compiledScriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {
 
 func reactiveVarAssignmentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"=": {token: lexerTokens.Equals, next: reactiveVarAssignmentLexer},
-		";": {token: lexerTokens.Semicolon, next: compiledScriptContentLexer},
+		"=": {token: lexeme.Equals, next: reactiveVarAssignmentLexer},
+		";": {token: lexeme.Semicolon, next: compiledScriptContentLexer},
 	}
 	cases = withScriptExitCase(cases)
 	return lexerFactory(cases, states.CompiledScriptSource)(model)
@@ -54,8 +54,8 @@ func reactiveVarAssignmentLexer(model *Lexer) (V2LexNode, LexFunc) {
 
 func esmImportLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"from": {token: lexerTokens.KeywordFrom, next: esmImportLexer},
-		";":    {token: lexerTokens.Semicolon, next: compiledScriptContentLexer},
+		"from": {token: lexeme.KeywordFrom, next: esmImportLexer},
+		";":    {token: lexeme.Semicolon, next: compiledScriptContentLexer},
 	}
 	cases = withScriptExitCase(cases)
 	return lexerFactory(cases, states.CompiledScriptSource)(model)
@@ -63,7 +63,7 @@ func esmImportLexer(model *Lexer) (V2LexNode, LexFunc) {
 
 func esmLineCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"\n": {token: lexerTokens.BlockCommentEnd, next: compiledScriptContentLexer},
+		"\n": {token: lexeme.BlockCommentEnd, next: compiledScriptContentLexer},
 	}
 	cases = withScriptExitCase(cases)
 	return lexerFactory(cases, states.CompiledScriptSource)(model)
@@ -71,7 +71,7 @@ func esmLineCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
 
 func esmBlockCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases := lexDefMap{
-		"*/": {token: lexerTokens.BlockCommentEnd, next: compiledScriptContentLexer},
+		"*/": {token: lexeme.BlockCommentEnd, next: compiledScriptContentLexer},
 	}
 	cases = withScriptExitCase(cases)
 	return lexerFactory(cases, states.CompiledScriptSource)(model)

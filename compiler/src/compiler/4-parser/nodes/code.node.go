@@ -2,7 +2,7 @@ package nodes
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
@@ -17,7 +17,7 @@ func NewCodeNode(lexNodes []*lexer.V2LexNode) *codeNode {
 	// Find the lexNode that is a StyleSource token
 	var content string
 	for _, lexNode := range lexNodes {
-		if lexNode.Token == lexerTokens.CodeSource {
+		if lexNode.Token == lexeme.CodeSource {
 			content = lexNode.Content
 			break
 		}

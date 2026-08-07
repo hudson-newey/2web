@@ -1,8 +1,8 @@
 package lexer
 
 import (
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/2-lexer/states"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
 	"io"
 )
 
@@ -40,7 +40,7 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 				// gracefully.
 				lexNode := V2LexNode{
 					Pos:     position,
-					Token:   lexerTokens.EOF,
+					Token:   lexeme.EOF,
 					Content: "",
 					State:   states.SourceText,
 				}
@@ -57,17 +57,17 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 
 		// There are different types of text depending on what context we are in
 		// Sometimes it can be external source code.
-		tokenMap := map[states.LexState]lexerTokens.LexToken{
-			states.CompiledScriptSource: lexerTokens.CompiledScriptSource,
-			states.ScriptSource:         lexerTokens.ScriptSource,
-			states.StyleSource:          lexerTokens.StyleSource,
-			states.CodeSource:           lexerTokens.CodeSource,
-			states.TextContent:          lexerTokens.TextContent,
+		tokenMap := map[states.LexState]lexeme.Lexeme{
+			states.CompiledScriptSource: lexeme.CompiledScriptSource,
+			states.ScriptSource:         lexeme.ScriptSource,
+			states.StyleSource:          lexeme.StyleSource,
+			states.CodeSource:           lexeme.CodeSource,
+			states.TextContent:          lexeme.TextContent,
 		}
 
 		token, exists := tokenMap[state]
 		if !exists {
-			token = lexerTokens.TextContent
+			token = lexeme.TextContent
 		}
 
 		position := Position{

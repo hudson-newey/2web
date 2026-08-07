@@ -3,12 +3,12 @@ package scanners
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 )
 
 func FirstToken(
 	tokens []*lexer.V2LexNode,
-	matcher lexerTokens.LexToken,
+	matcher lexeme.Lexeme,
 ) (*lexer.V2LexNode, error) {
 	return NthToken(tokens, matcher, 1)
 }
@@ -18,7 +18,7 @@ func FirstToken(
 // occurrence.
 func NthToken(
 	tokens []*lexer.V2LexNode,
-	matcher lexerTokens.LexToken,
+	matcher lexeme.Lexeme,
 	n int,
 ) (*lexer.V2LexNode, error) {
 	count := 0

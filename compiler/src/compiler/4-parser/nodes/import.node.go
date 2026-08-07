@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	lexerTokens "hudson-newey/2web/src/compiler/2-lexer/tokens"
+	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
@@ -21,13 +21,13 @@ import (
 
 // import importName from "importPath";
 func NewscriptImportNode(lexNodes []*lexer.V2LexNode) *scriptImportNode {
-	importNameNode, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 1)
+	importNameNode, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 1)
 	importNameNode.Content = strings.TrimSpace(importNameNode.Content)
 	if err != nil {
 		panic(err)
 	}
 
-	importPathNode, err := scanners.NthToken(lexNodes, lexerTokens.CompiledScriptSource, 2)
+	importPathNode, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 2)
 	quoteRe := regexp.MustCompile(`"(.*?)"`)
 	importPathNode.Content = quoteRe.FindAllStringSubmatch(importPathNode.Content, -1)[0][1]
 	if err != nil {
