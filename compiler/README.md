@@ -25,7 +25,7 @@
 ## Environment Variables
 
 - `__2WEB_CACHE_PATH` (default: ./.cache/) A path that will be used for the build cache
-- `__2WEB_DEBUG_PATH` (default: {output_path}/__2web.debug.json) Where debug info will be written
+- `__2WEB_DEBUG_PATH` (default: {output_path}/\_\_2web.debug.json) Where debug info will be written
 - `CI` (default: false) An environment variable to toggle CI integration
 
 ## Production Builds
@@ -39,63 +39,41 @@
 
 ### Supported Scripting Languages
 
-| Package                                      | State | JS Target | WASM Target | Server Target |
-| -------------------------------------------- | ----- | --------- | ----------- | ------------- |
-| [Nim](https://nim-lang.org)                  | ❌     | ❌         | ❌           | ❌             |
-| [Gleam](https://gleam.run)                   | ❌     | ❌         | ❌           | ❌             |
-| [F#](https://fsharp.org)                     | ❌     | ❌         | ❌           | ❌             |
-| JavaScript                                   | ✅     | ✅         | ➖           | ❌             |
-| [TypeScript](https://www.typescriptlang.org) | ✅     | ✅         | ➖           | ❌             |
-| [Flow](https://flow.org)                     | ❌     | ❌         | ➖           | ❌             |
-| [CoffeeScript](https://coffeescript.org)     | ❌     | ❌         | ➖           | ❌             |
-| [Elm](https://elm-lang.org)                  | ❌     | ❌         | ➖           | ❌             |
-| [clojurescript](https://clojurescript.org)   | ❌     | ❌         | ➖           | ❌             |
-| [reason](https://reasonml.github.io)         | ❌     | ❌         | ➖           | ❌             |
-| [rescript](https://rescript-lang.org)        | ❌     | ❌         | ➖           | ❌             |
-| [purescript](https://www.purescript.org)     | ❌     | ❌         | ➖           | ❌             |
-| [Civet](https://civet.dev)                   | ❌     | ❌         | ➖           | ❌             |
-| [Rust](https://rust-lang.org)                | ❌     | ➖         | ❌           | ❌             |
-| C/C++                                        | ❌     | ➖         | ❌           | ❌             |
-| C#                                           | ❌     | ➖         | ❌           | ❌             |
-| VB.net                                       | ❌     | ➖         | ❌           | ❌             |
+| Package                                      | State | JS Target | Server Target |
+| -------------------------------------------- | ----- | --------- | ------------- |
+| JavaScript                                   | ✅    | ✅        | ❌            |
+| [TypeScript](https://www.typescriptlang.org) | ✅    | ✅        | ❌            |
+| [F#](https://fsharp.org)                     | ❌    | ❌        | ❌            |
 
 ### Supported Markup Languages
 
 | Package | State | File Extensions |
 | ------- | ----- | --------------- |
-| html    | ✅     | `.html`, `.htm` |
-| xhtml   | ✅     | `.xhtml`        |
-| xml     | ✅     | `.xml`          |
-| xslt    | ✅     | `.xslt`, `.xsl` |
-| txt     | ✅     | `.txt`          |
-| pdf     | ✅     | `.pdf`          |
-| md      | ✅     | `.md`           |
-| pug     | ❌     | `.pug`          |
-| tex     | ❌     | `.tex`          |
-| org     | ❌     | `.org`          |
-| docx    | 🔧     | `.docx`, `.doc` |
-| odt     | ✅     | `.odt`          |
-| php     | ❌     | `.php`          |
+| html    | ✅    | `.html`, `.htm` |
+| xhtml   | ✅    | `.xhtml`        |
+| xml     | ✅    | `.xml`          |
+| xslt    | ✅    | `.xslt`, `.xsl` |
+| txt     | ✅    | `.txt`          |
+| pdf     | ✅    | `.pdf`          |
+| md      | ✅    | `.md`           |
+| docx    | 🔧    | `.docx`, `.doc` |
+| odt     | ✅    | `.odt`          |
 
 ### Supported Style Languages
 
 | Package | State |
 | ------- | ----- |
-| css     | ✅     |
-| sass    | ❌     |
-| scss    | ❌     |
-| less    | ❌     |
+| css     | ✅    |
+| sass    | ❌    |
+| scss    | ❌    |
 
 ### Supported Frameworks
 
 The following frameworks can be used in component islands.
 
-| Package | State | File Extensions            |
-| ------- | ----- | -------------------------- |
-| React   | ❌     | `.react.jsx`, `.react.tsx` |
-| Vue     | ❌     | `.vue`                     |
-| Svelte  | ❌     | `.svelte`                  |
-| hugo    | ❌     | `.hugo.html`               |
+| Package | State | File Extensions |
+| ------- | ----- | --------------- |
+| Vue     | ❌    | `.vue`          |
 
 ## Compiler Developer Options
 
