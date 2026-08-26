@@ -5,7 +5,6 @@ import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
@@ -47,22 +46,22 @@ type scriptImportNode struct {
 	// What is the path of the import?
 	importPath string
 
-	children ast.AbstractSyntaxTree
+	children AbstractSyntaxTree
 }
 
 func (m *scriptImportNode) Type() string {
 	return "importNode"
 }
 
-func (m *scriptImportNode) Children() ast.AbstractSyntaxTree {
+func (m *scriptImportNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
-func (m *scriptImportNode) AddChild(child ast.Node) {
+func (m *scriptImportNode) AddChild(child Node) {
 	m.children = append(m.children, child)
 }
 
-func (m *scriptImportNode) RemoveChild(child ast.Node) {
+func (m *scriptImportNode) RemoveChild(child Node) {
 	for i, c := range m.children {
 		if c == child {
 			m.children = append(m.children[:i], m.children[i+1:]...)
@@ -71,7 +70,7 @@ func (m *scriptImportNode) RemoveChild(child ast.Node) {
 	}
 }
 
-func (m *scriptImportNode) Content(page *page.Page) ast.NodeContent {
+func (m *scriptImportNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
 	// Check that the imported path really exists.
 	hostDirectory := filepath.Dir(page.InputPath)
 	componentPath := filepath.Join(hostDirectory, m.importPath)
@@ -86,7 +85,7 @@ func (m *scriptImportNode) Content(page *page.Page) ast.NodeContent {
 	selector := fmt.Sprintf("<%s />", m.importName)
 	HtmlContent := strings.ReplaceAll(page.Html.Content, selector, string(componentContent))
 
-	return ast.NodeContent{
+	return NodeContent{
 		HtmlContent:      html.FromContent(HtmlContent),
 		JsContent:        javascript.NewJsFile(),
 		CssContent:       css.NewCssFile(),

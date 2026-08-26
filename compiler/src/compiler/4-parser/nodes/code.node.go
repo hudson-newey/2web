@@ -3,7 +3,6 @@ package nodes
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
@@ -45,7 +44,7 @@ type codeNode struct {
 	startingCodeTagContent string
 	lexerNodes             []*lexer.V2LexNode
 	content                string
-	children               ast.AbstractSyntaxTree
+	children               AbstractSyntaxTree
 }
 
 func (m *codeNode) Type() string {
@@ -57,15 +56,15 @@ func (m *codeNode) escapedHtml() string {
 	return m.startingCodeTagContent + escapedContent + "</code>"
 }
 
-func (m *codeNode) Children() ast.AbstractSyntaxTree {
+func (m *codeNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
-func (m *codeNode) AddChild(child ast.Node) {
+func (m *codeNode) AddChild(child Node) {
 	m.children = append(m.children, child)
 }
 
-func (m *codeNode) RemoveChild(child ast.Node) {
+func (m *codeNode) RemoveChild(child Node) {
 	for i, c := range m.children {
 		if c == child {
 			m.children = append(m.children[:i], m.children[i+1:]...)
@@ -74,10 +73,10 @@ func (m *codeNode) RemoveChild(child ast.Node) {
 	}
 }
 
-func (m *codeNode) Content(page *page.Page) ast.NodeContent {
+func (m *codeNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
 	HtmlContent := html.FromContent(page.Html.Content + m.escapedHtml())
 
-	return ast.NodeContent{
+	return NodeContent{
 		HtmlContent:      HtmlContent,
 		TwoScriptContent: twoscript.NewTwoScriptFile(),
 		CssContent:       css.NewCssFile(),

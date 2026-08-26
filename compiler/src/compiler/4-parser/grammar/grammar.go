@@ -4,7 +4,7 @@ import (
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/4-parser/ast"
+	"hudson-newey/2web/src/compiler/4-parser/nodes"
 	"strings"
 )
 
@@ -13,7 +13,7 @@ type Grammar struct {
 	Def definition
 
 	// A constructor function to create a node from the tokens
-	Constructor func(lexNodes []*lexer.V2LexNode) *ast.Node
+	Constructor func(lexNodes []*lexer.V2LexNode) *nodes.Node
 
 	// Any child grammar definitions that should be recursively applied within
 	// this grammar once matched.

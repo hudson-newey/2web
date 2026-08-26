@@ -2,7 +2,6 @@ package parser
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/grammar"
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
@@ -11,8 +10,8 @@ func CreateAst(
 	lexNodes []*lexer.V2LexNode,
 	grammars []grammar.Grammar,
 	withTextMatcher bool,
-) ast.AbstractSyntaxTree {
-	var ast ast.AbstractSyntaxTree
+) nodes.AbstractSyntaxTree {
+	var ast nodes.AbstractSyntaxTree
 	skipCount := 0
 
 	for i := range lexNodes {
@@ -40,7 +39,7 @@ func processNode(
 	lexNodes []*lexer.V2LexNode,
 	grammars []grammar.Grammar,
 	withTextMatcher bool,
-) (ast.Node, int) {
+) (nodes.Node, int) {
 	for _, rule := range grammars {
 		// Searches ahead of the current position in the lexed tokens to see if the
 		// grammar definition matches.

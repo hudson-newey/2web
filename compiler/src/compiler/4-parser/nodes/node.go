@@ -1,4 +1,4 @@
-package ast
+package nodes
 
 import (
 	"hudson-newey/2web/src/content/css"
@@ -13,7 +13,7 @@ type nodeType = string
 type Node interface {
 	Type() nodeType
 
-	Content(page *page.Page) NodeContent
+	Content(page *page.Page, ast AbstractSyntaxTree) NodeContent
 
 	Children() AbstractSyntaxTree
 	AddChild(child Node)

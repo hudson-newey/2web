@@ -13,7 +13,7 @@ tmp_dir = "tmp"
   # args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache", "--format"]
   # Using a small file is helpful for debugging the lexer and parser because
   # there is less debug info to sift through.
-  # args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--verbose-lexer", "--verbose-ast", "--format"]
+  # args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--verbose-lexer", "--verbose-ast", "--isolated-pages", "--format", "--serial"]
   args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--format", "--isolated-pages", "--serial"]
   # args_bin = ["-i", "dev/", "-o", "dist/", "--production", "--ignore-errors", "--format"]
   # args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache", "--listen", "--format"]

@@ -3,7 +3,6 @@ package nodes
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/javascript"
@@ -31,22 +30,22 @@ func NewScriptReactiveVariableNode(lexNodes []*lexer.V2LexNode) *scriptReactiveV
 type scriptReactiveVariableNode struct {
 	variableName string
 	initialValue string
-	children     ast.AbstractSyntaxTree
+	children     AbstractSyntaxTree
 }
 
 func (m *scriptReactiveVariableNode) Type() string {
 	return "reactiveVariableNode"
 }
 
-func (m *scriptReactiveVariableNode) Children() ast.AbstractSyntaxTree {
+func (m *scriptReactiveVariableNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
-func (m *scriptReactiveVariableNode) AddChild(child ast.Node) {
+func (m *scriptReactiveVariableNode) AddChild(child Node) {
 	m.children = append(m.children, child)
 }
 
-func (m *scriptReactiveVariableNode) RemoveChild(child ast.Node) {
+func (m *scriptReactiveVariableNode) RemoveChild(child Node) {
 	for i, c := range m.children {
 		if c == child {
 			m.children = append(m.children[:i], m.children[i+1:]...)
@@ -55,8 +54,8 @@ func (m *scriptReactiveVariableNode) RemoveChild(child ast.Node) {
 	}
 }
 
-func (m *scriptReactiveVariableNode) Content(page *page.Page) ast.NodeContent {
-	return ast.NodeContent{
+func (m *scriptReactiveVariableNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+	return NodeContent{
 		HtmlContent:      page.Html,
 		JsContent:        javascript.NewJsFile(),
 		CssContent:       css.NewCssFile(),

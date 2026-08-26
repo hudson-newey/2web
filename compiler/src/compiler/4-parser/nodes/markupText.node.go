@@ -2,7 +2,6 @@ package nodes
 
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
@@ -18,22 +17,22 @@ func NewMarkupTextNode(lexNode []*lexer.V2LexNode) *markupTextNode {
 
 type markupTextNode struct {
 	content  string
-	children ast.AbstractSyntaxTree
+	children AbstractSyntaxTree
 }
 
 func (m *markupTextNode) Type() string {
 	return "MarkupTextNode"
 }
 
-func (m *markupTextNode) Children() ast.AbstractSyntaxTree {
+func (m *markupTextNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
-func (m *markupTextNode) AddChild(child ast.Node) {
+func (m *markupTextNode) AddChild(child Node) {
 	m.children = append(m.children, child)
 }
 
-func (m *markupTextNode) RemoveChild(child ast.Node) {
+func (m *markupTextNode) RemoveChild(child Node) {
 	for i, c := range m.children {
 		if c == child {
 			m.children = append(m.children[:i], m.children[i+1:]...)
@@ -42,9 +41,9 @@ func (m *markupTextNode) RemoveChild(child ast.Node) {
 	}
 }
 
-func (m *markupTextNode) Content(page *page.Page) ast.NodeContent {
+func (m *markupTextNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
 	HtmlContent := html.FromContent(page.Html.Content + m.content)
-	return ast.NodeContent{
+	return NodeContent{
 		HtmlContent:      HtmlContent,
 		JsContent:        javascript.NewJsFile(),
 		CssContent:       css.NewCssFile(),

@@ -2,10 +2,10 @@ package parser
 
 import (
 	"fmt"
-	"hudson-newey/2web/src/compiler/4-parser/ast"
+	"hudson-newey/2web/src/compiler/4-parser/nodes"
 )
 
-func PrintVerboseParser(structure ast.AbstractSyntaxTree) {
+func PrintVerboseParser(structure nodes.AbstractSyntaxTree) {
 	recursiveVerbosePrint(structure, 0)
 
 	// Draw an empty line at the end for better readability and to visually
@@ -13,7 +13,7 @@ func PrintVerboseParser(structure ast.AbstractSyntaxTree) {
 	fmt.Println()
 }
 
-func recursiveVerbosePrint(structure ast.AbstractSyntaxTree, depth int) {
+func recursiveVerbosePrint(structure nodes.AbstractSyntaxTree, depth int) {
 
 	for _, node := range structure {
 		last := node == structure[len(structure)-1]
