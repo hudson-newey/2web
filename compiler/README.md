@@ -16,6 +16,7 @@
 - `--ignore-errors` (default: false) Ignores errors in production builds. This allows you to ship compiler errors.
 - `--serial` (default: false) Disables parallel compilation of assets
 - `--dry-run` (default: false) Simulates a build without writing any files to disk
+- `--listen` (default: false) Instead of automatically exiting after compilation, open a websocket connection that can accept commands.
 
 ## Sub Commands
 
@@ -85,7 +86,7 @@ compiler.
 
 - `--verbose-lexer` (default: false) Logs the lexer output to the console
 - `--verbose-ast` (default: false) Logs the abstract syntax tree to the console
-- `--listen` (default: false) Instead of automatically exiting after compilation, open a websocket connection that can accept commands.
+- `--no-layout` (default: false) Disables `__layout.html`, `__style.css`, and `__script.js` support (useful for testing isolated page output)
 
 ### Listener Commands
 

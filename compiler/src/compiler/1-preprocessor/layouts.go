@@ -1,12 +1,17 @@
 package preprocessor
 
 import (
+	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/filesystem"
 	"path/filepath"
 	"strings"
 )
 
 func expandLayout(filePath string, content string) string {
+	if cli.GetArgs().NoLayout {
+		return content
+	}
+
 	layoutDir := filepath.Dir(filePath)
 	layoutFile := filepath.Join(layoutDir, "__layout.html")
 

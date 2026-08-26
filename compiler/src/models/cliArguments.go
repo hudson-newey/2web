@@ -16,9 +16,10 @@ type CliArguments struct {
 	Serial                 bool
 	DryRun                 bool
 	Verbose                bool
+	Listen                 bool
 
 	// Developer command line flags
 	VerboseLexer bool
 	VerboseAst   bool
-	Listen       bool
+	NoLayout     bool
 }
