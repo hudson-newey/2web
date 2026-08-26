@@ -27,6 +27,7 @@ func ParseArguments() models.CliArguments {
 	verboseLexer := flag.Bool("verbose-lexer", false, "Logs the lexer output to the console")
 	verboseAst := flag.Bool("verbose-ast", false, "Logs the ast output to the console")
 	noLayout := flag.Bool("no-layout", false, "Disables `__layout.html`, `__style.css`, and `__script.js` support")
+	noPartials := flag.Bool("no-partials", false, "Disables document partial support")
 
 	flag.Parse()
 
@@ -50,6 +51,7 @@ func ParseArguments() models.CliArguments {
 		VerboseLexer: *verboseLexer,
 		VerboseAst:   *verboseAst,
 		NoLayout:     *noLayout,
+		NoPartials:   *noPartials,
 	}
 
 	return GetArgs()

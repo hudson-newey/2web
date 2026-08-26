@@ -22,4 +22,5 @@ type CliArguments struct {
 	VerboseLexer bool
 	VerboseAst   bool
 	NoLayout     bool
+	NoPartials   bool
 }

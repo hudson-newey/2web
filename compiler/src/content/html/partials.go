@@ -2,6 +2,7 @@ package html
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/cli"
 	"strings"
 	"unicode"
 )
@@ -10,7 +11,9 @@ type headElement = string
 type bodyElement = string
 
 func ExpandPartial(content string) string {
-	if isFullDocument(content) {
+	if cli.GetArgs().NoPartials {
+		return content
+	} else if isFullDocument(content) {
 		return content
 	}
 
