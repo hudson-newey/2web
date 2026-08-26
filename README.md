@@ -109,3 +109,4 @@ You should **consider** using the following libraries with 2Web.
 - [ts-toolbelt](https://github.com/millsp/ts-toolbelt)
 - [tanstack/hotkeys](https://tanstack.com/hotkeys/latest)
 - [cellx](https://github.com/Riim/cellx) OR (if you need a more popular library) [alien-signals](https://github.com/stackblitz/alien-signals)
+- [Turbo](https://turbo.hotwired.dev/handbook/drive) (if you can handle the bundle size)
