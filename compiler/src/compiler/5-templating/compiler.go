@@ -2,6 +2,7 @@ package templating
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/4-parser/ast"
 	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
@@ -37,7 +38,9 @@ func Compile(filePath string, parsedAst ast.AbstractSyntaxTree) page.Page {
 	pageModel.InputPath = filePath
 
 	recurseAst(&pageModel, parsedAst)
-	addRouteAssets(&pageModel)
+	if !cli.GetArgs().IsolatedPages {
+		addRouteAssets(&pageModel)
+	}
 
 	// We want to exclude Markdown, xml, and xslt files from this processing step
 	// because our element ref symbol is a hashtag which has meaning in these

@@ -19,8 +19,7 @@ type CliArguments struct {
 	Listen                 bool
 
 	// Developer command line flags
-	VerboseLexer bool
-	VerboseAst   bool
-	NoLayout     bool
-	NoPartials   bool
+	VerboseLexer  bool
+	VerboseAst    bool
+	IsolatedPages bool
 }

@@ -86,8 +86,7 @@ compiler.
 
 - `--verbose-lexer` (default: false) Logs the lexer output to the console
 - `--verbose-ast` (default: false) Logs the abstract syntax tree to the console
-- `--no-layout` (default: false) Disables `__layout.html`, `__style.css`, and `__script.js` support (useful for testing isolated page output)
-- `--no-partials` (default: false) Disables document partial support (useful for testing isolated page output)
+- `--isolated-pages` (default: false) Disables `__layout.html`, `__style.css`, `__script.js` support, and document partial support
 
 ### Listener Commands
 

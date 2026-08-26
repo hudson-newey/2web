@@ -8,7 +8,7 @@ import (
 )
 
 func expandLayout(filePath string, content string) string {
-	if cli.GetArgs().NoLayout {
+	if cli.GetArgs().IsolatedPages {
 		return content
 	}
 

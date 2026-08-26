@@ -11,7 +11,7 @@ type headElement = string
 type bodyElement = string
 
 func ExpandPartial(content string) string {
-	if cli.GetArgs().NoPartials {
+	if cli.GetArgs().IsolatedPages {
 		return content
 	} else if isFullDocument(content) {
 		return content
