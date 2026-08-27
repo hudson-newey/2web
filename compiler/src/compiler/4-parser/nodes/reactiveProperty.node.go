@@ -8,6 +8,9 @@ import (
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
+	"strings"
+
+	"github.com/hudson-newey/2web/_shared/lists"
 )
 
 func NewReactivePropertyNode(lexNodes []*lexer.V2LexNode) *reactivePropertyNode {
@@ -41,6 +44,15 @@ func (m *reactivePropertyNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
+func (m *reactivePropertyNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+	return NodeContent{
+		HtmlContent:      page.Html,
+		JsContent:        javascript.NewJsFile(),
+		CssContent:       css.NewCssFile(),
+		TwoScriptContent: twoscript.NewTwoScriptFile(),
+	}
+}
+
 func (m *reactivePropertyNode) AddChild(child Node) {
 	m.children = append(m.children, child)
 }
@@ -54,11 +66,9 @@ func (m *reactivePropertyNode) RemoveChild(child Node) {
 	}
 }
 
-func (m *reactivePropertyNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
-	return NodeContent{
-		HtmlContent:      page.Html,
-		JsContent:        javascript.NewJsFile(),
-		CssContent:       css.NewCssFile(),
-		TwoScriptContent: twoscript.NewTwoScriptFile(),
-	}
+// Finds all reactive variable dependencies for a property binding
+func (m *reactivePropertyNode) reactiveVariableDeps(ast AbstractSyntaxTree) []*reactiveVariableNode {
+	return lists.Filter(ast.reactiveVariables(), func(x *reactiveVariableNode) bool {
+		return strings.Contains(m.reducer, x.selector())
+	})
 }

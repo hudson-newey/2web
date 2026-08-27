@@ -13,5 +13,5 @@ var scriptVariable = Grammar{
 		lexeme.CompiledScriptSource, // initial value
 		lexeme.Semicolon,
 	),
-	Constructor: wrapConstructor(nodes.NewScriptReactiveVariableNode),
+	Constructor: wrapConstructor(nodes.NewreactiveVariableNode),
 }

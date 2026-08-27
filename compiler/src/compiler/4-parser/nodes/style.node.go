@@ -36,6 +36,15 @@ func (m *styleNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
+func (m *styleNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+	return NodeContent{
+		HtmlContent:      page.Html,
+		JsContent:        javascript.NewJsFile(),
+		CssContent:       css.FromContent(m.content),
+		TwoScriptContent: twoscript.NewTwoScriptFile(),
+	}
+}
+
 func (m *styleNode) AddChild(child Node) {
 	m.children = append(m.children, child)
 }
@@ -46,14 +55,5 @@ func (m *styleNode) RemoveChild(child Node) {
 			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
-	}
-}
-
-func (m *styleNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
-	return NodeContent{
-		HtmlContent:      page.Html,
-		JsContent:        javascript.NewJsFile(),
-		CssContent:       css.FromContent(m.content),
-		TwoScriptContent: twoscript.NewTwoScriptFile(),
 	}
 }

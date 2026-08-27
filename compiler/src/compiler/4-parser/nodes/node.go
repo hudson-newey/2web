@@ -12,10 +12,9 @@ type nodeType = string
 
 type Node interface {
 	Type() nodeType
-
 	Content(page *page.Page, ast AbstractSyntaxTree) NodeContent
-
 	Children() AbstractSyntaxTree
+
 	AddChild(child Node)
 	RemoveChild(child Node)
 }

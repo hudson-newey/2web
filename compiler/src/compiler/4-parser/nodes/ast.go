@@ -4,8 +4,8 @@ import "github.com/hudson-newey/2web/_shared/lists"
 
 type AbstractSyntaxTree []Node
 
-func (ast AbstractSyntaxTree) reactiveVariables() []*scriptReactiveVariableNode {
-	return lists.FilterTypes[*scriptReactiveVariableNode](ast)
+func (ast AbstractSyntaxTree) reactiveVariables() []*reactiveVariableNode {
+	return lists.FilterTypes[*reactiveVariableNode](ast)
 }
 
 func (ast AbstractSyntaxTree) reactiveProperties() []*reactivePropertyNode {

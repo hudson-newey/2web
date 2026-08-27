@@ -36,6 +36,15 @@ func (m *scriptNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
+func (m *scriptNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+	return NodeContent{
+		HtmlContent:      page.Html,
+		JsContent:        javascript.FromContent(m.content),
+		CssContent:       css.NewCssFile(),
+		TwoScriptContent: twoscript.NewTwoScriptFile(),
+	}
+}
+
 func (m *scriptNode) AddChild(child Node) {
 	m.children = append(m.children, child)
 }
@@ -46,14 +55,5 @@ func (m *scriptNode) RemoveChild(child Node) {
 			m.children = append(m.children[:i], m.children[i+1:]...)
 			return
 		}
-	}
-}
-
-func (m *scriptNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
-	return NodeContent{
-		HtmlContent:      page.Html,
-		JsContent:        javascript.FromContent(m.content),
-		CssContent:       css.NewCssFile(),
-		TwoScriptContent: twoscript.NewTwoScriptFile(),
 	}
 }

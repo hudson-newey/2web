@@ -57,19 +57,6 @@ func (m *scriptImportNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
-func (m *scriptImportNode) AddChild(child Node) {
-	m.children = append(m.children, child)
-}
-
-func (m *scriptImportNode) RemoveChild(child Node) {
-	for i, c := range m.children {
-		if c == child {
-			m.children = append(m.children[:i], m.children[i+1:]...)
-			return
-		}
-	}
-}
-
 func (m *scriptImportNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
 	// Check that the imported path really exists.
 	hostDirectory := filepath.Dir(page.InputPath)
@@ -90,5 +77,18 @@ func (m *scriptImportNode) Content(page *page.Page, _ast AbstractSyntaxTree) Nod
 		JsContent:        javascript.NewJsFile(),
 		CssContent:       css.NewCssFile(),
 		TwoScriptContent: twoscript.NewTwoScriptFile(),
+	}
+}
+
+func (m *scriptImportNode) AddChild(child Node) {
+	m.children = append(m.children, child)
+}
+
+func (m *scriptImportNode) RemoveChild(child Node) {
+	for i, c := range m.children {
+		if c == child {
+			m.children = append(m.children[:i], m.children[i+1:]...)
+			return
+		}
 	}
 }
