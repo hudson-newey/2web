@@ -12,10 +12,6 @@ func CheckDependencies() {
 	requiredDependencies := []dependency{
 		{name: "pandoc", url: "https://pandoc.org/installing.html"},
 		{name: "sass", url: "https://sass-lang.com/install"},
-		{name: "less", url: "https://lesscss.org"},
-		{name: "rustc", url: "https://rust-lang.org"},
-		{name: "emcc", url: ""},
-		{name: "gleam", url: "https://gleam.run"},
 		{name: "fable", url: "https://fable.io"},
 		{name: ".NET", url: "https://dotnet.microsoft.com"},
 		{name: "ffmpeg", url: "https://ffmpeg.org/download.html"},

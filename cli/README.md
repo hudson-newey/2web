@@ -152,10 +152,6 @@ to be installed until you need some of the dependencies features.
 | [2webc](https://github.com/hudson-newey/2web)     |                                             |
 | [pandoc](https://pandoc.org)                      | `.tex`, `.docx`, `.doc`, `.odt`             |
 | [dart-sass](https://sass-lang.com)                | `.sass`, `.scss`                            |
-| [less](https://lesscss.org)                       | `.less`                                     |
-| [rustc](https://rust-lang.org)                    | `.rs`                                       |
-| [emcc](https://emscripten.org)                    | `.c`, `.h`, `.cpp`, `.c++`, `.hpp`, `.h++`  |
-| [gleam](https://gleam.run)                        | `.gleam`                                    |
 | [fable](https://fable.io)                         | `.fs`                                       |
 | [.NET](https://dotnet.microsoft.com)              | `.cs`, `.fs`, `.vb`                         |
 | [ffmpeg](https://ffmpeg.org)                      | Optimizing images/videos                    |
