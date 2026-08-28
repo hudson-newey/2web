@@ -369,14 +369,14 @@ func (m *reactiveVariableNode) compileReactiveVar(
 		eventDomSelector := javascript.CreateJsElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
 		eventListeners = eventListeners + fmt.Sprintf(`
-			document.addEventListener("[%s]", () => {
+			document.querySelector("[%s]").addEventListener("%s", () => {
 				%s = %s;
-				%s;
+				%s(%s);
 			});
 		`,
-			eventDomSelector,
+			eventDomSelector, e.eventName,
 			variableName, reactiveReducer,
-			handlerFuncName,
+			handlerFuncName, variableName,
 		)
 	}
 
