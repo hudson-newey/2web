@@ -12,6 +12,9 @@ type nodeType = string
 
 type Node interface {
 	Type() nodeType
+	// Basic content that is expanded on the first-pass compilation
+	MarkupContent() string
+	// Second-pass content passing that requires the entire document present
 	Content(page *page.Page, ast AbstractSyntaxTree) NodeContent
 	Children() AbstractSyntaxTree
 

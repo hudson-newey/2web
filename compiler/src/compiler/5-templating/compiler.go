@@ -175,25 +175,16 @@ func recurseAst(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 	// We need this so that when we get to ast nodes that replace page content,
 	// it has the full page context.
 	for _, node := range parsedAst {
-		if node.Type() != "MarkupTextNode" {
-			continue
-		}
-
-		nodeContent := node.Content(page, parsedAst)
-		page.SetContent(nodeContent.HtmlContent)
-		page.AddStyle(nodeContent.CssContent)
-		page.AddScript(nodeContent.JsContent)
-		page.AddTwoScript(nodeContent.TwoScriptContent)
+		markupContent := node.MarkupContent()
+		page.SetContent(
+			html.FromContent(page.Html.Content + markupContent),
+		)
 
 		recurseAst(page, node.Children())
 	}
 
 	// Second pass reactive content
 	for _, node := range parsedAst {
-		if node.Type() == "MarkupTextNode" {
-			continue
-		}
-
 		nodeContent := node.Content(page, parsedAst)
 		page.SetContent(nodeContent.HtmlContent)
 		page.AddStyle(nodeContent.CssContent)

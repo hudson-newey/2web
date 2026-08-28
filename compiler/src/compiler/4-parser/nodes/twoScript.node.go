@@ -39,6 +39,10 @@ func (m *twoScriptNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
+func (m *twoScriptNode) MarkupContent() string {
+	return ""
+}
+
 func (m *twoScriptNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,

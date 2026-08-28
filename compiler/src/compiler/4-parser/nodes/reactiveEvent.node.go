@@ -29,11 +29,18 @@ func NewReactiveEventNode(lexNodes []*lexer.V2LexNode) *reactiveEventNode {
 	assignmentSink := strings.TrimSpace(assignmentSplit[0])
 	assignmentExpr := strings.TrimSpace(assignmentSplit[1])
 
+	markupContent := fmt.Sprintf(
+		"@%s=\"%s\"",
+		propName.Content,
+		reducer.Content,
+	)
+
 	return &reactiveEventNode{
 		eventName:      propName.Content,
 		reducer:        reducer.Content,
 		assignmentSink: assignmentSink,
 		assignmentExpr: assignmentExpr,
+		markupContent:  markupContent,
 	}
 }
 
@@ -47,6 +54,7 @@ type reactiveEventNode struct {
 	assignmentSink string
 	// Everything AFTER the first equals sign (whitespace trimmed)
 	assignmentExpr string
+	markupContent  string
 	children       AbstractSyntaxTree
 }
 
@@ -56,6 +64,10 @@ func (m *reactiveEventNode) Type() string {
 
 func (m *reactiveEventNode) Children() AbstractSyntaxTree {
 	return m.children
+}
+
+func (m *reactiveEventNode) MarkupContent() string {
+	return m.markupContent
 }
 
 func (m *reactiveEventNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {
@@ -78,6 +90,11 @@ func (m *reactiveEventNode) RemoveChild(child Node) {
 			return
 		}
 	}
+}
+
+func (m *reactiveEventNode) selector() string {
+	// TODO: Use definitions from lexer here instead
+	return fmt.Sprintf("@%s=\"%s\"", m.eventName, m.reducer)
 }
 
 // What reactive variable this event binding is assigned to update

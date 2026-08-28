@@ -60,11 +60,13 @@ func (m *codeNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
-func (m *codeNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
-	HtmlContent := html.FromContent(page.Html.Content + m.escapedHtml())
+func (m *codeNode) MarkupContent() string {
+	return m.escapedHtml()
+}
 
+func (m *codeNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
 	return NodeContent{
-		HtmlContent:      HtmlContent,
+		HtmlContent:      page.Html,
 		TwoScriptContent: twoscript.NewTwoScriptFile(),
 		CssContent:       css.NewCssFile(),
 		JsContent:        javascript.NewJsFile(),

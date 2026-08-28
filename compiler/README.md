@@ -17,6 +17,7 @@
 - `--serial` (default: false) Disables parallel compilation of assets
 - `--dry-run` (default: false) Simulates a build without writing any files to disk
 - `--listen` (default: false) Instead of automatically exiting after compilation, open a websocket connection that can accept commands.
+- `--no-reactivity` (default: false) Disables all compiler-based reactivity features. Turns 2web into basic ssg.
 
 ## Sub Commands
 

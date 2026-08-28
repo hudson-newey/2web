@@ -17,6 +17,7 @@ type CliArguments struct {
 	DryRun                 bool
 	Verbose                bool
 	Listen                 bool
+	NoReactivity           bool
 
 	// Developer command line flags
 	VerboseLexer  bool

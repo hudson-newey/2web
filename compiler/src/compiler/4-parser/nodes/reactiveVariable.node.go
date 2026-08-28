@@ -2,13 +2,17 @@ package nodes
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
+	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
+	"hudson-newey/2web/src/models"
 	"slices"
 	"strings"
 
@@ -47,7 +51,16 @@ func (m *reactiveVariableNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
-func (m *reactiveVariableNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *reactiveVariableNode) MarkupContent() string {
+	return ""
+}
+
+func (m *reactiveVariableNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {
+	if !cli.GetArgs().NoReactivity {
+		// TODO: This should be a non-mutative operation
+		m.compileReactivity(page, ast)
+	}
+
 	return NodeContent{
 		HtmlContent:      page.Html,
 		JsContent:        javascript.NewJsFile(),
@@ -87,6 +100,7 @@ func (m *reactiveVariableNode) dependentProps(ast AbstractSyntaxTree) []*reactiv
 }
 
 func (m *reactiveVariableNode) dependentEvents(ast AbstractSyntaxTree) []*reactiveEventNode {
+	println(len(ast.reactiveEvents()), len(ast.reactiveProperties()), len(ast.reactiveVariables()))
 	return lists.Filter(ast.reactiveEvents(), func(x *reactiveEventNode) bool {
 		return slices.Contains(x.reactiveVariableDeps(ast), m) || x.reactiveVariableSink(ast) == m
 	})
@@ -203,8 +217,11 @@ In this example, out compiled code will look **something** (not exact) like this
 ```
 */
 const (
+	// never used throughout the app. A noop.
+	unused reactivityLevel = iota
+
 	// does not require any JavaScript. Can be inlined at compile time.
-	static reactivityLevel = iota
+	static
 
 	// Requires JavaScript to modify the DOM on initial render.
 	staticProperty
@@ -218,14 +235,14 @@ const (
 	reactive
 )
 
+// TODO: this should probably cache the type for faster compile times
 func (m *reactiveVariableNode) reactivityLevel(ast AbstractSyntaxTree) reactivityLevel {
 	events := m.dependentEvents(ast)
-	for i := range events {
-		event := events[i]
+	for _, e := range events {
 		// If the assignment expression uses the same variable that it's
 		// assigning to, we need to have a runtime variable to track state.
 		// e.g. think of a counting number
-		if strings.Contains(event.assignmentExpr, m.selector()) {
+		if strings.Contains(e.assignmentExpr, m.selector()) {
 			return reactive
 		}
 	}
@@ -242,9 +259,247 @@ func (m *reactiveVariableNode) reactivityLevel(ast AbstractSyntaxTree) reactivit
 	// don't ever update after first page load.
 	// e.g. think of a date/time that can't be evaluated at runtime.
 	props := m.dependentProps(ast)
-	if len(props) > 0 {
+	hasNonOptimizableProps := lists.Some(props, func(x *reactivePropertyNode) bool {
+		return !x.canCompilerInline()
+	})
+	// If even one of the properties cannot be inlined, then we have to treat it
+	// as a static property.
+	// TODO: If we start processing static reducers on the prop level, we can
+	// probably do per-prop optimizations.
+	if hasNonOptimizableProps {
 		return staticProperty
 	}
 
-	return static
+	if len(props) > 0 {
+		return static
+	}
+
+	return unused
+}
+
+func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, ast AbstractSyntaxTree) {
+	reactivityLevel := m.reactivityLevel(ast)
+
+	// short circuit fast if not used
+	if reactivityLevel == unused {
+		errMsg := fmt.Sprintf("Unused variable: %s", m.selector())
+		err := models.NewError(errMsg, "", lexer.Position{Row: 0, Col: 0})
+		documentErrors.AddErrors(&err)
+		return
+	}
+
+	// Ideally, slower reactive types would only target properties and events
+	// that are effected.
+	// Therefore, the fully "models.Reactive" variable reactivity class is a
+	// superset of "models.Assignment" because some references to the variable
+	// might not be fully reactive.
+	//
+	// This also means that each reactivity type should also make their own
+	// element selectors so that subset of elements that abide by the reactivity
+	// class are updated.
+	//
+	// TODO: I might be able to combine selectors for the same element that has
+	// different property targets.
+	if reactivityLevel >= reactive {
+		m.compileReactiveVar(pageModel, ast)
+	} else if reactivityLevel >= assignment {
+		// TODO: explore if reactive and assignment reactivity are mutually
+		// exclusive for variables, events, or props
+		m.compileAssignmentVar(pageModel, ast)
+	}
+
+	// static props differ from truly static variables because static props
+	// need runtime code to set the initial value of the prop
+	//
+	// e.g. <my-custom-element *value="$value"></my-custom-element>
+	//
+	// Most elements that have writable properties, also have an associated
+	// attribute. So static properties only really apply to poorly designed
+	// custom elements (e.g. web components).
+	//
+	// If the star is removed from this attribute, then it will become static
+	// content that can be evaluated at runtime.
+	// It is therefore recommended to remove the star from attributes if you
+	// do not need to
+	//
+	// e.g. <input type="range" value="$value"></input>
+	if reactivityLevel >= staticProperty {
+		m.compileStaticPropVar(pageModel, ast)
+	}
+
+	m.compileStatic(pageModel, ast)
+}
+
+func (m *reactiveVariableNode) compileReactiveVar(
+	pageModel *page.Page,
+	ast AbstractSyntaxTree,
+) {
+	events := m.dependentEvents(ast)
+	props := m.dependentProps(ast)
+
+	jsNewValueVar := javascript.ValueVar
+
+	domMutator := ""
+	for _, p := range props {
+		propDomSelector := javascript.CreateJsElementName()
+		selectorCount := strings.Count(pageModel.Html.Content, p.selector())
+		if selectorCount > 1 {
+			domMutator = domMutator + fmt.Sprintf(
+				`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
+				propDomSelector, p.propName, jsNewValueVar,
+			)
+		} else {
+			domMutator = domMutator + fmt.Sprintf(
+				`document.querySelector("[%s]")["%s"] = %s;`,
+				propDomSelector, p.propName, jsNewValueVar,
+			)
+		}
+	}
+
+	variableName := javascript.CreateJsVariableName()
+	handlerFuncName := javascript.CreateJsFunctionName()
+	domMutator = fmt.Sprintf(`
+	 	let %s = %s;
+		function %s(%s) { %s }
+	`,
+		variableName, m.initialValue,
+		handlerFuncName, jsNewValueVar, domMutator,
+	)
+
+	eventListeners := ""
+	pageContent := pageModel.Html.Content
+	for _, e := range events {
+		// TODO: This probably won't work when referencing other reactive
+		// variables. Expanding the scope from the reducer to page content
+		// might?? fix the issue???
+		reactiveReducer := strings.ReplaceAll(e.reducer, m.selector(), variableName)
+
+		eventDomSelector := javascript.CreateJsElementName()
+		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
+		eventListeners = eventListeners + fmt.Sprintf(`
+			document.addEventListener("%s", () => {
+				%s = %s;
+				%s;
+			});
+		`,
+			eventDomSelector,
+			variableName, reactiveReducer,
+			handlerFuncName,
+		)
+	}
+
+	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
+	handlerScript := javascript.FromContent(handlerContent)
+	pageModel.AddScript(handlerScript)
+
+	pageModel.Html = html.FromContent(pageContent)
+}
+
+func (m *reactiveVariableNode) compileAssignmentVar(
+	pageModel *page.Page,
+	ast AbstractSyntaxTree,
+) {
+	events := m.dependentEvents(ast)
+	props := m.dependentProps(ast)
+
+	jsNewValueVar := javascript.ValueVar
+
+	domMutator := ""
+	for _, p := range props {
+		propDomSelector := javascript.CreateJsElementName()
+		selectorCount := strings.Count(pageModel.Html.Content, p.selector())
+		if selectorCount > 1 {
+			domMutator = domMutator + fmt.Sprintf(
+				`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
+				propDomSelector, p.propName, jsNewValueVar,
+			)
+		} else {
+			domMutator = domMutator + fmt.Sprintf(
+				`document.querySelector("[%s]")["%s"] = %s;`,
+				propDomSelector, p.propName, jsNewValueVar,
+			)
+		}
+	}
+
+	handlerFuncName := javascript.CreateJsFunctionName()
+	domMutator = fmt.Sprintf(
+		`function %s(%s) { %s }`,
+		handlerFuncName, jsNewValueVar, domMutator,
+	)
+
+	eventListeners := ""
+	pageContent := pageModel.Html.Content
+	for _, e := range events {
+		eventDomSelector := javascript.CreateJsElementName()
+		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
+		eventListeners = eventListeners + fmt.Sprintf(
+			`document.addEventListener("%s", %s);`,
+			eventDomSelector, handlerFuncName,
+		)
+	}
+
+	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
+	handlerScript := javascript.FromContent(handlerContent)
+	pageModel.AddScript(handlerScript)
+
+	pageModel.Html = html.FromContent(pageContent)
+}
+
+func (m *reactiveVariableNode) compileStaticPropVar(
+	pageModel *page.Page,
+	ast AbstractSyntaxTree,
+) {
+	props := m.dependentProps(ast)
+	domSelector := javascript.CreateJsElementName()
+
+	// If there are multiple instances of the same reactive property
+	// selector, we can combine the assignment into one querySelectorAll
+	// this means that we don't have to do multiple properties to update
+	// elements that have the same selector.
+	//
+	// TODO: This updating selector(s) logic is quite duplicated throughout this
+	// file. We can probably refactor it out to a common function
+	reducerContent := ""
+	if len(props) > 1 {
+		// We use forEach here instead of map() so that the JavaScript
+		// JIT doesn't have to keep track of a return value.
+		//
+		// We use the square brackets here because some properties have dashes which
+		// cannot be acceded with a period.
+		//
+		// There's a newline at the start of this script tag so that when it is
+		// appended to the body, it's on its own line, and semantically distinct.
+		reducerContent = fmt.Sprintf(
+			`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
+			domSelector,
+		)
+	} else {
+		reducerContent = fmt.Sprintf(
+			`document.querySelector("[%s]")["%s"] = %s;`,
+			domSelector, props[0].propName, m.initialValue,
+		)
+	}
+
+	reducerScript := javascript.FromContent(reducerContent)
+	pageModel.AddScript(reducerScript)
+
+	// Replace all of the target properties with their compile-time DOM
+	// selector.
+	pageContent := pageModel.Html.Content
+	for _, p := range props {
+		pageContent = strings.ReplaceAll(pageContent, p.selector(), domSelector)
+	}
+	pageModel.Html = html.FromContent(pageContent)
+}
+
+func (m *reactiveVariableNode) compileStatic(
+	pageModel *page.Page,
+	ast AbstractSyntaxTree,
+) {
+	props := m.dependentProps(ast)
+	for _, p := range props {
+		pageModel.Html = html.FromContent(
+			strings.ReplaceAll(pageModel.Html.Content, p.selector(), m.initialValue),
+		)
+	}
 }

@@ -57,6 +57,10 @@ func (m *scriptImportNode) Children() AbstractSyntaxTree {
 	return m.children
 }
 
+func (m *scriptImportNode) MarkupContent() string {
+	return ""
+}
+
 func (m *scriptImportNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
 	// Check that the imported path really exists.
 	hostDirectory := filepath.Dir(page.InputPath)

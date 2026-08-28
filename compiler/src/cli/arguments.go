@@ -23,6 +23,7 @@ func ParseArguments() models.CliArguments {
 	dryRun := flag.Bool("dry-run", false, "Simulates a build without writing any files to disk")
 	verbose := flag.Bool("verbose", false, "Print extra debug information to the console")
 	listen := flag.Bool("listen", false, "Instead of automatically exiting after compilation, open a websocket connection that can accept commands")
+	noReactivity := flag.Bool("no-reactivity", false, "Disables all compiler-based reactivity features. Turns 2web into basic ssg.")
 
 	verboseLexer := flag.Bool("verbose-lexer", false, "Logs the lexer output to the console")
 	verboseAst := flag.Bool("verbose-ast", false, "Logs the ast output to the console")
@@ -46,6 +47,7 @@ func ParseArguments() models.CliArguments {
 		DryRun:                 *dryRun,
 		Verbose:                *verbose,
 		Listen:                 *listen,
+		NoReactivity:           *noReactivity,
 
 		VerboseLexer:  *verboseLexer,
 		VerboseAst:    *verboseAst,
