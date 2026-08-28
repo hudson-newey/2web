@@ -219,5 +219,32 @@ const (
 )
 
 func (m *reactiveVariableNode) reactivityLevel(ast AbstractSyntaxTree) reactivityLevel {
-	return reactive
+	events := m.dependentEvents(ast)
+	for i := range events {
+		event := events[i]
+		// If the assignment expression uses the same variable that it's
+		// assigning to, we need to have a runtime variable to track state.
+		// e.g. think of a counting number
+		if strings.Contains(event.assignmentExpr, m.selector()) {
+			return reactive
+		}
+	}
+
+	// If we need to respond to user input but the responses don't depend on
+	// previous state, we can keep updates completely stateless.
+	// e.g. think of a close button on a dialog. We can just set closed to false
+	// without needing to know if the dialog is open.
+	if len(events) > 0 {
+		return assignment
+	}
+
+	// All reactive properties that require an initial runtime assignment, but
+	// don't ever update after first page load.
+	// e.g. think of a date/time that can't be evaluated at runtime.
+	props := m.dependentProps(ast)
+	if len(props) > 0 {
+		return staticProperty
+	}
+
+	return static
 }
