@@ -389,9 +389,8 @@ func (m *reactiveVariableNode) compileReactiveVar(
 
 	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
 	handlerScript := javascript.FromContent(handlerContent)
-	pageModel.AddScript(handlerScript)
-
 	pageModel.SetContent(html.FromContent(pageContent))
+	pageModel.AddScript(handlerScript)
 }
 
 func (m *reactiveVariableNode) compileAssignmentVar(
@@ -439,9 +438,8 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 
 	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
 	handlerScript := javascript.FromContent(handlerContent)
-	pageModel.AddScript(handlerScript)
-
 	pageModel.SetContent(html.FromContent(pageContent))
+	pageModel.AddScript(handlerScript)
 }
 
 func (m *reactiveVariableNode) compileStaticPropVar(
@@ -449,46 +447,21 @@ func (m *reactiveVariableNode) compileStaticPropVar(
 	ast AbstractSyntaxTree,
 ) {
 	props := m.dependentProps(ast)
-	domSelector := javascript.CreateJsElementName()
 
-	// If there are multiple instances of the same reactive property
-	// selector, we can combine the assignment into one querySelectorAll
-	// this means that we don't have to do multiple properties to update
-	// elements that have the same selector.
-	//
-	// TODO: This updating selector(s) logic is quite duplicated throughout this
-	// file. We can probably refactor it out to a common function
 	reducerContent := ""
-	if len(props) > 1 {
-		// We use forEach here instead of map() so that the JavaScript
-		// JIT doesn't have to keep track of a return value.
-		//
-		// We use the square brackets here because some properties have dashes which
-		// cannot be acceded with a period.
-		//
-		// There's a newline at the start of this script tag so that when it is
-		// appended to the body, it's on its own line, and semantically distinct.
-		reducerContent = fmt.Sprintf(
-			`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
-			domSelector,
-		)
-	} else {
-		reducerContent = fmt.Sprintf(
+	pageContent := pageModel.Html.Content
+	for _, p := range props {
+		domSelector := javascript.CreateJsElementName()
+		pageContent = strings.Replace(pageContent, p.selector(), domSelector, 1)
+		reducerContent = reducerContent + fmt.Sprintf(
 			`document.querySelector("[%s]")["%s"] = %s;`,
-			domSelector, props[0].propName, m.initialValue,
+			domSelector, p.propName, m.initialValue,
 		)
 	}
 
 	reducerScript := javascript.FromContent(reducerContent)
-	pageModel.AddScript(reducerScript)
-
-	// Replace all of the target properties with their compile-time DOM
-	// selector.
-	pageContent := pageModel.Html.Content
-	for _, p := range props {
-		pageContent = strings.ReplaceAll(pageContent, p.selector(), p.selector()+" "+domSelector)
-	}
 	pageModel.SetContent(html.FromContent(pageContent))
+	pageModel.AddScript(reducerScript)
 }
 
 func (m *reactiveVariableNode) compileStatic(
