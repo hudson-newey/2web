@@ -326,7 +326,9 @@ func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, ast Abstr
 		m.compileStaticPropVar(pageModel, ast)
 	}
 
-	m.compileStatic(pageModel, ast)
+	if reactivityLevel == static {
+		m.compileStatic(pageModel, ast)
+	}
 }
 
 func (m *reactiveVariableNode) compileReactiveVar(
@@ -340,19 +342,10 @@ func (m *reactiveVariableNode) compileReactiveVar(
 
 	domMutator := ""
 	for _, p := range props {
-		propDomSelector := javascript.CreateJsElementName()
-		selectorCount := strings.Count(pageModel.Html.Content, p.selector())
-		if selectorCount > 1 {
-			domMutator = domMutator + fmt.Sprintf(
-				`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
-				propDomSelector, p.propName, jsNewValueVar,
-			)
-		} else {
-			domMutator = domMutator + fmt.Sprintf(
-				`document.querySelector("[%s]")["%s"] = %s;`,
-				propDomSelector, p.propName, jsNewValueVar,
-			)
-		}
+		domMutator = domMutator + fmt.Sprintf(
+			`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
+			p.selector(pageModel), p.propName, jsNewValueVar,
+		)
 	}
 
 	variableName := javascript.CreateJsVariableName()
@@ -376,7 +369,7 @@ func (m *reactiveVariableNode) compileReactiveVar(
 		eventDomSelector := javascript.CreateJsElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
 		eventListeners = eventListeners + fmt.Sprintf(`
-			document.addEventListener("%s", () => {
+			document.addEventListener("[%s]", () => {
 				%s = %s;
 				%s;
 			});
@@ -404,19 +397,10 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 
 	domMutator := ""
 	for _, p := range props {
-		propDomSelector := javascript.CreateJsElementName()
-		selectorCount := strings.Count(pageModel.Html.Content, p.selector())
-		if selectorCount > 1 {
-			domMutator = domMutator + fmt.Sprintf(
-				`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
-				propDomSelector, p.propName, jsNewValueVar,
-			)
-		} else {
-			domMutator = domMutator + fmt.Sprintf(
-				`document.querySelector("[%s]")["%s"] = %s;`,
-				propDomSelector, p.propName, jsNewValueVar,
-			)
-		}
+		domMutator = domMutator + fmt.Sprintf(
+			`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
+			p.selector(pageModel), p.propName, jsNewValueVar,
+		)
 	}
 
 	handlerFuncName := javascript.CreateJsFunctionName()
@@ -431,8 +415,8 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 		eventDomSelector := javascript.CreateJsElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
 		eventListeners = eventListeners + fmt.Sprintf(
-			`document.addEventListener("%s", %s);`,
-			eventDomSelector, handlerFuncName,
+			`document.querySelector("[%s]").addEventListener("%s", () => %s(%s));`,
+			eventDomSelector, e.eventName, handlerFuncName, e.assignmentExpr,
 		)
 	}
 
@@ -451,11 +435,9 @@ func (m *reactiveVariableNode) compileStaticPropVar(
 	reducerContent := ""
 	pageContent := pageModel.Html.Content
 	for _, p := range props {
-		domSelector := javascript.CreateJsElementName()
-		pageContent = strings.Replace(pageContent, p.selector(), domSelector, 1)
 		reducerContent = reducerContent + fmt.Sprintf(
 			`document.querySelector("[%s]")["%s"] = %s;`,
-			domSelector, p.propName, m.initialValue,
+			p.selector(pageModel), p.propName, m.initialValue,
 		)
 	}
 
@@ -471,7 +453,7 @@ func (m *reactiveVariableNode) compileStatic(
 	props := m.dependentProps(ast)
 	for _, p := range props {
 		pageModel.SetContent(
-			html.FromContent(strings.ReplaceAll(pageModel.Html.Content, p.selector(), m.initialValue)),
+			html.FromContent(strings.ReplaceAll(pageModel.Html.Content, p.selector(pageModel), m.initialValue)),
 		)
 	}
 }

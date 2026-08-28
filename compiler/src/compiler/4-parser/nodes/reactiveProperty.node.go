@@ -6,6 +6,7 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
+	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
@@ -44,6 +45,11 @@ type reactivePropertyNode struct {
 	reducer       string
 	markupContent string
 	children      AbstractSyntaxTree
+
+	// optional:
+	// If the property node has already been used during the compilation process
+	// it will already have a selector allocated to it that we can reuse.
+	allocatedSelector string
 }
 
 func (m *reactivePropertyNode) Type() string {
@@ -80,9 +86,25 @@ func (m *reactivePropertyNode) RemoveChild(child Node) {
 	}
 }
 
-func (m *reactivePropertyNode) selector() string {
+func (m *reactivePropertyNode) selector(pageModel *page.Page) string {
+	if m.allocatedSelector != "" {
+		return m.allocatedSelector
+	}
+
+	// Replace the compile time selector with a runtime selector
 	// TODO: Use definitions from lexer here instead
-	return fmt.Sprintf("*%s=\"%s\"", m.propName, m.reducer)
+	compilerSelector := fmt.Sprintf("*%s=\"%s\"", m.propName, m.reducer)
+	domSelector := javascript.CreateJsElementName()
+
+	m.allocatedSelector = domSelector
+
+	pageModel.SetContent(
+		html.FromContent(
+			strings.Replace(pageModel.Html.Content, compilerSelector, domSelector, 1),
+		),
+	)
+
+	return domSelector
 }
 
 // Some properties such as text assignment can be evaluated at compile time
