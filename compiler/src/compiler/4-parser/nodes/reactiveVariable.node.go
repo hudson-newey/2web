@@ -391,7 +391,7 @@ func (m *reactiveVariableNode) compileReactiveVar(
 	handlerScript := javascript.FromContent(handlerContent)
 	pageModel.AddScript(handlerScript)
 
-	pageModel.Html = html.FromContent(pageContent)
+	pageModel.SetContent(html.FromContent(pageContent))
 }
 
 func (m *reactiveVariableNode) compileAssignmentVar(
@@ -441,7 +441,7 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 	handlerScript := javascript.FromContent(handlerContent)
 	pageModel.AddScript(handlerScript)
 
-	pageModel.Html = html.FromContent(pageContent)
+	pageModel.SetContent(html.FromContent(pageContent))
 }
 
 func (m *reactiveVariableNode) compileStaticPropVar(
@@ -486,9 +486,9 @@ func (m *reactiveVariableNode) compileStaticPropVar(
 	// selector.
 	pageContent := pageModel.Html.Content
 	for _, p := range props {
-		pageContent = strings.ReplaceAll(pageContent, p.selector(), domSelector)
+		pageContent = strings.ReplaceAll(pageContent, p.selector(), p.selector()+" "+domSelector)
 	}
-	pageModel.Html = html.FromContent(pageContent)
+	pageModel.SetContent(html.FromContent(pageContent))
 }
 
 func (m *reactiveVariableNode) compileStatic(
@@ -497,8 +497,8 @@ func (m *reactiveVariableNode) compileStatic(
 ) {
 	props := m.dependentProps(ast)
 	for _, p := range props {
-		pageModel.Html = html.FromContent(
-			strings.ReplaceAll(pageModel.Html.Content, p.selector(), m.initialValue),
+		pageModel.SetContent(
+			html.FromContent(strings.ReplaceAll(pageModel.Html.Content, p.selector(), m.initialValue)),
 		)
 	}
 }
