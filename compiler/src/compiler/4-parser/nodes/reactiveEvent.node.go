@@ -30,14 +30,14 @@ func NewReactiveEventNode(lexNodes []*lexer.V2LexNode) *reactiveEventNode {
 	assignmentExpr := strings.TrimSpace(assignmentSplit[1])
 
 	markupContent := fmt.Sprintf(
-		"@%s=\"%s\"",
+		"@%s=\"%s",
 		propName.Content,
 		reducer.Content,
 	)
 
 	return &reactiveEventNode{
-		eventName:      propName.Content,
-		reducer:        reducer.Content,
+		eventName:      strings.TrimSpace(propName.Content),
+		reducer:        strings.TrimSpace(reducer.Content),
 		assignmentSink: assignmentSink,
 		assignmentExpr: assignmentExpr,
 		markupContent:  markupContent,

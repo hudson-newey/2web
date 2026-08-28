@@ -10,7 +10,8 @@ func (ast AbstractSyntaxTree) reactiveVariables() []*reactiveVariableNode {
 		matches = append(matches, n.Children().reactiveVariables()...)
 	}
 
-	return lists.FilterTypes[*reactiveVariableNode](ast)
+	matches = append(matches, lists.FilterTypes[*reactiveVariableNode](ast)...)
+	return matches
 }
 
 func (ast AbstractSyntaxTree) reactiveProperties() []*reactivePropertyNode {
@@ -19,7 +20,8 @@ func (ast AbstractSyntaxTree) reactiveProperties() []*reactivePropertyNode {
 		matches = append(matches, n.Children().reactiveProperties()...)
 	}
 
-	return lists.FilterTypes[*reactivePropertyNode](ast)
+	matches = append(matches, lists.FilterTypes[*reactivePropertyNode](ast)...)
+	return matches
 }
 
 func (ast AbstractSyntaxTree) reactiveEvents() []*reactiveEventNode {
@@ -28,5 +30,6 @@ func (ast AbstractSyntaxTree) reactiveEvents() []*reactiveEventNode {
 		matches = append(matches, n.Children().reactiveEvents()...)
 	}
 
-	return lists.FilterTypes[*reactiveEventNode](ast)
+	matches = append(matches, lists.FilterTypes[*reactiveEventNode](ast)...)
+	return matches
 }

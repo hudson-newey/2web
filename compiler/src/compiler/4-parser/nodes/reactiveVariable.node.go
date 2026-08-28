@@ -32,8 +32,8 @@ func NewreactiveVariableNode(lexNodes []*lexer.V2LexNode) *reactiveVariableNode 
 	}
 
 	return &reactiveVariableNode{
-		variableName: variableName.Content,
-		initialValue: initialValue.Content,
+		variableName: strings.TrimSpace(variableName.Content),
+		initialValue: strings.TrimSpace(initialValue.Content),
 	}
 }
 
@@ -100,7 +100,6 @@ func (m *reactiveVariableNode) dependentProps(ast AbstractSyntaxTree) []*reactiv
 }
 
 func (m *reactiveVariableNode) dependentEvents(ast AbstractSyntaxTree) []*reactiveEventNode {
-	println(len(ast.reactiveEvents()), len(ast.reactiveProperties()), len(ast.reactiveVariables()))
 	return lists.Filter(ast.reactiveEvents(), func(x *reactiveEventNode) bool {
 		return slices.Contains(x.reactiveVariableDeps(ast), m) || x.reactiveVariableSink(ast) == m
 	})

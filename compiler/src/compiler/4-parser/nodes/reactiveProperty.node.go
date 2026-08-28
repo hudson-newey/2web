@@ -21,20 +21,20 @@ func NewReactivePropertyNode(lexNodes []*lexer.V2LexNode) *reactivePropertyNode 
 		panic(err)
 	}
 
-	reducer, err := scanners.NthToken(lexNodes, lexeme.TextContent, 4)
+	reducer, err := scanners.NthToken(lexNodes, lexeme.TextContent, 2)
 	if err != nil {
 		panic(err)
 	}
 
 	markupContent := fmt.Sprintf(
-		"*%s=\"%s\"",
+		"*%s=\"%s",
 		propName.Content,
 		reducer.Content,
 	)
 
 	return &reactivePropertyNode{
-		propName:      propName.Content,
-		reducer:       reducer.Content,
+		propName:      strings.TrimSpace(propName.Content),
+		reducer:       strings.TrimSpace(reducer.Content),
 		markupContent: markupContent,
 	}
 }

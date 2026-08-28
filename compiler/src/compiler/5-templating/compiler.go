@@ -12,6 +12,8 @@ import (
 	"os"
 )
 
+var rootAstNode []nodes.Node = []nodes.Node{}
+
 func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	// Raw text files should be returned without modification since they are "raw"
 	// data formats.
@@ -29,6 +31,7 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	pageModel := page.NewPage()
 	pageModel.InputPath = filePath
 
+	rootAstNode = parsedAst
 	recurseAst(&pageModel, parsedAst)
 	if !cli.GetArgs().IsolatedPages {
 		addRouteAssets(&pageModel)
@@ -185,7 +188,7 @@ func recurseAst(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 
 	// Second pass reactive content
 	for _, node := range parsedAst {
-		nodeContent := node.Content(page, parsedAst)
+		nodeContent := node.Content(page, rootAstNode)
 		page.SetContent(nodeContent.HtmlContent)
 		page.AddStyle(nodeContent.CssContent)
 		page.AddScript(nodeContent.JsContent)

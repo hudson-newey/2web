@@ -34,8 +34,8 @@ func NewscriptImportNode(lexNodes []*lexer.V2LexNode) *scriptImportNode {
 	}
 
 	return &scriptImportNode{
-		importName: importNameNode.Content,
-		importPath: importPathNode.Content,
+		importName: strings.TrimSpace(importNameNode.Content),
+		importPath: strings.TrimSpace(importPathNode.Content),
 	}
 }
 
