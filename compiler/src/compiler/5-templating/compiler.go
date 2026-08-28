@@ -32,6 +32,7 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	pageModel.InputPath = filePath
 
 	rootAstNode = parsedAst
+	recurseAstMarkup(&pageModel, parsedAst)
 	recurseAst(&pageModel, parsedAst)
 	if !cli.GetArgs().IsolatedPages {
 		addRouteAssets(&pageModel)
@@ -173,7 +174,7 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	return pageModel
 }
 
-func recurseAst(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
+func recurseAstMarkup(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 	// First pass to establish page content
 	// We need this so that when we get to ast nodes that replace page content,
 	// it has the full page context.
@@ -183,9 +184,11 @@ func recurseAst(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 			html.FromContent(page.Html.Content + markupContent),
 		)
 
-		recurseAst(page, node.Children())
+		recurseAstMarkup(page, node.Children())
 	}
+}
 
+func recurseAst(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 	// Second pass reactive content
 	for _, node := range parsedAst {
 		nodeContent := node.Content(page, rootAstNode)
