@@ -13,5 +13,6 @@ var TextRules = []Grammar{
 	reactiveProperty,
 	reactiveEvent,
 
+	elementRef,
 	textOutput,
 }

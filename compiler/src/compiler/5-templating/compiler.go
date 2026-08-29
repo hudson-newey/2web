@@ -4,12 +4,9 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 	optimizer "hudson-newey/2web/src/compiler/6-optimizer"
-	"hudson-newey/2web/src/content/assets"
 	"hudson-newey/2web/src/content/html"
-	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/content/txt"
-	"hudson-newey/2web/src/content/xslt"
 	"os"
 )
 
@@ -40,24 +37,6 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	if !cli.GetArgs().IsolatedPages {
 		addRouteAssets(&pageModel)
 	}
-
-	// We want to exclude Markdown, xml, and xslt files from this processing step
-	// because our element ref symbol is a hashtag which has meaning in these
-	// formats.
-	//
-	// TODO: We should add support for element refs in Markdown, xml and xslt
-	// files.
-	if assets.IsMarkupFile(filePath) &&
-		!markdown.IsMarkdownFile(filePath) &&
-		!xslt.IsXsltFile(filePath) {
-		pageModel.Html.Content = expandElementRefs(pageModel.Html.Content)
-	}
-
-	// "Mustache like" expressions e.g. {{ $count }} are a shorthand for an
-	// element with only innerText.
-	// Therefore, we expand all of the mustache expressions before finding
-	// reactive property tokens
-	// pageModel.Html.Content = expandTextNodes(pageModel.Html.Content)
 
 	args := cli.GetArgs()
 	if args.WithFormatting {
