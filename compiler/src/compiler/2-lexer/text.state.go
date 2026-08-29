@@ -14,8 +14,8 @@ func textLexer(model *Lexer) (V2LexNode, LexFunc) {
 		">":  {token: lexeme.GreaterAngle, next: textLexer},
 		"\\": {token: lexeme.Escape, next: textLexer},
 
-		"{": {token: lexeme.TextContent, next: textLexer},
-		"}": {token: lexeme.TextContent, next: textLexer},
+		"{": {token: lexeme.CurlyOpen, next: textLexer},
+		"}": {token: lexeme.CurlyClosed, next: textLexer},
 
 		// "\n": {token: lexeme.NewLine, next: textLexer},
 		// "\t": {token: lexeme.Tab, next: textLexer},

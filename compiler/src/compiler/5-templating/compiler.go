@@ -57,7 +57,7 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	// element with only innerText.
 	// Therefore, we expand all of the mustache expressions before finding
 	// reactive property tokens
-	pageModel.Html.Content = expandTextNodes(pageModel.Html.Content)
+	// pageModel.Html.Content = expandTextNodes(pageModel.Html.Content)
 
 	args := cli.GetArgs()
 	if args.WithFormatting {

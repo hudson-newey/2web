@@ -57,6 +57,12 @@ const (
 	// #
 	Hash Lexeme = "Hash"
 
+	// {
+	CurlyOpen Lexeme = "CurlyOpen"
+
+	// }
+	CurlyClosed Lexeme = "CurlyOpen"
+
 	// Backslash used for escaping
 	// (e.g. \> in HTML so that you don't have to use the ugly &gt;)
 	// \
