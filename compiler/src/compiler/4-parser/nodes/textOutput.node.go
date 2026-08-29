@@ -25,7 +25,7 @@ func NewTextOutputNode(lexNodes []*lexer.V2LexNode) *textOutputNode {
 	return &textOutputNode{
 		expression: expression.Content,
 		reactiveProp: &reactivePropertyNode{
-			propName:      "innerText",
+			propName:      "textContent",
 			reducer:       expression.Content,
 			markupContent: markupContentForExpr(expression.Content),
 		},
@@ -65,5 +65,5 @@ func (m *textOutputNode) RemoveChild(child Node) {
 }
 
 func markupContentForExpr(expression string) string {
-	return fmt.Sprintf(`<span *innerText="%s"></span>`, expression)
+	return fmt.Sprintf(`<span *textContent="%s"></span>`, expression)
 }

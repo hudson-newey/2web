@@ -9,6 +9,6 @@
   $value = "";
 </script>
 
-<h1 *innerText="$value"></h1>
+<h1 *textContent="$value"></h1>
 
 <input @input="$value = event.target.value" />

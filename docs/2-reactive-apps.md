@@ -19,7 +19,7 @@ No code snippets will be shown out of context.
       $count = 0;
     </script>
 
-    <h1 *innerText="$count"></h1>
+    <h1 *textContent="$count"></h1>
     <button @click="++count">Increment</button>
   </body>
 </html>
@@ -41,7 +41,7 @@ _NOTE_: This is an dev build. optimized for readability, not performance.
       const __2_element_0 = document.getElementById("__2_element_0");
       let __2_var_0 = 0;
       function __2_func_0(__2_value) {
-        __2_element_0["innerText"] = __2_value;
+        __2_element_0["textContent"] = __2_value;
       }
     </script>
   </body>

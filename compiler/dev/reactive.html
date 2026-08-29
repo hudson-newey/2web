@@ -18,7 +18,7 @@
   $count = 0;
 </script>
 
-<h1 *innerText="$count" data-testid="count-output"></h1>
+<h1 *textContent="$count" data-testid="count-output"></h1>
 
 <div>
   <button @click="$count = $count + 1" data-testid="increment-button">

@@ -124,7 +124,7 @@ e.g.
 $ message = "Hello!";
 </script>
 
-<h1 *innerText="$message"></h1>
+<h1 *textContent="$message"></h1>
 ```
 
 As you can see from the example, the variable is not really reactive, but it
@@ -137,7 +137,7 @@ The compiled code will look something like this:
 <script>
 
 	document.addEventListener("DOMContentLoaded", () => {
-	    document.getElementById("_0").innerText = "Hello!";
+	    document.getElementById("_0").textContent = "Hello!";
 	});
 
 </script>

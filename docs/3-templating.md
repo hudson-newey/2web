@@ -63,7 +63,7 @@ Therefore, the code above compiles into the following code:
       const __2_element_0 = document.getElementById("__2_element_0");
       let __2_var_0 = 0;
       function __2_func_0(__2_value) {
-        __2_element_0["innerText"] = __2_value;
+        __2_element_0["textContent"] = __2_value;
       }
     </script>
   </body>
