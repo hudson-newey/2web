@@ -22,13 +22,6 @@ func NewElementRefNode(lexNodes []*lexer.V2LexNode) *elementRefNode {
 	}
 }
 
-// While <code> nodes are normally regular HTML elements, I have decided to
-// break this compatibility in 2web to make it easier to handle code content.
-// In 2web, if you have a <code> block, everything inside will be automatically
-// escaped into HTML escape sequences, meaning that if you include <style>,
-// <script>, etc... tags inside of a <code> block, they will not be interpreted.
-// By making this distinction at the node level (instead of using the tag name),
-// it makes this distinction VERY clear without any ambiguity.
 type elementRefNode struct {
 	id       string
 	children AbstractSyntaxTree
