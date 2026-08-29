@@ -1,7 +1,7 @@
-package routing
+package builder
 
 import "path/filepath"
 
-func IsLayoutFile(filePath string) bool {
+func isLayoutFile(filePath string) bool {
 	return filepath.Base(filePath) == "__layout.html"
 }

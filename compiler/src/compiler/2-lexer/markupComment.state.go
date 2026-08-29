@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 )
 
 func markupCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
@@ -10,5 +9,5 @@ func markupCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
 		"-->": {token: lexeme.MarkupCommentEnd, next: textLexer},
 	}
 
-	return lexerFactory(cases, states.MarkupComment)(model)
+	return lexerFactory(cases, markupComment)(model)
 }

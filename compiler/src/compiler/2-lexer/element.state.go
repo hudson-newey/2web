@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 )
 
 // When inside the first starting angle bracket (<) and up until (and including)
@@ -25,5 +24,5 @@ func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases = withAttributes(cases)
 	cases = withStrings(cases, elementLexer)
 
-	return lexerFactory(cases, states.Element)(model)
+	return lexerFactory(cases, element)(model)
 }

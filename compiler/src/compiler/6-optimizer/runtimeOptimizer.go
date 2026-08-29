@@ -1,9 +1,9 @@
-package runtimeOptimizer
+package optimizer
 
 import (
 	"hudson-newey/2web/src/content/page"
 )
 
-func InjectRuntimeOptimizations(page *page.Page) {
+func injectRuntimeOptimizations(page *page.Page) {
 	injectContainerOptimizations(page)
 }

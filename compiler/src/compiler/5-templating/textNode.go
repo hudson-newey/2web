@@ -3,7 +3,6 @@ package templating
 import (
 	"fmt"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
-	"hudson-newey/2web/src/compiler/5-templating/reactiveCompiler"
 	"strings"
 )
 
@@ -19,7 +18,7 @@ func expandTextNodes(content string) string {
 		// E.g. {{ $count * 2 }}
 		nodeReducer := strings.Join(node.Tokens[0:len(node.Tokens)], " ")
 
-		doubleQuotes := reactiveCompiler.UseDoubleQuotes(nodeReducer)
+		doubleQuotes := useDoubleQuotes(nodeReducer)
 
 		// While adding DOM nodes may decrease the performance of the
 		// application without further processing, the compiler can correctly

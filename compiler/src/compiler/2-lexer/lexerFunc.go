@@ -2,13 +2,12 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 	"io"
 )
 
 type LexFunc func(*Lexer) (V2LexNode, LexFunc)
 
-func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
+func lexerFactory(lexMap lexDefMap, state lexState) LexFunc {
 	return func(lexerModel *Lexer) (V2LexNode, LexFunc) {
 		matchingLexNode, nextState := lexMap.matching(lexerModel, state)
 		if nextState != nil {
@@ -42,7 +41,7 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 					Pos:     position,
 					Token:   lexeme.EOF,
 					Content: "",
-					State:   states.SourceText,
+					State:   sourceText,
 				}
 
 				return lexNode, lexerModel.State
@@ -57,12 +56,12 @@ func lexerFactory(lexMap lexDefMap, state states.LexState) LexFunc {
 
 		// There are different types of text depending on what context we are in
 		// Sometimes it can be external source code.
-		tokenMap := map[states.LexState]lexeme.Lexeme{
-			states.CompiledScriptSource: lexeme.CompiledScriptSource,
-			states.ScriptSource:         lexeme.ScriptSource,
-			states.StyleSource:          lexeme.StyleSource,
-			states.CodeSource:           lexeme.CodeSource,
-			states.TextContent:          lexeme.TextContent,
+		tokenMap := map[lexState]lexeme.Lexeme{
+			compiledScriptSource: lexeme.CompiledScriptSource,
+			scriptSource:         lexeme.ScriptSource,
+			styleSource:          lexeme.StyleSource,
+			codeSource:           lexeme.CodeSource,
+			textContent:          lexeme.TextContent,
 		}
 
 		token, exists := tokenMap[state]

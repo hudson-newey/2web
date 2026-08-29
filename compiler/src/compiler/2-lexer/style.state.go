@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 )
 
 // The lexer for when the <style> tag has been opened and before the first >
@@ -18,7 +17,7 @@ func inlineStyleTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases = withAttributes(cases)
 	cases = withStrings(cases, inlineStyleTagLexer)
 
-	return lexerFactory(cases, states.StyleSource)(model)
+	return lexerFactory(cases, styleSource)(model)
 }
 
 func styleContentLexer(model *Lexer) (V2LexNode, LexFunc) {
@@ -26,5 +25,5 @@ func styleContentLexer(model *Lexer) (V2LexNode, LexFunc) {
 		"</style>": {token: lexeme.StyleEndTag, next: textLexer},
 	}
 
-	return lexerFactory(cases, states.StyleSource)(model)
+	return lexerFactory(cases, styleSource)(model)
 }

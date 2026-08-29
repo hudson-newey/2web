@@ -11,6 +11,7 @@ import (
 // Warning: This means that element ref's cannot be used if an element has an
 // "id" attribute.
 func expandElementRefs(content string) string {
+	var elementRefToken lexer.LexerSelector = []string{"#"}
 	refNodes := lexer.FindPropNodes[lexer.RefNode](content, elementRefToken)
 
 	replacements := []string{}

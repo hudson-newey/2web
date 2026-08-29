@@ -1,4 +1,4 @@
-package runtimeOptimizer
+package optimizer
 
 import (
 	"fmt"

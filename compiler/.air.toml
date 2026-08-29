@@ -10,13 +10,13 @@ tmp_dir = "tmp"
   # However, during builds, the binary might change without the input files
   # changing
   # args_bin = ["-i", "dev/", "-o", "dist/", "--format"]
-  # args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache", "--format"]
+  args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache", "--format", "--serial"]
   # Using a small file is helpful for debugging the lexer and parser because
   # there is less debug info to sift through.
   # args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--verbose-lexer", "--verbose-ast", "--isolated-pages", "--format", "--serial"]
-  args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--format", "--serial"]
-  # args_bin = ["-i", "dev/", "-o", "dist/", "--production", "--ignore-errors", "--format"]
-  # args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache", "--listen", "--format"]
+  # args_bin = ["-i", "dev/small-file.html", "-o", "dist/", "--no-cache", "--format", "--serial"]
+  # args_bin = ["-i", "dev/", "-o", "dist/", "--production", "--ignore-errors", "--format", "--serial"]
+  # args_bin = ["-i", "dev/", "-o", "dist/", "--no-cache", "--listen", "--format", "--serial"]
   cmd = "go build -o ./tmp/main ./src"
   delay = 1
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]

@@ -3,7 +3,6 @@ package lexer
 import (
 	"fmt"
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 	"strconv"
 )
 
@@ -21,7 +20,7 @@ func NewV2LexNode() V2LexNode {
 type V2LexNode struct {
 	Pos     Position
 	Token   lexeme.Lexeme
-	State   states.LexState
+	State   lexState
 	Content string
 }
 

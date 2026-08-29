@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 )
 
 // Attribute lexing is shared between multiple states.
@@ -34,7 +33,7 @@ func reactivePropertyLexer(model *Lexer) (V2LexNode, LexFunc) {
 		"=": {token: lexeme.Equals, next: reactivePropertyLexer},
 	}
 	cases = withStrings(cases, elementLexer)
-	return lexerFactory(cases, states.Element)(model)
+	return lexerFactory(cases, element)(model)
 }
 
 func reactiveEventLexer(model *Lexer) (V2LexNode, LexFunc) {
@@ -42,5 +41,5 @@ func reactiveEventLexer(model *Lexer) (V2LexNode, LexFunc) {
 		"=": {token: lexeme.Equals, next: reactiveEventLexer},
 	}
 	cases = withStrings(cases, elementLexer)
-	return lexerFactory(cases, states.Element)(model)
+	return lexerFactory(cases, element)(model)
 }

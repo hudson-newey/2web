@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 )
 
 func textLexer(model *Lexer) (V2LexNode, LexFunc) {
@@ -22,5 +21,5 @@ func textLexer(model *Lexer) (V2LexNode, LexFunc) {
 		// "\t": {token: lexeme.Tab, next: textLexer},
 	}
 
-	return lexerFactory(cases, states.TextContent)(model)
+	return lexerFactory(cases, textContent)(model)
 }

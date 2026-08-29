@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 )
 
 // The lexer for when the <script> tag has been opened and before the first >
@@ -15,7 +14,7 @@ func inlineScriptTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 	cases = withAttributes(cases)
 	cases = withStrings(cases, inlineScriptTagLexer)
 
-	return lexerFactory(cases, states.ScriptSource)(model)
+	return lexerFactory(cases, scriptSource)(model)
 }
 
 func scriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {
@@ -23,5 +22,5 @@ func scriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {
 		"</script>": {token: lexeme.ScriptEndTag, next: textLexer},
 	}
 
-	return lexerFactory(cases, states.ScriptSource)(model)
+	return lexerFactory(cases, scriptSource)(model)
 }

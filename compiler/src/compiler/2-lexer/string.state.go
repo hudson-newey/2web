@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 )
 
 // Because string lexers are dynamically based on the starting context and quote
@@ -16,7 +15,7 @@ func createStringLexer(returningState LexFunc, exitToken LexMatcher) LexFunc {
 		exitToken: {token: lexeme.Lexeme(exitToken), next: returningState},
 	}
 
-	return lexerFactory(cases, states.String)
+	return lexerFactory(cases, sourceString)
 }
 
 // Since strings are common to most states, this helper function adds all of the

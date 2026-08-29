@@ -3,7 +3,6 @@ package builder
 import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/parallel/threadPool"
-	"hudson-newey/2web/src/routing"
 	"math"
 	"runtime"
 )
@@ -32,7 +31,7 @@ func startBuildPool() {
 func AddCompilationStep(filePath string) {
 	args := cli.GetArgs()
 	buildPool.Enqueue(func() {
-		if routing.IsLayoutFile(filePath) {
+		if isLayoutFile(filePath) {
 			return
 		}
 

@@ -33,6 +33,10 @@ Note that because 2web templates are a superset of html, css, and JavaScript,
 our templating is quite simple given that we don't have to do any language
 translations or use an intermediate language.
 
+## 6-Optimizer
+
+Optimizes the final build output. This will only run during a production build.
+
 ## IO
 
 A generic reader that supports different IO interfaces an unifies them under

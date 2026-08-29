@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
-	"hudson-newey/2web/src/compiler/2-lexer/states"
 	"slices"
 	"strings"
 )
@@ -18,7 +17,7 @@ type lexDef struct {
 
 type lexDefMap map[LexMatcher]lexDef
 
-func (lexMap *lexDefMap) matching(lexerModel *Lexer, state states.LexState) (V2LexNode, LexFunc) {
+func (lexMap *lexDefMap) matching(lexerModel *Lexer, state lexState) (V2LexNode, LexFunc) {
 	dereferencedMap := *lexMap
 
 	// Collect keys into a slice explicitly to avoid relying on maps.Keys which
