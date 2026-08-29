@@ -2,9 +2,10 @@ package builder
 
 import (
 	"hudson-newey/2web/src/cli"
-	"hudson-newey/2web/src/parallel/threadPool"
 	"math"
 	"runtime"
+
+	"github.com/hudson-newey/2web/_shared/parallel/threadPool"
 )
 
 // Inspired by Astro 7 Queued rendering
