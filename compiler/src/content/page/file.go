@@ -13,7 +13,7 @@ import (
 
 func NewPage() Page {
 	return Page{
-		Html:       &html.HTMLFile{},
+		Html:       html.FromContent(""),
 		TwoScript:  []*twoscript.TwoScriptFile{},
 		JavaScript: []*javascript.JSFile{},
 		Css:        []*css.CSSFile{},
@@ -32,7 +32,11 @@ type Page struct {
 	Errors     *PageErrors
 }
 
-func (model *Page) SetContent(htmlFile *html.HTMLFile) {
+func (model *Page) SetContent(content string) {
+	model.Html.Content = content
+}
+
+func (model *Page) SetHtmlContent(htmlFile *html.HTMLFile) {
 	model.Html = htmlFile
 }
 

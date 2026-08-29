@@ -45,8 +45,14 @@ func InitFileWriter() {
 }
 
 func fileWriterWorker() {
-	for job := range fileQueue {
-		writeFileSync(job)
+	// Since we'll be doing a lot of writes, keep this thread alive for the full
+	// duration of the application so that we don't have to keep creating /
+	// destroying the file writer thread.
+	// TODO: Can we use a message-based system instead of spin locking here?
+	for {
+		for job := range fileQueue {
+			writeFileSync(job)
+		}
 	}
 }
 

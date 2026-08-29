@@ -8,7 +8,6 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/document/documentErrors"
-	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
@@ -382,7 +381,7 @@ func (m *reactiveVariableNode) compileReactiveVar(
 
 	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
 	handlerScript := javascript.FromContent(handlerContent)
-	pageModel.SetContent(html.FromContent(pageContent))
+	pageModel.SetContent(pageContent)
 	pageModel.AddScript(handlerScript)
 }
 
@@ -422,7 +421,7 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 
 	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
 	handlerScript := javascript.FromContent(handlerContent)
-	pageModel.SetContent(html.FromContent(pageContent))
+	pageModel.SetContent(pageContent)
 	pageModel.AddScript(handlerScript)
 }
 
@@ -442,7 +441,7 @@ func (m *reactiveVariableNode) compileStaticPropVar(
 	}
 
 	reducerScript := javascript.FromContent(reducerContent)
-	pageModel.SetContent(html.FromContent(pageContent))
+	pageModel.SetContent(pageContent)
 	pageModel.AddScript(reducerScript)
 }
 
@@ -453,7 +452,7 @@ func (m *reactiveVariableNode) compileStatic(
 	props := m.dependentProps(ast)
 	for _, p := range props {
 		pageModel.SetContent(
-			html.FromContent(strings.ReplaceAll(pageModel.Html.Content, p.selector(pageModel), m.initialValue)),
+			strings.ReplaceAll(pageModel.Html.Content, p.selector(pageModel), m.initialValue),
 		)
 	}
 }

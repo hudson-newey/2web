@@ -4,7 +4,6 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
 	optimizer "hudson-newey/2web/src/compiler/6-optimizer"
-	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/content/txt"
 	"os"
@@ -20,9 +19,7 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	if txt.IsTxtFile(filePath) {
 		fileContent, _ := os.ReadFile(filePath)
 		pageModel := page.NewPage()
-		pageModel.SetContent(
-			html.FromContent(string(fileContent)),
-		)
+		pageModel.SetContent(string(fileContent))
 		return pageModel
 	}
 
@@ -61,9 +58,7 @@ func recurseAstMarkup(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 	// it has the full page context.
 	for _, node := range parsedAst {
 		markupContent := node.MarkupContent()
-		page.SetContent(
-			html.FromContent(page.Html.Content + markupContent),
-		)
+		page.SetContent(page.Html.Content + markupContent)
 
 		recurseAstMarkup(page, node.Children())
 	}
@@ -73,7 +68,7 @@ func recurseAst(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 	// Second pass reactive content
 	for _, node := range parsedAst {
 		nodeContent := node.Content(page, rootAstNode)
-		page.SetContent(nodeContent.HtmlContent)
+		page.SetContent(nodeContent.HtmlContent.Content)
 		page.AddStyle(nodeContent.CssContent)
 		page.AddScript(nodeContent.JsContent)
 		page.AddTwoScript(nodeContent.TwoScriptContent)

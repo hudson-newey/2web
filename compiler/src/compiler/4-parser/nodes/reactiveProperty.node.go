@@ -6,7 +6,6 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
-	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
@@ -99,9 +98,7 @@ func (m *reactivePropertyNode) selector(pageModel *page.Page) string {
 	m.allocatedSelector = domSelector
 
 	pageModel.SetContent(
-		html.FromContent(
-			strings.Replace(pageModel.Html.Content, compilerSelector, domSelector, 1),
-		),
+		strings.Replace(pageModel.Html.Content, compilerSelector, domSelector, 1),
 	)
 
 	return domSelector

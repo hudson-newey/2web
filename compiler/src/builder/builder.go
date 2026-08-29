@@ -78,7 +78,7 @@ func Build() bool {
 		compileAndWritePage(args.InputPath, outputFileName(args.InputPath, args.OutputPath, args.InputPath))
 	}
 
-	// Priting out document errors are not included in the compile time since
+	// Printing out document errors are not included in the compile time since
 	// the app is fully usable at this point.
 	//
 	// If the user is repeatedly compiling (e.g. through an automated build),
@@ -90,7 +90,7 @@ func Build() bool {
 	// the hopes that when they check the compiler output, they'll see the last
 	// compiler time was not recent.
 	// Because this use case typically only needs ~10 minute accuracy, we don't
-	// need to log out the day/month/year foramt since it would not be very
+	// need to log out the day/month/year format since it would not be very
 	// useful.
 	//
 	// The only use case I can think day/month/year information being useful is
@@ -98,7 +98,7 @@ func Build() bool {
 	// Therefore, if we are running in CI/CD environments, we log out the full
 	// day/month/year format so that you can easily see if the last build was
 	// not from when you expected it to be.
-	// Note: This information is quite redundent because most CI/CD environments
+	// Note: This information is quite redundant because most CI/CD environments
 	// still log out build date/time information, but maybe someday this comes
 	// in use lol.
 	compileTime := time.Since(startTime)
