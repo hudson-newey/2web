@@ -17,8 +17,7 @@ func textLexer(model *Lexer) (V2LexNode, LexFunc) {
 		"{": {token: lexeme.CurlyOpen, next: textLexer},
 		"}": {token: lexeme.CurlyClosed, next: textLexer},
 
-		// "\n": {token: lexeme.NewLine, next: textLexer},
-		// "\t": {token: lexeme.Tab, next: textLexer},
+		"@": {token: lexeme.AtSymbol, next: controlFlowLexer},
 	}
 
 	return lexerFactory(cases, textContent)(model)

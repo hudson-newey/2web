@@ -1,13 +1,18 @@
 <script compiled>
     $greeting = 0;
+    $toggled = false;
 </script>
-
-<div *title="$greeting">hello</div>
-<div *title="$greeting">hello</div>
-<div *title="$greeting">hello</div>
 
 <button @click="$greeting = $greeting + 1">Click Me</button>
 
-<div>
+<div *title="$greeting">
     Hello {{ $greeting }}
 </div>
+
+<button @click="$toggled = !$toggled">
+    Toggle
+</button>
+
+@if($toggled){
+    This is a dropdown!
+}

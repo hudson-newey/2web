@@ -61,7 +61,13 @@ const (
 	CurlyOpen Lexeme = "CurlyOpen"
 
 	// }
-	CurlyClosed Lexeme = "CurlyOpen"
+	CurlyClosed Lexeme = "CurlyClosed"
+
+	// (
+	BracketOpen Lexeme = "BracketOpen"
+
+	// )
+	BracketClosed Lexeme = "BracketClosed"
 
 	// Backslash used for escaping
 	// (e.g. \> in HTML so that you don't have to use the ugly &gt;)
@@ -82,6 +88,14 @@ const (
 
 	// </script>
 	ScriptEndTag Lexeme = "ScriptEndTag"
+
+	//? Control flow
+
+	// if
+	ControlFlowIfKeyword Lexeme = "ControlFlowIfKeyword"
+
+	// for
+	ControlFlowForKeyword Lexeme = "ControlFlowForKeyword"
 
 	//? JS Tokens
 

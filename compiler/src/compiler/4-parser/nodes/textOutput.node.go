@@ -27,7 +27,7 @@ func NewTextOutputNode(lexNodes []*lexer.V2LexNode) *textOutputNode {
 		reactiveProp: &reactivePropertyNode{
 			propName:      "textContent",
 			reducer:       expression.Content,
-			markupContent: markupContentForExpr(expression.Content),
+			markupContent: textNodeMarkup(expression.Content),
 		},
 	}
 }
@@ -47,7 +47,7 @@ func (m *textOutputNode) Children() AbstractSyntaxTree {
 }
 
 func (m *textOutputNode) MarkupContent() string {
-	return markupContentForExpr(m.expression)
+	return m.reactiveProp.MarkupContent()
 }
 
 func (m *textOutputNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {
@@ -64,6 +64,6 @@ func (m *textOutputNode) RemoveChild(child Node) {
 	m.reactiveProp.RemoveChild(child)
 }
 
-func markupContentForExpr(expression string) string {
+func textNodeMarkup(expression string) string {
 	return fmt.Sprintf(`<span *textContent="%s"></span>`, expression)
 }

@@ -10,6 +10,9 @@ const (
 	// <div[here]>
 	element lexState = "Element"
 
+	// @here
+	controlFlow = "ControlFlow"
+
 	// <!--[here]-->
 	markupComment lexState = "MarkupComment"
 
