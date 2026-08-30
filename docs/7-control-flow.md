@@ -1,23 +1,19 @@
-# Control Flow (Removed)
-
-Note that control flow is currently only available for static conditions that
-can be evaluated at compile time.
-Future work is planned to support runtime control flow with the same syntax.
-
-Syntax is also subject to change.
+# Control Flow
 
 ## If Conditions
 
 ```html
-{% if false <h1>Hidden Content</h1> %}
-```
+<script compiled>
+  $condition = false;
+</script>
 
-## For Loops
+<button @click="$condition = !$condition"></button>
 
-```html
-<ul>
-  {% for 1,2,3 <li>item: {{&value}}</li> %}
-</ul>
+@if ($condition) {
+  <div>
+    <h1>Discoverable content</h1>
+  </div>
+}
 ```
 
 [**Next**](./8-code-splitting.md) (Code Splitting)
