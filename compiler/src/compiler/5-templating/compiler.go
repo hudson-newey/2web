@@ -41,13 +41,7 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	}
 
 	// We always optimize last so that even the injected content is optimized.
-	if args.IsProd {
-		if args.WithFormatting {
-			cli.PrintWarning("Ignoring '--format' because '--production' was specified")
-		}
-
-		optimizer.OptimizePage(&pageModel)
-	}
+	optimizer.OptimizePage(&pageModel)
 
 	return pageModel
 }

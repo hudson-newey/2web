@@ -9,7 +9,7 @@ import (
 	"github.com/tdewolff/minify/v2/js"
 )
 
-func MinifyJs(content string) string {
+func minifyJs(content string) string {
 	m := minify.New()
 
 	// Check if the "uglifyjs" command-line tool is available

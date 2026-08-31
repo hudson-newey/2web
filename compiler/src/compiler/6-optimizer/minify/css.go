@@ -5,7 +5,7 @@ import (
 	"github.com/tdewolff/minify/v2/css"
 )
 
-func MinifyCss(content string) string {
+func minifyCss(content string) string {
 	m := minify.New()
 	m.AddFunc("text/css", css.Minify)
 

@@ -77,7 +77,7 @@ once, and do not take a name as an argument.
 ### Serve Command
 
 ```sh
-$ 2web serve [path] <arguments>
+$ 2web serve <path> <arguments>
 >
 ```
 

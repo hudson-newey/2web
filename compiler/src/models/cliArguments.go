@@ -1,23 +1,22 @@
 package models
 
 type CliArguments struct {
-	InputPath              string
-	OutputPath             string
-	HasDevTools            bool
-	NoRuntimeOptimizations bool
-	IsProd                 bool
-	WriteDebugAssets       bool
-	IsSilent               bool
-	DisableCache           bool
-	FromStdin              bool
-	ToStdout               bool
-	WithFormatting         bool
-	IgnoreErrors           bool
-	Serial                 bool
-	DryRun                 bool
-	Verbose                bool
-	Listen                 bool
-	NoReactivity           bool
+	InputPath        string
+	OutputPath       string
+	HasDevTools      bool
+	IsProd           bool
+	WriteDebugAssets bool
+	IsSilent         bool
+	DisableCache     bool
+	FromStdin        bool
+	ToStdout         bool
+	WithFormatting   bool
+	IgnoreErrors     bool
+	Serial           bool
+	DryRun           bool
+	Verbose          bool
+	Listen           bool
+	NoReactivity     bool
 
 	// Developer command line flags
 	VerboseLexer  bool

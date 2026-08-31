@@ -17,7 +17,7 @@ import (
 // minifier can be bootstrapped on top of the library.
 
 // Minifies HTML content, including all inline styles, scripts, and svg's
-func MinifyHtml(content string) string {
+func minifyHtml(content string) string {
 	// if the content is less than 2, then the document cannot have a doctype
 	// and the content is really small
 	if len(content) < 2 {
