@@ -23,14 +23,11 @@ func ProcessStaticSite(filePath string, content string, expandPartials bool) str
 	if assets.IsMarkupFile(filePath) &&
 		!xml.IsXmlFile(filePath) &&
 		!txt.IsTxtFile(filePath) {
+
 		// Before we expand the HTML partials, we need to expand the layouts because
 		// the layout may contain the doctype, html, head, and body tags that would
 		// cause the partial expansion to fail.
-		//
-		// TODO: Add support for markdown layouts.
-		if !markdown.IsMarkdownFile(filePath) {
-			ssgResult = expandLayout(filePath, ssgResult)
-		}
+		ssgResult = expandLayout(filePath, ssgResult)
 
 		// 2Web supports partial content, meaning that pages don't need and doctype,
 		// html, head, meta, or body tags.
