@@ -7,7 +7,6 @@ import (
 	"hudson-newey/2web/src/content/txt"
 	"hudson-newey/2web/src/content/xhtml"
 	"hudson-newey/2web/src/content/xml"
-	"hudson-newey/2web/src/content/xslt"
 )
 
 func ProcessStaticSite(filePath string, content string, expandPartials bool) string {
@@ -24,7 +23,6 @@ func ProcessStaticSite(filePath string, content string, expandPartials bool) str
 
 	if assets.IsMarkupFile(filePath) &&
 		!xml.IsXmlFile(filePath) &&
-		!xslt.IsXsltFile(filePath) &&
 		!txt.IsTxtFile(filePath) {
 		// Before we expand the HTML partials, we need to expand the layouts because
 		// the layout may contain the doctype, html, head, and body tags that would

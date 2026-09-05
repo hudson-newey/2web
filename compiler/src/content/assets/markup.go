@@ -10,7 +10,6 @@ import (
 	"hudson-newey/2web/src/content/txt"
 	"hudson-newey/2web/src/content/xhtml"
 	"hudson-newey/2web/src/content/xml"
-	"hudson-newey/2web/src/content/xslt"
 )
 
 func IsMarkupFile(filePath string) bool {
@@ -32,7 +31,6 @@ func IsMarkupFile(filePath string) bool {
 		// Most browsers can render xml natively, therefore, we treat them as markup
 		// files.
 		xml.IsXmlFile(filePath) ||
-		xslt.IsXsltFile(filePath) ||
 
 		// Most browsers treat .txt files as plain text, meaning that they can be
 		// rendered natively.

@@ -54,7 +54,7 @@
 | html    | ✅    | `.html`, `.htm` |
 | xhtml   | ✅    | `.xhtml`        |
 | xml     | ✅    | `.xml`          |
-| xslt    | ✅    | `.xslt`, `.xsl` |
+| xslt    | ❌    | `.xslt`, `.xsl` |
 | txt     | ✅    | `.txt`          |
 | pdf     | ✅    | `.pdf`          |
 | md      | ✅    | `.md`           |

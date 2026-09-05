@@ -32,8 +32,6 @@ tmp_dir = "tmp"
     "html",
     "xhtml",
     "xml",
-    "xslt",
-    "xsl",
     "md",
     "txt",
     "json",
