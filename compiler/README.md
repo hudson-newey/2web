@@ -41,11 +41,12 @@
 
 ### Supported Scripting Languages
 
-| Package                                      | State | JS Target | Server Target |
-| -------------------------------------------- | ----- | --------- | ------------- |
-| JavaScript                                   | ✅    | ✅        | ❌            |
-| [TypeScript](https://www.typescriptlang.org) | ✅    | ✅        | ❌            |
-| [F#](https://fsharp.org)                     | ❌    | ❌        | ❌            |
+| Package                                      | State | Browser Target | Server Target |
+| -------------------------------------------- | ----- | -------------- | ------------- |
+| JavaScript                                   | ✅    | ✅             | ❌            |
+| [TypeScript](https://www.typescriptlang.org) | ✅    | ✅             | ❌            |
+| [WASM](https://www.typescriptlang.org)       | ❌    | ✅             | ❌            |
+| [F#](https://fsharp.org)                     | ❌    | ❌             | ❌            |
 
 ### Supported Markup Languages
 
@@ -68,14 +69,6 @@
 | css     | ✅    |
 | sass    | ❌    |
 | scss    | ❌    |
-
-### Supported Frameworks
-
-The following frameworks can be used in component islands.
-
-| Package | State | File Extensions |
-| ------- | ----- | --------------- |
-| Vue     | ❌    | `.vue`          |
 
 ## Compiler Developer Options
 

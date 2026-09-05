@@ -3,11 +3,11 @@ package builder
 import (
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content"
+	"hudson-newey/2web/src/content/assets"
 	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/odt"
 	"hudson-newey/2web/src/content/page"
-	"hudson-newey/2web/src/content/pdf"
 	"hudson-newey/2web/src/convert"
 	"hudson-newey/2web/src/models"
 )
@@ -21,8 +21,8 @@ func buildFromBinary(
 		return buildDocx(inputPath, isFullPage)
 	} else if odt.IsOdtFile(inputPath) {
 		return buildOdt(inputPath, isFullPage)
-	} else if pdf.IsPdfFile(inputPath) {
-		return buildPdf(inputPath, data)
+	} else if assets.ShouldUseAssetPassthrough(inputPath) {
+		return buildStaticAsset(inputPath, data)
 	}
 
 	compiledPage := page.NewPage()
@@ -74,9 +74,9 @@ func buildOdt(inputPath string, isFullPage bool) (page.Page, bool) {
 	return page, isErrorFree
 }
 
-func buildPdf(inputPath string, data []byte) (page.Page, bool) {
+func buildStaticAsset(inputPath string, data []byte) (page.Page, bool) {
 	pageModel := page.NewPage()
-	var pdfModel content.BinaryFile = pdf.FromContent(inputPath, data)
+	var pdfModel content.BinaryFile = assets.FromContent(inputPath, data)
 
 	pageModel.AddAsset(&pdfModel)
 

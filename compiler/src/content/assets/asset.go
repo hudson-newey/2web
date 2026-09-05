@@ -1,4 +1,4 @@
-package pdf
+package assets
 
 import (
 	"fmt"
@@ -6,30 +6,30 @@ import (
 	"os"
 )
 
-func FromContent(inputPath string, data []byte) *PdfFile {
-	return &PdfFile{
+func FromContent(inputPath string, data []byte) *StaticAsset {
+	return &StaticAsset{
 		InputPath: inputPath,
 		Content:   data,
 	}
 }
 
-func FromFilePath(inputPath string) *PdfFile {
-	return &PdfFile{
+func FromFilePath(inputPath string) *StaticAsset {
+	return &StaticAsset{
 		InputPath: inputPath,
 	}
 }
 
-type PdfFile struct {
+type StaticAsset struct {
 	InputPath string
 	Content   []byte
 }
 
-func (model *PdfFile) Data() []byte {
+func (model *StaticAsset) Data() []byte {
 	if model.Content != nil {
 		return model.Content
 	}
 
-	// We use os.ReadFile instead of filesystem.ReadFile here because a pdf file
+	// We use os.ReadFile instead of filesystem.ReadFile here because an asset
 	// is likely to be an entry point that is only read once during a build
 	// because is a content page that won't be reused elsewhere.
 	// By using os.ReadFile, we avoid the memory overhead of caching the file
@@ -42,7 +42,7 @@ func (model *PdfFile) Data() []byte {
 	return data
 }
 
-func (model *PdfFile) OutputPath() string {
+func (model *StaticAsset) OutputPath() string {
 	inPath := cli.GetArgs().InputPath
 	outPath := cli.GetArgs().OutputPath
 
