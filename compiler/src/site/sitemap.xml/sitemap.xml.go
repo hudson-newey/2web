@@ -4,13 +4,12 @@ import (
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/content/xml"
-	"hudson-newey/2web/src/models"
 	"strings"
 )
 
 // TODO: refactor this so that the file writing is performed inside of the
 // builder. We should aim for all writing to be performed inside of the builder.
-func GenerateSitemap(paths []models.SitePath) {
+func GenerateSitemap(paths []string) {
 	// The final newline is intentional so that the file is POSIX compliant.
 	content := `<?xml version="1.0" encoding="UTF-8"?>
 	<sitemap>
@@ -38,11 +37,11 @@ func GenerateSitemap(paths []models.SitePath) {
 	pageModel.WriteHtml(outputFilePath)
 }
 
-func generateURLTags(paths []models.SitePath) string {
+func generateURLTags(paths []string) string {
 	var locSb strings.Builder
 	for _, path := range paths {
 		locSb.WriteString("<url><loc>")
-		locSb.WriteString(path.Path)
+		locSb.WriteString(path)
 		locSb.WriteString("</loc></url>\n")
 	}
 	return locSb.String()

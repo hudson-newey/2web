@@ -2,7 +2,6 @@ package site
 
 import (
 	"hudson-newey/2web/src/cli"
-	"hudson-newey/2web/src/models"
 	debugjson "hudson-newey/2web/src/site/debug.json"
 	robotstxt "hudson-newey/2web/src/site/robots.txt"
 	sitemapxml "hudson-newey/2web/src/site/sitemap.xml"
@@ -29,16 +28,12 @@ func AfterAll() {
 }
 
 func BeforeEach(outputPath string) {
-	path := models.SitePath{
-		Path: outputPath,
-	}
-
-	registerSitePage(path)
+	registerSitePage(outputPath)
 }
 
-func pathsContain(paths []models.SitePath, target string) bool {
+func pathsContain(paths []string, target string) bool {
 	for _, path := range paths {
-		if path.Path == target {
+		if path == target {
 			return true
 		}
 	}

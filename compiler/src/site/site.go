@@ -1,13 +1,11 @@
 package site
 
-import "hudson-newey/2web/src/models"
+var paths = []string{}
 
-var paths = []models.SitePath{}
-
-func GetSitePaths() []models.SitePath {
+func GetSitePaths() []string {
 	return paths
 }
 
-func registerSitePage(path models.SitePath) {
+func registerSitePage(path string) {
 	paths = append(paths, path)
 }
