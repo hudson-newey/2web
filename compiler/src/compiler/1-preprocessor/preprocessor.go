@@ -5,7 +5,6 @@ import (
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/txt"
-	"hudson-newey/2web/src/content/xhtml"
 	"hudson-newey/2web/src/content/xml"
 )
 
@@ -28,8 +27,8 @@ func ProcessStaticSite(filePath string, content string, expandPartials bool) str
 		// the layout may contain the doctype, html, head, and body tags that would
 		// cause the partial expansion to fail.
 		//
-		// TODO: Add support for markdown & xhtml layouts.
-		if !xhtml.IsXhtmlFile(filePath) && !markdown.IsMarkdownFile(filePath) {
+		// TODO: Add support for markdown layouts.
+		if !markdown.IsMarkdownFile(filePath) {
 			ssgResult = expandLayout(filePath, ssgResult)
 		}
 

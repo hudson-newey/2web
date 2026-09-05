@@ -30,7 +30,6 @@ tmp_dir = "tmp"
     "tpl",
     "tmpl",
     "html",
-    "xhtml",
     "xml",
     "md",
     "txt",

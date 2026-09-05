@@ -52,7 +52,7 @@
 | Package | State | File Extensions |
 | ------- | ----- | --------------- |
 | html    | ✅    | `.html`, `.htm` |
-| xhtml   | ✅    | `.xhtml`        |
+| xhtml   | ❌    | `.xhtml`        |
 | xml     | ✅    | `.xml`          |
 | xslt    | ❌    | `.xslt`, `.xsl` |
 | txt     | ✅    | `.txt`          |

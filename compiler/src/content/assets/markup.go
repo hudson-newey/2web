@@ -8,13 +8,11 @@ import (
 	"hudson-newey/2web/src/content/odt"
 	"hudson-newey/2web/src/content/pdf"
 	"hudson-newey/2web/src/content/txt"
-	"hudson-newey/2web/src/content/xhtml"
 	"hudson-newey/2web/src/content/xml"
 )
 
 func IsMarkupFile(filePath string) bool {
 	return html.IsHtmlFile(filePath) ||
-		xhtml.IsXhtmlFile(filePath) ||
 		twoWeb.IsTwoWebFile(filePath) ||
 		markdown.IsMarkdownFile(filePath) ||
 
