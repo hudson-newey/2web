@@ -1,6 +1,6 @@
-package models
+package cli
 
-type CliArguments struct {
+type cliArguments struct {
 	InputPath        string
 	OutputPath       string
 	HasDevTools      bool

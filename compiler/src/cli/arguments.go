@@ -2,12 +2,11 @@ package cli
 
 import (
 	"flag"
-	"hudson-newey/2web/src/models"
 )
 
-var parsedArgs models.CliArguments
+var parsedArgs cliArguments
 
-func ParseArguments() models.CliArguments {
+func ParseArguments() cliArguments {
 	inputPath := flag.String("i", "index.html", "Input file path")
 	outputPath := flag.String("o", "./dist/index.html", "Output file path")
 	hasDevTools := flag.Bool("dev-tools", false, "Include dev tools in the build")
@@ -30,7 +29,7 @@ func ParseArguments() models.CliArguments {
 
 	flag.Parse()
 
-	parsedArgs = models.CliArguments{
+	parsedArgs = cliArguments{
 		InputPath:      *inputPath,
 		OutputPath:     *outputPath,
 		HasDevTools:    *hasDevTools,
@@ -55,6 +54,6 @@ func ParseArguments() models.CliArguments {
 	return GetArgs()
 }
 
-func GetArgs() models.CliArguments {
+func GetArgs() cliArguments {
 	return parsedArgs
 }
