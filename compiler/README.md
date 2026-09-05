@@ -45,7 +45,7 @@
 | -------------------------------------------- | ----- | -------------- | ------------- |
 | JavaScript                                   | ✅    | ✅             | ❌            |
 | [TypeScript](https://www.typescriptlang.org) | ✅    | ✅             | ❌            |
-| [WASM](https://www.typescriptlang.org)       | ❌    | ✅             | ❌            |
+| [WASM](https://webassembly.org)              | ❌    | ✅             | ❌            |
 | [F#](https://fsharp.org)                     | ❌    | ❌             | ❌            |
 
 ### Supported Markup Languages
