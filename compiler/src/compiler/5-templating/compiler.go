@@ -8,6 +8,7 @@ import (
 	"hudson-newey/2web/src/content/txt"
 	"hudson-newey/2web/src/debugger"
 	"os"
+	"strings"
 )
 
 // This package is called concurrently from the build thread pool, so all page
@@ -54,16 +55,27 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	return pageModel
 }
 
+// recurseAstMarkup runs the first pass to establish page content.
+//
+// The markup is accumulated in a strings.Builder and written to the page once.
+// Appending every node's markup to the page content string would be quadratic
+// in the number of nodes (and in the size of the page), because every
+// concatenation copies the whole document so far.
+//
+// This pass must not read the page content: it only concatenates node markup.
 func recurseAstMarkup(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
-	// First pass to establish page content
-	// We need this so that when we get to ast nodes that replace page content,
-	// it has the full page context.
-	for _, node := range parsedAst {
-		markupContent := node.MarkupContent()
-		page.SetContent(page.Html.Content + markupContent)
+	var markup strings.Builder
 
-		recurseAstMarkup(page, node.Children())
+	var walk func(ast nodes.AbstractSyntaxTree)
+	walk = func(ast nodes.AbstractSyntaxTree) {
+		for _, node := range ast {
+			markup.WriteString(node.MarkupContent())
+			walk(node.Children())
+		}
 	}
+
+	walk(parsedAst)
+	page.SetContent(markup.String())
 }
 
 // recurseAst runs the reactive compilation pass over every node in the AST.
