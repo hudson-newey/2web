@@ -54,10 +54,10 @@ func (m *textOutputNode) MarkupContent() string {
 	return ""
 }
 
-func (m *textOutputNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {
+func (m *textOutputNode) Content(page *page.Page, index *ReactiveIndex) NodeContent {
 	// A kinda cool solution which lets us re-use the reactive prop content
 	// which hooks up event listeners, etc...
-	return m.reactiveProp.Content(page, ast)
+	return m.reactiveProp.Content(page, index)
 }
 
 func (m *textOutputNode) AddChild(child Node) {

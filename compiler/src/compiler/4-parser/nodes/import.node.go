@@ -61,7 +61,7 @@ func (m *scriptImportNode) MarkupContent() string {
 	return ""
 }
 
-func (m *scriptImportNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *scriptImportNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	// Check that the imported path really exists.
 	hostDirectory := filepath.Dir(page.InputPath)
 	componentPath := filepath.Join(hostDirectory, m.importPath)

@@ -31,7 +31,7 @@ func (m *markupTextNode) MarkupContent() string {
 	return m.content
 }
 
-func (m *markupTextNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *markupTextNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		JsContent:        javascript.NewJsFile(),

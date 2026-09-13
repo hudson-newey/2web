@@ -40,7 +40,7 @@ func (m *scriptNode) MarkupContent() string {
 	return ""
 }
 
-func (m *scriptNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *scriptNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		JsContent:        javascript.FromContent(m.content),

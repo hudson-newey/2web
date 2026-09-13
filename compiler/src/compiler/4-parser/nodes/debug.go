@@ -13,7 +13,7 @@ import (
 //
 // This powers the `__2web.debug.json` file that the browser devtools extension
 // renders.
-func CollectDebugInfo(inputPath string, ast AbstractSyntaxTree) debugger.PageDebugInfo {
+func CollectDebugInfo(inputPath string, index *ReactiveIndex) debugger.PageDebugInfo {
 	pageDebug := debugger.PageDebugInfo{
 		Page:       inputPath,
 		Variables:  []debugger.VariableInfo{},
@@ -21,28 +21,28 @@ func CollectDebugInfo(inputPath string, ast AbstractSyntaxTree) debugger.PageDeb
 		Events:     []debugger.EventInfo{},
 	}
 
-	for _, variable := range ast.reactiveVariables() {
+	for _, variable := range index.Variables {
 		pageDebug.Variables = append(pageDebug.Variables, debugger.VariableInfo{
 			Name:            variable.selector(),
 			InitialValue:    variable.initialValue,
-			ReactivityClass: reactivityLevelName(variable.reactivityLevel(ast)),
+			ReactivityClass: reactivityLevelName(variable.reactivityLevel(index)),
 		})
 	}
 
-	for _, property := range ast.reactiveProperties() {
+	for _, property := range index.Properties {
 		pageDebug.Properties = append(pageDebug.Properties, debugger.PropertyInfo{
-			PropName:     property.propName,
-			Reducer:      property.reducer,
-			Dependencies: dependencyNames(property.reactiveVariableDeps(ast)),
+			PropName:     property.node.propName,
+			Reducer:      property.node.reducer,
+			Dependencies: property.dependencies,
 		})
 	}
 
-	for _, event := range ast.reactiveEvents() {
+	for _, event := range index.Events {
 		pageDebug.Events = append(pageDebug.Events, debugger.EventInfo{
-			EventName:    event.eventName,
-			Reducer:      event.reducer,
-			Sink:         event.sinkName(ast),
-			Dependencies: dependencyNames(event.reactiveVariableDeps(ast)),
+			EventName:    event.node.eventName,
+			Reducer:      event.node.reducer,
+			Sink:         event.sink,
+			Dependencies: event.dependencies,
 		})
 	}
 
@@ -51,16 +51,6 @@ func CollectDebugInfo(inputPath string, ast AbstractSyntaxTree) debugger.PageDeb
 	sortEvents(pageDebug.Events)
 
 	return pageDebug
-}
-
-func dependencyNames(variables []*reactiveVariableNode) []string {
-	names := []string{}
-	for _, variable := range variables {
-		names = append(names, variable.selector())
-	}
-
-	sort.Strings(names)
-	return names
 }
 
 // sinkName resolves the variable that an event assigns to without panicking.

@@ -33,7 +33,7 @@ func (model *Grammar) MinimumTokenCount() int {
 
 // Matches lexer nodes against the given grammar.
 // Returns the matched subset.
-func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode {	// If we have not processed enough tokens to have a match yet, we can quickly
+func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode { // If we have not processed enough tokens to have a match yet, we can quickly
 	// return false.
 	//
 	// Optional tokens can be absent from the input, so the minimum number of

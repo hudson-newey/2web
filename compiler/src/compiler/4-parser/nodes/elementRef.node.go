@@ -39,7 +39,7 @@ func (m *elementRefNode) MarkupContent() string {
 	return fmt.Sprintf(`id="%s"`, m.id)
 }
 
-func (m *elementRefNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *elementRefNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		TwoScriptContent: twoscript.NewTwoScriptFile(),

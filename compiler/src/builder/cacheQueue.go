@@ -22,6 +22,15 @@ type pendingCacheEntry struct {
 	cacheKey   string
 }
 
+// The compile-time input/output/key triple maps directly onto a cache record.
+func (e pendingCacheEntry) record() cache.CacheRecord {
+	return cache.CacheRecord{
+		InputPath:  e.inputPath,
+		OutputPath: e.outputPath,
+		Key:        e.cacheKey,
+	}
+}
+
 var pendingCacheMutex sync.Mutex
 var pendingCacheEntries []pendingCacheEntry
 
@@ -63,6 +72,7 @@ func flushCacheEntries() {
 		failedWrites[path] = true
 	}
 
+	records := make([]cache.CacheRecord, 0, len(entries))
 	for _, entry := range entries {
 		if failedWrites[entry.outputPath] {
 			log.Printf("Skipping build cache for %s because its output could not be written", entry.outputPath)
@@ -74,6 +84,8 @@ func flushCacheEntries() {
 			continue
 		}
 
-		cache.CacheAsset(entry.inputPath, entry.outputPath, entry.cacheKey)
+		records = append(records, entry.record())
 	}
+
+	cache.CacheAssets(records)
 }

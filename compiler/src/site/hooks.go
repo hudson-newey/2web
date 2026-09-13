@@ -2,10 +2,10 @@ package site
 
 import (
 	"hudson-newey/2web/src/cli"
-	"sort"
 	debugjson "hudson-newey/2web/src/site/debug.json"
 	robotstxt "hudson-newey/2web/src/site/robots.txt"
 	sitemapxml "hudson-newey/2web/src/site/sitemap.xml"
+	"sort"
 )
 
 func AfterAll() {

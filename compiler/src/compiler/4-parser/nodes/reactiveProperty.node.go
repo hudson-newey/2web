@@ -80,7 +80,7 @@ func (m *reactivePropertyNode) MarkupContent() string {
 	return m.markupContent
 }
 
-func (m *reactivePropertyNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *reactivePropertyNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		JsContent:        javascript.NewJsFile(),

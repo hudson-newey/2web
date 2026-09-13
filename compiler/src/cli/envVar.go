@@ -53,6 +53,6 @@ func GetEnvVars() envVars {
 	return envVars{
 		CacheOverride: cacheOverride,
 		DebugOverride: debugOverride,
-		IsCi: isCiBool,
+		IsCi:          isCiBool,
 	}
 }

@@ -14,8 +14,10 @@ type Node interface {
 	Type() nodeType
 	// Basic content that is expanded on the first-pass compilation
 	MarkupContent() string
-	// Second-pass content passing that requires the entire document present
-	Content(page *page.Page, ast AbstractSyntaxTree) NodeContent
+	// Second-pass content passing that requires the entire document present.
+	// The reactive index is a pre-resolved view of the page's reactive graph
+	// (built once per page from the root AST).
+	Content(page *page.Page, index *ReactiveIndex) NodeContent
 	Children() AbstractSyntaxTree
 
 	AddChild(child Node)

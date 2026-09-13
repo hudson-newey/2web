@@ -64,7 +64,7 @@ func (m *codeNode) MarkupContent() string {
 	return m.escapedHtml()
 }
 
-func (m *codeNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *codeNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		TwoScriptContent: twoscript.NewTwoScriptFile(),

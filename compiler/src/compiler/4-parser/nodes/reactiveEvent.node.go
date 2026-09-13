@@ -70,7 +70,7 @@ func (m *reactiveEventNode) MarkupContent() string {
 	return m.markupContent
 }
 
-func (m *reactiveEventNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {
+func (m *reactiveEventNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		JsContent:        javascript.NewJsFile(),

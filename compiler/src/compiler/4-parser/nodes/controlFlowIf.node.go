@@ -71,7 +71,7 @@ func (m *controlFlowIfNode) MarkupContent() string {
 	return ""
 }
 
-func (m *controlFlowIfNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *controlFlowIfNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		TwoScriptContent: twoscript.NewTwoScriptFile(),

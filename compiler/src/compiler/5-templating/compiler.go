@@ -30,9 +30,14 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	pageModel := page.NewPage()
 	pageModel.InputPath = filePath
 
+	// Pre-resolve the reactive relationships of the page once. Dependency
+	// queries during compilation are answered from this index instead of
+	// walking the whole page AST per variable per candidate.
+	reactiveIndex := nodes.BuildReactiveIndex(parsedAst)
+
 	// Main part of the compiler where we recurse the constructed AST
 	recurseAstMarkup(&pageModel, parsedAst)
-	recurseAst(&pageModel, parsedAst, parsedAst)
+	recurseAst(&pageModel, parsedAst, reactiveIndex)
 
 	if !cli.GetArgs().IsolatedPages {
 		addRouteAssets(&pageModel)
@@ -41,7 +46,7 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	// The debug file is only generated for development builds (see site.AfterAll),
 	// so collecting the reactive graph is skipped for production builds.
 	if !cli.GetArgs().IsProd {
-		debugger.AddPageDebugInfo(nodes.CollectDebugInfo(filePath, parsedAst))
+		debugger.AddPageDebugInfo(nodes.CollectDebugInfo(filePath, reactiveIndex))
 	}
 
 	args := cli.GetArgs()
@@ -90,15 +95,15 @@ func recurseAstMarkup(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 // package global because this package is called concurrently from the build
 // thread pool (a global would be overwritten by every concurrently compiled
 // page, causing pages to render content from other pages' ASTs).
-func recurseAst(page *page.Page, rootAst nodes.AbstractSyntaxTree, current nodes.AbstractSyntaxTree) {
+func recurseAst(page *page.Page, rootAst nodes.AbstractSyntaxTree, index *nodes.ReactiveIndex) {
 	// Second pass reactive content
-	for _, node := range current {
-		nodeContent := node.Content(page, rootAst)
+	for _, node := range rootAst {
+		nodeContent := node.Content(page, index)
 		page.SetContent(nodeContent.HtmlContent.Content)
 		page.AddStyle(nodeContent.CssContent)
 		page.AddScript(nodeContent.JsContent)
 		page.AddTwoScript(nodeContent.TwoScriptContent)
 
-		recurseAst(page, rootAst, node.Children())
+		recurseAst(page, node.Children(), index)
 	}
 }

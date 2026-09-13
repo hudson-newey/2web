@@ -12,7 +12,6 @@ import (
 	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
 	"hudson-newey/2web/src/models"
-	"slices"
 	"strings"
 
 	"github.com/hudson-newey/2web/_shared/lists"
@@ -54,10 +53,10 @@ func (m *reactiveVariableNode) MarkupContent() string {
 	return ""
 }
 
-func (m *reactiveVariableNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {
+func (m *reactiveVariableNode) Content(page *page.Page, index *ReactiveIndex) NodeContent {
 	if !cli.GetArgs().NoReactivity {
 		// TODO: This should be a non-mutative operation
-		m.compileReactivity(page, ast)
+		m.compileReactivity(page, index)
 	}
 
 	return NodeContent{
@@ -92,16 +91,12 @@ func (m *reactiveVariableNode) selector() string {
 	return fmt.Sprintf("$%s", m.variableName)
 }
 
-func (m *reactiveVariableNode) dependentProps(ast AbstractSyntaxTree) []*reactivePropertyNode {
-	return lists.Filter(ast.reactiveProperties(), func(x *reactivePropertyNode) bool {
-		return slices.Contains(x.reactiveVariableDeps(ast), m)
-	})
+func (m *reactiveVariableNode) dependentProps(index *ReactiveIndex) []*reactivePropertyNode {
+	return index.FindDependentProperties(m)
 }
 
-func (m *reactiveVariableNode) dependentEvents(ast AbstractSyntaxTree) []*reactiveEventNode {
-	return lists.Filter(ast.reactiveEvents(), func(x *reactiveEventNode) bool {
-		return slices.Contains(x.reactiveVariableDeps(ast), m) || x.reactiveVariableSink(ast) == m
-	})
+func (m *reactiveVariableNode) dependentEvents(index *ReactiveIndex) []*reactiveEventNode {
+	return index.FindDependentEvents(m)
 }
 
 type reactivityLevel int
@@ -234,8 +229,8 @@ const (
 )
 
 // TODO: this should probably cache the type for faster compile times
-func (m *reactiveVariableNode) reactivityLevel(ast AbstractSyntaxTree) reactivityLevel {
-	events := m.dependentEvents(ast)
+func (m *reactiveVariableNode) reactivityLevel(index *ReactiveIndex) reactivityLevel {
+	events := m.dependentEvents(index)
 	for _, e := range events {
 		// If the assignment expression uses the same variable that it's
 		// assigning to, we need to have a runtime variable to track state.
@@ -256,7 +251,7 @@ func (m *reactiveVariableNode) reactivityLevel(ast AbstractSyntaxTree) reactivit
 	// All reactive properties that require an initial runtime assignment, but
 	// don't ever update after first page load.
 	// e.g. think of a date/time that can't be evaluated at runtime.
-	props := m.dependentProps(ast)
+	props := m.dependentProps(index)
 	hasNonOptimizableProps := lists.Some(props, func(x *reactivePropertyNode) bool {
 		return !x.canCompilerInline()
 	})
@@ -275,8 +270,8 @@ func (m *reactiveVariableNode) reactivityLevel(ast AbstractSyntaxTree) reactivit
 	return unused
 }
 
-func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, ast AbstractSyntaxTree) {
-	reactivityLevel := m.reactivityLevel(ast)
+func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, index *ReactiveIndex) {
+	reactivityLevel := m.reactivityLevel(index)
 
 	// short circuit fast if not used
 	if reactivityLevel == unused {
@@ -299,11 +294,11 @@ func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, ast Abstr
 	// TODO: I might be able to combine selectors for the same element that has
 	// different property targets.
 	if reactivityLevel >= reactive {
-		m.compileReactiveVar(pageModel, ast)
+		m.compileReactiveVar(pageModel, index)
 	} else if reactivityLevel >= assignment {
 		// TODO: explore if reactive and assignment reactivity are mutually
 		// exclusive for variables, events, or props
-		m.compileAssignmentVar(pageModel, ast)
+		m.compileAssignmentVar(pageModel, index)
 	}
 
 	// static props differ from truly static variables because static props
@@ -322,20 +317,20 @@ func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, ast Abstr
 	//
 	// e.g. <input type="range" value="$value"></input>
 	if reactivityLevel >= staticProperty {
-		m.compileStaticPropVar(pageModel, ast)
+		m.compileStaticPropVar(pageModel, index)
 	}
 
 	if reactivityLevel == static {
-		m.compileStatic(pageModel, ast)
+		m.compileStatic(pageModel, index)
 	}
 }
 
 func (m *reactiveVariableNode) compileReactiveVar(
 	pageModel *page.Page,
-	ast AbstractSyntaxTree,
+	index *ReactiveIndex,
 ) {
-	events := m.dependentEvents(ast)
-	props := m.dependentProps(ast)
+	events := m.dependentEvents(index)
+	props := m.dependentProps(index)
 
 	jsNewValueVar := javascript.ValueVar
 
@@ -387,10 +382,10 @@ func (m *reactiveVariableNode) compileReactiveVar(
 
 func (m *reactiveVariableNode) compileAssignmentVar(
 	pageModel *page.Page,
-	ast AbstractSyntaxTree,
+	index *ReactiveIndex,
 ) {
-	events := m.dependentEvents(ast)
-	props := m.dependentProps(ast)
+	events := m.dependentEvents(index)
+	props := m.dependentProps(index)
 
 	jsNewValueVar := javascript.ValueVar
 
@@ -427,9 +422,9 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 
 func (m *reactiveVariableNode) compileStaticPropVar(
 	pageModel *page.Page,
-	ast AbstractSyntaxTree,
+	index *ReactiveIndex,
 ) {
-	props := m.dependentProps(ast)
+	props := m.dependentProps(index)
 
 	reducerContent := ""
 	for _, p := range props {
@@ -450,9 +445,9 @@ func (m *reactiveVariableNode) compileStaticPropVar(
 
 func (m *reactiveVariableNode) compileStatic(
 	pageModel *page.Page,
-	ast AbstractSyntaxTree,
+	index *ReactiveIndex,
 ) {
-	props := m.dependentProps(ast)
+	props := m.dependentProps(index)
 	for _, p := range props {
 		pageModel.SetContent(
 			strings.ReplaceAll(pageModel.Html.Content, p.selector(pageModel), m.initialValue),
