@@ -31,16 +31,13 @@ func NewReactiveEventNode(lexNodes []*lexer.V2LexNode, context *ParseContext) No
 		)
 	}
 
-	assignmentSplit := strings.Split(reducer.Content, "=")
-	if len(assignmentSplit) < 2 {
+	assignmentSink, assignmentExpr := parseReducer(reducer.Content)
+	if assignmentSink == "" {
 		return context.DegradedNode(
-			"reactive event reducer must assign to a reactive variable (e.g. '$count = $count + 1')",
+			"reactive event reducer must assign to a reactive variable (e.g. '$count = $count + 1' or '$count++')",
 			lexNodes,
 		)
 	}
-
-	assignmentSink := strings.TrimSpace(assignmentSplit[0])
-	assignmentExpr := strings.TrimSpace(assignmentSplit[1])
 
 	markupContent := fmt.Sprintf(
 		"@%s=\"%s",
@@ -55,6 +52,36 @@ func NewReactiveEventNode(lexNodes []*lexer.V2LexNode, context *ParseContext) No
 		assignmentExpr: assignmentExpr,
 		markupContent:  markupContent,
 	}
+}
+
+// parseReducer splits an event reducer into its assignment sink and
+// assignment expression.
+//
+// e.g. "$x = $y + 1" sinks to $x with the expression "$y + 1".
+//
+// The increment and decrement shorthand is expanded into an assignment:
+// e.g. "$x++" sinks to $x with the expression "$x + 1".
+func parseReducer(reducer string) (sink string, expression string) {
+	assignmentSplit := strings.Split(reducer, "=")
+
+	if len(assignmentSplit) >= 2 {
+		return strings.TrimSpace(assignmentSplit[0]), strings.TrimSpace(assignmentSplit[1])
+	}
+
+	// Increment/decrement shorthand: "$x++" and "$x--".
+	trimmed := strings.TrimSpace(assignmentSplit[0])
+
+	if strings.HasSuffix(trimmed, "++") {
+		sink = strings.TrimSpace(strings.TrimSuffix(trimmed, "++"))
+		return sink, sink + " + 1"
+	}
+
+	if strings.HasSuffix(trimmed, "--") {
+		sink = strings.TrimSpace(strings.TrimSuffix(trimmed, "--"))
+		return sink, sink + " - 1"
+	}
+
+	return "", ""
 }
 
 type reactiveEventNode struct {

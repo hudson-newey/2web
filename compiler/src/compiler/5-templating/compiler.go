@@ -35,6 +35,23 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	// walking the whole page AST per variable per candidate.
 	reactiveIndex := nodes.BuildReactiveIndex(parsedAst)
 
+	// Pre-allocate the runtime variable names of the reactive runtime. Every
+	// variable that needs a runtime representation gets one before the
+	// reactivity pass so that computed variables can reference the runtime
+	// variables they are computed from regardless of compilation order.
+	for _, variable := range reactiveIndex.Variables {
+		needsRuntime := reactiveIndex.IsRuntime(variable) ||
+			reactiveIndex.HasDerivedDependents(variable) ||
+			(reactiveIndex.IsDerived(variable) && reactiveIndex.HasRuntimeDependency(variable))
+
+		if needsRuntime {
+			reactiveIndex.RegisterRuntimeVariable(
+				variable.Selector(),
+				pageModel.Ids.CreateVariableName(),
+			)
+		}
+	}
+
 	// Main part of the compiler where we recurse the constructed AST
 	recurseAstMarkup(&pageModel, parsedAst)
 	recurseAst(&pageModel, parsedAst, reactiveIndex)
@@ -42,6 +59,11 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	if !cli.GetArgs().IsolatedPages {
 		addRouteAssets(&pageModel)
 	}
+
+	// Emit the shared reactive runtime: the compiled wiring of every reactive
+	// variable, in dependency order, in one shared scope so that computed
+	// variables can reference the runtime variables they are computed from.
+	pageModel.EmitReactiveRuntime()
 
 	// The debug file is only generated for development builds (see site.AfterAll),
 	// so collecting the reactive graph is skipped for production builds.

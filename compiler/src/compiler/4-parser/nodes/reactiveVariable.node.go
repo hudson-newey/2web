@@ -102,6 +102,12 @@ func (m *reactiveVariableNode) RemoveChild(child Node) {
 	}
 }
 
+// Selector returns the variable's selector (its name prefixed with a dollar
+// sign).
+func (m *reactiveVariableNode) Selector() string {
+	return m.selector()
+}
+
 // When using this variable in code, reactive variables are easily visually
 // separated from normal JavaScript variables using the dollar sign prefix.
 func (m *reactiveVariableNode) selector() string {
@@ -248,10 +254,25 @@ const (
 	// Requires JavaScript to attach an event listener, keep track of state,
 	// and modify the DOM on event.
 	reactive
+
+	// Computed from other reactive variables. Its value is re-evaluated by
+	// the update cascade of the variables it is computed from.
+	computed
 )
 
 // TODO: this should probably cache the type for faster compile times
 func (m *reactiveVariableNode) reactivityLevel(index *ReactiveIndex) reactivityLevel {
+	// A variable that other variables are computed from needs a runtime
+	// representation so that the computed variables can be re-evaluated when
+	// it changes.
+	if index.HasDerivedDependents(m) {
+		return reactive
+	}
+
+	if index.IsDerived(m) {
+		return computed
+	}
+
 	events := m.dependentEvents(index)
 	for _, e := range events {
 		// If the assignment expression uses the same variable that it's
@@ -293,14 +314,33 @@ func (m *reactiveVariableNode) reactivityLevel(index *ReactiveIndex) reactivityL
 }
 
 func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, index *ReactiveIndex) {
-	reactivityLevel := m.reactivityLevel(index)
-
 	// short circuit fast if not used
-	if reactivityLevel == unused {
+	if index.IsUnused(m) {
 		errMsg := fmt.Sprintf("Unused variable: %s", m.selector())
 		err := models.NewError(errMsg, pageModel.InputPath, m.position)
 		documentErrors.AddErrors(&err)
 		return
+	}
+
+	// A variable that is computed from other reactive variables is not wired
+	// here: it is either recomputed by the update cascade of the runtime
+	// variable it depends on, or (when all of its dependencies are static) it
+	// is evaluated once in a startup bootstrap script.
+	if index.IsDerived(m) {
+		if !index.HasRuntimeDependency(m) {
+			m.compileComputedBootstrap(pageModel, index)
+			return
+		}
+
+		if !index.IsRuntime(m) {
+			m.compileComputedChunk(pageModel, index)
+			return
+		}
+
+		// The variable is computed from other variables AND directly assigned
+		// by its own events. It compiles like any other runtime variable, with
+		// its computation dependencies resolved into the shared reactive
+		// runtime scope.
 	}
 
 	// Ideally, slower reactive types would only target properties and events
@@ -315,7 +355,7 @@ func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, index *Re
 	//
 	// TODO: I might be able to combine selectors for the same element that has
 	// different property targets.
-	if reactivityLevel >= reactive {
+	if reactivityLevel := m.reactivityLevel(index); reactivityLevel >= reactive {
 		m.compileReactiveVar(pageModel, index)
 	} else if reactivityLevel >= assignment {
 		// TODO: explore if reactive and assignment reactivity are mutually
@@ -338,11 +378,11 @@ func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, index *Re
 	// do not need to
 	//
 	// e.g. <input type="range" value="$value"></input>
-	if reactivityLevel >= staticProperty {
+	if reactivityLevel := m.reactivityLevel(index); reactivityLevel >= staticProperty {
 		m.compileStaticPropVar(pageModel, index)
 	}
 
-	if reactivityLevel == static {
+	if reactivityLevel := m.reactivityLevel(index); reactivityLevel == static {
 		m.compileStatic(pageModel, index)
 	}
 }
@@ -364,8 +404,19 @@ func (m *reactiveVariableNode) compileReactiveVar(
 		)
 	}
 
-	variableName := pageModel.Ids.CreateVariableName()
+	// The runtime variable name was pre-allocated before the reactivity pass
+	// (see templating.Compile) so that computed variables can reference it
+	// regardless of compilation order.
+	variableName := index.RuntimeVariableName(m.selector())
+
 	handlerFuncName := pageModel.Ids.CreateFunctionName()
+
+	// Variables that are computed from this one are re-evaluated by this
+	// variable's update cascade: whenever an event changes this variable, every
+	// computed variable that (transitively) depends on it is re-evaluated (in
+	// dependency order) and its bound properties are updated.
+	domMutator = domMutator + m.compileComputedCascade(pageModel, index)
+
 	domMutator = fmt.Sprintf(`
 	 	let %s = %s;
 		function %s(%s) { %s }
@@ -377,10 +428,11 @@ func (m *reactiveVariableNode) compileReactiveVar(
 	eventListeners := ""
 	pageContent := pageModel.Html.Content
 	for _, e := range events {
-		// TODO: This probably won't work when referencing other reactive
-		// variables. Expanding the scope from the reducer to page content
-		// might?? fix the issue???
-		reactiveReducer := strings.ReplaceAll(e.reducer, m.selector(), variableName)
+		// The assignment expression (rather than the raw reducer) is used so
+		// that the increment/decrement shorthand expands into a correct
+		// assignment (e.g. "$count++" becomes "__2_var = __2_var + 1" rather
+		// than the no-op "__2_var = __2_var++").
+		reactiveReducer := strings.ReplaceAll(e.assignmentExpr, m.selector(), variableName)
 
 		eventDomSelector := pageModel.Ids.CreateElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
@@ -397,9 +449,13 @@ func (m *reactiveVariableNode) compileReactiveVar(
 	}
 
 	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
-	handlerScript := javascript.FromGeneratedContent(handlerContent)
 	pageModel.SetContent(pageContent)
-	pageModel.AddScript(handlerScript)
+
+	pageModel.AppendReactiveRuntime(page.ReactiveRuntimeChunk{
+		Variable:     m.selector(),
+		Dependencies: index.DependenciesOf(m),
+		Content:      handlerContent,
+	})
 }
 
 func (m *reactiveVariableNode) compileAssignmentVar(
@@ -475,4 +531,135 @@ func (m *reactiveVariableNode) compileStatic(
 			strings.ReplaceAll(pageModel.Html.Content, p.selector(pageModel), m.initialValue),
 		)
 	}
+}
+
+// compileComputedCascade emits the re-evaluation statements for every
+// variable that is (transitively) computed from this variable.
+//
+// The statements are appended to this variable's update function: when an
+// event changes this variable, each computed variable is re-evaluated (in
+// dependency order, so a computed variable that another computed variable
+// depends on is re-evaluated first) and its bound properties are updated.
+func (m *reactiveVariableNode) compileComputedCascade(
+	pageModel *page.Page,
+	index *ReactiveIndex,
+) string {
+	computedVariables := index.ComputedDependents(m)
+
+	cascade := ""
+	for _, computed := range computedVariables {
+		runtimeName := index.RuntimeVariableName(computed.selector())
+		expression, ok := index.ResolveExpression(computed)
+		if !ok {
+			continue
+		}
+
+		cascade = cascade + fmt.Sprintf("\t\t%s = %s;\n", runtimeName, expression)
+		cascade = cascade + m.computedPropertyUpdates(pageModel, index, computed, runtimeName)
+	}
+
+	return cascade
+}
+
+// computedPropertyUpdates emits the DOM property assignments that bind a
+// computed variable's value to the elements it is rendered into.
+func (m *reactiveVariableNode) computedPropertyUpdates(
+	pageModel *page.Page,
+	index *ReactiveIndex,
+	computed *reactiveVariableNode,
+	runtimeName string,
+) string {
+	updates := ""
+	for _, p := range index.FindDependentProperties(computed) {
+		updates = updates + fmt.Sprintf(
+			`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`+"\n",
+			p.selector(pageModel), p.propName, p.propAssignment(runtimeName),
+		)
+	}
+
+	return updates
+}
+
+// compileComputedChunk wires a computed variable into the reactive runtime
+// scope of the variable it is computed from.
+//
+// The computed variable's runtime declaration, initial DOM assignment, and
+// update function are emitted into the shared reactive runtime so that the
+// dependency's update cascade can re-evaluate it.
+func (m *reactiveVariableNode) compileComputedChunk(
+	pageModel *page.Page,
+	index *ReactiveIndex,
+) {
+	expression, ok := index.ResolveExpression(m)
+	if !ok {
+		errorModel := models.NewError(
+			fmt.Sprintf("computed variable '%s' is part of a cyclic dependency", m.selector()),
+			pageModel.InputPath,
+			m.position,
+		)
+
+		documentErrors.AddErrors(&errorModel)
+		return
+	}
+
+	// The runtime variable name was pre-allocated for this variable.
+	runtimeName := index.RuntimeVariableName(m.selector())
+
+	handlerFuncName := pageModel.Ids.CreateFunctionName()
+
+	initialAssignments := m.computedPropertyUpdates(pageModel, index, m, runtimeName)
+	mutatorBody := m.computedPropertyUpdates(pageModel, index, m, javascript.ValueVar)
+
+	content := fmt.Sprintf(
+		"let %s = %s;\n%s\nfunction %s(%s) { %s }\n",
+		runtimeName, expression,
+		initialAssignments,
+		handlerFuncName, javascript.ValueVar, mutatorBody,
+	)
+
+	pageModel.AppendReactiveRuntime(page.ReactiveRuntimeChunk{
+		Variable:     m.selector(),
+		Dependencies: index.DependenciesOf(m),
+		Content:      content,
+	})
+}
+
+// compileComputedBootstrap evaluates a computed variable whose dependencies
+// are all static (none of them can ever change at runtime).
+//
+// The computed expression is resolved with every dependency inlined as its
+// initial value and evaluated once in a startup script. No runtime state is
+// needed because the value can never change.
+func (m *reactiveVariableNode) compileComputedBootstrap(
+	pageModel *page.Page,
+	index *ReactiveIndex,
+) {
+	expression, ok := index.ResolveExpression(m)
+	if !ok {
+		errorModel := models.NewError(
+			fmt.Sprintf("computed variable '%s' is part of a cyclic dependency", m.selector()),
+			pageModel.InputPath,
+			m.position,
+		)
+
+		documentErrors.AddErrors(&errorModel)
+		return
+	}
+
+	bootstrap := ""
+	for _, p := range index.FindDependentProperties(m) {
+		bootstrap = bootstrap + fmt.Sprintf(
+			`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`+"\n",
+			p.selector(pageModel), p.propName, p.propAssignment(`"" + (`+expression+`)`),
+		)
+	}
+
+	if bootstrap == "" {
+		return
+	}
+
+	pageModel.AppendReactiveRuntime(page.ReactiveRuntimeChunk{
+		Variable: m.selector(),
+		Content:  bootstrap,
+	})
 }

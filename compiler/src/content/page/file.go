@@ -36,6 +36,113 @@ type Page struct {
 	// owns an allocator so that the compiled output doesn't depend on which
 	// other pages were compiled before it.
 	Ids javascript.IdAllocator
+
+	// reactiveRuntime accumulates the compiled reactive variable wiring of the
+	// page. Every reactive variable contributes a chunk, and the chunks are
+	// emitted into a single shared script (in dependency order) so that
+	// computed variables can reference the runtime variables they are computed
+	// from.
+	ReactiveRuntime []ReactiveRuntimeChunk
+}
+
+// ReactiveRuntimeChunk is the compiled wiring of a single reactive variable.
+//
+// Variable is the selector of the variable the chunk belongs to and
+// Dependencies lists the selectors of the variables whose chunks must be
+// declared before this one (the variables this one is computed from).
+type ReactiveRuntimeChunk struct {
+	Variable     string
+	Dependencies []string
+	Content      string
+}
+
+// AppendReactiveRuntime adds a compiled reactive variable chunk to the page's
+// shared reactive runtime.
+func (model *Page) AppendReactiveRuntime(chunk ReactiveRuntimeChunk) {
+	model.ReactiveRuntime = append(model.ReactiveRuntime, chunk)
+}
+
+// EmitReactiveRuntime flushes the accumulated reactive runtime chunks into a
+// single script.
+//
+// The chunks are emitted in dependency order (a chunk that another chunk is
+// computed from is declared first) so that computed variables can reference
+// the runtime variables they are computed from. Cyclic dependencies are
+// emitted in compilation order after a warning; they are reported as compiler
+// errors elsewhere.
+func (model *Page) EmitReactiveRuntime() {
+	if len(model.ReactiveRuntime) == 0 {
+		return
+	}
+
+	ordered := topologicalReactiveChunks(model.ReactiveRuntime)
+
+	content := ""
+	for _, chunk := range ordered {
+		content += chunk.Content + "\n"
+	}
+
+	model.AddScript(javascript.FromGeneratedContent(content))
+	model.ReactiveRuntime = nil
+}
+
+// topologicalReactiveChunks orders reactive runtime chunks so that every chunk
+// appears after the chunks it depends on.
+func topologicalReactiveChunks(chunks []ReactiveRuntimeChunk) []ReactiveRuntimeChunk {
+	ordered := make([]ReactiveRuntimeChunk, 0, len(chunks))
+	emitted := map[string]bool{}
+
+	// A chunk is ready when none of its dependencies are pending.
+	for len(ordered) < len(chunks) {
+		progressed := false
+
+		for _, chunk := range chunks {
+			if emitted[chunk.Variable] {
+				continue
+			}
+
+			ready := true
+			for _, dependency := range chunk.Dependencies {
+				if dependency == chunk.Variable {
+					continue
+				}
+
+				if !emitted[dependency] {
+					// Only wait for dependencies that actually have a chunk.
+					// Dependencies without one (e.g. static variables) are
+					// resolved at compile time.
+					for _, candidate := range chunks {
+						if candidate.Variable == dependency {
+							ready = false
+							break
+						}
+					}
+				}
+			}
+
+			if ready {
+				ordered = append(ordered, chunk)
+				emitted[chunk.Variable] = true
+				progressed = true
+			}
+		}
+
+		if !progressed {
+			// The remaining chunks form a dependency cycle. Emit them in
+			// compilation order; the cycle is reported as a compiler error
+			// elsewhere.
+			for _, chunk := range chunks {
+				if !emitted[chunk.Variable] {
+					ordered = append(ordered, chunk)
+					emitted[chunk.Variable] = true
+				}
+			}
+
+			break
+		}
+	}
+
+	return ordered
 }
 
 func (model *Page) SetContent(content string) {

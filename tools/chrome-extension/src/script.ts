@@ -11,6 +11,7 @@ interface VariableInfo {
   name: string;
   initialValue: string;
   reactivity: string;
+  dependsOn?: string[];
 }
 
 interface PropertyInfo {
@@ -287,6 +288,16 @@ function buildGraph(document_: DebugDocument): { nodes: GraphNode[]; edges: Grap
 
     for (const variable of pageGraph.variables) {
       ensureNode(variable.name, variable.name, "variable", source);
+    }
+
+    // Variable-to-variable edges: a computed variable is redrawn whenever the
+    // variables it is computed from change.
+    for (const variable of pageGraph.variables) {
+      for (const dependency of variable.dependsOn ?? []) {
+        if (nodes.has(dependency) && nodes.has(variable.name)) {
+          edges.push({ from: dependency, to: variable.name, kind: "dependency" });
+        }
+      }
     }
 
     for (const property of pageGraph.properties) {

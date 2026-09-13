@@ -58,9 +58,10 @@ type DebugInfo struct {
 // ReactivityClass mirrors the compiler's reactivity levels:
 // "unused", "static", "static-property", "assignment", "reactive".
 type VariableInfo struct {
-	Name            string `json:"name"`
-	InitialValue    string `json:"initialValue"`
-	ReactivityClass string `json:"reactivity"`
+	Name            string   `json:"name"`
+	InitialValue    string   `json:"initialValue"`
+	ReactivityClass string   `json:"reactivity"`
+	DependsOn       []string `json:"dependsOn"`
 }
 
 // PropertyInfo describes a reactive property binding

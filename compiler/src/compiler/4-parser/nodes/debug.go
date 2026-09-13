@@ -26,6 +26,7 @@ func CollectDebugInfo(inputPath string, index *ReactiveIndex) debugger.PageDebug
 			Name:            variable.selector(),
 			InitialValue:    variable.initialValue,
 			ReactivityClass: reactivityLevelName(variable.reactivityLevel(index)),
+			DependsOn:       index.DependenciesOf(variable),
 		})
 	}
 
@@ -85,6 +86,8 @@ func reactivityLevelName(level reactivityLevel) string {
 		return "assignment"
 	case reactive:
 		return "reactive"
+	case computed:
+		return "computed"
 	}
 
 	return "unknown"
