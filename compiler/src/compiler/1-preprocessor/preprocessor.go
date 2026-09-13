@@ -24,6 +24,10 @@ func ProcessStaticSite(filePath string, content string, expandPartials bool) str
 		!xml.IsXmlFile(filePath) &&
 		!txt.IsTxtFile(filePath) {
 
+		// Components are expanded first so that the layout expansion and the
+		// compilation pipeline can see the fully expanded page.
+		ssgResult = expandComponents(filePath, ssgResult, map[string]bool{})
+
 		// Before we expand the HTML partials, we need to expand the layouts because
 		// the layout may contain the doctype, html, head, and body tags that would
 		// cause the partial expansion to fail.

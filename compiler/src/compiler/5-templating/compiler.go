@@ -6,6 +6,7 @@ import (
 	optimizer "hudson-newey/2web/src/compiler/6-optimizer"
 	"hudson-newey/2web/src/content/page"
 	"hudson-newey/2web/src/content/txt"
+	"hudson-newey/2web/src/debugger"
 	"os"
 )
 
@@ -30,10 +31,16 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 
 	// Main part of the compiler where we recurse the constructed AST
 	recurseAstMarkup(&pageModel, parsedAst)
-	recurseAst(&pageModel, parsedAst)
+	recurseAst(&pageModel, parsedAst, parsedAst)
 
 	if !cli.GetArgs().IsolatedPages {
 		addRouteAssets(&pageModel)
+	}
+
+	// The debug file is only generated for development builds (see site.AfterAll),
+	// so collecting the reactive graph is skipped for production builds.
+	if !cli.GetArgs().IsProd {
+		debugger.AddPageDebugInfo(nodes.CollectDebugInfo(filePath, parsedAst))
 	}
 
 	args := cli.GetArgs()
@@ -59,15 +66,27 @@ func recurseAstMarkup(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 	}
 }
 
-func recurseAst(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
+// recurseAst runs the reactive compilation pass over every node in the AST.
+//
+// Every node is handed the ROOT AST (rootAst) rather than the subtree it is
+// currently in, because reactive nodes need the whole page's AST to find their
+// dependencies. For example, a reactive variable declared inside a
+// <script compiled> block depends on event and property nodes that are spread
+// across the whole page.
+//
+// The root is threaded through the recursion instead of being stashed in a
+// package global because this package is called concurrently from the build
+// thread pool (a global would be overwritten by every concurrently compiled
+// page, causing pages to render content from other pages' ASTs).
+func recurseAst(page *page.Page, rootAst nodes.AbstractSyntaxTree, current nodes.AbstractSyntaxTree) {
 	// Second pass reactive content
-	for _, node := range parsedAst {
-		nodeContent := node.Content(page, parsedAst)
+	for _, node := range current {
+		nodeContent := node.Content(page, rootAst)
 		page.SetContent(nodeContent.HtmlContent.Content)
 		page.AddStyle(nodeContent.CssContent)
 		page.AddScript(nodeContent.JsContent)
 		page.AddTwoScript(nodeContent.TwoScriptContent)
 
-		recurseAst(page, node.Children())
+		recurseAst(page, rootAst, node.Children())
 	}
 }

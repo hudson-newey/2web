@@ -11,10 +11,10 @@ func inlineScriptTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 		">": {token: lexeme.GreaterAngle, next: scriptContentLexer},
 	}
 
-	cases = withAttributes(cases)
+	cases = withAttributes(cases, inlineScriptTagLexer)
 	cases = withStrings(cases, inlineScriptTagLexer)
 
-	return lexerFactory(cases, scriptSource)(model)
+	return lexerFactory(cases, tagAttributes)(model)
 }
 
 func scriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {

@@ -17,6 +17,21 @@ type call struct {
 	err error
 }
 
+// ClearReadCache drops every cached file read.
+//
+// The read cache assumes that source files don't change during a compilation,
+// which keeps repeated reads of the same file consistent (and cheap). Long
+// lived processes that compile the same files more than once (tests, and
+// eventually watch mode) must clear the cache between compilations so that
+// changed files are re-read from disk.
+func ClearReadCache() {
+	mu.Lock()
+	defer mu.Unlock()
+
+	cache = make(map[string][]byte)
+	inFlight = make(map[string]*call)
+}
+
 // A thread-safe file read operation.
 // If multiple reads are issued in parallel while one is already in progress,
 // they will use the result of the first read instead of issuing multiple reads.

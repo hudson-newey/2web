@@ -11,9 +11,15 @@ import (
 
 // pendingCacheEntry is an asset that has been compiled and written, but whose
 // output has not yet been confirmed as flushed to disk.
+//
+// The cache key is the fingerprint that was checked (and compiled against) for
+// this page. Deferring the cache registration until the writes are confirmed
+// prevents the cache from marking assets as up-to-date when their output file
+// was never written.
 type pendingCacheEntry struct {
 	inputPath  string
 	outputPath string
+	cacheKey   string
 }
 
 var pendingCacheMutex sync.Mutex
@@ -26,13 +32,14 @@ var pendingCacheEntries []pendingCacheEntry
 // caching an asset before filesystem.WaitFileWriter has drained the write queue
 // could record a cache entry for a file that was never written. A subsequent
 // build would then trust the cache and never write the missing file.
-func queueCacheAsset(inputPath string, outputPath string) {
+func queueCacheAsset(inputPath string, outputPath string, cacheKey string) {
 	pendingCacheMutex.Lock()
 	defer pendingCacheMutex.Unlock()
 
 	pendingCacheEntries = append(pendingCacheEntries, pendingCacheEntry{
 		inputPath,
 		outputPath,
+		cacheKey,
 	})
 }
 
@@ -67,6 +74,6 @@ func flushCacheEntries() {
 			continue
 		}
 
-		cache.CacheAsset(entry.inputPath, entry.outputPath)
+		cache.CacheAsset(entry.inputPath, entry.outputPath, entry.cacheKey)
 	}
 }

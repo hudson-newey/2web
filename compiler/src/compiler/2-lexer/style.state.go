@@ -14,10 +14,10 @@ func inlineStyleTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 		">": {token: lexeme.GreaterAngle, next: styleContentLexer},
 	}
 
-	cases = withAttributes(cases)
+	cases = withAttributes(cases, inlineStyleTagLexer)
 	cases = withStrings(cases, inlineStyleTagLexer)
 
-	return lexerFactory(cases, styleSource)(model)
+	return lexerFactory(cases, tagAttributes)(model)
 }
 
 func styleContentLexer(model *Lexer) (V2LexNode, LexFunc) {

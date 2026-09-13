@@ -343,12 +343,12 @@ func (m *reactiveVariableNode) compileReactiveVar(
 	for _, p := range props {
 		domMutator = domMutator + fmt.Sprintf(
 			`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
-			p.selector(pageModel), p.propName, jsNewValueVar,
+			p.selector(pageModel), p.propName, p.propAssignment(p.propValue(jsNewValueVar)),
 		)
 	}
 
-	variableName := javascript.CreateJsVariableName()
-	handlerFuncName := javascript.CreateJsFunctionName()
+	variableName := pageModel.Ids.CreateVariableName()
+	handlerFuncName := pageModel.Ids.CreateFunctionName()
 	domMutator = fmt.Sprintf(`
 	 	let %s = %s;
 		function %s(%s) { %s }
@@ -365,7 +365,7 @@ func (m *reactiveVariableNode) compileReactiveVar(
 		// might?? fix the issue???
 		reactiveReducer := strings.ReplaceAll(e.reducer, m.selector(), variableName)
 
-		eventDomSelector := javascript.CreateJsElementName()
+		eventDomSelector := pageModel.Ids.CreateElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
 		eventListeners = eventListeners + fmt.Sprintf(`
 			document.querySelector("[%s]").addEventListener("%s", () => {
@@ -398,11 +398,11 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 	for _, p := range props {
 		domMutator = domMutator + fmt.Sprintf(
 			`document.querySelectorAll("[%s]").forEach((__2_element_ref_mod) => __2_element_ref_mod["%s"] = %s);`,
-			p.selector(pageModel), p.propName, jsNewValueVar,
+			p.selector(pageModel), p.propName, p.propAssignment(p.propValue(jsNewValueVar)),
 		)
 	}
 
-	handlerFuncName := javascript.CreateJsFunctionName()
+	handlerFuncName := pageModel.Ids.CreateFunctionName()
 	domMutator = fmt.Sprintf(
 		`function %s(%s) { %s }`,
 		handlerFuncName, jsNewValueVar, domMutator,
@@ -411,7 +411,7 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 	eventListeners := ""
 	pageContent := pageModel.Html.Content
 	for _, e := range events {
-		eventDomSelector := javascript.CreateJsElementName()
+		eventDomSelector := pageModel.Ids.CreateElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
 		eventListeners = eventListeners + fmt.Sprintf(
 			`document.querySelector("[%s]").addEventListener("%s", () => %s(%s));`,
@@ -432,16 +432,19 @@ func (m *reactiveVariableNode) compileStaticPropVar(
 	props := m.dependentProps(ast)
 
 	reducerContent := ""
-	pageContent := pageModel.Html.Content
 	for _, p := range props {
 		reducerContent = reducerContent + fmt.Sprintf(
 			`document.querySelector("[%s]")["%s"] = %s;`,
-			p.selector(pageModel), p.propName, m.initialValue,
+			p.selector(pageModel), p.propName, p.propAssignment(p.propValue(m.initialValue)),
 		)
 	}
 
+	// p.selector() replaces the compile time selector in the page's content, so
+	// the page model must not be overwritten with a content snapshot taken
+	// before the replacements. Overwriting would leave the compiler selectors
+	// in the emitted HTML while the emitted JavaScript queries the runtime
+	// selectors, leaving the property permanently unwired.
 	reducerScript := javascript.FromContent(reducerContent)
-	pageModel.SetContent(pageContent)
 	pageModel.AddScript(reducerScript)
 }
 

@@ -31,6 +31,12 @@ const (
 	// <code>[here]</code>
 	codeSource lexState = "CodeSource"
 
+	// <code [here]> — the attribute section of a tag-specific inline tag.
+	// Attribute names must not be emitted with the tag's content state (e.g.
+	// CodeSource), because the nodes scan their content state tokens to find
+	// the tag's content and would treat an attribute name as the content.
+	tagAttributes lexState = "TagAttributes"
+
 	// e.g. "[here]" or '[here]'
 	sourceString lexState = "String"
 )

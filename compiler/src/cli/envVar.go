@@ -24,9 +24,16 @@ func GetEnvVars() envVars {
 	debugOverride, hasOverride := os.LookupEnv(constants.EnvDebugOverride)
 	if !hasOverride {
 		outputDirectory := GetArgs().OutputPath
-		if outputDirectory[len(outputDirectory)-1] != '/' {
+
+		// An empty output path would panic on the index below. It can't be
+		// suffixed with a trailing slash either, so fall back to the working
+		// directory.
+		if outputDirectory == "" {
+			outputDirectory = "./"
+		} else if outputDirectory[len(outputDirectory)-1] != '/' {
 			outputDirectory += "/"
 		}
+
 		// Default to {output_path}/__2web.debug.json so that it's accessible
 		// to third party extensions that look at the build output.
 		debugOverride = fmt.Sprintf("%s/__2web.debug.json", outputDirectory)

@@ -6,6 +6,7 @@ import (
 	"hudson-newey/2web/src/filesystem"
 	"os"
 	"path"
+	"sync"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -13,11 +14,18 @@ import (
 
 const buildCacheTableName = "build_records"
 
+// The build thread pool compiles pages in parallel, so the shared connection
+// and every read of it must be guarded by a mutex.
+var dbMutex sync.Mutex
+
 var cachedConnection *sql.DB = nil
 
 // This is public so that the main function can close the connection at the end
 // of the programs execution.
 func CloseDBConnection() {
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
+
 	if cachedConnection != nil {
 		cachedConnection.Close()
 		cachedConnection = nil
@@ -32,6 +40,9 @@ func dbConnection() *sql.DB {
 	if cli.GetArgs().DisableCache {
 		panic("Attempted to establish database connection with DisabledCache")
 	}
+
+	dbMutex.Lock()
+	defer dbMutex.Unlock()
 
 	if cachedConnection != nil {
 		return cachedConnection
@@ -52,14 +63,14 @@ func dbConnection() *sql.DB {
 	db.SetMaxOpenConns(8)
 	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
-	createDbTables()
+	// The table creation runs on the already locked connection. Calling
+	// dbConnection() here would deadlock on dbMutex.
+	createDbTables(db)
 
-	return db
+	return cachedConnection
 }
 
-func createDbTables() {
-	db := dbConnection()
-
+func createDbTables(db *sql.DB) {
 	createTableSQL := `
 	CREATE TABLE IF NOT EXISTS ` + buildCacheTableName + ` (
 		in_out_mod TEXT PRIMARY KEY

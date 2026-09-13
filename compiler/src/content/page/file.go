@@ -30,6 +30,12 @@ type Page struct {
 	Css        []*css.CSSFile
 	Assets     []*content.BinaryFile
 	Errors     *PageErrors
+
+	// Ids allocates the runtime identifiers (DOM selectors, variable and
+	// function names) that wire this page's compiled output together. Each page
+	// owns an allocator so that the compiled output doesn't depend on which
+	// other pages were compiled before it.
+	Ids javascript.IdAllocator
 }
 
 func (model *Page) SetContent(content string) {

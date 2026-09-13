@@ -3,7 +3,6 @@ package javascript
 import (
 	"fmt"
 	"hudson-newey/2web/src/constants"
-	"sync"
 )
 
 const JsFunctionNamespace string = constants.CompilerNamespace + "func_"
@@ -12,35 +11,41 @@ const JsElementNamespace string = "data-" + constants.CompilerNamespace + "eleme
 
 const ValueVar string = constants.CompilerNamespace + "value"
 
-// nextNodeId is shared between all concurrently compiled pages because element
-// names must be unique across the whole site.
+// IdAllocator allocates the unique runtime identifiers that wire a single
+// page's compiled output together (DOM selectors, JavaScript variable names,
+// and handler function names).
 //
-// Access to it must be synchronized, otherwise two pages can be assigned the
-// same id, producing colliding DOM selectors and JavaScript identifiers.
-var nextNodeIdMutex sync.Mutex
-var nextNodeId int = 0
+// Identifiers only need to be unique within a page: the emitted HTML and the
+// emitted JavaScript for a page reference each other and are served together.
+//
+// Each page owns an allocator (see page.Page) instead of the compiler sharing
+// one build wide counter. A build wide counter made the identifiers depend on
+// which pages happened to be compiled before them (and in what order), so the
+// compiled output of a page would change between builds even when none of its
+// inputs changed. That breaks reproducible builds and forces browsers to
+// re-download unchanged assets on every rebuild.
+type IdAllocator struct {
+	nextId int
+}
 
-// reserveNextNodeId returns the next unused node id.
-func reserveNextNodeId() int {
-	nextNodeIdMutex.Lock()
-	defer nextNodeIdMutex.Unlock()
+func NewIdAllocator() IdAllocator {
+	return IdAllocator{}
+}
 
-	id := nextNodeId
-	nextNodeId++
+func (model *IdAllocator) CreateFunctionName() string {
+	return fmt.Sprint(JsFunctionNamespace, model.reserve())
+}
+
+func (model *IdAllocator) CreateVariableName() string {
+	return fmt.Sprint(JsVarNamespace, model.reserve())
+}
+
+func (model *IdAllocator) CreateElementName() string {
+	return fmt.Sprint(JsElementNamespace, model.reserve())
+}
+
+func (model *IdAllocator) reserve() int {
+	id := model.nextId
+	model.nextId++
 	return id
-}
-
-func CreateJsFunctionName() string {
-	functionName := fmt.Sprint(JsFunctionNamespace, reserveNextNodeId())
-	return functionName
-}
-
-func CreateJsVariableName() string {
-	variableName := fmt.Sprint(JsVarNamespace, reserveNextNodeId())
-	return variableName
-}
-
-func CreateJsElementName() string {
-	functionName := fmt.Sprint(JsElementNamespace, reserveNextNodeId())
-	return functionName
 }

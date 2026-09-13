@@ -43,8 +43,13 @@ func write(content string, outputPath string) {
 
 func writeBinary(content []byte, outputPath string) {
 	if cli.GetArgs().ToStdout {
-		fmt.Println(string(content))
-	} else {
+		// Binary assets can't be printed to stdout: the bytes would be
+		// corrupted by the console encoding and would pollute the html output
+		// that --stdout is meant to emit. They are still written to their
+		// output path so that the compiled output stays complete.
 		filesystem.WriteFile(content, outputPath)
+		return
 	}
+
+	filesystem.WriteFile(content, outputPath)
 }

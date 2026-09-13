@@ -9,7 +9,11 @@ var codeBlock = Grammar{
 	Def: newDefinition(
 		lexeme.LessAngle,
 		lexeme.CodeStartTag,
+
+		// Attributes on the code tag. e.g. <code class="language-html">
+		lexeme.NewCaptureUntil(),
 		lexeme.GreaterAngle,
+
 		lexeme.CodeSource,
 		lexeme.CodeEndTag,
 	),

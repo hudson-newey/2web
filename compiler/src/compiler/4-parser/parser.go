@@ -45,7 +45,10 @@ func processNode(
 		// grammar definition matches.
 		// We search ahead so that if the grammar definition is multiple tokens long,
 		// we don't default to the text lexer state for leading tokens.
-		peekBufferEnd := index + len(rule.Def)
+		//
+		// Optional tokens in the definition can be missing from the input, so the
+		// look-ahead only needs to cover the required tokens.
+		peekBufferEnd := index + rule.MinimumTokenCount()
 		if peekBufferEnd > len(lexNodes) {
 			continue
 		}

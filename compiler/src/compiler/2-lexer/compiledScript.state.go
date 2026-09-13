@@ -11,10 +11,10 @@ func inlineCompiledScriptTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 		">": {token: lexeme.GreaterAngle, next: compiledScriptContentLexer},
 	}
 
-	cases = withAttributes(cases)
-	cases = withStrings(cases, compiledScriptContentLexer)
+	cases = withAttributes(cases, inlineCompiledScriptTagLexer)
+	cases = withStrings(cases, inlineCompiledScriptTagLexer)
 
-	return lexerFactory(cases, compiledScriptSource)(model)
+	return lexerFactory(cases, tagAttributes)(model)
 }
 
 // We want to allow the user to exit a "<script compiled>" block even if they

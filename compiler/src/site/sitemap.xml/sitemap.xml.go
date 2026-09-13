@@ -23,7 +23,9 @@ func GenerateSitemap(paths []string) {
 	file.AddContent(content)
 
 	outputDirectory := cli.GetArgs().OutputPath
-	if outputDirectory[len(outputDirectory)-1] != '/' {
+	if outputDirectory == "" {
+		outputDirectory = "./"
+	} else if outputDirectory[len(outputDirectory)-1] != '/' {
 		outputDirectory += "/"
 	}
 	outputFilePath := outputDirectory + "sitemap.xml"

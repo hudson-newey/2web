@@ -47,7 +47,11 @@ func (m *textOutputNode) Children() AbstractSyntaxTree {
 }
 
 func (m *textOutputNode) MarkupContent() string {
-	return m.reactiveProp.MarkupContent()
+	// The rendered span is owned by the reactive property node (see Children).
+	// Rendering it here as well would emit the text output span twice, and the
+	// runtime wiring only replaces the first copy, leaving the second with a
+	// raw compiler selector in the page.
+	return ""
 }
 
 func (m *textOutputNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {

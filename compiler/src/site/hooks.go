@@ -30,7 +30,7 @@ func AfterAll() {
 	// We don't want to publish debug info to production as it might contain
 	// sensitive information about the source code.
 	if !cli.GetArgs().IsProd {
-		debugjson.GenerateDebugJson()
+		debugjson.GenerateDebugJson(paths)
 	}
 }
 

@@ -9,15 +9,36 @@ var controlFlowIf = Grammar{
 	// @if (expression) {
 	//	<div>Hello World!</div>
 	// }
+	//
+	// Whitespace around the condition and body is optional, so both of these
+	// forms are valid:
+	//
+	//	@if($isOpen){Hello World!}
+	//	@if ($isOpen) {
+	//		Hello World!
+	//	}
 	Def: newDefinition(
 		lexeme.AtSymbol,
 		lexeme.ControlFlowIfKeyword,
+
+		// Whitespace between the keyword and the condition
+		optional(lexeme.TextContent),
+
 		lexeme.BracketOpen,
-		lexeme.TextContent,
+
+		// The condition expression. e.g. "$isOpen"
+		// This is captured instead of matched exactly so that expressions made
+		// of multiple tokens (e.g. "$count > 5") are supported.
+		lexeme.NewCaptureUntil(),
 		lexeme.BracketClosed,
+
+		// Whitespace between the condition and the body
+		optional(lexeme.TextContent),
+
 		lexeme.CurlyOpen,
+
 		// Conditional content to show
-		lexeme.TextContent,
+		lexeme.NewCaptureUntil(),
 		lexeme.CurlyClosed,
 	),
 	// We have to include TextRules as a sub-grammar so that control flow like

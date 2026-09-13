@@ -27,7 +27,11 @@ func minifyJs(content string) string {
 
 	minifiedContent, err := m.String("application/javascript", content)
 	if err != nil {
-		panic(err)
+		// A page with invalid JavaScript (e.g. a page that failed to compile
+		// and is being shipped with --ignore-errors) must not kill the entire
+		// build. Serve the unminified content instead.
+		logger.PrintWarning("failed to minify JavaScript, shipping unminified content: " + err.Error())
+		return content
 	}
 
 	return minifiedContent

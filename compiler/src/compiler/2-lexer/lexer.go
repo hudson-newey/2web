@@ -104,7 +104,15 @@ func (model *Lexer) lexLiteral(exitConditions lexDefMap) string {
 			}
 		}
 
-		model.Pos.Col++
+		if nextChar == '\n' {
+			// Track line feeds so that lexer positions stay accurate for
+			// compiler errors. Without this, every position after the first
+			// multi line text node would point at the wrong row.
+			model.lineFeed()
+		} else {
+			model.Pos.Col++
+		}
+
 		literal += string(nextChar)
 	}
 }

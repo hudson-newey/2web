@@ -9,10 +9,10 @@ func inlineCodeTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 		">": {token: lexeme.GreaterAngle, next: codeContentLexer},
 	}
 
-	cases = withAttributes(cases)
+	cases = withAttributes(cases, inlineCodeTagLexer)
 	cases = withStrings(cases, inlineCodeTagLexer)
 
-	return lexerFactory(cases, codeSource)(model)
+	return lexerFactory(cases, tagAttributes)(model)
 }
 
 func codeContentLexer(model *Lexer) (V2LexNode, LexFunc) {
