@@ -3,6 +3,9 @@ package builder
 import (
 	"hudson-newey/2web/src/builder/cache"
 	"hudson-newey/2web/src/cli"
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
+	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/site"
 )
 
@@ -56,9 +59,22 @@ func compileAndWritePage(inputPath string, outputPath string) {
 	compiledPage, success := BuildToPage(inputPath, true)
 
 	if !success && production && !args.IgnoreErrors {
-		// Compiler errors should not be ignored in production builds, otherwise, we
-		// start shipping compiler errors to end users, which does not look good.
-		cli.HardError("Build failed for " + inputPath)
+		// Compiler errors should not be ignored in production builds, otherwise,
+		// we start shipping compiler errors to end users, which does not look
+		// good.
+		//
+		// The failure is recorded as a compiler error (which is rendered into
+		// the page and reported in the terminal) and the build continues so that
+		// the remaining pages still compile. The build is marked as failed
+		// through the document error list.
+		buildError := models.NewError(
+			"build failed (production builds do not ship compiler errors)",
+			inputPath,
+			lexer.StartingPosition,
+		)
+
+		documentErrors.AddErrors(&buildError)
+		cli.PrintBuildLog("\t- " + inputPath + " \033[31m(FAILED)\033[0m")
 		return
 	}
 

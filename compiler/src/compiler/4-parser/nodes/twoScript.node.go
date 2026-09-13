@@ -9,7 +9,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewTwoScriptNode(lexNodes []*lexer.V2LexNode) *twoScriptNode {
+func NewTwoScriptNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	// Find the lexNode that is a StyleSource token
 	var content string
 	for _, lexNode := range lexNodes {

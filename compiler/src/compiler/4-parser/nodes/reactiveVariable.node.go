@@ -18,20 +18,39 @@ import (
 	"github.com/hudson-newey/2web/_shared/logger"
 )
 
-func NewreactiveVariableNode(lexNodes []*lexer.V2LexNode) *reactiveVariableNode {
+func NewreactiveVariableNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	variableName, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 1)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"reactive variable declaration is missing a variable name. Reactive variables are declared with '$name = value;'",
+			lexNodes,
+		)
 	}
 
 	initialValue, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 2)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"reactive variable declaration is missing an initial value. Reactive variables are declared with '$name = value;'",
+			lexNodes,
+		)
+	}
+
+	variableNameContent := strings.TrimSpace(variableName.Content)
+	initialValueContent := strings.TrimSpace(initialValue.Content)
+
+	if initialValueContent == "" {
+		return context.DegradedNode(
+			"reactive variable '$"+variableNameContent+"' is missing an initial value",
+			lexNodes,
+		)
 	}
 
 	return &reactiveVariableNode{
-		variableName: strings.TrimSpace(variableName.Content),
-		initialValue: strings.TrimSpace(initialValue.Content),
+		variableName: variableNameContent,
+		initialValue: initialValueContent,
+		// The declaration position is kept so that errors about the variable
+		// (e.g. that it is unused) can be reported against the declaration.
+		position: positionOf(lexNodes),
 	}
 }
 
@@ -39,6 +58,9 @@ type reactiveVariableNode struct {
 	variableName string
 	initialValue string
 	children     AbstractSyntaxTree
+
+	// The position of the declaration in the source file.
+	position lexer.Position
 }
 
 func (m *reactiveVariableNode) Type() string {
@@ -276,7 +298,7 @@ func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, index *Re
 	// short circuit fast if not used
 	if reactivityLevel == unused {
 		errMsg := fmt.Sprintf("Unused variable: %s", m.selector())
-		err := models.NewError(errMsg, "", lexer.Position{Row: 0, Col: 0})
+		err := models.NewError(errMsg, pageModel.InputPath, m.position)
 		documentErrors.AddErrors(&err)
 		return
 	}

@@ -3,6 +3,7 @@ package lexer
 import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/io/reader"
+	"hudson-newey/2web/src/models"
 	"io"
 	"strings"
 )
@@ -11,6 +12,17 @@ type Lexer struct {
 	Pos   *Position
 	Input *reader.Reader
 	State LexFunc
+
+	// Errors records the errors produced while lexing (e.g. source read
+	// failures). They are attributed to the file being lexed and are rendered
+	// into the page's error overlay by the builder.
+	Errors []*models.Error
+}
+
+// RecordError records an error produced while lexing.
+func (model *Lexer) RecordError(message string, position Position) {
+	errorModel := models.NewError(message, model.Input.FilePath, position)
+	model.Errors = append(model.Errors, &errorModel)
 }
 
 func NewLexer(reader *reader.Reader) *Lexer {
@@ -39,12 +51,7 @@ func (model *Lexer) nextChar() (char rune, size int, err error) {
 }
 
 func (model *Lexer) peek(length int) string {
-	bytes, err := model.Input.Reader.Peek(length)
-	if err != nil && err != io.EOF {
-		panic(err)
-	}
-
-	return string(bytes)
+	return string(model.peekBytes(length))
 }
 
 // peekBytes peeks the next `length` bytes without copying them.
@@ -55,7 +62,9 @@ func (model *Lexer) peek(length int) string {
 func (model *Lexer) peekBytes(length int) []byte {
 	bytes, err := model.Input.Reader.Peek(length)
 	if err != nil && err != io.EOF {
-		panic(err)
+		// A read failure (other than end of file) must not kill the build.
+		model.RecordError("failed to read source: "+err.Error(), *model.Pos)
+		return nil
 	}
 
 	return bytes
@@ -65,7 +74,8 @@ func (model *Lexer) skip(length int) {
 	for range length {
 		char, _, err := model.Input.Reader.ReadRune()
 		if err != nil && err != io.EOF {
-			panic(err)
+			model.RecordError("failed to read source: "+err.Error(), *model.Pos)
+			return
 		}
 
 		if char == '\n' {
@@ -80,7 +90,8 @@ func (model *Lexer) skip(length int) {
 func (model *Lexer) backup(length int) {
 	for range length {
 		if err := model.Input.Reader.UnreadRune(); err != nil {
-			panic(err)
+			model.RecordError("failed to unread source: "+err.Error(), *model.Pos)
+			return
 		}
 
 		model.Pos.Col--

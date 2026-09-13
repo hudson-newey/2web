@@ -10,7 +10,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewCodeNode(lexNodes []*lexer.V2LexNode) *codeNode {
+func NewCodeNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	startingCodeTagContent := ""
 
 	// Find the lexNode that is a StyleSource token

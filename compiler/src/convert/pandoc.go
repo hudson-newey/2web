@@ -1,8 +1,8 @@
 package convert
 
 import (
+	"errors"
 	"fmt"
-	"hudson-newey/2web/src/cli"
 	"os/exec"
 )
 
@@ -23,8 +23,7 @@ func ConvertFormat(
 				"Please install pandoc https://pandoc.org/installing.html",
 			fromFormat,
 		)
-		cli.HardError(errorMsg)
-		return emptyFile, nil
+		return emptyFile, errors.New(errorMsg)
 	}
 
 	cmd := exec.Command(pandocPath, "-f", fromFormat, "-t", toFormat)

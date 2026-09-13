@@ -10,10 +10,10 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewScriptNode(lexNodes []*lexer.V2LexNode) *scriptNode {
+func NewScriptNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	sourceNode, err := scanners.FirstToken(lexNodes, lexeme.ScriptSource)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode("script block has no content", lexNodes)
 	}
 
 	return &scriptNode{

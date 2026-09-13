@@ -19,22 +19,45 @@ import (
 )
 
 // import importName from "importPath";
-func NewscriptImportNode(lexNodes []*lexer.V2LexNode) *scriptImportNode {
+func NewscriptImportNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	importNameNode, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 1)
-	importNameNode.Content = strings.TrimSpace(importNameNode.Content)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"import statement is missing an imported name. Components are imported with 'import Name from \"path\";'",
+			lexNodes,
+		)
 	}
+
+	importNameNode.Content = strings.TrimSpace(importNameNode.Content)
 
 	importPathNode, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 2)
-	quoteRe := regexp.MustCompile(`"(.*?)"`)
-	importPathNode.Content = quoteRe.FindAllStringSubmatch(importPathNode.Content, -1)[0][1]
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"import statement is missing an import path. Components are imported with 'import Name from \"path\";'",
+			lexNodes,
+		)
 	}
 
+	quoteRe := regexp.MustCompile(`"(.*?)"|'(.*?)'`)
+	quotedPath := quoteRe.FindAllStringSubmatch(importPathNode.Content, -1)
+	if len(quotedPath) == 0 {
+		return context.DegradedNode(
+			"import path must be a quoted string (e.g. 'import Name from \"components/header.component.html\";')",
+			lexNodes,
+		)
+	}
+
+	// The path is captured in the first or second sub match depending on the
+	// quote style used.
+	importPath := quotedPath[0][1]
+	if importPath == "" {
+		importPath = quotedPath[0][2]
+	}
+
+	importPathNode.Content = importPath
+
 	return &scriptImportNode{
-		importName: strings.TrimSpace(importNameNode.Content),
+		importName: importNameNode.Content,
 		importPath: strings.TrimSpace(importPathNode.Content),
 	}
 }

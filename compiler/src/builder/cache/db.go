@@ -46,9 +46,19 @@ func dbLocation() string {
 	return path.Join(cacheLocation(), "build.db")
 }
 
+// dbDisabled records that the cache database couldn't be opened so that the
+// database isn't retried (and failed) on every cache operation.
+var dbDisabled bool
+
+// dbConnection returns the shared cache database connection, or nil when the
+// cache is unavailable.
+//
+// The build cache is disposable state, so a database that can't be opened
+// (e.g. because the cache directory is read only) degrades to an empty cache
+// instead of failing the build.
 func dbConnection() *sql.DB {
 	if cli.GetArgs().DisableCache {
-		panic("Attempted to establish database connection with DisabledCache")
+		return nil
 	}
 
 	dbMutex.Lock()
@@ -58,17 +68,25 @@ func dbConnection() *sql.DB {
 		return cachedConnection
 	}
 
+	if dbDisabled {
+		return nil
+	}
+
 	dbPath := dbLocation()
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
-		filesystem.CreateFile(dbPath)
+		if err := filesystem.CreateFile(dbPath); err != nil {
+			log.Printf("build cache disabled: failed to create cache database: %v", err)
+			dbDisabled = true
+			return nil
+		}
 	}
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		panic(err)
+		log.Printf("build cache disabled: failed to open cache database: %v", err)
+		dbDisabled = true
+		return nil
 	}
-
-	cachedConnection = db
 
 	// SQLite allows exactly one writer at a time, so a pool of connections
 	// would only add cross connection file locking (and busy retries) between
@@ -92,9 +110,16 @@ func dbConnection() *sql.DB {
 
 	// The table creation runs on the already locked connection. Calling
 	// dbConnection() here would deadlock on dbMutex.
-	createDbTables(db)
+	if err := createDbTables(db); err != nil {
+		log.Printf("build cache disabled: failed to create cache tables: %v", err)
+		db.Close()
+		dbDisabled = true
+		return nil
+	}
 
 	cachedKeySnapshot = loadKeySnapshot(db)
+
+	cachedConnection = db
 
 	return cachedConnection
 }
@@ -149,14 +174,12 @@ func rememberCachedKey(key string) {
 	cachedKeySnapshot[key] = true
 }
 
-func createDbTables(db *sql.DB) {
+func createDbTables(db *sql.DB) error {
 	createTableSQL := `
 	CREATE TABLE IF NOT EXISTS ` + buildCacheTableName + ` (
 		in_out_mod TEXT PRIMARY KEY
 	);`
 
 	_, err := db.Exec(createTableSQL)
-	if err != nil {
-		panic(err)
-	}
+	return err
 }

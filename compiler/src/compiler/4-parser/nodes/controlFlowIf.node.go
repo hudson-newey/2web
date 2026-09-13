@@ -13,21 +13,34 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewControlFlowIfNode(lexNodes []*lexer.V2LexNode) *controlFlowIfNode {
+func NewControlFlowIfNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	// The grammar captures everything between the condition's parentheses and
 	// the body's curly braces, so the expression and content can contain
 	// whitespace and multiple tokens.
 	expression, err := scanners.CapturedContent(lexNodes, lexeme.BracketOpen, lexeme.BracketClosed)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"@if block is missing a condition. If blocks are declared with '@if (condition) { content }'",
+			lexNodes,
+		)
 	}
 
 	content, err := scanners.CapturedContent(lexNodes, lexeme.CurlyOpen, lexeme.CurlyClosed)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"@if block is missing a body. If blocks are declared with '@if (condition) { content }'",
+			lexNodes,
+		)
 	}
 
 	expression = strings.TrimSpace(expression)
+
+	if expression == "" {
+		return context.DegradedNode(
+			"@if block is missing a condition. If blocks are declared with '@if (condition) { content }'",
+			lexNodes,
+		)
+	}
 
 	// The markup pass renders the reactive property node (which owns the
 	// conditionally rendered markup) through Children(), so the if node itself

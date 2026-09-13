@@ -58,7 +58,16 @@ func lexerFactory(lexMap *compiledMatchers, state lexState) LexFunc {
 				return lexNode, lexerModel.State
 			}
 
-			panic(err)
+			// A read failure (other than end of file) must not kill the build.
+			lexerModel.RecordError("failed to read source: "+err.Error(), *lexerModel.Pos)
+			lexNode := V2LexNode{
+				Pos:     *lexerModel.Pos,
+				Token:   lexeme.EOF,
+				State:   sourceText,
+				Content: "",
+			}
+
+			return lexNode, lexerModel.State
 		}
 
 		startPos := lexerModel.Pos

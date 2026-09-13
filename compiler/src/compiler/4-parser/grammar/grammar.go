@@ -3,7 +3,6 @@ package grammar
 import (
 	"slices"
 
-	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/nodes"
@@ -14,8 +13,10 @@ type Grammar struct {
 	// A sequence of tokens that define the reactive variable
 	Def definition
 
-	// A constructor function to create a node from the tokens
-	Constructor func(lexNodes []*lexer.V2LexNode) *nodes.Node
+	// A constructor function to create a node from the matched tokens. The
+	// parse context lets constructors report syntax errors with the position
+	// that caused them and degrade gracefully instead of panicking.
+	Constructor func(lexNodes []*lexer.V2LexNode, context *nodes.ParseContext) *nodes.Node
 
 	// Any child grammar definitions that should be recursively applied within
 	// this grammar once matched.
@@ -33,7 +34,7 @@ func (model *Grammar) MinimumTokenCount() int {
 
 // Matches lexer nodes against the given grammar.
 // Returns the matched subset.
-func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode { // If we have not processed enough tokens to have a match yet, we can quickly
+func (model *Grammar) Match(lexNodes []*lexer.V2LexNode, context *nodes.ParseContext) []*lexer.V2LexNode { // If we have not processed enough tokens to have a match yet, we can quickly
 	// return false.
 	//
 	// Optional tokens can be absent from the input, so the minimum number of
@@ -55,7 +56,10 @@ func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode { //
 	// loop iteration (e.g. so we can increment the index in the captureUntil
 	// blocks).
 	index := 0
-	for _, token := range model.Def {
+	// The definition position is tracked explicitly. The capture block below
+	// needs the NEXT definition entry (the capture's break condition), which
+	// must not be confused with the current position in the input tokens.
+	for defIndex, token := range model.Def {
 		// If the definition token is optional, we consume the input token when
 		// it matches and continue matching the next definition token when it
 		// does not.
@@ -85,23 +89,39 @@ func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode { //
 		// If we come across a CaptureUntil token, we want to continue looping
 		// (and incrementing i) until we find the next token (break condition).
 		if lexeme.IsSpecialToken(token, lexeme.CaptureUntil) {
-			// If the CaptureUntil is the very last token in the definition,
-			// the parser would end up in an infinite loop.
-			// It's ok to use a panic here since if we panic here, the program
-			// would never even run once propperly.
+			// If the CaptureUntil is the very last token in the definition, the
+			// parser would end up in an infinite loop. That is a compiler bug
+			// rather than a user error, but panicking would kill the whole
+			// build, so the capture block is disabled and the error is reported
+			// with the position of the token the match started at.
 			//
 			// Use i instaed of i+1 because i indexed from zero while the length
 			// is indexed from 1.
-			if index+1 == len(model.Def) {
-				panic("Detected unbreakable CaptureUntil block (infinite parser loop)")
+			if defIndex+1 == len(model.Def) {
+				if context != nil {
+					context.ReportError(
+						"internal grammar error: unbreakable capture block in grammar definition "+model.Def.String(),
+						positionOf(lexNodes),
+					)
+				}
+
+				return []*lexer.V2LexNode{}
 			}
 
-			breakTokens := captureBreakTokens(model.Def[index+1])
+			breakTokens := captureBreakTokens(model.Def[defIndex+1])
 			for {
 				// If we reach the end of the file while searching for the break
-				// condition, we probably want to log an error.
+				// condition, the capture block was never terminated. Report it
+				// as a syntax error (with the position the capture started at)
+				// and degrade to the captured content so far.
 				if index >= len(matchingSubset) {
-					cli.PrintWarning("Parser finished inside of capture block")
+					if context != nil {
+						context.ReportError(
+							"unterminated capture block: the closing token for the block was never found",
+							positionOf(lexNodes),
+						)
+					}
+
 					return matchedSubset
 				}
 
@@ -141,6 +161,15 @@ func captureBreakTokens(breakCondition lexeme.Lexeme) []lexeme.Lexeme {
 	}
 
 	return []lexeme.Lexeme{breakCondition}
+}
+
+// positionOf returns the position of the first token in the slice.
+func positionOf(lexNodes []*lexer.V2LexNode) lexer.Position {
+	if len(lexNodes) == 0 {
+		return lexer.StartingPosition
+	}
+
+	return lexNodes[0].Pos
 }
 
 func (model *definition) String() string {

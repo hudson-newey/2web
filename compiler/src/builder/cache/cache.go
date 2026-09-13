@@ -68,7 +68,10 @@ func IsCached(inputPath string, outputPath string, key string) bool {
 	}
 
 	// Opening the connection loads (or refreshes) the in memory key snapshot.
-	dbConnection()
+	// A nil connection means the cache is unavailable (everything misses).
+	if dbConnection() == nil {
+		return false
+	}
 
 	return hasCachedKey(key)
 }
@@ -100,6 +103,9 @@ func CacheAssets(records []CacheRecord) {
 	}
 
 	conn := dbConnection()
+	if conn == nil {
+		return
+	}
 
 	tx, err := conn.Begin()
 	if err != nil {

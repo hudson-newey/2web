@@ -14,18 +14,31 @@ import (
 	"github.com/hudson-newey/2web/_shared/lists"
 )
 
-func NewReactiveEventNode(lexNodes []*lexer.V2LexNode) *reactiveEventNode {
+func NewReactiveEventNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	propName, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"reactive event binding is missing an event name. Events are bound with '@event=\"...\"'",
+			lexNodes,
+		)
 	}
 
 	reducer, err := scanners.NthToken(lexNodes, lexeme.TextContent, 2)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"reactive event binding is missing a reducer. Events are bound with '@event=\"reducer\"'",
+			lexNodes,
+		)
 	}
 
 	assignmentSplit := strings.Split(reducer.Content, "=")
+	if len(assignmentSplit) < 2 {
+		return context.DegradedNode(
+			"reactive event reducer must assign to a reactive variable (e.g. '$count = $count + 1')",
+			lexNodes,
+		)
+	}
+
 	assignmentSink := strings.TrimSpace(assignmentSplit[0])
 	assignmentExpr := strings.TrimSpace(assignmentSplit[1])
 

@@ -1,0 +1,24 @@
+<title>Syntax Errors</title>
+
+<p>
+  This page contains intentionally broken syntax to exercise the compiler
+  error pipeline. Every construct below should produce a compiler error that
+  is rendered in the page error overlay (with the file and position) instead
+  of crashing the build.
+</p>
+
+<script compiled>
+  $message = ;
+  import Broken from ;
+  import from "components/header.component.html";
+</script>
+
+<div *title=""></div>
+
+<button @click="">Broken Button</button>
+
+@if () {
+  This condition is empty.
+}
+
+{{ }}

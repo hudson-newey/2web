@@ -2,12 +2,11 @@ package models
 
 import (
 	"fmt"
-	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"os"
 	"strings"
 )
 
-func NewError(message, filePath string, position lexer.Position) Error {
+func NewError(message, filePath string, position Position) Error {
 	return Error{
 		Message:  message,
 		FilePath: filePath,
@@ -18,7 +17,7 @@ func NewError(message, filePath string, position lexer.Position) Error {
 type Error struct {
 	Message      string
 	FilePath     string
-	Position     lexer.Position
+	Position     Position
 	CreationTime string
 }
 

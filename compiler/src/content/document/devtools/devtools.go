@@ -12,7 +12,8 @@ func InjectDevTools(pageContent string) string {
 func createDevtoolsTemplate() string {
 	devtoolsHtml, err := document.BuildTemplate(devtoolsHtmlSource(), nil)
 	if err != nil {
-		panic(err)
+		// The devtools failing to inject must not kill the build.
+		return ""
 	}
 
 	return devtoolsHtml

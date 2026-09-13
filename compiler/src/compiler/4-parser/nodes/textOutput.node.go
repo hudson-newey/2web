@@ -8,10 +8,13 @@ import (
 	"hudson-newey/2web/src/content/page"
 )
 
-func NewTextOutputNode(lexNodes []*lexer.V2LexNode) *textOutputNode {
+func NewTextOutputNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	expression, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"text output is missing an expression. Text output is written with '{{ expression }}'",
+			lexNodes,
+		)
 	}
 
 	// so... text nodes are really just a short hand for a reactive property

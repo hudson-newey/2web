@@ -10,6 +10,7 @@ func CreateAst(
 	lexNodes []*lexer.V2LexNode,
 	grammars []grammar.Grammar,
 	withTextMatcher bool,
+	context *nodes.ParseContext,
 ) nodes.AbstractSyntaxTree {
 	var ast nodes.AbstractSyntaxTree
 	skipCount := 0
@@ -20,7 +21,7 @@ func CreateAst(
 			continue
 		}
 
-		nextNode, skipNext := processNode(i, lexNodes, grammars, withTextMatcher)
+		nextNode, skipNext := processNode(i, lexNodes, grammars, withTextMatcher, context)
 		skipCount = skipNext
 
 		if nextNode != nil {
@@ -39,6 +40,7 @@ func processNode(
 	lexNodes []*lexer.V2LexNode,
 	grammars []grammar.Grammar,
 	withTextMatcher bool,
+	context *nodes.ParseContext,
 ) (nodes.Node, int) {
 	for _, rule := range grammars {
 		// Searches ahead of the current position in the lexed tokens to see if the
@@ -58,12 +60,15 @@ func processNode(
 		// peekBuffer := lexNodes[index:peekBufferEnd]
 		peekBuffer := lexNodes[index:]
 
-		matchedSubset := rule.Match(peekBuffer)
+		matchedSubset := rule.Match(peekBuffer, context)
 		if len(matchedSubset) > 0 {
-			newNode := *rule.Constructor(peekBuffer)
+			// The node constructors receive the matched subset (rather than the
+			// whole tail) so that degraded nodes can render exactly the source
+			// that the grammar consumed when reporting syntax errors.
+			newNode := *rule.Constructor(matchedSubset, context)
 
 			// Recurisvely match the ChildDef's
-			childAst := CreateAst(matchedSubset, rule.ChildDefs, false)
+			childAst := CreateAst(matchedSubset, rule.ChildDefs, false, context)
 			for _, child := range childAst {
 				newNode.AddChild(child)
 			}

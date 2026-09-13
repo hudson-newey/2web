@@ -10,10 +10,10 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewStyleNode(lexNodes []*lexer.V2LexNode) *styleNode {
+func NewStyleNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	sourceNode, err := scanners.FirstToken(lexNodes, lexeme.StyleSource)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode("style block has no content", lexNodes)
 	}
 
 	return &styleNode{

@@ -67,7 +67,9 @@ func createErrorTemplate(errors []*models.Error) string {
 
 	errorHtml, err := document.BuildTemplate(errorHtmlSource(), templateData)
 	if err != nil {
-		panic(err)
+		// The error overlay failing to render must not kill the build; the
+		// error is still reported in the terminal.
+		return "<!-- 2web: failed to render the compiler error overlay -->"
 	}
 
 	return errorHtml

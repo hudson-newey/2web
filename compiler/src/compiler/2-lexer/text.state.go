@@ -66,7 +66,14 @@ func escapeSequenceLexer(model *Lexer) (V2LexNode, LexFunc) {
 			}, textLexer
 		}
 
-		panic(err)
+		// A read failure (other than end of file) must not kill the build.
+		model.RecordError("failed to read source: "+err.Error(), *model.Pos)
+		return V2LexNode{
+			Pos:     position,
+			Token:   lexeme.EOF,
+			State:   sourceText,
+			Content: "",
+		}, textLexer
 	}
 
 	if char == '\n' {

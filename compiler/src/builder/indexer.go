@@ -1,10 +1,13 @@
 package builder
 
 import (
+	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/assets"
 	"hudson-newey/2web/src/content/css"
+	"hudson-newey/2web/src/content/document/documentErrors"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/svg"
+	"hudson-newey/2web/src/models"
 	"os"
 	"strings"
 )
@@ -12,7 +15,17 @@ import (
 func indexPages(inputPath string) []string {
 	inputFile, err := os.Stat(inputPath)
 	if err != nil {
-		panic(err)
+		// If the input can't be stat'ed (e.g. a broken symlink inside the
+		// site), the file can't be indexed. Report it and continue with the
+		// remaining files.
+		indexError := models.NewError(
+			"failed to index file: "+err.Error(),
+			inputPath,
+			lexer.StartingPosition,
+		)
+
+		documentErrors.AddErrors(&indexError)
+		return []string{}
 	}
 
 	if inputFile.IsDir() {
@@ -24,7 +37,14 @@ func indexPages(inputPath string) []string {
 		totalFiles := []string{}
 		currentDirFiles, err := os.ReadDir(inputPath)
 		if err != nil {
-			panic(err)
+			readError := models.NewError(
+				"failed to read directory: "+err.Error(),
+				inputPath,
+				lexer.StartingPosition,
+			)
+
+			documentErrors.AddErrors(&readError)
+			return []string{}
 		}
 
 		for _, file := range currentDirFiles {

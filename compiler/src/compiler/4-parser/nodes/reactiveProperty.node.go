@@ -15,15 +15,21 @@ import (
 	"github.com/hudson-newey/2web/_shared/lists"
 )
 
-func NewReactivePropertyNode(lexNodes []*lexer.V2LexNode) *reactivePropertyNode {
+func NewReactivePropertyNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	propName, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"reactive property binding is missing a property name. Properties are bound with '*property=\"reducer\"'",
+			lexNodes,
+		)
 	}
 
 	reducer, err := scanners.NthToken(lexNodes, lexeme.TextContent, 2)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"reactive property binding is missing a reducer. Properties are bound with '*property=\"reducer\"'",
+			lexNodes,
+		)
 	}
 
 	markupContent := fmt.Sprintf(
