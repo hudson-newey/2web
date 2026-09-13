@@ -5,11 +5,18 @@ import (
 	"hudson-newey/2web/src/builder"
 	"hudson-newey/2web/src/builder/cache"
 	"hudson-newey/2web/src/cli"
+	"hudson-newey/2web/src/filesystem"
 	"os"
 )
 
 func main() {
 	cli.ParseArguments()
+
+	// Flush any file writes that are still queued if the compiler dies
+	// unexpectedly (e.g. through a panic raised by cli.HardError). Without this,
+	// an unexpected exit would drop all writes still sitting in the file writer
+	// queue or leave partially written files on disk.
+	defer filesystem.WaitFileWriter()
 
 	if cli.GetArgs().Listen {
 		// Once you init the action server, the program will enter an infinite loop.

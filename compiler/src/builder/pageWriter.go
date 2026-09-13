@@ -53,7 +53,12 @@ func compileAndWritePage(inputPath string, outputPath string) {
 			cli.PrintBuildLog("\t- " + inputPath)
 		} else {
 			cli.PrintBuildLog("\t- " + inputPath + " \033[33m(MODIFIED)\033[0m")
-			cache.CacheAsset(inputPath, outputPath)
+			// We don't add the asset to the build cache here because the page's
+			// files are written asynchronously. queueCacheAsset defers the cache
+			// registration until the file writes have been confirmed, which
+			// prevents the cache from marking assets as up-to-date when their
+			// output file was never written.
+			queueCacheAsset(inputPath, outputPath)
 		}
 	} else {
 		cli.PrintBuildLog("\t- " + inputPath + " \033[31m(ERROR)\033[0m")

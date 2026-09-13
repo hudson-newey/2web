@@ -9,8 +9,10 @@ import (
 	"os"
 )
 
-var rootAstNode []nodes.Node = []nodes.Node{}
-
+// This package is called concurrently from the build thread pool, so all page
+// compilation state must be local to the Compile call. A package level AST
+// would be overwritten by every concurrently compiled page, causing pages to
+// render content from other pages' ASTs.
 func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	// Raw text files should be returned without modification since they are "raw"
 	// data formats.
@@ -27,7 +29,6 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	pageModel.InputPath = filePath
 
 	// Main part of the compiler where we recurse the constructed AST
-	rootAstNode = parsedAst
 	recurseAstMarkup(&pageModel, parsedAst)
 	recurseAst(&pageModel, parsedAst)
 
@@ -61,7 +62,7 @@ func recurseAstMarkup(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 func recurseAst(page *page.Page, parsedAst nodes.AbstractSyntaxTree) {
 	// Second pass reactive content
 	for _, node := range parsedAst {
-		nodeContent := node.Content(page, rootAstNode)
+		nodeContent := node.Content(page, parsedAst)
 		page.SetContent(nodeContent.HtmlContent.Content)
 		page.AddStyle(nodeContent.CssContent)
 		page.AddScript(nodeContent.JsContent)

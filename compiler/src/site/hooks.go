@@ -2,6 +2,7 @@ package site
 
 import (
 	"hudson-newey/2web/src/cli"
+	"sort"
 	debugjson "hudson-newey/2web/src/site/debug.json"
 	robotstxt "hudson-newey/2web/src/site/robots.txt"
 	sitemapxml "hudson-newey/2web/src/site/sitemap.xml"
@@ -9,6 +10,12 @@ import (
 
 func AfterAll() {
 	paths := GetSitePaths()
+
+	// Pages are registered in compilation completion order, which is
+	// nondeterministic when pages are compiled in parallel. Sorting the paths
+	// ensures that generated site assets (e.g. the sitemap) are byte-for-byte
+	// identical between serial and parallel builds.
+	sort.Strings(paths)
 
 	containsSitemap := pathsContain(paths, "sitemap.xml")
 	if !containsSitemap {

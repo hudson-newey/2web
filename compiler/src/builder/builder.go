@@ -36,9 +36,9 @@ func Build() bool {
 
 	// If the output path already exists, delete the output path so that there
 	// are no stale files.
-	if _, err := os.Stat(args.OutputPath); err != os.ErrNotExist {
+	if _, err := os.Stat(args.OutputPath); err == nil {
 		// TODO: This has been disabled because it doesn't work with Vite HMR
-		// os.RemoveAll(*args.OutputPath)
+		// os.RemoveAll(args.OutputPath)
 	}
 
 	// Print out the "starting compilation" message after we have confirmed that
@@ -77,6 +77,21 @@ func Build() bool {
 	} else {
 		compileAndWritePage(args.InputPath, outputFileName(args.InputPath, args.OutputPath, args.InputPath))
 	}
+
+	// Page compilation hands file writes off to an asynchronous file writer
+	// thread, so reaching this point only means that all pages have been
+	// compiled - not that their output has been written to disk.
+	//
+	// We must drain the file write queue before reporting the build as
+	// finished, otherwise the compiler could exit with writes still sitting in
+	// the queue (silently dropping them) or with the writer thread still
+	// mid-write (leaving a partially written file on disk).
+	filesystem.WaitFileWriter()
+
+	// Now that all file writes have been flushed to disk, we know exactly which
+	// outputs were written successfully and can safely record them in the
+	// build cache.
+	flushCacheEntries()
 
 	// Printing out document errors are not included in the compile time since
 	// the app is fully usable at this point.
