@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var textLexerState stateLexers
+
 func textLexer(model *Lexer) (V2LexNode, LexFunc) {
 	// Escape sequences are handled before the generic matchers so that the
 	// escape character itself is never emitted into the page. The backslash
@@ -16,26 +18,28 @@ func textLexer(model *Lexer) (V2LexNode, LexFunc) {
 		return escapeSequenceLexer(model)
 	}
 
-	cases := lexDefMap{
-		// The comment state has to always come first that it takes precedence over
-		// other matches and can omit them as source text.
-		"<!--": {token: lexeme.MarkupCommentStart, next: markupCommentLexer},
+	matchers := textLexerState.get(func() lexDefMap {
+		return lexDefMap{
+			// The comment state has to always come first that it takes precedence over
+			// other matches and can omit them as source text.
+			"<!--": {token: lexeme.MarkupCommentStart, next: markupCommentLexer},
 
-		"<":  {token: lexeme.LessAngle, next: elementLexer},
-		">":  {token: lexeme.GreaterAngle, next: textLexer},
-		"\\": {token: lexeme.Escape, next: escapeSequenceLexer},
+			"<":  {token: lexeme.LessAngle, next: elementLexer},
+			">":  {token: lexeme.GreaterAngle, next: textLexer},
+			"\\": {token: lexeme.Escape, next: escapeSequenceLexer},
 
-		"{": {token: lexeme.CurlyOpen, next: textLexer},
-		"}": {token: lexeme.CurlyClosed, next: textLexer},
+			"{": {token: lexeme.CurlyOpen, next: textLexer},
+			"}": {token: lexeme.CurlyClosed, next: textLexer},
 
-		"@": {token: lexeme.AtSymbol, next: controlFlowLexer},
-	}
+			"@": {token: lexeme.AtSymbol, next: controlFlowLexer},
+		}
+	})
 
-	return lexerFactory(cases, textContent)(model)
+	return lexerFactory(matchers, textContent)(model)
 }
 
-// escapeSequenceLexer consumes the character that follows an escape character
-// (e.g. the ">" of "\>") and emits it as literal text content.
+// escapeSequenceLexer consumes the character that follows an escape
+// character (e.g. the ">" of "\>") and emits it as literal text content.
 //
 // The escaped character is emitted as a text content token (instead of the
 // token it would normally lex as) so that the parser can't interpret it. e.g.

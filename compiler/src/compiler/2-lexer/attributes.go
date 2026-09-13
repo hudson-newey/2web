@@ -14,7 +14,9 @@ import (
 // themselves so that the tag's own exit conditions (e.g. the closing >) stay
 // reachable. Returning to a fixed state (e.g. elementLexer) would lose the tag
 // context and the tag would be terminated by the wrong lexer.
-func withAttributes(src lexDefMap, returningState LexFunc) lexDefMap {
+//
+// cacheKey identifies the calling state for the string lexer cache.
+func withAttributes(src lexDefMap, returningState LexFunc, cacheKey string) lexDefMap {
 	attributeStates := lexDefMap{
 		// I treat tabs like spaces so that they are treated the same in attributes
 		" ":  {token: lexeme.Space, next: returningState},
@@ -30,10 +32,10 @@ func withAttributes(src lexDefMap, returningState LexFunc) lexDefMap {
 		// element state. In element state, a quoted value like
 		// data-testid="html-code" would fire the "code" tag matcher in the
 		// middle of the attribute value, splitting the tag in two.
-		"#":  {token: lexeme.Hash, next: returningState},
-		"=":  {token: lexeme.Equals, next: returningState},
-		"!":  {token: lexeme.Exclamation, next: textLexer},
-		">":  {token: lexeme.GreaterAngle, next: textLexer},
+		"#": {token: lexeme.Hash, next: returningState},
+		"=": {token: lexeme.Equals, next: returningState},
+		"!": {token: lexeme.Exclamation, next: textLexer},
+		">": {token: lexeme.GreaterAngle, next: textLexer},
 
 		"*": {token: lexeme.Star, next: reactivePropertyLexer},
 		"@": {token: lexeme.AtSymbol, next: reactiveEventLexer},
@@ -42,18 +44,28 @@ func withAttributes(src lexDefMap, returningState LexFunc) lexDefMap {
 	return src.with(attributeStates)
 }
 
+var reactivePropertyLexerState stateLexers
+
 func reactivePropertyLexer(model *Lexer) (V2LexNode, LexFunc) {
-	cases := lexDefMap{
-		"=": {token: lexeme.Equals, next: reactivePropertyLexer},
-	}
-	cases = withStrings(cases, elementLexer)
-	return lexerFactory(cases, element)(model)
+	matchers := reactivePropertyLexerState.get(func() lexDefMap {
+		cases := lexDefMap{
+			"=": {token: lexeme.Equals, next: reactivePropertyLexer},
+		}
+		return withStrings(cases, elementLexer, "reactive-property")
+	})
+
+	return lexerFactory(matchers, element)(model)
 }
 
+var reactiveEventLexerState stateLexers
+
 func reactiveEventLexer(model *Lexer) (V2LexNode, LexFunc) {
-	cases := lexDefMap{
-		"=": {token: lexeme.Equals, next: reactiveEventLexer},
-	}
-	cases = withStrings(cases, elementLexer)
-	return lexerFactory(cases, element)(model)
+	matchers := reactiveEventLexerState.get(func() lexDefMap {
+		cases := lexDefMap{
+			"=": {token: lexeme.Equals, next: reactiveEventLexer},
+		}
+		return withStrings(cases, elementLexer, "reactive-event")
+	})
+
+	return lexerFactory(matchers, element)(model)
 }

@@ -4,6 +4,7 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/io/reader"
 	"io"
+	"strings"
 )
 
 type Lexer struct {
@@ -44,6 +45,20 @@ func (model *Lexer) peek(length int) string {
 	}
 
 	return string(bytes)
+}
+
+// peekBytes peeks the next `length` bytes without copying them.
+//
+// The returned slice aliases the read buffer and is only valid until the next
+// read operation, which is enough for the matcher comparisons that look but
+// don't consume.
+func (model *Lexer) peekBytes(length int) []byte {
+	bytes, err := model.Input.Reader.Peek(length)
+	if err != nil && err != io.EOF {
+		panic(err)
+	}
+
+	return bytes
 }
 
 func (model *Lexer) skip(length int) {
@@ -90,17 +105,24 @@ func (model *Lexer) lineFeed() {
 
 // lexIdent scans the input until the end of an identifier and then returns the
 // literal source that was scanned up until the first lexer exit condition.
-func (model *Lexer) lexLiteral(exitConditions lexDefMap) string {
-	var literal string
+// lexLiteral captures text until one of the exit conditions matches at the
+// current position.
+//
+// The literal is accumulated in a strings.Builder. Concatenating character by
+// character with `literal += string(char)` would be quadratic in the length of
+// the literal because every concatenation copies the whole string so far.
+func (model *Lexer) lexLiteral(exitConditions *compiledMatchers) string {
+	var literal strings.Builder
+
 	for {
 		if exitConditions.wouldMatchAt(model) {
-			return literal
+			return literal.String()
 		}
 
 		nextChar, _, err := model.Input.Reader.ReadRune()
 		if err != nil {
 			if err == io.EOF {
-				return literal
+				return literal.String()
 			}
 		}
 
@@ -113,6 +135,6 @@ func (model *Lexer) lexLiteral(exitConditions lexDefMap) string {
 			model.Pos.Col++
 		}
 
-		literal += string(nextChar)
+		literal.WriteRune(nextChar)
 	}
 }

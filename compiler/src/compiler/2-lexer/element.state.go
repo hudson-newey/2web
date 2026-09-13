@@ -5,17 +5,11 @@ import (
 	"strings"
 )
 
+var elementLexerState stateLexers
+
 // When inside the first starting angle bracket (<) and up until (and including)
 // the closing angle bracket (>).
 func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
-	cases := lexDefMap{
-		"!doctype": {token: lexeme.Doctype, next: elementLexer},
-		"script compiled": {token: lexeme.CompiledScriptStartTag, next: inlineCompiledScriptTagLexer},
-		"script":          {token: lexeme.ScriptStartTag, next: inlineScriptTagLexer},
-		"style":           {token: lexeme.StyleStartTag, next: inlineStyleTagLexer},
-		"code":            {token: lexeme.CodeStartTag, next: inlineCodeTagLexer},
-	}
-
 	// "style", "script", and "code" are also common attribute names
 	// (e.g. style="color: red"). HTML tokenizers treat <style="x"> as an
 	// unknown element rather than a style tag, so these matchers must not fire
@@ -27,16 +21,50 @@ func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
 	// Note that attributes without a value (e.g. <span data-style>) are still
 	// treated as tag openings; disambiguating those requires full parser level
 	// context that the lexer doesn't have.
+	//
+	// The check runs per position (instead of being baked into the compiled
+	// matchers) because it depends on what follows the tag name at the current
+	// position.
 	for _, tagName := range []string{"script", "style", "code"} {
 		if attributeAssignment(model, tagName) {
-			delete(cases, tagName)
+			return emitTagNameAsAttribute(model, tagName)
 		}
 	}
 
-	cases = withAttributes(cases, elementLexer)
-	cases = withStrings(cases, elementLexer)
+	matchers := elementLexerState.get(func() lexDefMap {
+		cases := lexDefMap{
+			"!doctype":        {token: lexeme.Doctype, next: elementLexer},
+			"script compiled": {token: lexeme.CompiledScriptStartTag, next: inlineCompiledScriptTagLexer},
+			"script":          {token: lexeme.ScriptStartTag, next: inlineScriptTagLexer},
+			"style":           {token: lexeme.StyleStartTag, next: inlineStyleTagLexer},
+			"code":            {token: lexeme.CodeStartTag, next: inlineCodeTagLexer},
+		}
 
-	return lexerFactory(cases, element)(model)
+		cases = withAttributes(cases, elementLexer, "element")
+		cases = withStrings(cases, elementLexer, "element")
+		return cases
+	})
+
+	return lexerFactory(matchers, element)(model)
+}
+
+// emitTagNameAsAttribute emits a tag name that is actually an attribute
+// assignment (e.g. the "style" of style="color: red") as literal attribute
+// text.
+func emitTagNameAsAttribute(model *Lexer, tagName string) (V2LexNode, LexFunc) {
+	position := Position{
+		Row: model.Pos.Row,
+		Col: model.Pos.Col,
+	}
+
+	model.skip(len(tagName))
+
+	return V2LexNode{
+		Pos:     position,
+		Token:   lexeme.TextContent,
+		State:   element,
+		Content: tagName,
+	}, elementLexer
 }
 
 // attributeAssignment returns whether the input at the current position reads
