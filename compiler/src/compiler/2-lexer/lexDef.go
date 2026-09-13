@@ -39,6 +39,16 @@ type matcherEntry struct {
 // before shorter prefix tokens (e.g. "<").
 type compiledMatchers struct {
 	entries []matcherEntry
+
+	// The length of the longest matcher. Peek requests are clamped to this so
+	// that the read buffer is never over asked.
+	maxLength int
+
+	// byFirst indexes the entries by the case folded first byte of their
+	// matcher. Literal scanning checks matchers at every character, so
+	// bucketing on the first byte removes the vast majority of the full
+	// matcher comparisons.
+	byFirst [256][]matcherEntry
 }
 
 // compile flattens a lexDefMap into a compiledMatchers value.
@@ -67,7 +77,13 @@ func compileMatchers(defs lexDefMap) *compiledMatchers {
 		return strings.Compare(a.matcher, b.matcher)
 	})
 
-	return &compiledMatchers{entries: entries}
+	compiled := &compiledMatchers{entries: entries, maxLength: maxLength}
+	for _, entry := range entries {
+		first := foldByte(entry.folded[0])
+		compiled.byFirst[first] = append(compiled.byFirst[first], entry)
+	}
+
+	return compiled
 }
 
 // stateLexers lazily compiles the matcher set for a single lexer state.
@@ -97,10 +113,17 @@ func (s *stateLexers) get(build func() lexDefMap) *compiledMatchers {
 // All matchers are case-insensitive (e.g. !DOCTYPE and !doctype tokens are
 // equivalent).
 func (c *compiledMatchers) matching(lexerModel *Lexer, state lexState) (V2LexNode, LexFunc) {
-	for _, entry := range c.entries {
-		peeked := lexerModel.peekBytes(len(entry.matcher))
+	peeked := lexerModel.peekBytes(c.maxLength)
+	if len(peeked) == 0 {
+		return NewV2LexNode(), nil
+	}
 
-		if bytes.EqualFold(peeked, entry.folded) {
+	for _, entry := range c.byFirst[foldByte(peeked[0])] {
+		if len(peeked) < len(entry.matcher) {
+			continue
+		}
+
+		if bytes.EqualFold(peeked[:len(entry.matcher)], entry.folded) {
 			matcherOffset := len(entry.matcher)
 			lexerModel.skip(matcherOffset)
 
@@ -127,15 +150,28 @@ func (c *compiledMatchers) matching(lexerModel *Lexer, state lexState) (V2LexNod
 // position without consuming any input. This is used by lexLiteral to detect
 // an exit condition before consuming the character that begins it.
 func (c *compiledMatchers) wouldMatchAt(lexerModel *Lexer) bool {
-	for _, entry := range c.entries {
-		peeked := lexerModel.peekBytes(len(entry.matcher))
+	peeked := lexerModel.peekBytes(c.maxLength)
+	if len(peeked) == 0 {
+		return false
+	}
 
-		if bytes.EqualFold(peeked, entry.folded) {
+	for _, entry := range c.byFirst[foldByte(peeked[0])] {
+		if len(peeked) >= len(entry.matcher) && bytes.EqualFold(peeked[:len(entry.matcher)], entry.folded) {
 			return true
 		}
 	}
 
 	return false
+}
+
+// foldByte lower cases an ASCII byte for the first byte bucket index.
+// Multi byte characters fold to themselves: no matcher starts with one.
+func foldByte(b byte) byte {
+	if b >= 'A' && b <= 'Z' {
+		return b + ('a' - 'A')
+	}
+
+	return b
 }
 
 // Merges two lexDefMaps together, with the dst map taking precedence
