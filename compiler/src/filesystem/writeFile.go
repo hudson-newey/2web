@@ -118,10 +118,23 @@ func fileWriterWorker() {
 // renamed over the output path. Because the rename is only performed after the
 // temp file has been fully written and closed, an interrupted build can never
 // leave a truncated file at the output path.
+// createdDirectories caches the directories that have already been created.
+//
+// Every file write used to call MkdirAll, which stats every path component of
+// the directory on every write. With hundreds of output files that is
+// thousands of redundant stat chains per build.
+var createdDirectories sync.Map
+
 func writeFileAtomic(job fileJob) error {
-	const dirMode os.FileMode = os.ModeDir | 0755
-	if err := os.MkdirAll(filepath.Dir(job.OutputPath), dirMode); err != nil {
-		return err
+	outputDirectory := filepath.Dir(job.OutputPath)
+
+	if _, created := createdDirectories.Load(outputDirectory); !created {
+		const dirMode os.FileMode = os.ModeDir | 0755
+		if err := os.MkdirAll(outputDirectory, dirMode); err != nil {
+			return err
+		}
+
+		createdDirectories.Store(outputDirectory, struct{}{})
 	}
 
 	tempPath := job.OutputPath + TempFileSuffix
