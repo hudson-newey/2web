@@ -13,6 +13,7 @@ const HelpDocumentation string = `Commands:
   2web test [path]
 
   2web database <sub_command>
+  2web server <sub_command>
   2web doctor <sub_command>
 
   2web generate <template_name>
@@ -40,6 +41,13 @@ const HelpDocumentation string = `Commands:
   2web database <sub_command>
     init
     migrate
+
+  2web server <sub_command>
+    Compiles and serves the server routes compiled from .server.ts files
+    run
+    start
+    stop
+    status
 
   2web doctor <sub_command>
     check

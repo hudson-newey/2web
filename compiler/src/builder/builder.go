@@ -82,6 +82,11 @@ func Build() bool {
 	// thread, so reaching this point only means that all pages have been
 	// compiled - not that their output has been written to disk.
 	//
+	// Server routes (.server.ts files) are compiled into the server output
+	// directory and mounted on the generated express server. The route
+	// manifest is written after every route has been compiled.
+	FlushServerRoutes()
+
 	// We must drain the file write queue before reporting the build as
 	// finished, otherwise the compiler could exit with writes still sitting in
 	// the queue (silently dropping them) or with the writer thread still

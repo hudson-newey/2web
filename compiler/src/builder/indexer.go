@@ -56,7 +56,8 @@ func indexPages(inputPath string) []string {
 				shouldPreserve := assets.IsMarkupFile(page) ||
 					css.IsCssFile(page) ||
 					javascript.IsJsFile(page) ||
-					svg.IsSvgFile(page)
+					svg.IsSvgFile(page) ||
+					IsServerScript(page)
 
 				// TODO: Don't include assets in page indexing. They should instead be
 				// pulled out of the page source so that they can be efficiently tree
@@ -67,12 +68,12 @@ func indexPages(inputPath string) []string {
 			}
 		}
 
-		// Filter out all paths that are not markup files.
+		// Filter out all paths that are not markup files or server scripts.
 		// This means that any non-markup files will be tree-shaken if they are not
 		// used by any markup files.
 		filteredFiles := []string{}
 		for _, file := range totalFiles {
-			if assets.IsMarkupFile(file) {
+			if assets.IsMarkupFile(file) || IsServerScript(file) {
 				filteredFiles = append(filteredFiles, file)
 			}
 		}

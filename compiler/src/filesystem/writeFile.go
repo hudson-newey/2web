@@ -199,3 +199,45 @@ func recordFailedWrite(outputPath string, err error) {
 	defer failedWritesMutex.Unlock()
 	failedWrites = append(failedWrites, outputPath)
 }
+
+// WriteFileSync writes a file synchronously and atomically (through a temp
+// file that is renamed over the output path).
+//
+// Use this for files whose presence must be guaranteed as soon as the
+// function returns (e.g. the server entry point that the cli executes after
+// the build), and for reporting write failures.
+func WriteFileSync(content []byte, outputPath string) error {
+	if cli.GetArgs().DryRun {
+		return nil
+	}
+
+	if cli.GetArgs().Serial {
+		return writeFileAtomic(fileJob{Content: content, OutputPath: outputPath})
+	}
+
+	// Synchronous writes bypass the write queue: the file must exist when this
+	// function returns.
+	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModeDir|0755); err != nil {
+		return err
+	}
+
+	tempPath := outputPath + TempFileSuffix
+
+	file, err := os.OpenFile(tempPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return err
+	}
+
+	if err = writeAll(file, content); err != nil {
+		file.Close()
+		os.Remove(tempPath)
+		return err
+	}
+
+	if err = file.Close(); err != nil {
+		os.Remove(tempPath)
+		return err
+	}
+
+	return os.Rename(tempPath, outputPath)
+}
