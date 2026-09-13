@@ -380,7 +380,7 @@ func (m *reactiveVariableNode) compileReactiveVar(
 	}
 
 	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
-	handlerScript := javascript.FromContent(handlerContent)
+	handlerScript := javascript.FromGeneratedContent(handlerContent)
 	pageModel.SetContent(pageContent)
 	pageModel.AddScript(handlerScript)
 }
@@ -420,7 +420,7 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 	}
 
 	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
-	handlerScript := javascript.FromContent(handlerContent)
+	handlerScript := javascript.FromGeneratedContent(handlerContent)
 	pageModel.SetContent(pageContent)
 	pageModel.AddScript(handlerScript)
 }
@@ -444,7 +444,7 @@ func (m *reactiveVariableNode) compileStaticPropVar(
 	// before the replacements. Overwriting would leave the compiler selectors
 	// in the emitted HTML while the emitted JavaScript queries the runtime
 	// selectors, leaving the property permanently unwired.
-	reducerScript := javascript.FromContent(reducerContent)
+	reducerScript := javascript.FromGeneratedContent(reducerContent)
 	pageModel.AddScript(reducerScript)
 }
 
