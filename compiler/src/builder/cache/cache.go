@@ -67,22 +67,26 @@ func IsCached(inputPath string, outputPath string, key string) bool {
 		return false
 	}
 
-	conn := dbConnection()
+	// Opening the connection loads (or refreshes) the in memory key snapshot.
+	dbConnection()
 
-	querySQL := `
-	SELECT COUNT(*) FROM ` + buildCacheTableName + ` WHERE in_out_mod = ?;
-	`
-
-	var count int
-	err := conn.QueryRow(querySQL, key).Scan(&count)
-	if err != nil {
-		return false
-	}
-
-	return count > 0
+	return hasCachedKey(key)
 }
 
-// CacheAsset records a successful compilation in the build cache.
+// CacheRecord describes one successfully compiled asset to record in the
+// build cache.
+type CacheRecord struct {
+	InputPath  string
+	OutputPath string
+	Key        string
+}
+
+// CacheAssets records successful compilations in the build cache.
+//
+// All records are written in a single transaction. During a full build one
+// record is produced per page, and committing them individually would mean
+// one write transaction (and one file lock round trip) per page on a database
+// that the parallel compilation workers are also reading from.
 //
 // The key must be the same key that was checked (and that the page was
 // compiled against), so that a dependency changing mid-build can never record
@@ -90,35 +94,62 @@ func IsCached(inputPath string, outputPath string, key string) bool {
 //
 // Cache entries for superseded content of the same input/output pair are
 // pruned so that the cache database doesn't grow with every content change.
-func CacheAsset(inputPath string, outputPath string, key string) {
-	if key == "" {
+func CacheAssets(records []CacheRecord) {
+	if len(records) == 0 {
 		return
 	}
 
 	conn := dbConnection()
 
-	// All keys for this input/output pair share this prefix, so pruning on the
-	// prefix removes entries for old content versions without touching entries
-	// for other pages.
-	keyPrefix := inputPath + "->" + outputPath + "@"
-
-	// substr() is used instead of LIKE so that special characters in file
-	// paths (e.g. "%") can't broaden the match.
-	_, err := conn.Exec(
-		`DELETE FROM `+buildCacheTableName+` WHERE substr(in_out_mod, 1, ?) = ? AND in_out_mod != ?;`,
-		len(keyPrefix), keyPrefix, key,
-	)
+	tx, err := conn.Begin()
 	if err != nil {
-		logger.PrintWarning("failed to prune old build cache entries for " + inputPath)
+		logger.PrintWarning("failed to open a build cache transaction: " + err.Error())
+		return
 	}
 
-	insertSQL := `
-	INSERT INTO ` + buildCacheTableName + `(in_out_mod)
-	VALUES (?);`
+	committed := false
+	defer func() {
+		if !committed {
+			tx.Rollback()
+		}
+	}()
 
-	_, err = conn.Exec(insertSQL, key)
-	if err != nil {
-		panic(err)
+	for _, record := range records {
+		// All keys for this input/output pair share this prefix, so pruning on
+		// the prefix removes entries for old content versions without touching
+		// entries for other pages.
+		keyPrefix := record.InputPath + "->" + record.OutputPath + "@"
+
+		// substr() is used instead of LIKE so that special characters in file
+		// paths (e.g. "%") can't broaden the match.
+		if _, err := tx.Exec(
+			`DELETE FROM `+buildCacheTableName+` WHERE substr(in_out_mod, 1, ?) = ? AND in_out_mod != ?;`,
+			len(keyPrefix), keyPrefix, record.Key,
+		); err != nil {
+			logger.PrintWarning("failed to prune old build cache entries for " + record.InputPath)
+			continue
+		}
+
+		if _, err := tx.Exec(
+			`INSERT INTO `+buildCacheTableName+` (in_out_mod) VALUES (?);`,
+			record.Key,
+		); err != nil {
+			logger.PrintWarning("failed to record build cache entry for " + record.InputPath + ": " + err.Error())
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		logger.PrintWarning("failed to commit build cache entries: " + err.Error())
+		return
+	}
+
+	committed = true
+
+	// Keep the in memory snapshot in sync with the committed entries so that
+	// (e.g. in listen mode) a later compilation of the same build sees the
+	// freshly recorded entries.
+	for _, record := range records {
+		rememberCachedKey(record.Key)
 	}
 }
 
