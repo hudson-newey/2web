@@ -303,7 +303,7 @@ func (m *reactiveVariableNode) reactivityLevel(index *ReactiveIndex) reactivityL
 		// If the assignment expression uses the same variable that it's
 		// assigning to, we need to have a runtime variable to track state.
 		// e.g. think of a counting number
-		if strings.Contains(e.assignmentExpr, m.selector()) {
+		if containsSelector(e.assignmentExpr, m.selector()) {
 			return reactive
 		}
 	}
@@ -344,6 +344,16 @@ func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, index *Re
 		errMsg := fmt.Sprintf("Unused variable: %s", m.selector())
 		err := models.NewError(errMsg, pageModel.InputPath, m.position)
 		documentErrors.AddErrors(&err)
+		return
+	}
+
+	// A variable whose value expression calls a function (e.g. a remote
+	// function invoked over rpc, which returns a promise) is evaluated
+	// asynchronously: the runtime value is a placeholder until the call
+	// resolves, and the update cascades of the variables it is computed from
+	// re-issue the call.
+	if index.IsAsyncComputed(m) {
+		m.compileAsyncComputed(pageModel, index)
 		return
 	}
 
@@ -619,12 +629,34 @@ func (m *reactiveVariableNode) compileComputedCascade(
 			continue
 		}
 
+		if index.IsAsyncComputed(computed) {
+			// The call is asynchronous: the render block re-issues the call
+			// and renders the resolved value as a side effect of the call.
+			// The runtime value keeps its current content until it resolves.
+			propUpdates := m.computedPropertyUpdates(pageModel, index, computed, runtimeName)
+			cascade = cascade + "\t\t" + asyncComputedRenderBlock(computed, runtimeName, expression, propUpdates) + ";\n"
+			cascade = cascade + htmlOutputReloadsFor(index, computed)
+			continue
+		}
+
 		cascade = cascade + fmt.Sprintf("\t\t%s = %s;\n", runtimeName, expression)
 		cascade = cascade + m.computedPropertyUpdates(pageModel, index, computed, runtimeName)
 		cascade = cascade + htmlOutputReloadsFor(index, computed)
 	}
 
 	return cascade
+}
+
+// asyncComputedRenderBlock returns the statement that evaluates an
+// asynchronously computed variable's value expression: it re-issues the
+// expression's function call (with the reactive variables it reads resolved
+// to their current values) and renders the resolved value into the
+// properties the variable is bound to as a side effect of the call.
+func asyncComputedRenderBlock(computed *reactiveVariableNode, runtimeName string, expression string, propUpdates string) string {
+	return fmt.Sprintf(
+		"( async () => {\n\t\t\ttry {\n\t\t\t\t%s = \"\" + ( await %s );\n%s\t\t\t} catch (__2_error) {\n\t\t\t\tconsole.error(\"[2web] failed to evaluate '%s':\", __2_error);\n\t\t\t}\n\t\t} )()",
+		runtimeName, expression, propUpdates, computed.selector(),
+	)
 }
 
 // computedPropertyUpdates emits the DOM property assignments that bind a
@@ -680,6 +712,58 @@ func (m *reactiveVariableNode) compileComputedChunk(
 		"let %s = %s;\n%s\nfunction %s(%s) { %s }\n",
 		runtimeName, expression,
 		initialAssignments,
+		handlerFuncName, javascript.ValueVar, mutatorBody,
+	)
+
+	pageModel.AppendReactiveRuntime(page.ReactiveRuntimeChunk{
+		Variable:     m.selector(),
+		Dependencies: index.DependenciesOf(m),
+		Content:      content,
+	})
+}
+
+// compileAsyncComputed wires a computed variable whose value expression
+// calls a function (e.g. a remote function invoked over rpc).
+//
+// The call is asynchronous, so the variable's runtime value is a placeholder
+// (an empty string) until the call resolves: the value expression is wrapped
+// in an async render block that assigns the resolved value to the runtime
+// variable and re-renders the properties the variable is bound to.
+//
+// The reactive variables that the expression reads were substituted with
+// their runtime names (see ResolveExpression), so the call reads their
+// current values whenever it runs, and the update cascades of those
+// variables re-issue the call (see compileComputedCascade).
+func (m *reactiveVariableNode) compileAsyncComputed(
+	pageModel *page.Page,
+	index *ReactiveIndex,
+) {
+	expression, ok := index.ResolveExpression(m)
+	if !ok {
+		errorModel := models.NewError(
+			fmt.Sprintf("computed variable '%s' is part of a cyclic dependency", m.selector()),
+			pageModel.InputPath,
+			m.position,
+		)
+
+		documentErrors.AddErrors(&errorModel)
+		return
+	}
+
+	// The runtime variable name was pre-allocated for this variable.
+	runtimeName := index.RuntimeVariableName(m.selector())
+
+	renderBlock := asyncComputedRenderBlock(m, runtimeName, expression,
+		m.computedPropertyUpdates(pageModel, index, m, runtimeName))
+
+	handlerFuncName := pageModel.Ids.CreateFunctionName()
+
+	initialAssignments := m.computedPropertyUpdates(pageModel, index, m, runtimeName)
+	mutatorBody := m.computedPropertyUpdates(pageModel, index, m, javascript.ValueVar)
+
+	content := fmt.Sprintf(
+		"let %s = \"\";\n%s\n%s;\nfunction %s(%s) { %s }\n",
+		runtimeName, initialAssignments, renderBlock,
 		handlerFuncName, javascript.ValueVar, mutatorBody,
 	)
 

@@ -131,7 +131,7 @@ func BuildReactiveIndex(ast AbstractSyntaxTree) *ReactiveIndex {
 				continue
 			}
 
-			if strings.Contains(variable.initialValue, candidate.selector()) {
+			if containsSelector(variable.initialValue, candidate.selector()) {
 				deps = append(deps, candidate.selector())
 			}
 		}
@@ -248,11 +248,34 @@ func eventSinkSelector(sinkName string, variables []*reactiveVariableNode) strin
 	return ""
 }
 
-// containsSelector checks whether a reducer references a variable selector.
-// This mirrors the contains checks that the reactive nodes used to perform
-// inline during compilation.
+// containsSelector checks whether a source fragment references a variable
+// selector.
+//
+// The match respects identifier boundaries: '$count' is not considered a
+// reference inside '$countGreeting' (they are distinct identifiers), which
+// mirrors how replaceSelector substitutes references.
 func containsSelector(source string, selector string) bool {
-	return strings.Contains(source, selector)
+	for i := 0; i+len(selector) <= len(source); i++ {
+		if source[i:i+len(selector)] != selector {
+			continue
+		}
+
+		before := byte(' ')
+		if i > 0 {
+			before = source[i-1]
+		}
+
+		after := byte(' ')
+		if i+len(selector) < len(source) {
+			after = source[i+len(selector)]
+		}
+
+		if !isIdentifierByte(before) && !isIdentifierByte(after) {
+			return true
+		}
+	}
+
+	return false
 }
 
 // ---------------------------------------------------------------------------
@@ -314,6 +337,17 @@ func (index *ReactiveIndex) IsRuntime(variable *reactiveVariableNode) bool {
 // compiled script function body.
 func (index *ReactiveIndex) IsAssignedByFunction(variable *reactiveVariableNode) bool {
 	return index.functionSinks[variable.selector()]
+}
+
+// IsAsyncComputed returns whether the variable's value expression calls a
+// function (e.g. a remote function invoked over rpc, which returns a
+// promise).
+//
+// Such a variable is evaluated asynchronously: its runtime value is a
+// placeholder until the call resolves, and its update cascade re-issues the
+// call whenever one of the variables it is computed from changes.
+func (index *ReactiveIndex) IsAsyncComputed(variable *reactiveVariableNode) bool {
+	return containsFunctionCall(variable.initialValue)
 }
 
 // HasCompiledFunction returns whether a function with the given name was

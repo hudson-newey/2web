@@ -46,6 +46,7 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	for _, variable := range reactiveIndex.Variables {
 		needsRuntime := reactiveIndex.IsRuntime(variable) ||
 			reactiveIndex.HasDerivedDependents(variable) ||
+			reactiveIndex.IsAsyncComputed(variable) ||
 			(reactiveIndex.IsDerived(variable) && reactiveIndex.HasRuntimeDependency(variable))
 
 		if needsRuntime {
