@@ -46,6 +46,19 @@ export function notExportedForRpc() {
 export default (request, response) => response.json({ ok: true });
 `;
 
+// A verb route: its default export handles one http method at its route.
+const compiledGetRoute = `
+export default (request, response) => {
+  response.json({ method: request.method, name: request.query.name ?? null });
+};
+`;
+
+const compiledPostRoute = `
+export default (request, response) => {
+  response.json({ method: request.method, body: request.body });
+};
+`;
+
 // Minimal json request helper (node http, so the tests don't depend on the
 // fetch implementation of the test environment).
 function request(
@@ -92,16 +105,16 @@ beforeAll(async () => {
   serverDir = fs.mkdtempSync(path.join(process.cwd(), ".rpc-test-"));
 
   fs.writeFileSync(path.join(serverDir, "test.js"), compiledModule);
+  fs.writeFileSync(path.join(serverDir, "get.js"), compiledGetRoute);
+  fs.writeFileSync(path.join(serverDir, "post.js"), compiledPostRoute);
   fs.writeFileSync(
     path.join(serverDir, "routes.json"),
     JSON.stringify({
       routes: [
-        {
-          route: "/test",
-          file: "test.js",
-          rpc: ["greet", "item", "boom"],
-        },
+        { route: "/test", method: "get", file: "get.js" },
+        { route: "/submit", method: "post", file: "post.js" },
       ],
+      modules: [{ file: "test.js", rpc: ["greet", "item", "boom"] }],
     }),
   );
 
@@ -198,5 +211,90 @@ describe("rpc endpoints", () => {
     expect(response.status).toBe(500);
     expect(response.text).toBe('{"error":"rpc call failed"}');
     expect(response.text).not.toContain("secret internal failure");
+  });
+});
+
+// Verb routes are mounted for the http method their file name declares, and
+// are the only http entry points: server modules are never mounted.
+describe("verb routes", () => {
+  test("should mount the handler for the method the route declares", async () => {
+    const response = await request("GET", "/test?name=2web");
+
+    expect(response.status).toBe(200);
+    expect(JSON.parse(response.text)).toEqual({
+      method: "GET",
+      name: "2web",
+    });
+  });
+
+  test("should not respond to methods the route doesn't declare", async () => {
+    const response = await request("POST", "/test");
+
+    expect(response.status).toBe(404);
+  });
+
+  test("should pass the parsed request body to post routes", async () => {
+    const response = await request(
+      "POST",
+      "/submit",
+      JSON.stringify({ items: [1, 2] }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(JSON.parse(response.text)).toEqual({
+      method: "POST",
+      body: { items: [1, 2] },
+    });
+  });
+
+  test("should not mount server modules as http endpoints", async () => {
+    const response = await request("GET", "/test-module");
+
+    // There is no route for the module file; only verb routes are mounted.
+    expect(response.status).toBe(404);
+  });
+
+  test("should skip routes with an unknown method", async () => {
+    const warn = console.warn;
+    console.warn = () => {};
+
+    fs.writeFileSync(
+      path.join(serverDir, "teapot.js"),
+      "export default (request, response) => response.status(418).end();",
+    );
+    fs.writeFileSync(
+      path.join(serverDir, "routes.json"),
+      JSON.stringify({
+        routes: [{ route: "/tea", method: "brew", file: "teapot.js" }],
+        modules: [],
+      }),
+    );
+
+    const app = express();
+    applyServerHardening(app);
+    mountServerRoutes(app, serverDir);
+
+    const httpServer = app.listen(0, "127.0.0.1");
+    await new Promise<void>((resolve) => httpServer.once("listening", resolve));
+    const port = (httpServer.address() as AddressInfo).port;
+
+    const response = await new Promise<{ status: number }>((resolve) => {
+      const httpRequest = http.request(
+        { hostname: "127.0.0.1", port, path: "/tea", method: "GET" },
+        (response) => {
+          response.resume();
+          response.on("end", () => resolve({ status: response.statusCode ?? 0 }));
+        },
+      );
+      httpRequest.end();
+    });
+
+    httpServer.close();
+
+    console.warn = warn;
+
+    // The route was skipped, so express answers with its default 404 (the
+    // error middleware turns it into json).
+    expect(response.status).toBe(404);
   });
 });

@@ -16,12 +16,20 @@ import (
 	"hudson-newey/2web/src/models"
 )
 
-// A server route is a `.server.ts` (or `.server.js`) file. Each file is
-// compiled into a standalone node module that default exports an express
-// request handler, and is mounted on the generated express server at the
-// route that mirrors its position in the source tree.
+// Server side code comes in two kinds of files:
 //
-// e.g. "src/api/users.server.ts" is served at "/api/users".
+//   - HTTP verb routes ("__get.server.ts", "__post.server.ts", ...): each
+//     default exports an express request handler that handles one HTTP
+//     method, and is mounted on the generated express server at the route
+//     that mirrors the directory the file sits in.
+//
+//     e.g. "src/api/users/__get.server.ts" handles "GET /api/users".
+//
+//   - Server modules (any other ".server.ts" file): compiled so that their
+//     named exports can be invoked over rpc (see the html outputs, compiled
+//     functions, and event reducers that call them), but never mounted as
+//     http endpoints. Verb routes are the only entry point for accessing a
+//     server endpoint over http.
 
 // Server output is emitted next to the client output with a "-server"
 // suffix. e.g. "./dist/" -> "./dist-server/".
@@ -30,58 +38,76 @@ func serverOutputDir() string {
 	return strings.TrimSuffix(strings.TrimSuffix(outputPath, "/"), "\\") + "-server"
 }
 
-// ServerRoute describes a compiled server route in the route manifest.
+// ServerRoute describes one HTTP verb route in the route manifest.
 type ServerRoute struct {
 	// Route is the url path that the handler is mounted at.
 	// e.g. "/api/users"
 	Route string `json:"route"`
 
+	// Method is the (lowercase) http method the handler responds to.
+	// e.g. "get"
+	Method string `json:"method"`
+
 	// File is the path of the compiled handler module, relative to the server
 	// output directory.
+	// e.g. "api/users/__get.server.js"
+	File string `json:"file"`
+}
+
+// ServerModule describes a compiled server module whose exported functions
+// are callable over rpc (see the rpc endpoint in the server runtime). Server
+// modules are never mounted as http endpoints.
+type ServerModule struct {
+	// File is the path of the compiled module, relative to the server output
+	// directory.
 	// e.g. "api/users.server.js"
 	File string `json:"file"`
 
 	// Rpc lists the names of the exported functions that the generated rpc
-	// endpoints call (see the rpc endpoint in the server runtime). Empty for
-	// route handlers that don't export functions.
+	// endpoints call.
 	Rpc []string `json:"rpc,omitempty"`
 }
 
 var (
 	serverRoutesMutex sync.Mutex
 	serverRoutes      []ServerRoute
+	serverModules     []ServerModule
 )
 
-// routeForServerScript derives the url path of a server script from its
-// position in the source tree.
+// serverVerbs lists the http methods that a "__<method>.server.ts" route
+// file can handle.
+var serverVerbs = []string{"get", "post", "put", "patch", "delete", "head", "options"}
+
+// verbRouteForServerScript returns the http method and the url path of a
+// verb route file (e.g. "__get.server.ts"), and whether the file is a verb
+// route at all.
 //
-// e.g. (with an input path of "src/"):
+// The route mirrors the directory the file sits in:
 //
-//	src/api/users.server.ts -> /api/users
-//	src/index.server.ts     -> /
-//	src/api/index.server.ts -> /api
-func routeForServerScript(inputPath string, filePath string) string {
-	relativePath, err := filepath.Rel(inputPath, filePath)
-	if err != nil {
-		// Fall back to the file name when the path isn't inside the input
-		// path (e.g. a file passed directly to the compiler).
-		relativePath = filepath.Base(filePath)
+//	(with an input path of "src/")
+//	src/api/users/__get.server.ts -> ("get", "/api/users")
+//	src/__post.server.ts          -> ("post", "/")
+func verbRouteForServerScript(inputPath string, filePath string) (method string, route string, isVerbRoute bool) {
+	base := strings.ToLower(filepath.Base(filePath))
+
+	for _, verb := range serverVerbs {
+		for _, extension := range []string{".ts", ".js", ".mjs"} {
+			if base != "__"+verb+".server"+extension {
+				continue
+			}
+
+			directory := filepath.Dir(filePath)
+
+			relativePath, err := filepath.Rel(inputPath, directory)
+			if err != nil || relativePath == "." {
+				return verb, "/", true
+			}
+
+			return verb, "/" + filepath.ToSlash(relativePath), true
+		}
 	}
 
-	route := "/" + filepath.ToSlash(relativePath)
-
-	// Strip the server script extension. e.g. "api/users.server.ts" -> "api/users"
-	route = strings.TrimSuffix(route, ".server.ts")
-	route = strings.TrimSuffix(route, ".server.js")
-	route = strings.TrimSuffix(route, ".server.mjs")
-
-	// Directory index files are served at the directory route.
-	route = strings.TrimSuffix(route, "index")
-	if route == "" {
-		route = "/"
-	}
-
-	return route
+	return "", "", false
 }
 
 // serverScriptOutputPath returns the compiled handler output path for a
@@ -167,14 +193,25 @@ func buildServerRoute(inputPath string, filePath string) {
 	outputPath := filepath.Join(serverOutputDir(), serverScriptOutputPath(inputPath, filePath))
 	filesystem.WriteFile([]byte(bundledContent), outputPath)
 
-	route := routeForServerScript(inputPath, filePath)
+	relativeOutput := serverScriptOutputPath(inputPath, filePath)
 
 	serverRoutesMutex.Lock()
-	serverRoutes = append(serverRoutes, ServerRoute{
-		Route: route,
-		File:  serverScriptOutputPath(inputPath, filePath),
-		Rpc:   exportedFunctionNames(string(source)),
-	})
+	if method, route, isVerbRoute := verbRouteForServerScript(inputPath, filePath); isVerbRoute {
+		// A verb route file is an http endpoint: its default export handles
+		// the method the file name declares. Named exports of a verb route
+		// are not rpc callable (the route is the entry point).
+		serverRoutes = append(serverRoutes, ServerRoute{
+			Route:  route,
+			Method: method,
+			File:   relativeOutput,
+		})
+	} else {
+		// A server module is only reachable over rpc.
+		serverModules = append(serverModules, ServerModule{
+			File: relativeOutput,
+			Rpc:  exportedFunctionNames(string(source)),
+		})
+	}
 	serverRoutesMutex.Unlock()
 
 	cli.PrintBuildLog("\t- " + filePath + " \033[35m(server)\033[0m")
@@ -190,9 +227,10 @@ func buildServerRoute(inputPath string, filePath string) {
 func FlushServerRoutes() {
 	serverRoutesMutex.Lock()
 	routes := serverRoutes
+	modules := serverModules
 	serverRoutesMutex.Unlock()
 
-	if len(routes) == 0 {
+	if len(routes) == 0 && len(modules) == 0 {
 		return
 	}
 
@@ -205,10 +243,22 @@ func FlushServerRoutes() {
 			separator = ""
 		}
 
+		manifestContent += fmt.Sprintf(
+			"    { \"route\": %q, \"method\": %q, \"file\": %q }%s\n",
+			route.Route, route.Method, route.File, separator,
+		)
+	}
+	manifestContent += "  ],\n  \"modules\": [\n"
+	for i, module := range modules {
+		separator := ","
+		if i == len(modules)-1 {
+			separator = ""
+		}
+
 		rpcFunctions := "[]"
-		if len(route.Rpc) > 0 {
-			quoted := make([]string, len(route.Rpc))
-			for index, name := range route.Rpc {
+		if len(module.Rpc) > 0 {
+			quoted := make([]string, len(module.Rpc))
+			for index, name := range module.Rpc {
 				quoted[index] = fmt.Sprintf("%q", name)
 			}
 
@@ -216,8 +266,8 @@ func FlushServerRoutes() {
 		}
 
 		manifestContent += fmt.Sprintf(
-			"    { \"route\": %q, \"file\": %q, \"rpc\": %s }%s\n",
-			route.Route, route.File, rpcFunctions, separator,
+			"    { \"file\": %q, \"rpc\": %s }%s\n",
+			module.File, rpcFunctions, separator,
 		)
 	}
 	manifestContent += "  ]\n}\n"

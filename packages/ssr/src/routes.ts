@@ -8,12 +8,70 @@ export interface ServerRoute {
   route: string;
   file: string;
 
+  // The (lowercase) http method the route handles. e.g. "get"
+  method: string;
+}
+
+// A compiled server module whose exported functions are callable over rpc.
+// Server modules are never mounted as http endpoints.
+export interface ServerModule {
+  file: string;
+
   // The exported functions that the generated rpc endpoints call.
   rpc?: string[];
 }
 
 export interface ServerRouteManifest {
   routes: ServerRoute[];
+
+  // The rpc callable modules. Older manifests don't have this section (in
+  // which case no rpc endpoint can be called).
+  modules?: ServerModule[];
+}
+
+// The http methods that a "__<method>.server.ts" route file can handle.
+const routeMethods = [
+  "get",
+  "post",
+  "put",
+  "patch",
+  "delete",
+  "head",
+  "options",
+] as const;
+
+// Mounts one server route's handler for the http method the route declares.
+function mountRouteHandler(
+  app: Express,
+  serverRoute: ServerRoute,
+  handler: express.RequestHandler,
+): void {
+  const method = serverRoute.method.toLowerCase();
+
+  if (!routeMethods.includes(method as (typeof routeMethods)[number])) {
+    console.warn(
+      `[2web] server route '${serverRoute.route}' declares the unknown http method '${serverRoute.method}' and was skipped`,
+    );
+    return;
+  }
+
+  const methodHandlers: Record<
+    (typeof routeMethods)[number],
+    (route: string, handler: express.RequestHandler) => void
+  > = {
+    get: (route, routeHandler) => app.get(route, routeHandler),
+    post: (route, routeHandler) => app.post(route, routeHandler),
+    put: (route, routeHandler) => app.put(route, routeHandler),
+    patch: (route, routeHandler) => app.patch(route, routeHandler),
+    delete: (route, routeHandler) => app.delete(route, routeHandler),
+    head: (route, routeHandler) => app.head(route, routeHandler),
+    options: (route, routeHandler) => app.options(route, routeHandler),
+  };
+
+  methodHandlers[method as (typeof routeMethods)[number]](
+    serverRoute.route,
+    handler,
+  );
 }
 
 export interface RouteServerOptions {
@@ -119,7 +177,7 @@ export async function mountServerRoutes(
       continue;
     }
 
-    app.all(serverRoute.route, handler);
+    mountRouteHandler(app, serverRoute, handler);
   }
 }
 
@@ -258,9 +316,11 @@ async function handleRpcRequest(
   const functionName = trimmed.slice(functionSeparator + 1);
 
   // Only functions that the compiler recorded for this module can be called.
-  const route = manifest.routes.find((entry) => entry.file === modulePath);
+  const moduleEntry = (manifest.modules ?? []).find(
+    (entry) => entry.file === modulePath,
+  );
 
-  if (!route || !(route.rpc ?? []).includes(functionName)) {
+  if (!moduleEntry || !(moduleEntry.rpc ?? []).includes(functionName)) {
     response.status(404).json({ error: "unknown rpc endpoint" });
     return;
   }
