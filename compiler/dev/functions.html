@@ -1,0 +1,37 @@
+<title>Compiled Functions</title>
+
+<script compiled>
+  import { greet } from "./api/greetings.server.ts";
+
+  $count = 1;
+  $name = "world";
+  $greeting = "";
+
+  // Assigning to a reactive variable inside a function updates the page.
+  function increase() {
+    $count = $count + 1;
+  }
+
+  // The increment shorthand and compound assignments work too.
+  function double() {
+    $count += $count;
+  }
+
+  // Imported server functions can be called like normal async functions.
+  async function greetUser() {
+    $greeting = await greet($name);
+  }
+
+  function setUser() {
+    $name = "2web";
+  }
+</script>
+
+<button @click="increase()">Increase</button>
+<button @click="double()">Double</button>
+<button @click="setUser()">Set user</button>
+<button @click="greetUser()">Greet</button>
+
+<p>Count {{ $count }}</p>
+<p>Name {{ $name }}</p>
+<p>Greeting {{ $greeting }}</p>

@@ -282,6 +282,14 @@ func (m *reactiveVariableNode) reactivityLevel(index *ReactiveIndex) reactivityL
 		return computed
 	}
 
+	// A variable that is assigned inside a compiled script function needs a
+	// runtime representation and an update function: the function body's
+	// assignments are rewritten into "update the runtime variable and run its
+	// update cascade" statements (see twoScriptNode).
+	if index.IsAssignedByFunction(m) {
+		return reactive
+	}
+
 	events := m.dependentEvents(index)
 	for _, e := range events {
 		// If the assignment expression uses the same variable that it's
@@ -336,7 +344,11 @@ func (m *reactiveVariableNode) compileReactivity(pageModel *page.Page, index *Re
 	// variable it depends on, or (when all of its dependencies are static) it
 	// is evaluated once in a startup bootstrap script.
 	if index.IsDerived(m) {
-		if !index.HasRuntimeDependency(m) {
+		// A computed variable that is also assigned by a compiled script
+		// function must keep its runtime representation (the bootstrap below
+		// evaluates the value once, which would silently drop the function's
+		// updates).
+		if !index.HasRuntimeDependency(m) && !index.IsAssignedByFunction(m) {
 			m.compileComputedBootstrap(pageModel, index)
 			return
 		}
@@ -414,11 +426,17 @@ func (m *reactiveVariableNode) compileReactiveVar(
 	}
 
 	// The runtime variable name was pre-allocated before the reactivity pass
-	// (see templating.Compile) so that computed variables can reference it
-	// regardless of compilation order.
+	// (see templating.Compile) so that computed variables and compiled script
+	// functions can reference it regardless of compilation order.
 	variableName := index.RuntimeVariableName(m.selector())
 
-	handlerFuncName := pageModel.Ids.CreateFunctionName()
+	// The update function's name is pre-allocated with it, so that compiled
+	// script functions can call the update cascade of the variables they
+	// assign to.
+	handlerFuncName := index.HandlerName(m.selector())
+	if handlerFuncName == "" {
+		handlerFuncName = pageModel.Ids.CreateFunctionName()
+	}
 
 	// Variables that are computed from this one are re-evaluated by this
 	// variable's update cascade: whenever an event changes this variable, every

@@ -39,6 +39,10 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	// variable that needs a runtime representation gets one before the
 	// reactivity pass so that computed variables can reference the runtime
 	// variables they are computed from regardless of compilation order.
+	//
+	// The update function names are pre-allocated with them so that compiled
+	// script functions can call the update cascade of the variables they
+	// assign to.
 	for _, variable := range reactiveIndex.Variables {
 		needsRuntime := reactiveIndex.IsRuntime(variable) ||
 			reactiveIndex.HasDerivedDependents(variable) ||
@@ -49,6 +53,10 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 				variable.Selector(),
 				pageModel.Ids.CreateVariableName(),
 			)
+			reactiveIndex.RegisterHandlerName(
+				variable.Selector(),
+				pageModel.Ids.CreateFunctionName(),
+			)
 		}
 	}
 
@@ -56,12 +64,13 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	recurseAstMarkup(&pageModel, parsedAst)
 	recurseAst(&pageModel, parsedAst, reactiveIndex)
 
-	// Compile the event reducers that directly call imported server functions
-	// into standalone rpc listeners. This must run after the AST walk (the
-	// server script imports register their rpc functions during it) and
-	// before the shared reactive runtime is emitted (so that the listeners
-	// are part of it).
-	nodes.CompileServerCalls(&pageModel, reactiveIndex)
+	// Compile the event reducers that directly call a function (an imported
+	// server function or a function declared in a compiled script block) into
+	// standalone listeners. This must run after the AST walk (the server
+	// script imports register their rpc functions during it) and before the
+	// shared reactive runtime is emitted (so that the listeners are part of
+	// it).
+	nodes.CompileFunctionCalls(&pageModel, reactiveIndex)
 
 	if !cli.GetArgs().IsolatedPages {
 		addRouteAssets(&pageModel)

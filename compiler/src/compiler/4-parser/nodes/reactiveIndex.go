@@ -36,6 +36,23 @@ type ReactiveIndex struct {
 	// been generated for the page, so that importing the same server function
 	// twice doesn't declare it twice in the shared runtime scope.
 	rpcFunctions map[string]bool
+
+	// compiledFunctions records the names of the functions that were declared
+	// in the page's compiled script blocks. Event listeners can call them
+	// directly, just like the imported server functions.
+	compiledFunctions map[string]bool
+
+	// functionSinks records the reactive variables that are assigned inside a
+	// compiled script function body. They need a runtime representation (and
+	// an update function) exactly like variables that are assigned by events.
+	functionSinks map[string]bool
+
+	// handlerNames maps a variable's selector to the name of the runtime
+	// update function that was allocated for it. The names are pre-allocated
+	// with the runtime variable names so that compiled script functions can
+	// reference the update function of the variables they assign to
+	// regardless of compilation order.
+	handlerNames map[string]string
 }
 
 type indexedProperty struct {
@@ -57,14 +74,36 @@ type indexedEvent struct {
 // BuildReactiveIndex walks the AST once and resolves every reactive
 // relationship up front.
 func BuildReactiveIndex(ast AbstractSyntaxTree) *ReactiveIndex {
-	variables := ast.reactiveVariables()
-
 	index := &ReactiveIndex{
-		Variables:        variables,
-		dependencies:     map[string][]string{},
-		runtimeVariables: map[string]string{},
-		rpcFunctions:     map[string]bool{},
+		dependencies:      map[string][]string{},
+		runtimeVariables:  map[string]string{},
+		rpcFunctions:      map[string]bool{},
+		compiledFunctions: map[string]bool{},
+		functionSinks:     map[string]bool{},
+		handlerNames:      map[string]string{},
 	}
+
+	// Reconcile the compiled script blocks with their function declarations
+	// before the variables are collected: assignments inside function bodies
+	// are parsed like variable declarations (the lexer has no brace context)
+	// and must not leak into the page's reactive state. This also registers
+	// the functions and the variables they assign to.
+	for _, block := range ast.twoScriptNodes() {
+		for _, function := range block.prepareCompiledFunctions() {
+			if function.name != "" {
+				index.compiledFunctions[function.name] = true
+			}
+
+			for _, reference := range function.references {
+				if reference.kind != refRead {
+					index.functionSinks[reference.selector] = true
+				}
+			}
+		}
+	}
+
+	variables := ast.reactiveVariables()
+	index.Variables = variables
 
 	// Resolve the variable-to-variable dependency edges: a variable whose
 	// initial value references another reactive variable is computed from it.
@@ -192,6 +231,18 @@ func (index *ReactiveIndex) RegisterRuntimeVariable(selector string, runtimeName
 	index.runtimeVariables[selector] = runtimeName
 }
 
+// RegisterHandlerName records the name of the runtime update function that
+// was allocated for a reactive variable.
+func (index *ReactiveIndex) RegisterHandlerName(selector string, handlerName string) {
+	index.handlerNames[selector] = handlerName
+}
+
+// HandlerName returns the name of the runtime update function that was
+// allocated for a reactive variable, or empty when the variable has none.
+func (index *ReactiveIndex) HandlerName(selector string) string {
+	return index.handlerNames[selector]
+}
+
 // RuntimeVariableName returns the runtime JavaScript variable name allocated
 // for a reactive variable, or empty when the variable has no runtime
 // representation.
@@ -199,8 +250,9 @@ func (index *ReactiveIndex) RuntimeVariableName(selector string) string {
 	return index.runtimeVariables[selector]
 }
 
-// IsRuntime returns whether the variable is directly assigned by an event,
-// which means it needs a runtime representation.
+// IsRuntime returns whether the variable is directly assigned by an event or
+// by a compiled script function, which means it needs a runtime
+// representation.
 func (index *ReactiveIndex) IsRuntime(variable *reactiveVariableNode) bool {
 	for _, event := range index.Events {
 		if event.sink == variable.selector() {
@@ -208,7 +260,19 @@ func (index *ReactiveIndex) IsRuntime(variable *reactiveVariableNode) bool {
 		}
 	}
 
-	return false
+	return index.functionSinks[variable.selector()]
+}
+
+// IsAssignedByFunction returns whether the variable is assigned inside a
+// compiled script function body.
+func (index *ReactiveIndex) IsAssignedByFunction(variable *reactiveVariableNode) bool {
+	return index.functionSinks[variable.selector()]
+}
+
+// HasCompiledFunction returns whether a function with the given name was
+// declared in one of the page's compiled script blocks.
+func (index *ReactiveIndex) HasCompiledFunction(functionName string) bool {
+	return index.compiledFunctions[functionName]
 }
 
 // HasRuntimeDependency returns whether any variable in the variable's
@@ -241,13 +305,18 @@ func (index *ReactiveIndex) HasDerivedDependents(variable *reactiveVariableNode)
 }
 
 // IsUnused returns whether the variable has no reactive properties, no
-// events, and isn't referenced by any other reactive variable.
+// events, isn't referenced by any other reactive variable, and isn't assigned
+// by a compiled script function.
 func (index *ReactiveIndex) IsUnused(variable *reactiveVariableNode) bool {
 	if len(index.FindDependentProperties(variable)) > 0 {
 		return false
 	}
 
 	if len(index.FindDependentEvents(variable)) > 0 {
+		return false
+	}
+
+	if index.functionSinks[variable.selector()] {
 		return false
 	}
 

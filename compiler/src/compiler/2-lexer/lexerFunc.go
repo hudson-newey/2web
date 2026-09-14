@@ -70,7 +70,12 @@ func lexerFactory(lexMap *compiledMatchers, state lexState) LexFunc {
 			return lexNode, lexerModel.State
 		}
 
-		startPos := lexerModel.Pos
+		// Copy the position by value. Pos is a pointer, so capturing it by
+		// reference would alias the live position: every mutation made while
+		// scanning the literal (and by backup below) would move the recorded
+		// start along with it, making every content token report the position
+		// where the literal ENDED instead of where it started.
+		startPos := *lexerModel.Pos
 		lexerModel.backup(1)
 		text := lexerModel.lexLiteral(lexMap)
 
