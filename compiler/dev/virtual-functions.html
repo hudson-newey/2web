@@ -1,0 +1,23 @@
+<title>Virtual Functions</title>
+
+<script compiled>
+  import { $uid, $props, $env, $readFile } from "@compiler/types/interop.types.ts";
+  import PriceTag from "components/price-tag.component.html";
+
+  $firstId = "$uid()";
+  $secondId = "$uid()";
+  $apiKey = $env("2WEB_UNSET_ENV_VAR");
+  $license = $readFile("license.txt");
+
+  $count = 3;
+</script>
+
+<PriceTag [label]="'Reactive tag'" [price]="$count" />
+
+<input id="uid-demo" aria-describedby="$uid()" value="virtual" />
+
+<p class="ids">{{ $firstId }} {{ $secondId }}</p>
+<p class="env">{{ $apiKey }}</p>
+<p class="license">{{ $license }}</p>
+
+<button @click="$count = 10">Bump</button>

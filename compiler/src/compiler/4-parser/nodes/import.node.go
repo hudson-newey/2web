@@ -90,6 +90,19 @@ func (m *scriptImportNode) Content(page *page.Page, index *ReactiveIndex) NodeCo
 	hostDirectory := filepath.Dir(page.InputPath)
 	componentPath := filepath.Join(hostDirectory, m.importPath)
 
+	// Compile time virtual functions (the interop types: $props(), $uid(),
+	// $env(), $readFile()) are evaluated by the preprocessor, which also
+	// removes their import statement. If one still reaches this node, it
+	// contributes nothing to the page rather than erroring.
+	if strings.Contains(m.importPath, "interop.types") {
+		return NodeContent{
+			HtmlContent:      page.Html,
+			JsContent:        javascript.NewJsFile(),
+			CssContent:       css.NewCssFile(),
+			TwoScriptContent: twoscript.NewTwoScriptFile(),
+		}
+	}
+
 	// Imports of server scripts (.server.ts files) generate async client
 	// functions that pass through to generated rpc endpoints. The imported
 	// functions can then be called directly from reactive event listeners.

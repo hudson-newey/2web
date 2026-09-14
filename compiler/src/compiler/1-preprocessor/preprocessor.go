@@ -33,6 +33,11 @@ func ProcessStaticSite(filePath string, content string, expandPartials bool) str
 		// cause the partial expansion to fail.
 		ssgResult = expandLayout(filePath, ssgResult)
 
+		// The compile time virtual functions ($uid(), $env(), $readFile())
+		// are expanded last, so that component content (which is inlined by
+		// the component expansion) is covered too.
+		ssgResult = expandVirtualFunctions(filePath, ssgResult)
+
 		// 2Web supports partial content, meaning that pages don't need and doctype,
 		// html, head, meta, or body tags.
 		// The user can just start writing the pages content, and the compiler can

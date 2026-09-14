@@ -1,6 +1,8 @@
 package preprocessor
 
 import (
+	"fmt"
+	"html"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -14,6 +16,69 @@ import (
 //
 // Multi line imports (e.g. import {\n\tHeader\n} from "...") are supported.
 var componentImportPattern = regexp.MustCompile(`(?s)import\s+([^;]+?)\s+from\s+("[^"]+"|'[^']+')\s*;?`)
+
+// Matches a "$props().<name>" access. e.g. "$props().title"
+var propsAccessPattern = regexp.MustCompile(`\$props\(\)\.([A-Za-z_$][A-Za-z0-9_$]*)`)
+
+// Matches the "$props()" object form.
+var propsObjectPattern = regexp.MustCompile(`\$props\(\)`)
+
+// Matches an instance parameter. e.g. [title]="'My Counter'"
+var instancePropPattern = regexp.MustCompile(`\[([A-Za-z_$][A-Za-z0-9_$]*)\]="([^"]*)"`)
+
+// isInteropImport returns whether the import imports the compiler's compile
+// time interop types (the virtual functions like "$props()" and "$uid()").
+func isInteropImport(importPath string) bool {
+	return strings.Contains(importPath, "interop.types")
+}
+
+// isConstantValue returns whether a component parameter value is a compile
+// time constant (a string literal, number, or boolean), which can be inlined
+// into the component's markup.
+func isConstantValue(value string) bool {
+	if strings.Contains(value, "$") {
+		return false
+	}
+
+	if regexp.MustCompile(`^(?:'[^']*'|"[^"]*"|-?[0-9]+(?:\.[0-9]+)?|true|false|null)$`).MatchString(value) {
+		return true
+	}
+
+	return false
+}
+
+// templateEscape formats a constant component parameter for inlining into a
+// text output: string literals are unquoted and html escaped (matching the
+// text rendering semantics of a runtime text output); numbers and booleans
+// are rendered as-is.
+func templateEscape(value string) string {
+	unquoted := regexp.MustCompile(`^'([^']*)'$|^"([^"]*)"$`).FindStringSubmatch(value)
+
+	if unquoted != nil {
+		if unquoted[1] != "" {
+			return html.EscapeString(unquoted[1])
+		}
+
+		return html.EscapeString(unquoted[2])
+	}
+
+	return html.EscapeString(value)
+}
+
+// propsObjectLiteral builds the object literal that the "$props()" object
+// form evaluates to.
+func propsObjectLiteral(instanceProps map[string]string) string {
+	entries := []string{}
+	for name, value := range instanceProps {
+		entries = append(entries, name+": "+value)
+	}
+
+	if len(entries) == 0 {
+		return "{}"
+	}
+
+	return "{ " + strings.Join(entries, ", ") + " }"
+}
 
 // expandComponents inlines imported components into the page source.
 //
@@ -50,6 +115,15 @@ func expandComponents(filePath string, content string, visiting map[string]bool)
 			continue
 		}
 
+		// Compile time virtual functions (e.g. "$props()") are imported from
+		// the compiler's interop types. They are evaluated by the compiler
+		// itself, so the import statement is removed instead of being
+		// resolved.
+		if isInteropImport(importPath) {
+			content = strings.Replace(content, statement, "", 1)
+			continue
+		}
+
 		// Only markup files are components. e.g. ESM imports of .ts files are
 		// bundled by esbuild and must be left alone.
 		if !assets.IsMarkupFile(componentPath) {
@@ -60,8 +134,12 @@ func expandComponents(filePath string, content string, visiting map[string]bool)
 		// (e.g. <Header />). A component without a selector in the importing
 		// file isn't used, so inlining it would only pollute the page with its
 		// script variables.
-		selector := "<" + importName + " />"
-		if !strings.Contains(content, selector) {
+		selectorPattern, selectorPatternErr := componentSelectorPattern(importName)
+		if selectorPatternErr != nil {
+			continue
+		}
+
+		if !selectorPattern.MatchString(content) {
 			continue
 		}
 
@@ -70,10 +148,75 @@ func expandComponents(filePath string, content string, visiting map[string]bool)
 		delete(visiting, componentPath)
 
 		content = strings.Replace(content, statement, "", 1)
-		content = strings.ReplaceAll(content, selector, expandedComponent)
+		content = selectorPattern.ReplaceAllStringFunc(content, func(selector string) string {
+			return expandComponentInstance(selector, expandedComponent)
+		})
 	}
 
 	return content
+}
+
+// componentSelectorPattern matches an instance of the component with the
+// given import name, including its attributes.
+// e.g. <Counter [title]="'My Counter'" />
+func componentSelectorPattern(importName string) (*regexp.Regexp, error) {
+	if !regexp.MustCompile(`^[A-Za-z][A-Za-z0-9]*$`).MatchString(importName) {
+		// The import name isn't a usable markup tag name (e.g. a braced esm
+		// import).
+		return nil, fmt.Errorf("not a component import")
+	}
+
+	return regexp.MustCompile(`(?s)<` + regexp.QuoteMeta(importName) + `(\s[^>]*)?/>`), nil
+}
+
+// expandComponentInstance inlines a component instance's content, substituting
+// the instance's parameters for the "$props()" accesses in the component.
+func expandComponentInstance(selector string, componentContent string) string {
+	attributes := strings.TrimSpace(strings.TrimSuffix(strings.TrimPrefix(selector, "<"), "/>"))
+
+	instanceProps := parseInstanceProps(attributes)
+
+	content := componentContent
+
+	for name, value := range instanceProps {
+		if !isConstantValue(value) {
+			// A reactive value keeps its expression: the component references
+			// the reactive variable the instance passed, so the component
+			// updates when it changes.
+			content = strings.ReplaceAll(content, "$props()."+name, value)
+			continue
+		}
+
+		// A constant value is inlined into text outputs (escaped, matching
+		// the text rendering semantics of a runtime text output).
+		textOutput := regexp.MustCompile(
+			`(\{\{\s*)\$props\(\)\.` + regexp.QuoteMeta(name) + `(\s*\}\})`,
+		)
+
+		content = textOutput.ReplaceAllString(content, "${1}"+templateEscape(value)+"${2}")
+		content = strings.ReplaceAll(content, "$props()."+name, value)
+	}
+
+	// The remaining "$props()" accesses (properties the instance didn't pass,
+	// and the object form) resolve to undefined / an object of the passed
+	// values.
+	content = propsObjectPattern.ReplaceAllString(content, propsObjectLiteral(instanceProps))
+	content = propsAccessPattern.ReplaceAllString(content, "undefined")
+
+	return content
+}
+
+// instanceProps maps the parameter names of a component instance to the
+// (raw) value expressions they were passed.
+// e.g. <Counter [title]="'My Counter'" [count]="1" />.
+func parseInstanceProps(attributes string) map[string]string {
+	props := map[string]string{}
+
+	for _, match := range instancePropPattern.FindAllStringSubmatch(attributes, -1) {
+		props[match[1]] = strings.TrimSpace(match[2])
+	}
+
+	return props
 }
 
 func unquoteImportPath(quotedPath string) string {
