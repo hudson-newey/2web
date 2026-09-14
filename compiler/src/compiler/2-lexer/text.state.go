@@ -31,6 +31,10 @@ func textLexer(model *Lexer) (V2LexNode, LexFunc) {
 			"{": {token: lexeme.CurlyOpen, next: textLexer},
 			"}": {token: lexeme.CurlyClosed, next: textLexer},
 
+			// The html output delimiters. e.g. '[[ $htmlContent ]]'
+			"[[": {token: lexeme.DoubleSquareOpen, next: textLexer},
+			"]]": {token: lexeme.DoubleSquareClosed, next: textLexer},
+
 			"@": {token: lexeme.AtSymbol, next: controlFlowLexer},
 		}
 	})

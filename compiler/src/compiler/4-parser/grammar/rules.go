@@ -15,6 +15,7 @@ var TextRules = []Grammar{
 
 	elementRef,
 	textOutput,
+	htmlOutput,
 
 	// Control flow always has to appear last so that exiting a control flow
 	// block is always avoided.

@@ -27,7 +27,10 @@ function inlineCompiledScripts(html: string): string {
   );
 }
 
-export async function navigateToPage(location: string): Promise<BrowserFrame> {
+export async function navigateToPage(
+  location: string,
+  beforeLoad?: (frame: BrowserFrame) => void,
+): Promise<BrowserFrame> {
   const compiledLocation = `dist/${location}`;
   const html = inlineCompiledScripts(readFileSync(compiledLocation, "utf-8"));
 
@@ -40,6 +43,12 @@ export async function navigateToPage(location: string): Promise<BrowserFrame> {
   const page = browser.newPage();
 
   page.url = "http://localhost:5173/" + location;
+
+  // Some pages run code during the initial script evaluation (e.g. an html
+  // output that loads its content from a remote function), so tests need a
+  // chance to stub the environment (e.g. fetch) before the page runs.
+  beforeLoad?.(page.mainFrame);
+
   page.content = html;
 
   return page.mainFrame;

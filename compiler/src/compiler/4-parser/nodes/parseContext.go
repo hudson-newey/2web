@@ -24,6 +24,11 @@ type ParseContext struct {
 	// counter is per page (rather than global) so that the compiled output of
 	// a page doesn't depend on which other pages were compiled before it.
 	controlFlowIds map[string]int
+
+	// syntheticIdCounter counts the unique compile time placeholders that
+	// nodes rendering their own containers (see htmlOutputNode) allocate
+	// during parsing.
+	syntheticIdCounter int
 }
 
 func NewParseContext(filePath string) *ParseContext {
@@ -39,6 +44,13 @@ func (c *ParseContext) ReportError(message string, position lexer.Position) {
 
 	c.errors = append(c.errors, &errorModel)
 	documentErrors.AddErrors(&errorModel)
+}
+
+// nextSyntheticId returns the next unique placeholder id for this page.
+func (c *ParseContext) nextSyntheticId() int {
+	c.syntheticIdCounter++
+
+	return c.syntheticIdCounter
 }
 
 // nextControlFlowId returns the next instance id for the given control flow

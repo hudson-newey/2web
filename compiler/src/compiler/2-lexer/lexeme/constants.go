@@ -100,6 +100,15 @@ const (
 	// contain text outputs like '{{ $item }}'.
 	DoubleCurlyClosed Lexeme = "DoubleCurlyClosed"
 
+	//? HTML output
+
+	// [[ and ]]
+	// The delimiters of an html output. e.g. '[[ $htmlContent ]]'.
+	// Unlike a text output ('{{ $content }}'), an html output renders the
+	// expression's value as html instead of as text.
+	DoubleSquareOpen   Lexeme = "DoubleSquareOpen"
+	DoubleSquareClosed Lexeme = "DoubleSquareClosed"
+
 	// for
 	ControlFlowForKeyword Lexeme = "ControlFlowForKeyword"
 
