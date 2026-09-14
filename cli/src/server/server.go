@@ -2,13 +2,17 @@ package server
 
 import (
 	"bytes"
+	"crypto/sha256"
 	_ "embed"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -37,6 +41,10 @@ var actionSocketOutPath string
 var liveReloadTemplate = fmt.Sprintf(`
 <script type="module">%s</script>
 `, liveReloadScript)
+
+// absOutputPath is the resolved output directory of the dev server. The
+// output snapshot (see snapshotDirectory) is taken against it.
+var absOutputPath string
 
 func runDevServer(inPath string, outPath string, options Options) {
 	absInPath, err := filepath.Abs(inPath)
@@ -82,6 +90,7 @@ func runDevServer(inPath string, outPath string, options Options) {
 	// E.g. reload clients, re-compile source, stop server, etc...
 	actionSocketInPath = inPath
 	actionSocketOutPath = outPath
+	absOutputPath = absOutPath
 	mux.HandleFunc("/__2web_actions", actionSocket)
 
 	// Serve static files with HTML injection
@@ -246,6 +255,12 @@ func serveFile(
 		w.Header().Set("Content-Type", http.DetectContentType(content))
 	}
 
+	// The dev server always serves fresh content: the hot updates and reloads
+	// must never be served from the browser cache.
+	if contentTypeExists {
+		w.Header().Set("Cache-Control", "no-cache")
+	}
+
 	// Inject live reload script for HTML files
 	if strings.Contains(contentType, "text/html") && injectAutoReload {
 		content = injectLiveReload(content)
@@ -327,8 +342,162 @@ func watchFiles(inPath string, outPath string, relativeOutPath string) {
 }
 
 func handleFileChange(inPath string, outPath string) {
+	before := snapshotDirectory(absOutputPath)
 	buildAssets(inPath, outPath)
-	notifyClients()
+
+	// The browser references the BUILD output (not the sources), so the hot
+	// update notification carries the output assets that the rebuild
+	// changed. The client hot swaps css assets in place and reloads the page
+	// for everything else.
+	after := snapshotDirectory(absOutputPath)
+	changed := diffSnapshot(before, after)
+
+	// A rebuilt page embeds the (hashed) names of its css/js assets, so an
+	// asset change rewrites every page that references it. When a page's
+	// content only changed because of those references, the page itself is
+	// unchanged: the client hot swaps the assets instead of reloading, which
+	// is the point of css hot swapping.
+	changed = filterAssetReferenceOnlyPages(changed, before, after)
+
+	broadcastAssets(changed)
+}
+
+// assetReferencePattern matches the hashed asset names that compiled pages
+// reference (e.g. "b6fc67446cef3b8d.css").
+var assetReferencePattern = regexp.MustCompile(`[a-f0-9]{16,}\.(?:css|js)`)
+
+// filterAssetReferenceOnlyPages drops the html pages whose new content only
+// differs from the old content in the hashed asset references they embed.
+func filterAssetReferenceOnlyPages(
+	changed []string,
+	before map[string]string,
+	after map[string]string,
+) []string {
+	filtered := make([]string, 0, len(changed))
+
+	for _, asset := range changed {
+		if !strings.HasSuffix(asset, ".html") {
+			filtered = append(filtered, asset)
+			continue
+		}
+
+		beforeContent, hadBefore := before[asset]
+		afterContent, hadAfter := after[asset]
+
+		if hadBefore && hadAfter &&
+			stripAssetReferences(beforeContent) == stripAssetReferences(afterContent) {
+			continue
+		}
+
+		filtered = append(filtered, asset)
+	}
+
+	return filtered
+}
+
+// stripAssetReferences removes the hashed asset references from a page's
+// content, so that two pages that only differ in the assets they reference
+// compare equal.
+func stripAssetReferences(content string) string {
+	return assetReferencePattern.ReplaceAllString(content, "")
+}
+
+// snapshotDirectory maps every file of a directory tree (relative to the
+// root, slash separated) to a hash of its content.
+//
+// The hashes (rather than modification times) are compared, because the
+// compiler rewrites files whose content didn't change (e.g. the sitemap), and
+// those rewrites must not trigger hot updates.
+func snapshotDirectory(root string) map[string]string {
+	snapshot := map[string]string{}
+
+	if root == "" {
+		return snapshot
+	}
+
+	filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+
+		if d.IsDir() {
+			return nil
+		}
+
+		relative, err := filepath.Rel(root, path)
+		if err != nil {
+			return nil
+		}
+
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return nil
+		}
+
+		// Html pages keep their raw content: the reload decision needs to
+		// know whether a page's change is real markup or just the asset
+		// references the compiler rewrote (see handleFileChange).
+		if strings.HasSuffix(path, ".html") {
+			snapshot[filepath.ToSlash(relative)] = string(content)
+			return nil
+		}
+
+		hash := sha256.Sum256(content)
+		snapshot[filepath.ToSlash(relative)] = hex.EncodeToString(hash[:])
+
+		return nil
+	})
+
+	return snapshot
+}
+
+// isMetaOutput returns whether the output file is compiler bookkeeping that
+// is never a page asset, so it can't take part in hot updates.
+func isMetaOutput(path string) bool {
+	switch path {
+	case "__2web.debug.json", "robots.txt", "sitemap.xml":
+		return true
+	}
+
+	return false
+}
+
+// diffSnapshot returns the files whose content changed between the two
+// snapshots (relative to the output root, compiler bookkeeping excluded).
+func diffSnapshot(before map[string]string, after map[string]string) []string {
+	changed := []string{}
+
+	for path, hash := range after {
+		if before[path] == hash || isMetaOutput(path) {
+			continue
+		}
+
+		changed = append(changed, path)
+	}
+
+	return changed
+}
+
+// broadcastAssets notifies every connected client about the assets that a
+// rebuild changed.
+func broadcastAssets(assets []string) {
+	if len(assets) == 0 {
+		return
+	}
+
+	message, err := json.Marshal(map[string]any{
+		"type":   "assets",
+		"assets": assets,
+	})
+	if err != nil {
+		notifyClients()
+		return
+	}
+
+	broadcast(message)
+
+	assetList := strings.Join(assets, ", ")
+	logger.Println(fmt.Sprintf("\tHot updated: %s", assetList))
 }
 
 func buildAssets(inPath string, outPath string) {
@@ -371,17 +540,23 @@ func getLatestModTime(root string) time.Time {
 	return latest
 }
 
-func notifyClients() {
+func broadcast(message []byte) {
 	clientsMu.Lock()
 	defer clientsMu.Unlock()
 
 	for client := range clients {
-		err := client.WriteMessage(websocket.TextMessage, []byte("reload"))
+		err := client.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
 			client.Close()
 			delete(clients, client)
 		}
 	}
+}
+
+func notifyClients() {
+	// A plain "reload" message is the legacy (full page reload) notification,
+	// which the injected client still understands.
+	broadcast([]byte("reload"))
 
 	// Log after complete so hot path is clear of logs to reduce perf hit.
 	logger.Println("\tSent reload client notification")
