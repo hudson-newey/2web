@@ -3,6 +3,7 @@ package builder
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 
@@ -39,6 +40,11 @@ type ServerRoute struct {
 	// output directory.
 	// e.g. "api/users.server.js"
 	File string `json:"file"`
+
+	// Rpc lists the names of the exported functions that the generated rpc
+	// endpoints call (see the rpc endpoint in the server runtime). Empty for
+	// route handlers that don't export functions.
+	Rpc []string `json:"rpc,omitempty"`
 }
 
 var (
@@ -167,6 +173,7 @@ func buildServerRoute(inputPath string, filePath string) {
 	serverRoutes = append(serverRoutes, ServerRoute{
 		Route: route,
 		File:  serverScriptOutputPath(inputPath, filePath),
+		Rpc:   exportedFunctionNames(string(source)),
 	})
 	serverRoutesMutex.Unlock()
 
@@ -198,9 +205,19 @@ func FlushServerRoutes() {
 			separator = ""
 		}
 
+		rpcFunctions := "[]"
+		if len(route.Rpc) > 0 {
+			quoted := make([]string, len(route.Rpc))
+			for index, name := range route.Rpc {
+				quoted[index] = fmt.Sprintf("%q", name)
+			}
+
+			rpcFunctions = "[ " + strings.Join(quoted, ", ") + " ]"
+		}
+
 		manifestContent += fmt.Sprintf(
-			"    { \"route\": %q, \"file\": %q }%s\n",
-			route.Route, route.File, separator,
+			"    { \"route\": %q, \"file\": %q, \"rpc\": %s }%s\n",
+			route.Route, route.File, rpcFunctions, separator,
 		)
 	}
 	manifestContent += "  ]\n}\n"
@@ -246,4 +263,33 @@ func IsServerScript(filePath string) bool {
 		(strings.HasSuffix(filePath, ".ts") ||
 			strings.HasSuffix(filePath, ".js") ||
 			strings.HasSuffix(filePath, ".mjs"))
+}
+
+// exportedFunctionNames scans a server script source for the functions that
+// are exported for rpc calls.
+//
+// The scan is intentionally conservative: only named function declarations and
+// arrow function constants are picked up. Default exports are route handlers
+// (not rpc targets), and re-exports aren't supported.
+func exportedFunctionNames(source string) []string {
+	patterns := []*regexp.Regexp{
+		regexp.MustCompile(`(?m)^\s*export\s+(?:async\s+)?function\s+([A-Za-z_$][\w$]*)`),
+		regexp.MustCompile(`export\s+const\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?(?:\(|function)`),
+	}
+
+	seen := map[string]bool{}
+	names := []string{}
+
+	for _, pattern := range patterns {
+		for _, match := range pattern.FindAllStringSubmatch(source, -1) {
+			name := match[1]
+
+			if !seen[name] {
+				seen[name] = true
+				names = append(names, name)
+			}
+		}
+	}
+
+	return names
 }

@@ -124,7 +124,16 @@ func (m *reactiveVariableNode) dependentProps(index *ReactiveIndex) []*reactiveP
 }
 
 func (m *reactiveVariableNode) dependentEvents(index *ReactiveIndex) []*reactiveEventNode {
-	return index.FindDependentEvents(m)
+	events := index.FindDependentEvents(m)
+
+	// Event reducers that directly call an imported server function don't
+	// assign to any variable. They are compiled into standalone listeners by
+	// CompileServerCalls and are never wired here (wiring them here would
+	// attach the call to the assignment machinery of a variable it merely
+	// reads).
+	return lists.Filter(events, func(e *reactiveEventNode) bool {
+		return e.assignmentSink != ""
+	})
 }
 
 type reactivityLevel int

@@ -7,6 +7,9 @@ import { pathToFileURL } from "node:url";
 export interface ServerRoute {
   route: string;
   file: string;
+
+  // The exported functions that the generated rpc endpoints call.
+  rpc?: string[];
 }
 
 export interface ServerRouteManifest {
@@ -133,7 +136,10 @@ export async function startRouteServer(
   const app = express();
   applyServerHardening(app);
 
+  const manifest = loadRouteManifest(serverDir);
+
   await mountServerRoutes(app, serverDir);
+  mountRpcEndpoints(app, serverDir, manifest);
 
   if (options.clientDir) {
     // Serve the compiled client output statically. The index option is
@@ -193,4 +199,102 @@ export async function startRouteServer(
   }
 
   return server;
+}
+
+// ---------------------------------------------------------------------------
+// Rpc endpoints
+// ---------------------------------------------------------------------------
+
+// The url prefix that the generated rpc endpoints are mounted under.
+// e.g. "/_2web/rpc/api/users.server.js/greet"
+export const RPC_ENDPOINT_PREFIX = "/_2web/rpc";
+
+// Mounts the generated rpc endpoints on the given express app.
+//
+// A client calls an exported server function through a POST request whose body
+// is a json array of the function arguments:
+//
+//	POST /_2web/rpc/api/users.server.js/greet   body: ["world"]
+//
+// The endpoint dispatches to the compiled function and returns the function
+// return value as a string.
+//
+// Only functions that the compiler recorded in the route manifest are
+// callable: the dispatcher validates the module and function against the
+// manifest, so a request can never execute something that wasn't exported at
+// compile time.
+export function mountRpcEndpoints(
+  app: Express,
+  serverDir: string,
+  manifest: ServerRouteManifest,
+): void {
+  app.use(RPC_ENDPOINT_PREFIX, (request, response, next) => {
+    void handleRpcRequest(request, response, next, serverDir, manifest);
+  });
+}
+
+async function handleRpcRequest(
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction,
+  serverDir: string,
+  manifest: ServerRouteManifest,
+): Promise<void> {
+  if (request.method !== "POST") {
+    response.status(405).json({ error: "rpc endpoints only accept POST" });
+    return;
+  }
+
+  // The request path is "/<module path>/<function name>".
+  const trimmed = request.path.replace(/^\//, "");
+  const functionSeparator = trimmed.lastIndexOf("/");
+
+  if (functionSeparator <= 0) {
+    response.status(404).json({ error: "unknown rpc endpoint" });
+    return;
+  }
+
+  const modulePath = trimmed.slice(0, functionSeparator);
+  const functionName = trimmed.slice(functionSeparator + 1);
+
+  // Only functions that the compiler recorded for this module can be called.
+  const route = manifest.routes.find((entry) => entry.file === modulePath);
+
+  if (!route || !(route.rpc ?? []).includes(functionName)) {
+    response.status(404).json({ error: "unknown rpc endpoint" });
+    return;
+  }
+
+  const args = request.body;
+
+  if (!Array.isArray(args)) {
+    response.status(400).json({ error: "rpc arguments must be a json array" });
+    return;
+  }
+
+  try {
+    const modulePathUrl = pathToFileURL(
+      path.join(serverDir, modulePath),
+    ).href;
+
+    const module = await import(/* @vite-ignore */ modulePathUrl);
+    const target = module[functionName];
+
+    if (typeof target !== "function") {
+      response.status(404).json({ error: "unknown rpc endpoint" });
+      return;
+    }
+
+    // The function return is returned as a string. Strings are passed through
+    // verbatim; every other value is serialized as json so that objects and
+    // arrays don't degrade to "[object Object]".
+    const result = await target(...args);
+    const body =
+      typeof result === "string" ? result : (JSON.stringify(result) ?? "");
+
+    response.status(200).send(body);
+  } catch (error) {
+    console.error(`[2web] rpc call to '${modulePath}/${functionName}' failed:`, error);
+    response.status(500).json({ error: "rpc call failed" });
+  }
 }

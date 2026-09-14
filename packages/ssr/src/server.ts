@@ -1,6 +1,6 @@
 import { createServer as createViteServer } from "vite";
 import { handleSsrRequest } from "./handler";
-import { applyServerHardening, mountServerRoutes } from "./routes";
+import { applyServerHardening, loadRouteManifest, mountRpcEndpoints, mountServerRoutes } from "./routes";
 import express from "express";
 import fs from "node:fs";
 
@@ -12,7 +12,10 @@ export async function runServer(port: number = 5173) {
   // Compiled server routes (.server.ts files) are mounted when they have been
   // built (see the routes.json manifest in the server output directory).
   if (fs.existsSync("./dist-server/routes.json")) {
+    const manifest = loadRouteManifest("./dist-server/");
+
     await mountServerRoutes(app, "./dist-server/");
+    mountRpcEndpoints(app, "./dist-server/", manifest);
   }
 
   // Create Vite server in middleware mode and configure the app type as

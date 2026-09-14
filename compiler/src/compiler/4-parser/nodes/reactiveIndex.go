@@ -31,6 +31,11 @@ type ReactiveIndex struct {
 	// need a runtime representation (event assigned variables, and variables
 	// that other variables are computed from) get one.
 	runtimeVariables map[string]string
+
+	// rpcFunctions records the client side rpc passthrough functions that have
+	// been generated for the page, so that importing the same server function
+	// twice doesn't declare it twice in the shared runtime scope.
+	rpcFunctions map[string]bool
 }
 
 type indexedProperty struct {
@@ -58,6 +63,7 @@ func BuildReactiveIndex(ast AbstractSyntaxTree) *ReactiveIndex {
 		Variables:        variables,
 		dependencies:     map[string][]string{},
 		runtimeVariables: map[string]string{},
+		rpcFunctions:     map[string]bool{},
 	}
 
 	// Resolve the variable-to-variable dependency edges: a variable whose
@@ -361,6 +367,18 @@ func isIdentifierByte(b byte) bool {
 		(b >= 'a' && b <= 'z') ||
 		(b >= 'A' && b <= 'Z') ||
 		(b >= '0' && b <= '9')
+}
+
+// RegisterRpcFunction records that a client side rpc passthrough function was
+// generated for the given function name.
+func (index *ReactiveIndex) RegisterRpcFunction(functionName string) {
+	index.rpcFunctions[functionName] = true
+}
+
+// HasRpcFunction returns whether a client side rpc passthrough function was
+// already generated for the given function name.
+func (index *ReactiveIndex) HasRpcFunction(functionName string) bool {
+	return index.rpcFunctions[functionName]
 }
 
 // VariableBySelector returns the variable declared with the given selector,

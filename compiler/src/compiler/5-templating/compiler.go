@@ -56,6 +56,13 @@ func Compile(filePath string, parsedAst nodes.AbstractSyntaxTree) page.Page {
 	recurseAstMarkup(&pageModel, parsedAst)
 	recurseAst(&pageModel, parsedAst, reactiveIndex)
 
+	// Compile the event reducers that directly call imported server functions
+	// into standalone rpc listeners. This must run after the AST walk (the
+	// server script imports register their rpc functions during it) and
+	// before the shared reactive runtime is emitted (so that the listeners
+	// are part of it).
+	nodes.CompileServerCalls(&pageModel, reactiveIndex)
+
 	if !cli.GetArgs().IsolatedPages {
 		addRouteAssets(&pageModel)
 	}

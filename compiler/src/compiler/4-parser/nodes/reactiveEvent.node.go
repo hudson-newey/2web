@@ -32,9 +32,9 @@ func NewReactiveEventNode(lexNodes []*lexer.V2LexNode, context *ParseContext) No
 	}
 
 	assignmentSink, assignmentExpr := parseReducer(reducer.Content)
-	if assignmentSink == "" {
+	if assignmentSink == "" && assignmentExpr == "" {
 		return context.DegradedNode(
-			"reactive event reducer must assign to a reactive variable (e.g. '$count = $count + 1' or '$count++')",
+			"reactive event reducer must assign to a reactive variable or call an imported server function (e.g. '$count = $count + 1' or 'save($name)')",
 			lexNodes,
 		)
 	}
@@ -51,6 +51,10 @@ func NewReactiveEventNode(lexNodes []*lexer.V2LexNode, context *ParseContext) No
 		assignmentSink: assignmentSink,
 		assignmentExpr: assignmentExpr,
 		markupContent:  markupContent,
+		// The position of the binding is kept so that errors about the reducer
+		// (e.g. a call to a function that wasn't imported from a server
+		// script) can be reported against the binding.
+		position: positionOf(lexNodes),
 	}
 }
 
@@ -61,6 +65,11 @@ func NewReactiveEventNode(lexNodes []*lexer.V2LexNode, context *ParseContext) No
 //
 // The increment and decrement shorthand is expanded into an assignment:
 // e.g. "$x++" sinks to $x with the expression "$x + 1".
+//
+// A reducer that is a direct function call (e.g. "save($name)") doesn't
+// assign to anything. It is returned with an empty sink and the call as its
+// expression, and is compiled into a standalone event listener that calls the
+// function (see CompileServerCalls for the server function rpc calls).
 func parseReducer(reducer string) (sink string, expression string) {
 	assignmentSplit := strings.Split(reducer, "=")
 
@@ -81,7 +90,40 @@ func parseReducer(reducer string) (sink string, expression string) {
 		return sink, sink + " - 1"
 	}
 
+	trimmed = strings.TrimSuffix(trimmed, ";")
+
+	if isCallReducer(trimmed) {
+		return "", trimmed
+	}
+
 	return "", ""
+}
+
+// isCallReducer returns whether the reducer is a bare function call
+// expression, e.g. "save()" or "save($name, $other)".
+//
+// The call target must be a bare identifier: server script functions are
+// imported into the page's shared runtime scope with their own names.
+func isCallReducer(reducer string) bool {
+	open := strings.Index(reducer, "(")
+
+	if open <= 0 || !strings.HasSuffix(reducer, ")") {
+		return false
+	}
+
+	target := strings.TrimSpace(reducer[:open])
+
+	if target == "" {
+		return false
+	}
+
+	for i := 0; i < len(target); i++ {
+		if !isIdentifierByte(target[i]) {
+			return false
+		}
+	}
+
+	return true
 }
 
 type reactiveEventNode struct {
@@ -95,7 +137,11 @@ type reactiveEventNode struct {
 	// Everything AFTER the first equals sign (whitespace trimmed)
 	assignmentExpr string
 	markupContent  string
-	children       AbstractSyntaxTree
+	// The position of the binding in the source file. Errors about the
+	// reducer (e.g. a call to a function that wasn't imported from a server
+	// script) are reported against it.
+	position lexer.Position
+	children AbstractSyntaxTree
 }
 
 func (m *reactiveEventNode) Type() string {

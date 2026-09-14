@@ -1,0 +1,10 @@
+<title>Server Calls</title>
+
+<script compiled>
+  import { greet } from "./api/greetings.server.ts";
+
+  $name = "2web";
+</script>
+
+<button @click="greet($name)">Greet</button>
+<button @click="greet('direct')">Greet direct</button>
