@@ -8,6 +8,7 @@ import (
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
 	"hudson-newey/2web/src/content/css"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/javascript"
 	"hudson-newey/2web/src/content/page"
 	twoscript "hudson-newey/2web/src/content/twoScript"
@@ -298,6 +299,13 @@ func (m *reactiveVariableNode) reactivityLevel(index *ReactiveIndex) reactivityL
 		return reactive
 	}
 
+	// A variable that is read by an assignment event's expression (e.g. "$y"
+	// in '@click="$x = $y + 1"') needs a runtime representation: the event's
+	// listener reads its current value when it runs.
+	if index.IsEventRead(m) {
+		return reactive
+	}
+
 	events := m.dependentEvents(index)
 	for _, e := range events {
 		// If the assignment expression uses the same variable that it's
@@ -474,11 +482,23 @@ func (m *reactiveVariableNode) compileReactiveVar(
 	eventListeners := ""
 	pageContent := pageModel.Html.Content
 	for _, e := range events {
+		// Only the variable that the event assigns to wires the listener.
+		// Events whose expressions merely read this variable (e.g. "$y" in
+		// '@click="$x = $y + 1"') are wired by their sink variable's compile;
+		// wiring them here as well would attach a second (and differently
+		// shaped) listener to the same element.
+		if e.assignmentSink != m.selector() {
+			continue
+		}
+
 		// The assignment expression (rather than the raw reducer) is used so
 		// that the increment/decrement shorthand expands into a correct
 		// assignment (e.g. "$count++" becomes "__2_var = __2_var + 1" rather
-		// than the no-op "__2_var = __2_var++").
-		reactiveReducer := strings.ReplaceAll(e.assignmentExpr, m.selector(), variableName)
+		// than the no-op "__2_var = __2_var++"). Every reactive variable the
+		// expression reads is substituted with its runtime value, so a cross
+		// variable assignment ("$x = $y + 1") reads the current runtime value
+		// of "$y" instead of emitting the raw selector.
+		reactiveReducer := resolveReactiveExpression(e.assignmentExpr, index)
 
 		eventDomSelector := pageModel.Ids.CreateElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
@@ -531,18 +551,44 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 	eventListeners := ""
 	pageContent := pageModel.Html.Content
 	for _, e := range events {
+		// Only the variable that the event assigns to wires the listener (see
+		// the note in compileReactiveVar).
+		if e.assignmentSink != m.selector() {
+			continue
+		}
+
 		eventDomSelector := pageModel.Ids.CreateElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
 		eventListeners = eventListeners + fmt.Sprintf(
 			`document.querySelector("[%s]").addEventListener("%s", () => %s(%s));`,
-			eventDomSelector, e.eventName, handlerFuncName, e.assignmentExpr,
+			eventDomSelector, e.eventName, handlerFuncName,
+			resolveReactiveExpression(e.assignmentExpr, index),
 		)
 	}
 
 	handlerContent := fmt.Sprintf("%s\n%s", domMutator, eventListeners)
-	handlerScript := javascript.FromGeneratedContent(handlerContent)
 	pageModel.SetContent(pageContent)
-	pageModel.AddScript(handlerScript)
+
+	// The listeners are emitted into the shared reactive runtime (rather than
+	// a standalone script): their expressions may reference the runtime
+	// variables of other chunks (e.g. a cross variable assignment), and each
+	// runtime chunk compiles into one shared module scope, while standalone
+	// scripts are separate modules whose declarations can't be referenced
+	// across files.
+	//
+	// The dependencies order the chunk after the runtime variables the
+	// listeners read.
+	dependencies := []string{}
+	for _, e := range events {
+		dependencies = append(dependencies,
+			variableSelectorsReferencedBy(e.assignmentExpr, index.Variables)...)
+	}
+
+	pageModel.AppendReactiveRuntime(page.ReactiveRuntimeChunk{
+		Variable:     m.selector(),
+		Dependencies: dependencies,
+		Content:      handlerContent,
+	})
 }
 
 func (m *reactiveVariableNode) compileStaticPropVar(
@@ -568,14 +614,53 @@ func (m *reactiveVariableNode) compileStaticPropVar(
 	pageModel.AddScript(reducerScript)
 }
 
+// unquote strips the surrounding quotes of a string literal value. e.g.
+// the initial value "world" renders as world.
+func unquote(value string) string {
+	if len(value) >= 2 {
+		first := value[0]
+		last := value[len(value)-1]
+
+		if (first == '"' && last == '"') || (first == '\'' && last == '\'') {
+			return value[1 : len(value)-1]
+		}
+	}
+
+	return value
+}
+
 func (m *reactiveVariableNode) compileStatic(
 	pageModel *page.Page,
 	index *ReactiveIndex,
 ) {
 	props := m.dependentProps(index)
 	for _, p := range props {
+		selector := p.selector(pageModel)
+
+		// A text output lowers into a bare container span
+		// ("<span *textContent=\"...\"></span>"), which the compiled value
+		// replaces wholesale (the value is escaped, matching the text
+		// rendering semantics of a runtime text output).
+		//
+		// Replacing only the selector attribute would leave the value inside
+		// the element's tag as a broken attribute
+		// (e.g. '<span "hello"></span>').
+		container := "<span " + selector + "></span>"
+		if strings.Contains(pageModel.Html.Content, container) {
+			pageModel.SetContent(
+				strings.ReplaceAll(
+					pageModel.Html.Content,
+					container,
+					html.EscapeHtml(unquote(m.initialValue)),
+				),
+			)
+			continue
+		}
+
+		// Property bindings on elements the author wrote can't be statically
+		// inlined into the markup; the value replaces the binding attribute.
 		pageModel.SetContent(
-			strings.ReplaceAll(pageModel.Html.Content, p.selector(pageModel), m.initialValue),
+			strings.ReplaceAll(pageModel.Html.Content, selector, m.initialValue),
 		)
 	}
 }

@@ -71,15 +71,9 @@ func NewReactiveEventNode(lexNodes []*lexer.V2LexNode, context *ParseContext) No
 // expression, and is compiled into a standalone event listener that calls the
 // function (see CompileServerCalls for the server function rpc calls).
 func parseReducer(reducer string) (sink string, expression string) {
-	assignmentSplit := strings.Split(reducer, "=")
-
-	if len(assignmentSplit) >= 2 {
-		return strings.TrimSpace(assignmentSplit[0]), strings.TrimSpace(assignmentSplit[1])
-	}
+	trimmed := strings.TrimSpace(reducer)
 
 	// Increment/decrement shorthand: "$x++" and "$x--".
-	trimmed := strings.TrimSpace(assignmentSplit[0])
-
 	if strings.HasSuffix(trimmed, "++") {
 		sink = strings.TrimSpace(strings.TrimSuffix(trimmed, "++"))
 		return sink, sink + " + 1"
@@ -90,13 +84,65 @@ func parseReducer(reducer string) (sink string, expression string) {
 		return sink, sink + " - 1"
 	}
 
+	// A trailing semicolon is optional.
 	trimmed = strings.TrimSuffix(trimmed, ";")
 
+	// An assignment assigns to the reactive variable before the first "=".
+	// The split must happen at the FIRST "=" only (and must not treat
+	// comparisons or "=" characters inside the value expression as
+	// assignment boundaries):
+	//
+	//	"$x = 'a=b'"      assigns the string "a=b"
+	//	"$flag = $a == $b" assigns the comparison's result
+	//	"$count += 2"     is a compound assignment
+	equals := strings.Index(trimmed, "=")
+
+	if equals > 0 {
+		switch trimmed[equals-1] {
+		case '=', '!', '<', '>':
+			// A comparison operator ("==", "!=", "<=", ">="): the reducer
+			// doesn't assign to anything.
+		case '+', '-', '*', '/', '%':
+			// A compound assignment ("$count += 2") expands into a plain
+			// assignment of the compound expression.
+			sink = strings.TrimSpace(trimmed[:equals-1])
+			if isReactiveSelector(sink) {
+				value := strings.TrimSpace(trimmed[equals+1:])
+
+				return sink, "(" + sink + " " + string(trimmed[equals-1]) + " " + value + ")"
+			}
+		default:
+			sink = strings.TrimSpace(trimmed[:equals])
+			if isReactiveSelector(sink) {
+				return sink, strings.TrimSpace(trimmed[equals+1:])
+			}
+		}
+
+		return "", ""
+	}
+
+	// No "=" at all: the reducer may be a direct function call.
 	if isCallReducer(trimmed) {
 		return "", trimmed
 	}
 
 	return "", ""
+}
+
+// isReactiveSelector returns whether the string is a bare reactive variable
+// selector. e.g. "$count".
+func isReactiveSelector(selector string) bool {
+	if len(selector) < 2 || selector[0] != '$' {
+		return false
+	}
+
+	for i := 1; i < len(selector); i++ {
+		if !isIdentifierByte(selector[i]) {
+			return false
+		}
+	}
+
+	return true
 }
 
 // isCallReducer returns whether the reducer is a bare function call

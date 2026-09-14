@@ -14,6 +14,19 @@ func outputFileName(inputPath string, outputPath string, fileName string) string
 	isInDir := strings.HasSuffix(inputPath, string(os.PathSeparator))
 	isOutDir := strings.HasSuffix(outputPath, string(os.PathSeparator))
 
+	// The output path is the output directory the compiled files are written
+	// into, whether or not it was passed with a trailing separator.
+	//
+	// Without this normalization, "-o dist" (no trailing separator) resolved
+	// the compiled file against the PARENT of the output directory
+	// (path.Dir("dist") is "." or the parent directory), silently overwriting
+	// the input file whenever the input and the output directory shared a
+	// parent.
+	if !isOutDir {
+		outputPath += string(os.PathSeparator)
+		isOutDir = true
+	}
+
 	// If we are passed in a file, but a directory as the output, append the
 	// file name to the output directory
 	if !isInDir && isOutDir {

@@ -320,12 +320,38 @@ func (index *ReactiveIndex) RuntimeVariableName(selector string) string {
 	return index.runtimeVariables[selector]
 }
 
-// IsRuntime returns whether the variable is directly assigned by an event or
-// by a compiled script function, which means it needs a runtime
-// representation.
+// IsEventRead returns whether the variable is read (as an operand) by an
+// assignment event's expression, e.g. "$y" in '@click="$x = $y + 1"'.
+//
+// Such a variable needs a runtime representation: the event's listener reads
+// its current value when it runs.
+func (index *ReactiveIndex) IsEventRead(variable *reactiveVariableNode) bool {
+	for _, event := range index.Events {
+		// The variable's own sink doesn't count as a read (e.g. "$count" in
+		// '@click="$count = $count + 1"' is the assignment target, not an
+		// operand of another event).
+		if event.sink == variable.selector() || event.sink == "" {
+			continue
+		}
+
+		if slices.Contains(event.dependencies, variable.selector()) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// IsRuntime returns whether the variable is directly assigned by an event,
+// read by an assignment event's expression, or assigned by a compiled script
+// function, which means it needs a runtime representation.
 func (index *ReactiveIndex) IsRuntime(variable *reactiveVariableNode) bool {
 	for _, event := range index.Events {
 		if event.sink == variable.selector() {
+			return true
+		}
+
+		if event.sink != "" && slices.Contains(event.dependencies, variable.selector()) {
 			return true
 		}
 	}
