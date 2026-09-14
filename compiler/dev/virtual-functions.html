@@ -3,6 +3,7 @@
 <script compiled>
   import { $uid, $props, $env, $readFile } from "@compiler/types/interop.types.ts";
   import PriceTag from "components/price-tag.component.html";
+  import Badge from "components/badge.component.html";
 
   $firstId = "$uid()";
   $secondId = "$uid()";
@@ -13,6 +14,11 @@
 </script>
 
 <PriceTag [label]="'Reactive tag'" [price]="$count" />
+
+<Badge [label]="'scoped styles'" />
+<Badge [label]="'second badge'" />
+
+<p class="page-paragraph">a page paragraph (unstyled by the badge)</p>
 
 <input id="uid-demo" aria-describedby="$uid()" value="virtual" />
 

@@ -26,7 +26,12 @@ func ProcessStaticSite(filePath string, content string, expandPartials bool) str
 
 		// Components are expanded first so that the layout expansion and the
 		// compilation pipeline can see the fully expanded page.
-		ssgResult = expandComponents(filePath, ssgResult, map[string]bool{})
+		//
+		// The scope counter is per page (the component style scope ids are
+		// deterministic per page), so it doesn't leak between the pages that
+		// the build compiles in parallel.
+		scopeCounter := 0
+		ssgResult = expandComponents(filePath, ssgResult, map[string]bool{}, &scopeCounter)
 
 		// Before we expand the HTML partials, we need to expand the layouts because
 		// the layout may contain the doctype, html, head, and body tags that would

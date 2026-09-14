@@ -92,7 +92,7 @@ func propsObjectLiteral(instanceProps map[string]string) string {
 //
 // Import statements are resolved relative to the importing file, so a
 // component can import another component that sits next to it.
-func expandComponents(filePath string, content string, visiting map[string]bool) string {
+func expandComponents(filePath string, content string, visiting map[string]bool, scopeCounter *int) string {
 	importDirectory := filepath.Dir(filePath)
 
 	for _, match := range componentImportPattern.FindAllStringSubmatch(content, -1) {
@@ -144,12 +144,12 @@ func expandComponents(filePath string, content string, visiting map[string]bool)
 		}
 
 		visiting[componentPath] = true
-		expandedComponent := expandComponents(componentPath, string(componentContent), visiting)
+		expandedComponent := expandComponents(componentPath, string(componentContent), visiting, scopeCounter)
 		delete(visiting, componentPath)
 
 		content = strings.Replace(content, statement, "", 1)
 		content = selectorPattern.ReplaceAllStringFunc(content, func(selector string) string {
-			return expandComponentInstance(selector, expandedComponent)
+			return expandComponentInstance(selector, expandedComponent, scopeCounter)
 		})
 	}
 
@@ -170,13 +170,22 @@ func componentSelectorPattern(importName string) (*regexp.Regexp, error) {
 }
 
 // expandComponentInstance inlines a component instance's content, substituting
-// the instance's parameters for the "$props()" accesses in the component.
-func expandComponentInstance(selector string, componentContent string) string {
+// the instance's parameters for the "$props()" accesses in the component, and
+// scoping the component's styles to the instance.
+//
+// Components without style blocks aren't scoped: their markup compiles
+// unchanged.
+func expandComponentInstance(selector string, componentContent string, scopeCounter *int) string {
 	attributes := strings.TrimSpace(strings.TrimSuffix(strings.TrimPrefix(selector, "<"), "/>"))
 
 	instanceProps := parseInstanceProps(attributes)
 
 	content := componentContent
+
+	if hasStyleBlock(content) {
+		*scopeCounter++
+		content = scopeComponent(content, *scopeCounter)
+	}
 
 	for name, value := range instanceProps {
 		if !isConstantValue(value) {

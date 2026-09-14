@@ -1,0 +1,14 @@
+<style>
+  p {
+    background-color: darkslateblue;
+    color: white;
+  }
+
+  & .badge-label {
+    font-weight: bold;
+  }
+</style>
+
+<p class="badge-label" title="a scoped component">
+  badge: {{ $props().label }}
+</p>
