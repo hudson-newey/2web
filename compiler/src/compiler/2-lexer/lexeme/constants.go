@@ -94,6 +94,12 @@ const (
 	// if
 	ControlFlowIfKeyword Lexeme = "ControlFlowIfKeyword"
 
+	// }}
+	// A doubled closing curly brace is matched as one token inside control
+	// flow blocks so that a body capture (which ends at a single }) can
+	// contain text outputs like '{{ $item }}'.
+	DoubleCurlyClosed Lexeme = "DoubleCurlyClosed"
+
 	// for
 	ControlFlowForKeyword Lexeme = "ControlFlowForKeyword"
 

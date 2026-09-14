@@ -1,0 +1,16 @@
+<title>For Loops</title>
+
+<script compiled>
+  $fruits = ["apple", "banana", "cherry"];
+  $label = "none";
+</script>
+
+<ul class="fruit-list">
+  @for (fruit of $fruits) {
+    <li>fruit value: {{ $fruit }}</li>
+  }
+</ul>
+
+<p>{{ $label }}</p>
+
+<button @click="$fruits = ['x', 'y']">Swap</button>

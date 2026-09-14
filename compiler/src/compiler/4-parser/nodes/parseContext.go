@@ -17,6 +17,13 @@ type ParseContext struct {
 	FilePath string
 
 	errors []*models.Error
+
+	// controlFlowIds counts the synthesized helper variables that control
+	// flow nodes have created per unique source fragment. Two identical loops
+	// on one page must not declare the same runtime variable twice, and the
+	// counter is per page (rather than global) so that the compiled output of
+	// a page doesn't depend on which other pages were compiled before it.
+	controlFlowIds map[string]int
 }
 
 func NewParseContext(filePath string) *ParseContext {
@@ -32,6 +39,18 @@ func (c *ParseContext) ReportError(message string, position lexer.Position) {
 
 	c.errors = append(c.errors, &errorModel)
 	documentErrors.AddErrors(&errorModel)
+}
+
+// nextControlFlowId returns the next instance id for the given control flow
+// source fragment.
+func (c *ParseContext) nextControlFlowId(base string) int {
+	if c.controlFlowIds == nil {
+		c.controlFlowIds = map[string]int{}
+	}
+
+	c.controlFlowIds[base]++
+
+	return c.controlFlowIds[base]
 }
 
 // Adopt merges externally produced errors (e.g. from the lexer) into the

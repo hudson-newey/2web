@@ -576,6 +576,15 @@ func (m *reactiveVariableNode) compileComputedCascade(
 	cascade := ""
 	for _, computed := range computedVariables {
 		runtimeName := index.RuntimeVariableName(computed.selector())
+
+		// A computed dependent without a runtime representation took the
+		// bootstrap path (its dependencies are all static, so its value can
+		// never change). There is nothing to re-evaluate, and emitting its
+		// update would reference an empty variable name.
+		if runtimeName == "" {
+			continue
+		}
+
 		expression, ok := index.ResolveExpression(computed)
 		if !ok {
 			continue
