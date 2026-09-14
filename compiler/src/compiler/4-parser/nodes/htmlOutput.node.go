@@ -56,16 +56,10 @@ func NewHtmlOutputNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node 
 	}
 
 	if containsFunctionCall(expression) {
-		// The container's compiler selector is a unique placeholder that the
-		// compilation pass replaces with the runtime selector (the same
-		// mechanism that reactive property bindings use).
-		placeholder := fmt.Sprintf("data-__2_html_%d", context.nextSyntheticId())
-
 		return &htmlOutputNode{
-			expression:      expression,
-			containerMarkup: fmt.Sprintf(`<span %s></span>`, placeholder),
-			placeholder:     placeholder,
-			async:           true,
+			expression: expression,
+			id:         context.nextSyntheticId(),
+			async:      true,
 		}
 	}
 
@@ -101,14 +95,41 @@ type htmlOutputNode struct {
 	// textContent).
 	reactiveProp *reactivePropertyNode
 
-	// The async flavor renders into a container element that this node owns.
-	// containerMarkup is the container's raw markup (with a unique compiler
-	// placeholder as its selector) and is replaced during compilation.
-	containerMarkup string
-	placeholder     string
-	async           bool
+	// The async flavor renders into a container element that this node owns,
+	// through a generated load function (see reloadFunctionName). The
+	// container's compiler selector is a unique placeholder that the
+	// compilation pass replaces with the runtime selector. The reactive
+	// variables that the expression read trigger the load function through
+	// their update cascades, so that the rendered html is refreshed when
+	// their value changes.
+	id    int
+	async bool
 
 	children AbstractSyntaxTree
+}
+
+// reloadFunctionName returns the name of the generated async function that
+// calls the expression's function and renders its result into the container.
+func (m *htmlOutputNode) reloadFunctionName() string {
+	return fmt.Sprintf("__2_html_load_%d", m.id)
+}
+
+// containerMarkup returns the raw markup of the async flavor's container.
+func (m *htmlOutputNode) containerMarkup() string {
+	return fmt.Sprintf(`<span %s></span>`, m.placeholder())
+}
+
+// placeholder returns the unique compiler selector of the async flavor's
+// container.
+func (m *htmlOutputNode) placeholder() string {
+	return fmt.Sprintf("data-__2_html_%d", m.id)
+}
+
+// reloadCall returns the runtime statement that re-renders the output. It is
+// appended to the update cascades of the reactive variables that the
+// expression reads.
+func (m *htmlOutputNode) reloadCall() string {
+	return m.reloadFunctionName() + "();"
 }
 
 func (m *htmlOutputNode) Type() string {
@@ -130,7 +151,7 @@ func (m *htmlOutputNode) MarkupContent() string {
 		return ""
 	}
 
-	return m.containerMarkup
+	return m.containerMarkup()
 }
 
 func (m *htmlOutputNode) Content(pageModel *page.Page, index *ReactiveIndex) NodeContent {
@@ -185,29 +206,36 @@ func (m *htmlOutputNode) compileReactiveOutput(pageModel *page.Page, index *Reac
 func (m *htmlOutputNode) compileAsyncOutput(pageModel *page.Page, index *ReactiveIndex) {
 	elementSelector := pageModel.Ids.CreateElementName()
 	pageModel.SetContent(
-		strings.ReplaceAll(pageModel.Html.Content, m.placeholder, elementSelector),
+		strings.ReplaceAll(pageModel.Html.Content, m.placeholder(), elementSelector),
 	)
 
 	// Reactive variables that the expression reads are passed with the value
-	// they have when the load block runs (runtime variables by reference, and
-	// static variables inlined with their value).
+	// they have when the load function runs (runtime variables by reference,
+	// so a reload reads the updated value, and static variables inlined with
+	// their value).
 	expression := resolveReactiveExpression(m.expression, index)
 
-	loadBlock := fmt.Sprintf(
-		`(async () => {
+	loadFunction := fmt.Sprintf(
+		`async function %s() {
 	try {
 		document.querySelector("[%s]")["innerHTML"] = "" + (await %s);
 	} catch (__2_error) {
 		console.error("[2web] failed to render html output '%s':", __2_error);
 	}
-})();`,
-		elementSelector, expression, strings.ReplaceAll(m.expression, `"`, `\"`),
+}
+
+%s`,
+		m.reloadFunctionName(), elementSelector, expression,
+		strings.ReplaceAll(m.expression, `"`, `\"`), m.reloadCall(),
 	)
 
+	// The chunk is emitted after the runtime variables that the expression
+	// reads are declared, so that the initial call reads their initial
+	// values.
 	pageModel.AppendReactiveRuntime(page.ReactiveRuntimeChunk{
 		Variable:     "html:" + elementSelector,
 		Dependencies: variableSelectorsReferencedBy(m.expression, index.Variables),
-		Content:      loadBlock,
+		Content:      loadFunction,
 	})
 }
 

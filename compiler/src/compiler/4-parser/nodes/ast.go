@@ -14,6 +14,17 @@ func (ast AbstractSyntaxTree) reactiveVariables() []*reactiveVariableNode {
 	return matches
 }
 
+// htmlOutputNodes returns every html output in the tree.
+func (ast AbstractSyntaxTree) htmlOutputNodes() []*htmlOutputNode {
+	matches := []*htmlOutputNode{}
+	for _, n := range ast {
+		matches = append(matches, n.Children().htmlOutputNodes()...)
+	}
+
+	matches = append(matches, lists.FilterTypes[*htmlOutputNode](ast)...)
+	return matches
+}
+
 // twoScriptNodes returns every compiled script block in the tree.
 func (ast AbstractSyntaxTree) twoScriptNodes() []*twoScriptNode {
 	matches := []*twoScriptNode{}

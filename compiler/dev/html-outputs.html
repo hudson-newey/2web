@@ -5,11 +5,13 @@
 
   $htmlContent = "<strong>from a variable</strong>";
   $count = 0;
+  $name = "server";
 </script>
 
 <div class="html-var">[[ $htmlContent ]]</div>
-<div class="html-call">[[ greet("server") ]]</div>
+<div class="html-call">[[ greet($name) ]]</div>
 <p class="text-var">{{ $htmlContent }}</p>
 
 <button @click="$htmlContent = '<em>updated html</em>'">Update</button>
 <button @click="$count++">Count</button>
+<button @click="$name = 'other'">Rename</button>

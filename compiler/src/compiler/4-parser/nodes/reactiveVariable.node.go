@@ -290,6 +290,14 @@ func (m *reactiveVariableNode) reactivityLevel(index *ReactiveIndex) reactivityL
 		return reactive
 	}
 
+	// A variable that is read by an html output's function call needs a
+	// runtime representation (the generated load function reads it by its
+	// runtime name, so it must be declared) and its update cascade must run
+	// the output's reload function.
+	if len(index.FindDependentHtmlOutputs(m)) > 0 {
+		return reactive
+	}
+
 	events := m.dependentEvents(index)
 	for _, e := range events {
 		// If the assignment expression uses the same variable that it's
@@ -443,6 +451,7 @@ func (m *reactiveVariableNode) compileReactiveVar(
 	// computed variable that (transitively) depends on it is re-evaluated (in
 	// dependency order) and its bound properties are updated.
 	domMutator = domMutator + m.compileComputedCascade(pageModel, index)
+	domMutator = domMutator + m.htmlOutputReloads(index)
 
 	domMutator = fmt.Sprintf(`
 	 	let %s = %s;
@@ -503,6 +512,7 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 	}
 
 	handlerFuncName := pageModel.Ids.CreateFunctionName()
+	domMutator = domMutator + m.htmlOutputReloads(index)
 	domMutator = fmt.Sprintf(
 		`function %s(%s) { %s }`,
 		handlerFuncName, jsNewValueVar, domMutator,
@@ -560,6 +570,25 @@ func (m *reactiveVariableNode) compileStatic(
 	}
 }
 
+// htmlOutputReloads returns the statements that re-render the html outputs
+// whose expressions read this variable. Their generated load functions
+// re-invoke the (asynchronous) functions the outputs call, so that the
+// rendered html is refreshed when the variable's value changes.
+func (m *reactiveVariableNode) htmlOutputReloads(index *ReactiveIndex) string {
+	return htmlOutputReloadsFor(index, m)
+}
+
+// htmlOutputReloadsFor returns the reload statements of the html outputs that
+// read the given variable.
+func htmlOutputReloadsFor(index *ReactiveIndex, variable *reactiveVariableNode) string {
+	reloads := ""
+	for _, htmlOutput := range index.FindDependentHtmlOutputs(variable) {
+		reloads = reloads + htmlOutput.reloadCall() + "\n"
+	}
+
+	return reloads
+}
+
 // compileComputedCascade emits the re-evaluation statements for every
 // variable that is (transitively) computed from this variable.
 //
@@ -592,6 +621,7 @@ func (m *reactiveVariableNode) compileComputedCascade(
 
 		cascade = cascade + fmt.Sprintf("\t\t%s = %s;\n", runtimeName, expression)
 		cascade = cascade + m.computedPropertyUpdates(pageModel, index, computed, runtimeName)
+		cascade = cascade + htmlOutputReloadsFor(index, computed)
 	}
 
 	return cascade

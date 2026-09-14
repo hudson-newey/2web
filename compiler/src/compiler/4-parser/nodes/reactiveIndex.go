@@ -37,6 +37,11 @@ type ReactiveIndex struct {
 	// twice doesn't declare it twice in the shared runtime scope.
 	rpcFunctions map[string]bool
 
+	// HtmlOutputs indexes the html outputs that call a function. Their
+	// generated load functions are called by the update cascades of the
+	// reactive variables their expressions read.
+	HtmlOutputs []indexedHtmlOutput
+
 	// compiledFunctions records the names of the functions that were declared
 	// in the page's compiled script blocks. Event listeners can call them
 	// directly, just like the imported server functions.
@@ -59,6 +64,18 @@ type indexedProperty struct {
 	node *reactivePropertyNode
 	// The selectors of the reactive variables that the property's reducer
 	// references.
+	dependencies []string
+}
+
+// indexedHtmlOutput is an html output (see htmlOutputNode) whose expression
+// calls a function. The expression's value can't be assigned by the property
+// machinery (the call is asynchronous), so the output re-renders by calling
+// its generated load function whenever one of the reactive variables its
+// expression reads changes.
+type indexedHtmlOutput struct {
+	node *htmlOutputNode
+
+	// The selectors of the reactive variables that the expression reads.
 	dependencies []string
 }
 
@@ -139,11 +156,41 @@ func BuildReactiveIndex(ast AbstractSyntaxTree) *ReactiveIndex {
 		})
 	}
 
+	for _, htmlOutput := range ast.htmlOutputNodes() {
+		if !htmlOutput.async {
+			// A reactive html output is wired through its innerHTML property
+			// binding (which the index already tracks as a property).
+			continue
+		}
+
+		index.HtmlOutputs = append(index.HtmlOutputs, indexedHtmlOutput{
+			node:         htmlOutput,
+			dependencies: variableSelectorsReferencedBy(htmlOutput.expression, variables),
+		})
+	}
+
 	sort.Slice(index.Variables, func(i, j int) bool {
 		return index.Variables[i].variableName < index.Variables[j].variableName
 	})
 
 	return index
+}
+
+// FindDependentHtmlOutputs returns every html output whose expression reads
+// the given variable. Their generated load functions are called by the
+// variable's update cascade so that the rendered html is refreshed when the
+// value changes.
+func (index *ReactiveIndex) FindDependentHtmlOutputs(variable *reactiveVariableNode) []*htmlOutputNode {
+	selector := variable.selector()
+
+	matches := []*htmlOutputNode{}
+	for _, htmlOutput := range index.HtmlOutputs {
+		if slices.Contains(htmlOutput.dependencies, selector) {
+			matches = append(matches, htmlOutput.node)
+		}
+	}
+
+	return matches
 }
 
 // FindDependentProperties returns every property whose reducer references the
@@ -317,6 +364,10 @@ func (index *ReactiveIndex) IsUnused(variable *reactiveVariableNode) bool {
 	}
 
 	if index.functionSinks[variable.selector()] {
+		return false
+	}
+
+	if len(index.FindDependentHtmlOutputs(variable)) > 0 {
 		return false
 	}
 

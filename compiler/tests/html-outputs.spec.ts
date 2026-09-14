@@ -54,12 +54,33 @@ test("should render a remote function call's html once it resolves", async () =>
   const [url, options] = fetchMock.mock.calls[0];
 
   expect(url).toBe("/_2web/rpc/api/greetings.server.js/greet");
+
+  // The reactive variable argument is expanded to its current value.
   expect(JSON.parse(options.body)).toEqual(["server"]);
 
   await vi.waitFor(() =>
     expect(callOutput().querySelector("em")).not.toBeNull(),
   );
   expect(callOutput().innerHTML).toContain("hello from the server");
+});
+
+// The load function of an html output that calls a remote function with a
+// reactive variable is re-run by the variable's update cascade, so the call
+// is re-issued (with the new value) whenever the variable changes.
+test("should re-call the remote function when a reactive argument changes", async () => {
+  const user = userEvent.setup();
+
+  await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+
+  await user.click(getByText(document.body as any, "Rename"));
+
+  await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+
+  expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual(["other"]);
+
+  await vi.waitFor(() =>
+    expect(callOutput().innerHTML).toContain("hello from the server"),
+  );
 });
 
 test("should re-render a reactive html variable when it changes", async () => {
