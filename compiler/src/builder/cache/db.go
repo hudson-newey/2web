@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 	"sync"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -177,9 +178,45 @@ func rememberCachedKey(key string) {
 func createDbTables(db *sql.DB) error {
 	createTableSQL := `
 	CREATE TABLE IF NOT EXISTS ` + buildCacheTableName + ` (
-		in_out_mod TEXT PRIMARY KEY
+		in_out_mod TEXT PRIMARY KEY,
+		last_touched INTEGER NOT NULL DEFAULT 0
 	);`
 
-	_, err := db.Exec(createTableSQL)
-	return err
+	if _, err := db.Exec(createTableSQL); err != nil {
+		return err
+	}
+
+	// Databases created before the vacuum feature have no last_touched column.
+	// The migration adds it; the "duplicate column" failure for databases that
+	// already have it is expected and ignored. Any other failure leaves the
+	// cache working (with entries touched at their insertion time) but the
+	// vacuum is disabled for this run.
+	if _, err := db.Exec(`ALTER TABLE ` + buildCacheTableName + ` ADD COLUMN last_touched INTEGER NOT NULL DEFAULT 0;`); err != nil && !strings.Contains(strings.ToLower(err.Error()), "duplicate column") {
+		return err
+	}
+
+	return nil
+}
+
+// cacheSize returns the size of the build cache database on disk, including
+// its write ahead log.
+func cacheSize() int64 {
+	total := int64(0)
+
+	for _, suffix := range []string{"", "-wal"} {
+		if info, err := os.Stat(dbLocation() + suffix); err == nil {
+			total += info.Size()
+		}
+	}
+
+	return total
+}
+
+// checkpoint flushes the write ahead log back into the main database file and
+// truncates it, so that cacheSize() measures where the cache actually is (and
+// deleted rows actually reclaim space).
+func checkpoint(conn *sql.DB) {
+	if _, err := conn.Exec("PRAGMA wal_checkpoint(TRUNCATE);"); err != nil {
+		log.Printf("failed to checkpoint the build cache: %v", err)
+	}
 }

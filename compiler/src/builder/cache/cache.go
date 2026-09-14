@@ -5,11 +5,112 @@ import (
 	"encoding/hex"
 	"fmt"
 	"os"
+	"sync"
+	"time"
 
 	"github.com/hudson-newey/2web/_shared/logger"
 	"hudson-newey/2web/src/cli"
 	"hudson-newey/2web/src/filesystem"
 )
+
+// buildTimestamp is the time (in unix seconds) that every cache touch of the
+// current build is recorded with.
+//
+// It is captured once at the start of compilation (see BeginBuild) so that the
+// cache writes never need to query the clock themselves: every entry written
+// or read during a build shares one timestamp, which is all the "last touched"
+// resolution the vacuum needs (a build either touched an entry or it didn't).
+var buildTimestamp int64 = 0
+
+// BeginBuild records the build's timestamp for every cache touch made during
+// this build. It must be called at the start of every compilation.
+func BeginBuild(timestamp time.Time) {
+	touchedKeysMutex.Lock()
+	touchedKeys = nil
+	touchedKeysMutex.Unlock()
+
+	buildTimestamp = timestamp.Unix()
+}
+
+// buildTime returns the timestamp that cache touches of the current build are
+// recorded with.
+//
+// Callers that use the cache outside of a build (no BeginBuild call) fall back
+// to the current time.
+func buildTime() int64 {
+	if buildTimestamp == 0 {
+		return time.Now().Unix()
+	}
+
+	return buildTimestamp
+}
+
+// touchedKeys collects the cache keys that were read (hit) during the current
+// build. They are flushed into one batched last_touched update at the end of
+// the build, so that a cache hit doesn't cost a write per page.
+var touchedKeysMutex sync.Mutex
+var touchedKeys []string
+
+// touchKey records that the current build used (read a valid entry for) the
+// given cache key.
+func touchKey(key string) {
+	touchedKeysMutex.Lock()
+	defer touchedKeysMutex.Unlock()
+
+	touchedKeys = append(touchedKeys, key)
+}
+
+// FlushTouches persists the last_touched time of every cache entry that this
+// build read. It must be called once at the end of the build.
+func FlushTouches() {
+	touchedKeysMutex.Lock()
+	keys := touchedKeys
+	touchedKeys = nil
+	touchedKeysMutex.Unlock()
+
+	if len(keys) == 0 {
+		return
+	}
+
+	conn := dbConnection()
+	if conn == nil {
+		return
+	}
+
+	tx, err := conn.Begin()
+	if err != nil {
+		logger.PrintWarning("failed to open a build cache transaction: " + err.Error())
+		return
+	}
+
+	committed := false
+	defer func() {
+		if !committed {
+			tx.Rollback()
+		}
+	}()
+
+	statement, err := tx.Prepare(`UPDATE ` + buildCacheTableName + ` SET last_touched = ? WHERE in_out_mod = ?;`)
+	if err != nil {
+		logger.PrintWarning("failed to prepare the build cache touch update: " + err.Error())
+		return
+	}
+
+	defer statement.Close()
+
+	for _, key := range keys {
+		if _, err := statement.Exec(buildTime(), key); err != nil {
+			logger.PrintWarning("failed to touch build cache entry: " + err.Error())
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		logger.PrintWarning("failed to commit build cache touches: " + err.Error())
+		return
+	}
+
+	committed = true
+}
 
 // CacheKey returns the cache key for a compilation unit.
 //
@@ -73,7 +174,16 @@ func IsCached(inputPath string, outputPath string, key string) bool {
 		return false
 	}
 
-	return hasCachedKey(key)
+	if !hasCachedKey(key) {
+		return false
+	}
+
+	// A cache hit is a use of the entry: record it (batched, see
+	// FlushTouches) so that the vacuum keeps entries that builds still rely
+	// on.
+	touchKey(key)
+
+	return true
 }
 
 // CacheRecord describes one successfully compiled asset to record in the
@@ -137,8 +247,8 @@ func CacheAssets(records []CacheRecord) {
 		}
 
 		if _, err := tx.Exec(
-			`INSERT INTO `+buildCacheTableName+` (in_out_mod) VALUES (?);`,
-			record.Key,
+			`INSERT INTO `+buildCacheTableName+` (in_out_mod, last_touched) VALUES (?, ?);`,
+			record.Key, buildTime(),
 		); err != nil {
 			logger.PrintWarning("failed to record build cache entry for " + record.InputPath + ": " + err.Error())
 		}

@@ -2,6 +2,7 @@ package builder
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/builder/cache"
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
@@ -16,6 +17,11 @@ import (
 
 func Build() bool {
 	startTime := time.Now()
+
+	// Every cache touch of this build is recorded with the build's start time
+	// (see cache.BeginBuild), so the cache writes never need to query the
+	// clock themselves.
+	cache.BeginBuild(startTime)
 
 	args := cli.GetArgs()
 
@@ -95,8 +101,16 @@ func Build() bool {
 
 	// Now that all file writes have been flushed to disk, we know exactly which
 	// outputs were written successfully and can safely record them in the
-	// build cache.
+	// build cache. Entries that this build served from cache are marked as
+	// touched with it as well.
 	flushCacheEntries()
+	cache.FlushTouches()
+
+	// Reclaim space in the build cache when it has grown too large. This only
+	// does work once the cache database is actually over its size limit, and
+	// the build is finished at this point, so the (rare) vacuum cost isn't
+	// part of the compile time the user is waiting on.
+	cache.Vacuum()
 
 	// Printing out document errors are not included in the compile time since
 	// the app is fully usable at this point.
