@@ -157,8 +157,15 @@ func expandComponents(filePath string, content string, visiting map[string]bool,
 }
 
 // componentSelectorPattern matches an instance of the component with the
-// given import name, including its attributes.
-// e.g. <Counter [title]="'My Counter'" />
+// given import name, including its attributes and its children.
+//
+// Both self closing instances and instances with children are matched:
+//
+//	<Counter [title]="'My Counter'" />
+//	<Counter><p slot="header">Hello</p></Counter>
+//
+// The second capture group holds the instance's children (empty for self
+// closing instances), which the component's slots render.
 func componentSelectorPattern(importName string) (*regexp.Regexp, error) {
 	if !regexp.MustCompile(`^[A-Za-z][A-Za-z0-9]*$`).MatchString(importName) {
 		// The import name isn't a usable markup tag name (e.g. a braced esm
@@ -166,7 +173,11 @@ func componentSelectorPattern(importName string) (*regexp.Regexp, error) {
 		return nil, fmt.Errorf("not a component import")
 	}
 
-	return regexp.MustCompile(`(?s)<` + regexp.QuoteMeta(importName) + `(\s[^>]*)?/>`), nil
+	name := regexp.QuoteMeta(importName)
+
+	return regexp.MustCompile(
+		`(?s)<` + name + `\b([^>]*?)(?:/>|>(.*?)</` + name + `\s*>)`,
+	), nil
 }
 
 // expandComponentInstance inlines a component instance's content, substituting
@@ -176,28 +187,24 @@ func componentSelectorPattern(importName string) (*regexp.Regexp, error) {
 // Components without style blocks aren't scoped: their markup compiles
 // unchanged.
 func expandComponentInstance(selector string, componentContent string, scopeCounter *int) string {
-	attributes := strings.TrimSpace(strings.TrimSuffix(strings.TrimPrefix(selector, "<"), "/>"))
+	attributes, children := parseInstance(selector)
 
 	instanceProps := parseInstanceProps(attributes)
 
 	content := componentContent
 
-	if hasStyleBlock(content) {
-		*scopeCounter++
-		content = scopeComponent(content, *scopeCounter)
-	}
-
+	// The instance parameters replace the "$props()" accesses of the
+	// component. A reactive value keeps its expression: the component
+	// references the reactive variable the instance passed, so the component
+	// updates when it changes. A constant value is inlined into text outputs
+	// (escaped, matching the text rendering semantics of a runtime text
+	// output).
 	for name, value := range instanceProps {
 		if !isConstantValue(value) {
-			// A reactive value keeps its expression: the component references
-			// the reactive variable the instance passed, so the component
-			// updates when it changes.
 			content = strings.ReplaceAll(content, "$props()."+name, value)
 			continue
 		}
 
-		// A constant value is inlined into text outputs (escaped, matching
-		// the text rendering semantics of a runtime text output).
 		textOutput := regexp.MustCompile(
 			`(\{\{\s*)\$props\(\)\.` + regexp.QuoteMeta(name) + `(\s*\}\})`,
 		)
@@ -212,7 +219,16 @@ func expandComponentInstance(selector string, componentContent string, scopeCoun
 	content = propsObjectPattern.ReplaceAllString(content, propsObjectLiteral(instanceProps))
 	content = propsAccessPattern.ReplaceAllString(content, "undefined")
 
-	return content
+	if hasStyleBlock(content) {
+		*scopeCounter++
+		content = scopeComponent(content, *scopeCounter)
+	}
+
+	// The instance's children fill the component's slots. This runs after the
+	// props and scoping, so the slot contents are the consumer's own markup:
+	// they don't receive the component's props, and they aren't tagged with
+	// the component's scope attribute.
+	return spliceSlots(content, children)
 }
 
 // instanceProps maps the parameter names of a component instance to the

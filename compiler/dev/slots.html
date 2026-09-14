@@ -1,0 +1,20 @@
+<title>Slots</title>
+
+<script compiled>
+  import Card from "components/card.component.html";
+
+  $count = 0;
+</script>
+
+<Card>
+  <h2 slot="title">My Card</h2>
+  <p>body content</p>
+</Card>
+
+<Card />
+
+<Card>
+  <p>count is {{ $count }}</p>
+</Card>
+
+<button @click="$count = 42">Bump</button>
