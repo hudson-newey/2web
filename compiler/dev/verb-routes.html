@@ -1,0 +1,33 @@
+<title>Verb Routes</title>
+
+<script compiled>
+  // Verb route files ("__get.server.ts", "__post.server.ts", ...) are the
+  // only http entry points for server endpoints. They are mounted at the url
+  // path that mirrors the directory they sit in:
+  //
+  //   dev/api/__get.server.ts  -> "GET /api"
+  //   dev/api/__post.server.ts -> "POST /api"
+
+  $getResult = "not requested";
+  $postResult = "not requested";
+
+  async function callGetRoute() {
+    const response = await fetch("/api");
+    $getResult = await response.text();
+  }
+
+  async function callPostRoute() {
+    const response = await fetch("/api", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ from: "verb-routes.html" }),
+    });
+    $postResult = await response.text();
+  }
+</script>
+
+<button @click="callGetRoute()">GET /api</button>
+<button @click="callPostRoute()">POST /api</button>
+
+<p class="get-result">{{ $getResult }}</p>
+<p class="post-result">{{ $postResult }}</p>

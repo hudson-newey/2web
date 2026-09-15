@@ -12,7 +12,7 @@ import { Document } from "happy-dom";
 let document: Document;
 
 beforeEach(async () => {
-  document = (await navigateToPage("virtual-functions.html")).document;
+  document = (await navigateToPage("scoped-styles.html")).document;
 });
 
 test("should load", () => {
@@ -20,7 +20,7 @@ test("should load", () => {
 });
 
 test("should tag component instances with their scope attribute", () => {
-  const badges = document.querySelectorAll(".badge-label");
+  const badges = document.querySelectorAll("p.badge-label[data-__2_scope]");
 
   expect(badges.length).toBe(2);
   expect(badges[0].getAttribute("data-__2_scope")).toBe("1");
@@ -29,7 +29,11 @@ test("should tag component instances with their scope attribute", () => {
 
 test("should not tag the page's own elements with a scope attribute", () => {
   expect(document.querySelector(".page-paragraph")!.getAttribute("data-__2_scope")).toBeNull();
-  expect(document.querySelector(".ids")!.getAttribute("data-__2_scope")).toBeNull();
+
+  // The page's own element that reuses the component's class name.
+  const pageLabel = document.querySelector("p.badge-label:not([data-__2_scope])")!;
+  expect(pageLabel).not.toBeNull();
+  expect(pageLabel.getAttribute("data-__2_scope")).toBeNull();
 });
 
 test("should wrap the component's style block in a @scope rule per instance", () => {

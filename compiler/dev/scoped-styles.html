@@ -1,0 +1,14 @@
+<title>Scoped Styles</title>
+
+<script compiled>
+  import Badge from "components/badge.component.html";
+</script>
+
+<Badge [label]="'first'" />
+<Badge [label]="'second'" />
+
+<!-- The badge's rules must not leak into these page-owned elements (the
+     component's unqualified "p" rule and its "& .badge-label" rule would
+     style both of them without the @scope wrapper). -->
+<p class="page-paragraph">a page paragraph</p>
+<p class="badge-label">a page element that reuses a component class name</p>
