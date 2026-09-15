@@ -15,12 +15,9 @@ func ExecuteScript(filePath string, args ...string) {
 		return
 	}
 
-	// Mutation is fine as long as the runtimeCommand function doesn't own the
-	// returned value.
-	shellCommand := append(
-		runtimeCommand(packageManager),
-		args...,
-	)
+	shellCommand := runtimeCommand(packageManager)
+	shellCommand = append(shellCommand, filePath)
+	shellCommand = append(shellCommand, args...)
 
 	shell.ExecuteCommand(shellCommand...)
 }
@@ -35,10 +32,11 @@ func runtimeCommand(pm packages.PackageManager) []string {
 		return []string{"bun"}
 	case packages.Deno:
 		return []string{"deno", "-A"}
-	case packages.Npm:
-	case packages.Pnpm:
-	case packages.Yarn:
-		return []string{"node"}
+	case packages.Npm, packages.Pnpm, packages.Yarn:
+		// Node can execute TypeScript directly from node 22.6 (with the
+		// type stripping flag) and 23.6+ (natively). Older node versions
+		// reject the flag, but the flag is a no-op on modern runtimes.
+		return []string{"node", "--experimental-strip-types"}
 	}
 
 	logger.PrintError("Could not determine runtime")

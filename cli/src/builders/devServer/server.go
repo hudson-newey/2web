@@ -21,21 +21,24 @@ import (
 func ServeSolution(args []string) {
 	// Server routes (.server.ts files) are compiled into the server output
 	// directory before the dev server starts, so that they can be mounted.
+	// The ssr server also serves the compiled client output, so the solution
+	// is built whenever it exists too.
 	hasRoutes := hasServerSources()
-	if hasRoutes {
+	hasSsr := ssr.HasSsrTarget()
+	if hasRoutes || hasSsr {
 		build.BuildSolution(args)
 	}
 
-	// When the solution has server routes, the compiled server runtime runs
-	// alongside the client dev server. It runs as a child of this process, so
-	// a single ctrl-c stops both.
+	// The ssr server mounts the compiled server routes itself (see the ssr
+	// template's runServer), so starting the standalone server runtime would
+	// double mount every route on a second port.
 	var serverProcess *exec.Cmd
-	if hasRoutes {
+	if hasRoutes && !hasSsr {
 		serverProcess = startRouteServerProcess(args)
 	}
 
 	switch {
-	case ssr.HasSsrTarget():
+	case hasSsr:
 		serveSsr(args)
 	case configs.HasViteConfig():
 		serveVite(args)
@@ -80,6 +83,12 @@ func serveInbuilt(args []string) {
 }
 
 func serveSsr(args []string) {
+	// The ssr server reads its port from the PORT environment variable (see
+	// @two-web/kit/ssr's runServer), so the --port flag is forwarded there.
+	for key, value := range serverRuntimeEnvironment(args) {
+		os.Setenv(key, value)
+	}
+
 	runner.ExecuteScript("./server/ssr.ts")
 }
 
