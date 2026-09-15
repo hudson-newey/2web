@@ -14,7 +14,12 @@ import (
 	"hudson-newey/2web/src/filesystem"
 )
 
-const debugFileVersion = 1
+// debugFileVersion is bumped whenever the debug document shape changes. A
+// previous debug file with a different version is discarded entirely (its
+// reactive graphs were written by an older compiler and can be missing
+// fields), so cached pages of the next build simply start without a graph
+// until they are recompiled.
+const debugFileVersion = 2
 
 // assetInfo describes a single file in the compiled build output.
 type assetInfo struct {
@@ -82,11 +87,18 @@ func debuggerInfoString(sitePaths []string) string {
 // don't contribute a graph to this run. Because a cached page's compile time
 // inputs are unchanged, its previous graph is still accurate and is carried
 // over so that the debug file always describes the whole site.
+//
+// Carried over graphs are pruned to the pages of the current build: graphs
+// for pages that were deleted from the site (or that belong to a different
+// input directory, e.g. after switching the dev workflow) must not survive
+// forever.
 func mergedReactivity() []debugger.PageDebugInfo {
 	previous := readPreviousReactivity()
 	merged := map[string]debugger.PageDebugInfo{}
 	for _, graph := range previous {
-		merged[graph.Page] = graph
+		if debugger.HasCurrentBuildPage(graph.Page) {
+			merged[graph.Page] = graph
+		}
 	}
 
 	for _, graph := range debugger.GetPageDebugInfo() {

@@ -48,6 +48,33 @@ func GetPageDebugInfo() []PageDebugInfo {
 	return pages
 }
 
+// currentBuildPages holds the input file paths of the build that is currently
+// running. The debug file writer uses it to prune stale reactive graphs that
+// were carried over from previous builds (e.g. pages that were deleted from
+// the site, or pages that belong to a different input directory).
+var currentBuildPages = map[string]bool{}
+
+// SetCurrentBuildPages records the input file paths that the current build
+// compiles. It must be called before the pages are compiled.
+func SetCurrentBuildPages(pages []string) {
+	debugMutex.Lock()
+	defer debugMutex.Unlock()
+
+	currentBuildPages = make(map[string]bool, len(pages))
+	for _, pagePath := range pages {
+		currentBuildPages[pagePath] = true
+	}
+}
+
+// HasCurrentBuildPage returns whether the input file path belongs to the
+// current build.
+func HasCurrentBuildPage(pagePath string) bool {
+	debugMutex.Lock()
+	defer debugMutex.Unlock()
+
+	return currentBuildPages[pagePath]
+}
+
 type DebugInfo struct {
 	Message string
 }

@@ -6,6 +6,7 @@ import (
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/debugger"
 	"hudson-newey/2web/src/filesystem"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/site"
@@ -64,6 +65,13 @@ func Build() bool {
 		// recursively find all children of the input directory
 		indexedPages := indexPages(args.InputPath)
 
+		// The debug file writer carries reactive graphs over from previous
+		// builds for pages that this build served from cache. Recording the
+		// input files that belong to this build lets it prune graphs that were
+		// carried over for pages that aren't part of the site anymore (or that
+		// belong to a different input directory).
+		debugger.SetCurrentBuildPages(indexedPages)
+
 		for _, filePath := range indexedPages {
 			AddCompilationStep(filePath)
 		}
@@ -81,6 +89,7 @@ func Build() bool {
 		// such as bundler plugins, linters, etc...
 		site.AfterAll()
 	} else {
+		debugger.SetCurrentBuildPages([]string{args.InputPath})
 		compileAndWritePage(args.InputPath, outputFileName(args.InputPath, args.OutputPath, args.InputPath))
 	}
 

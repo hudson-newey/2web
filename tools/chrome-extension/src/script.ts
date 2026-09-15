@@ -7,46 +7,13 @@
 //   - Reactivity: the reactive variables, properties, and events of the site
 //   - Graph: the relationship graph between variables, properties, and events
 
-interface VariableInfo {
-  name: string;
-  initialValue: string;
-  reactivity: string;
-  dependsOn?: string[];
-}
-
-interface PropertyInfo {
-  prop: string;
-  reducer: string;
-  dependencies: string[];
-}
-
-interface EventInfo {
-  event: string;
-  reducer: string;
-  sink: string;
-  dependencies: string[];
-}
-
-interface PageReactivity {
-  page: string;
-  variables: VariableInfo[];
-  properties: PropertyInfo[];
-  events: EventInfo[];
-}
-
-interface AssetInfo {
-  path: string;
-  type: string;
-  size: number;
-}
-
-interface DebugDocument {
-  version: number;
-  pages: string[];
-  assets: AssetInfo[];
-  messages: string[];
-  reactivity: PageReactivity[];
-}
+import {
+  normalizeDebugDocument,
+  type DebugDocument,
+  type EventInfo,
+  type PropertyInfo,
+  type VariableInfo,
+} from "./debugDocument";
 
 const DEBUG_FILE = "__2web.debug.json";
 
@@ -76,7 +43,20 @@ async function fetchDebugDocument(): Promise<DebugDocument | null> {
   return new Promise((resolve) => {
     chrome.devtools.inspectedWindow.eval(
       expression,
-      (result: DebugDocument | null) => resolve(result ?? null),
+      (
+        result: unknown,
+        exceptionInfo?: chrome.devtools.inspectedWindow.EvaluationExceptionInfo,
+      ) => {
+        if (exceptionInfo) {
+          // The evaluation itself failed (e.g. the inspected page is a
+          // restricted chrome:// page). Report it instead of hanging.
+          console.warn("[2web] failed to inspect the page:", exceptionInfo.description);
+          resolve(null);
+          return;
+        }
+
+        resolve(normalizeDebugDocument(result));
+      },
     );
   });
 }
@@ -499,9 +479,17 @@ async function refresh(): Promise<void> {
     return;
   }
 
-  renderAssets(PANELS.assets, debugDocument);
-  renderReactivity(PANELS.reactivity, debugDocument);
-  renderGraph(PANELS.graph, debugDocument);
+  try {
+    renderAssets(PANELS.assets, debugDocument);
+    renderReactivity(PANELS.reactivity, debugDocument);
+    renderGraph(PANELS.graph, debugDocument);
+  } catch (error) {
+    // A render failure must never leave the panel stuck on the loading
+    // status: surface it so that a bad debug file is diagnosable.
+    console.error("[2web] failed to render the debug info:", error);
+    setStatus(`Failed to render __2web.debug.json: ${error}`, true);
+    return;
+  }
 
   const variableCount = debugDocument.reactivity.reduce((sum, page) => sum + page.variables.length, 0);
   const eventCount = debugDocument.reactivity.reduce((sum, page) => sum + page.events.length, 0);
@@ -517,7 +505,27 @@ for (const tab of document.querySelectorAll(".tab")) {
   tab.addEventListener("click", () => switchTab((tab as HTMLElement).dataset.tab!));
 }
 
-document.getElementById("refresh")!.addEventListener("click", refresh);
-chrome.devtools.network.onNavigated.addListener(refresh);
+document.getElementById("refresh")!.addEventListener("click", () => {
+  void refresh();
+});
 
-refresh();
+if (chrome?.devtools?.inspectedWindow) {
+  chrome.devtools.network.onNavigated.addListener(() => {
+    void refresh();
+  });
+
+  void refresh();
+} else {
+  // The panel only gets the chrome.devtools API when it runs inside the
+  // browser devtools (via the extension's devtools_page). Opening the built
+  // panel as a normal web page must not hang on the loading status.
+  for (const panel of Object.values(PANELS)) {
+    panel.replaceChildren();
+    panel.appendChild(
+      emptyState(
+        "The chrome.devtools API is unavailable. Load this panel through the 2web devtools panel (chrome devtools > 2web tab).",
+      ),
+    );
+  }
+  setStatus("chrome.devtools API unavailable", true);
+}
