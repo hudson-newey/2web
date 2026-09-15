@@ -1,0 +1,62 @@
+<title>SSR Dev Home</title>
+
+<script compiled>
+  import { $uid } from "@compiler/types/interop.types.ts";
+  import { getUserTable, getUserCount, getUsers, greetVisitor } from "./api/users.server.ts";
+  import UserBadge from "components/user-badge.component.html";
+
+  $query = "all";
+  $greeting = "";
+  $users = [];
+  $userCount = 0;
+  $routeStatus = "not requested";
+
+  // Loaded from the server once the page runs in the browser.
+  async function loadUsers() {
+    $users = await getUsers();
+    $userCount = await getUserCount();
+  }
+
+  async function callStatusRoute() {
+    const response = await fetch("/api");
+    $routeStatus = await response.text();
+  }
+
+  async function callEchoRoute() {
+    const response = await fetch("/api", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ from: "ssr dev site" }),
+    });
+    $routeStatus = await response.text();
+  }
+
+  loadUsers();
+</script>
+
+<h1>SSR Dev Site</h1>
+
+<p class="user-count">user count: {{ $userCount }}</p>
+
+<section aria-labelledby="$uid()">
+  <h2 id="$uid()">User table (server rendered html)</h2>
+  <div class="user-table">[[ getUserTable($query) ]]</div>
+</section>
+
+<p class="greeting">{{ $greeting }}</p>
+
+<ul class="user-list">
+  @for (user of $users) {
+    <li class="user">{{ $user }}</li>
+  }
+</ul>
+
+<UserBadge [name]="'static badge'" />
+
+<p class="route-status">{{ $routeStatus }}</p>
+
+<button @click="$query = 'all'">All users</button>
+<button @click="$query = 'grace'">Filter: grace</button>
+<button @click="$greeting = greetVisitor()">Greet</button>
+<button @click="callStatusRoute()">GET /api</button>
+<button @click="callEchoRoute()">POST /api</button>

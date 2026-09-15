@@ -8,6 +8,21 @@
   </head>
 
   <body>
-    <div id="output-element"></div>
+    <header id="toolbar">
+      <nav id="tabs">
+        <button class="tab active" data-tab="assets">Assets</button>
+        <button class="tab" data-tab="reactivity">Reactivity</button>
+        <button class="tab" data-tab="graph">Graph</button>
+      </nav>
+      <button id="refresh" title="Reload __2web.debug.json from the page">Refresh</button>
+    </header>
+
+    <main id="panels">
+      <section id="panel-assets" class="panel active"></section>
+      <section id="panel-reactivity" class="panel"></section>
+      <section id="panel-graph" class="panel"></section>
+    </main>
+
+    <footer id="status"></footer>
   </body>
 </html>

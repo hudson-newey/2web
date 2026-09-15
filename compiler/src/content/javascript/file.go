@@ -42,10 +42,38 @@ func FromContent(content javascriptCode) *JSFile {
 type JSFile struct {
 	Content          javascriptCode
 	memoisedFileName string
+
+	// requiresBundle marks content that needs the esbuild pipeline (TypeScript
+	// transpilation and ESM bundling). Compiler generated script content is
+	// plain JavaScript without imports, so bundling it would only pay esbuild's
+	// per call setup cost for nothing.
+	requiresBundle bool
+
+	memoisedRawContent string
+}
+
+// FromGeneratedContent creates a JSFile from compiler generated script
+// content.
+//
+// The compiler emits plain JavaScript without imports for its reactive
+// handlers, so this content skips the esbuild pipeline. Content that was
+// written by the user (which may be TypeScript or contain ESM imports) must be
+// created with FromContent instead.
+func FromGeneratedContent(content javascriptCode) *JSFile {
+	return &JSFile{Content: content}
 }
 
 func (model *JSFile) RawContent() string {
+	if model.memoisedRawContent != "" {
+		return model.memoisedRawContent
+	}
+
 	result := model.Content
+
+	if !model.requiresBundle {
+		model.memoisedRawContent = result
+		return result
+	}
 
 	workingDir, _ := filepath.Abs(cli.GetArgs().InputPath)
 
@@ -76,6 +104,7 @@ func (model *JSFile) RawContent() string {
 		documentErrors.AddErrors(&errorModel)
 	}
 
+	model.memoisedRawContent = bundledContent
 	return bundledContent
 }
 

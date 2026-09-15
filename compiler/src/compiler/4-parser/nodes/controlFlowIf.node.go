@@ -2,6 +2,8 @@ package nodes
 
 import (
 	"fmt"
+	"strings"
+
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 	"hudson-newey/2web/src/compiler/4-parser/scanners"
@@ -11,24 +13,52 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewControlFlowIfNode(lexNodes []*lexer.V2LexNode) *controlFlowIfNode {
-	expression, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
+func NewControlFlowIfNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
+	// The grammar captures everything between the condition's parentheses and
+	// the body's curly braces, so the expression and content can contain
+	// whitespace and multiple tokens.
+	expression, err := scanners.CapturedContent(lexNodes, lexeme.BracketOpen, lexeme.BracketClosed)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"@if block is missing a condition. If blocks are declared with '@if (condition) { content }'",
+			lexNodes,
+		)
 	}
 
-	content, err := scanners.NthToken(lexNodes, lexeme.TextContent, 2)
+	content, err := scanners.CapturedContent(lexNodes, lexeme.CurlyOpen, lexeme.CurlyClosed)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"@if block is missing a body. If blocks are declared with '@if (condition) { content }'",
+			lexNodes,
+		)
 	}
 
+	expression = strings.TrimSpace(expression)
+
+	if expression == "" {
+		return context.DegradedNode(
+			"@if block is missing a condition. If blocks are declared with '@if (condition) { content }'",
+			lexNodes,
+		)
+	}
+
+	// The markup pass renders the reactive property node (which owns the
+	// conditionally rendered markup) through Children(), so the if node itself
+	// must not render any markup. Rendering both would duplicate the content.
 	return &controlFlowIfNode{
-		expression: expression.Content,
-		content:    content.Content,
+		expression: expression,
+		content:    content,
 		reactiveProp: &reactivePropertyNode{
-			propName:      "hidden",
-			reducer:       expression.Content,
-			markupContent: ifExprNodeMarkup(expression.Content, content.Content),
+			propName: "hidden",
+			// Keep the raw expression as the reducer so that reactive variable
+			// dependency detection can find the variables used in the condition.
+			reducer:       expression,
+			markupContent: ifExprNodeMarkup(expression, content),
+			// `hidden` hides an element when it is true, but `@if (condition)`
+			// should render its content when the condition is true. Negate the
+			// condition so that the content is shown when the condition is
+			// truthy.
+			negated: true,
 		},
 	}
 }
@@ -49,10 +79,12 @@ func (m *controlFlowIfNode) Children() AbstractSyntaxTree {
 }
 
 func (m *controlFlowIfNode) MarkupContent() string {
-	return m.reactiveProp.MarkupContent()
+	// The conditionally rendered markup is owned by the reactive property node
+	// (see Children), which is rendered during the markup pass.
+	return ""
 }
 
-func (m *controlFlowIfNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *controlFlowIfNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		TwoScriptContent: twoscript.NewTwoScriptFile(),

@@ -1,0 +1,271 @@
+/* 2web devtools panel — styled to match Chrome's dark devtools theme. */
+
+:root {
+  color-scheme: dark;
+
+  --background: #1e1e1e;
+  --surface: #252526;
+  --border: #3c3c3c;
+  --text: #cccccc;
+  --text-dim: #9d9d9d;
+  --accent: #4fc1ff;
+
+  --variable: #7ee787;
+  --property: #79c0ff;
+  --event: #ffa657;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 12px;
+}
+
+#toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+#tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.tab {
+  padding: 4px 14px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text);
+  background: #333;
+}
+
+.tab.active {
+  color: var(--accent);
+  background: #333;
+}
+
+#refresh {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+#refresh:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#panels {
+  flex: 1;
+  overflow: auto;
+  padding: 10px 14px;
+}
+
+.panel {
+  display: none;
+}
+
+.panel.active {
+  display: block;
+}
+
+#status {
+  padding: 4px 10px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#status.error {
+  color: #f14c4c;
+}
+
+/* --- shared content styles ------------------------------------------------ */
+
+.section-heading {
+  margin: 14px 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.section-heading:first-child {
+  margin-top: 4px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  background: var(--background);
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.data-table tr:hover td {
+  background: #2a2d2e;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+.numeric {
+  text-align: right;
+  font-family: monospace;
+  color: var(--text-dim);
+}
+
+.empty-state {
+  padding: 24px 12px;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* --- asset + reactivity badges -------------------------------------------- */
+
+.asset-type,
+.reactivity-badge {
+  color: var(--text-dim);
+}
+
+.reactivity-reactive {
+  color: #f14c4c;
+}
+
+.reactivity-assignment {
+  color: var(--event);
+}
+
+.reactivity-static-property {
+  color: var(--property);
+}
+
+.reactivity-static {
+  color: var(--variable);
+}
+
+.reactivity-unused {
+  color: var(--text-dim);
+}
+
+.variable-name {
+  color: var(--variable);
+}
+
+/* --- graph tab ------------------------------------------------------------- */
+
+.graph .edge {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.2;
+}
+
+.graph .edge-sink {
+  stroke: var(--event);
+}
+
+.graph .edge-dependency {
+  stroke-dasharray: 4 3;
+  stroke: var(--text-dim);
+}
+
+.graph.has-selection .edge:not(.connected) {
+  opacity: 0.12;
+}
+
+.graph.has-selection .graph-node:not(.selected):not(.connected) {
+  opacity: 0.2;
+}
+
+.graph .edge.connected.edge-sink {
+  stroke-width: 2;
+}
+
+.graph .edge.connected.edge-dependency {
+  stroke: var(--accent);
+}
+
+.graph-node {
+  cursor: pointer;
+}
+
+.graph-node rect {
+  fill: var(--surface);
+  stroke: var(--border);
+}
+
+.graph-node text {
+  fill: var(--text);
+  font-family: monospace;
+  font-size: 10px;
+}
+
+.graph-node:hover rect {
+  stroke: var(--accent);
+}
+
+.graph-node.node-variable rect {
+  stroke: var(--variable);
+}
+
+.graph-node.node-variable text {
+  fill: var(--variable);
+}
+
+.graph-node.node-property rect {
+  stroke: var(--property);
+}
+
+.graph-node.node-property text {
+  fill: var(--property);
+}
+
+.graph-node.node-event rect {
+  stroke: var(--event);
+}
+
+.graph-node.node-event text {
+  fill: var(--event);
+}
+
+.graph-node.selected rect {
+  stroke-width: 2;
+  fill: #333;
+}

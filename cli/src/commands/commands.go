@@ -70,6 +70,11 @@ func ProcessInvocation(args []string) {
 		return
 	}
 
+	if command == "server" {
+		serverCommand(programName, command, args)
+		return
+	}
+
 	// We pass the commands into the "serve" builder because we support specifying
 	// a path to serve as the third optional argument.
 	// If not specified, the "./src/" directory will be the target.

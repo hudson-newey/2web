@@ -10,7 +10,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewCodeNode(lexNodes []*lexer.V2LexNode) *codeNode {
+func NewCodeNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	startingCodeTagContent := ""
 
 	// Find the lexNode that is a StyleSource token
@@ -64,7 +64,7 @@ func (m *codeNode) MarkupContent() string {
 	return m.escapedHtml()
 }
 
-func (m *codeNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *codeNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		TwoScriptContent: twoscript.NewTwoScriptFile(),

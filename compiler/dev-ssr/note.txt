@@ -1,0 +1,2 @@
+This website exists to exercise the compiler's ssr serving path. This
+sentence was read from a file at compile time.

@@ -4,26 +4,35 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 )
 
+var inlineStyleTagLexerState stateLexers
+
 // The lexer for when the <style> tag has been opened and before the first >
 // meaning that we are technically still in an element tag, but when we
 // transition to a text content state, we need to start lexing style content.
 func inlineStyleTagLexer(model *Lexer) (V2LexNode, LexFunc) {
-	// We need these = and > conditions because inline style tags can have element
-	// attributes.
-	cases := lexDefMap{
-		">": {token: lexeme.GreaterAngle, next: styleContentLexer},
-	}
+	matchers := inlineStyleTagLexerState.get(func() lexDefMap {
+		// We need these = and > conditions because inline style tags can have element
+		// attributes.
+		cases := lexDefMap{
+			">": {token: lexeme.GreaterAngle, next: styleContentLexer},
+		}
 
-	cases = withAttributes(cases)
-	cases = withStrings(cases, inlineStyleTagLexer)
+		cases = withAttributes(cases, inlineStyleTagLexer, "inline-style-tag")
+		cases = withStrings(cases, inlineStyleTagLexer, "inline-style-tag")
+		return cases
+	})
 
-	return lexerFactory(cases, styleSource)(model)
+	return lexerFactory(matchers, tagAttributes)(model)
 }
 
-func styleContentLexer(model *Lexer) (V2LexNode, LexFunc) {
-	cases := lexDefMap{
-		"</style>": {token: lexeme.StyleEndTag, next: textLexer},
-	}
+var styleContentLexerState stateLexers
 
-	return lexerFactory(cases, styleSource)(model)
+func styleContentLexer(model *Lexer) (V2LexNode, LexFunc) {
+	matchers := styleContentLexerState.get(func() lexDefMap {
+		return lexDefMap{
+			"</style>": {token: lexeme.StyleEndTag, next: textLexer},
+		}
+	})
+
+	return lexerFactory(matchers, styleSource)(model)
 }

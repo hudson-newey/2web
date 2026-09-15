@@ -1,0 +1,22 @@
+<title>Event Reducers</title>
+
+<script compiled>
+  $x = 0;
+  $y = 10;
+  $text = "";
+  $flag = false;
+  $count = 5;
+  $staticText = "rendered at compile time";
+</script>
+
+<button @click="$x = $y + 1">Cross</button>
+<button @click="$text = 'a=b'">Equals</button>
+<button @click="$flag = $x == 11">Compare</button>
+<button @click="$count += 2">Add</button>
+
+<p>X {{ $x }}</p>
+<p>Y {{ $y }}</p>
+<p>Text {{ $text }}</p>
+<p>Flag {{ $flag }}</p>
+<p>Count {{ $count }}</p>
+<p class="static-out">{{ $staticText }}</p>

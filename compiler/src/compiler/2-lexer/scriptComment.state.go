@@ -4,10 +4,14 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 )
 
-func scriptCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
-	cases := lexDefMap{
-		"*/": {token: lexeme.MarkupCommentStart, next: inlineScriptTagLexer},
-	}
+var scriptCommentLexerState stateLexers
 
-	return lexerFactory(cases, scriptComment)(model)
+func scriptCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
+	matchers := scriptCommentLexerState.get(func() lexDefMap {
+		return lexDefMap{
+			"*/": {token: lexeme.MarkupCommentStart, next: inlineScriptTagLexer},
+		}
+	})
+
+	return lexerFactory(matchers, scriptComment)(model)
 }

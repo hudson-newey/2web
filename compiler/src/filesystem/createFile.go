@@ -5,14 +5,15 @@ import (
 	"path/filepath"
 )
 
-func CreateFile(outputPath string) {
+func CreateFile(outputPath string) error {
 	if err := os.MkdirAll(filepath.Dir(outputPath), os.ModePerm); err != nil {
-		panic(err)
+		return err
 	}
 
 	file, err := os.Create(outputPath)
 	if err != nil {
-		panic(err)
+		return err
 	}
-	defer file.Close()
+
+	return file.Close()
 }

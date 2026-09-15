@@ -3,6 +3,7 @@ package minify
 import (
 	"strings"
 
+	"github.com/hudson-newey/2web/_shared/logger"
 	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/css"
 	"github.com/tdewolff/minify/v2/html"
@@ -54,7 +55,9 @@ func minifyHtml(content string) string {
 
 	minifiedContent, err := m.String("text/html", content)
 	if err != nil {
-		panic(err)
+		// A minification failure must not kill the entire build.
+		logger.PrintWarning("failed to minify html, shipping unminified content: " + err.Error())
+		return content
 	}
 
 	// The "minify" library can get 99% of the way to full minification, however

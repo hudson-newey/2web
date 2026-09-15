@@ -1,0 +1,13 @@
+<title>Dependent Reactive Variables</title>
+
+<script compiled>
+  $count = 1;
+  $doubled = $count * 2;
+  $tripledPlusOne = $doubled * 3 + 1;
+</script>
+
+<button @click="$count++">Increase</button>
+
+<p>Count {{ $count }}</p>
+<p>Doubled {{ $doubled }}</p>
+<p>Tripled plus one {{ $tripledPlusOne }}</p>

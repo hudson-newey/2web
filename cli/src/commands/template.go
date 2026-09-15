@@ -17,8 +17,8 @@ func templateCommand(programName string, command string, args []string) {
 	template := args[2]
 
 	templates := map[string]func(){
-		"serer-side-rendering": templates.SsrTemplate,
-		"ssr":                  templates.SsrTemplate,
+		"server-side-rendering": templates.SsrTemplate,
+		"ssr":                   templates.SsrTemplate,
 
 		"database": templates.DatabaseTemplate,
 		"db":       templates.DatabaseTemplate,

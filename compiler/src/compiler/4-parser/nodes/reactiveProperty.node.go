@@ -15,15 +15,21 @@ import (
 	"github.com/hudson-newey/2web/_shared/lists"
 )
 
-func NewReactivePropertyNode(lexNodes []*lexer.V2LexNode) *reactivePropertyNode {
+func NewReactivePropertyNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	propName, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"reactive property binding is missing a property name. Properties are bound with '*property=\"reducer\"'",
+			lexNodes,
+		)
 	}
 
 	reducer, err := scanners.NthToken(lexNodes, lexeme.TextContent, 2)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"reactive property binding is missing a reducer. Properties are bound with '*property=\"reducer\"'",
+			lexNodes,
+		)
 	}
 
 	markupContent := fmt.Sprintf(
@@ -49,6 +55,23 @@ type reactivePropertyNode struct {
 	// If the property node has already been used during the compilation process
 	// it will already have a selector allocated to it that we can reuse.
 	allocatedSelector string
+
+	// negated inverts the value that is assigned to the property at runtime.
+	//
+	// This is needed for props like `hidden`, where `@if (condition)` should
+	// show its content when the condition is truthy, but the `hidden` property
+	// hides an element when it is assigned a truthy value.
+	negated bool
+}
+
+// propValue wraps the given runtime value expression in the property's value
+// transformation (e.g. negation for the `hidden` property).
+func (m *reactivePropertyNode) propValue(value string) string {
+	if m.negated {
+		return fmt.Sprintf("!(%s)", value)
+	}
+
+	return value
 }
 
 func (m *reactivePropertyNode) Type() string {
@@ -63,7 +86,7 @@ func (m *reactivePropertyNode) MarkupContent() string {
 	return m.markupContent
 }
 
-func (m *reactivePropertyNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *reactivePropertyNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		JsContent:        javascript.NewJsFile(),
@@ -93,7 +116,7 @@ func (m *reactivePropertyNode) selector(pageModel *page.Page) string {
 	// Replace the compile time selector with a runtime selector
 	// TODO: Use definitions from lexer here instead
 	compilerSelector := fmt.Sprintf("*%s=\"%s\"", m.propName, m.reducer)
-	domSelector := javascript.CreateJsElementName()
+	domSelector := pageModel.Ids.CreateElementName()
 
 	m.allocatedSelector = domSelector
 
@@ -109,6 +132,20 @@ func (m *reactivePropertyNode) selector(pageModel *page.Page) string {
 func (m *reactivePropertyNode) canCompilerInline() bool {
 	supportedPropSinks := []string{"textContent", "innerText"}
 	return slices.Contains(supportedPropSinks, m.propName)
+}
+
+// propAssignment wraps the runtime value expression for the property's
+// assignment.
+//
+// String sinks (textContent/innerText) stringify the assigned value. DOM
+// stringification of a falsy value (e.g. the number 0) behaves differently
+// between engines, so the emitted code makes the string conversion explicit.
+func (m *reactivePropertyNode) propAssignment(value string) string {
+	if m.canCompilerInline() {
+		return fmt.Sprintf(`"" + (%s)`, value)
+	}
+
+	return value
 }
 
 // Finds all reactive variable dependencies for a property binding

@@ -1,5 +1,9 @@
 tmp/
 
+# 2web build output
+dist-server/
+.rpc-test-*
+
 # Logs
 logs
 *.log

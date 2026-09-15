@@ -36,6 +36,14 @@ func AddCompilationStep(filePath string) {
 			return
 		}
 
+		if IsServerScript(filePath) {
+			// Server scripts are compiled into the server output directory
+			// and are mounted on the generated express server (see
+			// FlushServerRoutes). They never produce client exposed output.
+			buildServerRoute(args.InputPath, filePath)
+			return
+		}
+
 		compileAndWritePage(
 			filePath,
 			outputFileName(args.InputPath, args.OutputPath, filePath),

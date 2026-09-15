@@ -1,0 +1,22 @@
+<title>HTML Outputs</title>
+
+<script compiled>
+  import { greet } from "./api/greetings.server.ts";
+
+  $htmlContent = "<strong>from a variable</strong>";
+  $count = 0;
+  $name = "server";
+
+  // A computed variable that calls a remote function is evaluated
+  // asynchronously and re-evaluated (with the new count) when $count changes.
+  $countGreeting = greet($count);
+</script>
+
+<div class="html-var">[[ $htmlContent ]]</div>
+<div class="html-call">[[ greet($name) ]]</div>
+<p class="text-var">{{ $htmlContent }}</p>
+<p class="computed-call">{{ $countGreeting }}</p>
+
+<button @click="$htmlContent = '<em>updated html</em>'">Update</button>
+<button @click="$count++">Count</button>
+<button @click="$name = 'other'">Rename</button>

@@ -8,10 +8,13 @@ import (
 	"hudson-newey/2web/src/content/page"
 )
 
-func NewTextOutputNode(lexNodes []*lexer.V2LexNode) *textOutputNode {
+func NewTextOutputNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	expression, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"text output is missing an expression. Text output is written with '{{ expression }}'",
+			lexNodes,
+		)
 	}
 
 	// so... text nodes are really just a short hand for a reactive property
@@ -47,13 +50,17 @@ func (m *textOutputNode) Children() AbstractSyntaxTree {
 }
 
 func (m *textOutputNode) MarkupContent() string {
-	return m.reactiveProp.MarkupContent()
+	// The rendered span is owned by the reactive property node (see Children).
+	// Rendering it here as well would emit the text output span twice, and the
+	// runtime wiring only replaces the first copy, leaving the second with a
+	// raw compiler selector in the page.
+	return ""
 }
 
-func (m *textOutputNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {
+func (m *textOutputNode) Content(page *page.Page, index *ReactiveIndex) NodeContent {
 	// A kinda cool solution which lets us re-use the reactive prop content
 	// which hooks up event listeners, etc...
-	return m.reactiveProp.Content(page, ast)
+	return m.reactiveProp.Content(page, index)
 }
 
 func (m *textOutputNode) AddChild(child Node) {

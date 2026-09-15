@@ -7,7 +7,18 @@ import (
 
 type LexFunc func(*Lexer) (V2LexNode, LexFunc)
 
-func lexerFactory(lexMap lexDefMap, state lexState) LexFunc {
+// contentTokens maps a lexer state to the token that literal text captured in
+// that state is emitted as. The map is constant, so it is built once instead
+// of per lexer invocation.
+var contentTokens = map[lexState]lexeme.Lexeme{
+	compiledScriptSource: lexeme.CompiledScriptSource,
+	scriptSource:         lexeme.ScriptSource,
+	styleSource:          lexeme.StyleSource,
+	codeSource:           lexeme.CodeSource,
+	textContent:          lexeme.TextContent,
+}
+
+func lexerFactory(lexMap *compiledMatchers, state lexState) LexFunc {
 	return func(lexerModel *Lexer) (V2LexNode, LexFunc) {
 		matchingLexNode, nextState := lexMap.matching(lexerModel, state)
 		if nextState != nil {
@@ -47,24 +58,30 @@ func lexerFactory(lexMap lexDefMap, state lexState) LexFunc {
 				return lexNode, lexerModel.State
 			}
 
-			panic(err)
+			// A read failure (other than end of file) must not kill the build.
+			lexerModel.RecordError("failed to read source: "+err.Error(), *lexerModel.Pos)
+			lexNode := V2LexNode{
+				Pos:     *lexerModel.Pos,
+				Token:   lexeme.EOF,
+				State:   sourceText,
+				Content: "",
+			}
+
+			return lexNode, lexerModel.State
 		}
 
-		startPos := lexerModel.Pos
+		// Copy the position by value. Pos is a pointer, so capturing it by
+		// reference would alias the live position: every mutation made while
+		// scanning the literal (and by backup below) would move the recorded
+		// start along with it, making every content token report the position
+		// where the literal ENDED instead of where it started.
+		startPos := *lexerModel.Pos
 		lexerModel.backup(1)
 		text := lexerModel.lexLiteral(lexMap)
 
 		// There are different types of text depending on what context we are in
 		// Sometimes it can be external source code.
-		tokenMap := map[lexState]lexeme.Lexeme{
-			compiledScriptSource: lexeme.CompiledScriptSource,
-			scriptSource:         lexeme.ScriptSource,
-			styleSource:          lexeme.StyleSource,
-			codeSource:           lexeme.CodeSource,
-			textContent:          lexeme.TextContent,
-		}
-
-		token, exists := tokenMap[state]
+		token, exists := contentTokens[state]
 		if !exists {
 			token = lexeme.TextContent
 		}

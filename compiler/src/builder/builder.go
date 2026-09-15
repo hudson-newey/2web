@@ -2,9 +2,11 @@ package builder
 
 import (
 	"fmt"
+	"hudson-newey/2web/src/builder/cache"
 	"hudson-newey/2web/src/cli"
 	lexer "hudson-newey/2web/src/compiler/2-lexer"
 	"hudson-newey/2web/src/content/document/documentErrors"
+	"hudson-newey/2web/src/debugger"
 	"hudson-newey/2web/src/filesystem"
 	"hudson-newey/2web/src/models"
 	"hudson-newey/2web/src/site"
@@ -16,6 +18,11 @@ import (
 
 func Build() bool {
 	startTime := time.Now()
+
+	// Every cache touch of this build is recorded with the build's start time
+	// (see cache.BeginBuild), so the cache writes never need to query the
+	// clock themselves.
+	cache.BeginBuild(startTime)
 
 	args := cli.GetArgs()
 
@@ -36,9 +43,9 @@ func Build() bool {
 
 	// If the output path already exists, delete the output path so that there
 	// are no stale files.
-	if _, err := os.Stat(args.OutputPath); err != os.ErrNotExist {
+	if _, err := os.Stat(args.OutputPath); err == nil {
 		// TODO: This has been disabled because it doesn't work with Vite HMR
-		// os.RemoveAll(*args.OutputPath)
+		// os.RemoveAll(args.OutputPath)
 	}
 
 	// Print out the "starting compilation" message after we have confirmed that
@@ -58,6 +65,13 @@ func Build() bool {
 		// recursively find all children of the input directory
 		indexedPages := indexPages(args.InputPath)
 
+		// The debug file writer carries reactive graphs over from previous
+		// builds for pages that this build served from cache. Recording the
+		// input files that belong to this build lets it prune graphs that were
+		// carried over for pages that aren't part of the site anymore (or that
+		// belong to a different input directory).
+		debugger.SetCurrentBuildPages(indexedPages)
+
 		for _, filePath := range indexedPages {
 			AddCompilationStep(filePath)
 		}
@@ -75,8 +89,37 @@ func Build() bool {
 		// such as bundler plugins, linters, etc...
 		site.AfterAll()
 	} else {
+		debugger.SetCurrentBuildPages([]string{args.InputPath})
 		compileAndWritePage(args.InputPath, outputFileName(args.InputPath, args.OutputPath, args.InputPath))
 	}
+
+	// Page compilation hands file writes off to an asynchronous file writer
+	// thread, so reaching this point only means that all pages have been
+	// compiled - not that their output has been written to disk.
+	//
+	// Server routes (.server.ts files) are compiled into the server output
+	// directory and mounted on the generated express server. The route
+	// manifest is written after every route has been compiled.
+	FlushServerRoutes()
+
+	// We must drain the file write queue before reporting the build as
+	// finished, otherwise the compiler could exit with writes still sitting in
+	// the queue (silently dropping them) or with the writer thread still
+	// mid-write (leaving a partially written file on disk).
+	filesystem.WaitFileWriter()
+
+	// Now that all file writes have been flushed to disk, we know exactly which
+	// outputs were written successfully and can safely record them in the
+	// build cache. Entries that this build served from cache are marked as
+	// touched with it as well.
+	flushCacheEntries()
+	cache.FlushTouches()
+
+	// Reclaim space in the build cache when it has grown too large. This only
+	// does work once the cache database is actually over its size limit, and
+	// the build is finished at this point, so the (rare) vacuum cost isn't
+	// part of the compile time the user is waiting on.
+	cache.Vacuum()
 
 	// Printing out document errors are not included in the compile time since
 	// the app is fully usable at this point.

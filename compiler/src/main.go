@@ -5,11 +5,25 @@ import (
 	"hudson-newey/2web/src/builder"
 	"hudson-newey/2web/src/builder/cache"
 	"hudson-newey/2web/src/cli"
+	"hudson-newey/2web/src/filesystem"
 	"os"
+	"runtime/pprof"
 )
 
 func main() {
 	cli.ParseArguments()
+
+	if profPath := os.Getenv("CPUPROF"); profPath != "" {
+		f, _ := os.Create(profPath)
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
+
+	// Flush any file writes that are still queued if the compiler dies
+	// unexpectedly (e.g. through a panic raised by cli.HardError). Without this,
+	// an unexpected exit would drop all writes still sitting in the file writer
+	// queue or leave partially written files on disk.
+	defer filesystem.WaitFileWriter()
 
 	if cli.GetArgs().Listen {
 		// Once you init the action server, the program will enter an infinite loop.
@@ -18,6 +32,10 @@ func main() {
 
 	// Only build if the listen flag is not being used.
 	isErrorFree := builder.Build()
+
+	if os.Getenv("CPUPROF") != "" {
+		pprof.StopCPUProfile()
+	}
 
 	// Ensure that the database connection is properly closed before exiting.
 	// I suspect that this would be automatically handled, but I'm not 100% sure.

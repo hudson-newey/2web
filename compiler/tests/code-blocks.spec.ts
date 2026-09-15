@@ -33,7 +33,7 @@ test("code block with empty compiled script", () => {
 
 test("html code block", () => {
   const expectedText = `<script>
-$ count = 0;
+$count = 0;
 </script>
 
 <h1>{{ $count }}</h1>
@@ -44,8 +44,7 @@ $ count = 0;
 });
 
 test("javascript code block", () => {
-  const expectedText = `
-$ message = "Hello World!";
+  const expectedText = `$message = "Hello World!";
 `;
 
   expect(getElement("javascript-code").textContent).toEqual(expectedText);
@@ -53,7 +52,7 @@ $ message = "Hello World!";
 
 test("compiled script in <pre> block", () => {
   const expectedText = `<script compiled>
-$ greeting = "Hello";
+$greeting = "Hello";
 </script>
 
 <h1>{{ $greeting }}</h1>
@@ -67,10 +66,9 @@ test("empty style block", () => {
 });
 
 test("css in code block should be emitted as text", () => {
-  const expectedText = `
-  <style>
+  const expectedText = `  <style>
     .unstyledElement {
-      color: red;
+      color: red !important;
     }
   </style>
 `;
@@ -79,7 +77,5 @@ test("css in code block should be emitted as text", () => {
 });
 
 test("preprocessor text nodes", () => {
-  // Because the code is not inside a <pre> block, we expect that the text will
-  // be collapsed into a single line.
-  expect(getElement("text-nodes").textContent).toEqual("<h1>{{ $count }}</h1>");
+  expect(getElement("text-nodes").textContent).toEqual("  <h1>{{ $count }}</h1>\n");
 });

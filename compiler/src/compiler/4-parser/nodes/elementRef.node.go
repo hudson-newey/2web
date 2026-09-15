@@ -11,10 +11,13 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewElementRefNode(lexNodes []*lexer.V2LexNode) *elementRefNode {
+func NewElementRefNode(lexNodes []*lexer.V2LexNode, context *ParseContext) Node {
 	id, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
-		panic(err)
+		return context.DegradedNode(
+			"element reference is missing an element name. Element references are written with '#name'",
+			lexNodes,
+		)
 	}
 
 	return &elementRefNode{
@@ -39,7 +42,7 @@ func (m *elementRefNode) MarkupContent() string {
 	return fmt.Sprintf(`id="%s"`, m.id)
 }
 
-func (m *elementRefNode) Content(page *page.Page, _ast AbstractSyntaxTree) NodeContent {
+func (m *elementRefNode) Content(page *page.Page, _ *ReactiveIndex) NodeContent {
 	return NodeContent{
 		HtmlContent:      page.Html,
 		TwoScriptContent: twoscript.NewTwoScriptFile(),

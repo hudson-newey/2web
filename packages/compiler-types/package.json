@@ -1,0 +1,13 @@
+{
+  "name": "@compiler/types",
+  "version": "0.0.1-rc.1",
+  "description": "Type declarations for 2web's compile time virtual functions",
+  "license": "MIT",
+  "types": "./interop.types.ts",
+  "exports": {
+    "./interop.types.ts": "./interop.types.ts"
+  },
+  "files": [
+    "interop.types.ts"
+  ]
+}

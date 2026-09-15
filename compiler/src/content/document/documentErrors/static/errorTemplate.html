@@ -18,13 +18,15 @@
     <div class="__2_error_list">
       {{ range .Errors }}
       <div class="__2_error">
-        <h2 class="__2_error_file">{{ .FilePath }}</h2>
+        <h2 class="__2_error_file">
+          {{ .FilePath }}{{ if .Position.Row }}:{{ .Position.Row }}:{{ .Position.Col }}{{ end }}
+        </h2>
         <pre class="__2_error_message">{{ .Message }}</pre>
 
         <div class="__2_error_actions">
           <a
             class="__2_error_action_button"
-            href="vscode://file/{{ .AbsoluteFilePath }}:1"
+            href="vscode://file/{{ .AbsoluteFilePath }}:{{ if .Position.Row }}{{ .Position.Row }}{{ else }}1{{ end }}"
           >
             Open in Editor
           </a>
