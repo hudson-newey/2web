@@ -246,8 +246,14 @@ func CacheAssets(records []CacheRecord) {
 			continue
 		}
 
+		// The delete above only prunes keys for *other* content versions of
+		// this input/output pair. When the same key is recorded again (e.g.
+		// the output directory was deleted but the cache entry is still
+		// valid), the insert upserts so that the existing row's touch time is
+		// refreshed instead of failing the primary key constraint.
 		if _, err := tx.Exec(
-			`INSERT INTO `+buildCacheTableName+` (in_out_mod, last_touched) VALUES (?, ?);`,
+			`INSERT INTO `+buildCacheTableName+` (in_out_mod, last_touched) VALUES (?, ?)
+				ON CONFLICT(in_out_mod) DO UPDATE SET last_touched = excluded.last_touched;`,
 			record.Key, buildTime(),
 		); err != nil {
 			logger.PrintWarning("failed to record build cache entry for " + record.InputPath + ": " + err.Error())
