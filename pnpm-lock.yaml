@@ -216,6 +216,9 @@ importers:
       '@types/chrome':
         specifier: ^0.1.40
         version: 0.1.43
+      happy-dom:
+        specifier: ^17.4.7
+        version: 17.4.7
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -224,7 +227,7 @@ importers:
         version: 6.3.5(@types/node@24.10.1)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1)
       vitest:
         specifier: 3.1.2
-        version: 3.1.2(@types/node@24.10.1)(@vitest/ui@3.1.2)(jsdom@26.1.0)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1)
+        version: 3.1.2(@types/node@24.10.1)(@vitest/ui@3.1.2)(happy-dom@17.4.7)(jsdom@26.1.0)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1)
 
   tools/vscode-extension:
     dependencies:
@@ -9082,7 +9085,7 @@ snapshots:
       - tsx
       - yaml
 
-  vitest@3.1.2(@types/node@24.10.1)(@vitest/ui@3.1.2)(jsdom@26.1.0)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1):
+  vitest@3.1.2(@types/node@24.10.1)(@vitest/ui@3.1.2)(happy-dom@17.4.7)(jsdom@26.1.0)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1):
     dependencies:
       '@vitest/expect': 3.1.2
       '@vitest/mocker': 3.1.2(vite@6.3.5(@types/node@24.10.1)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))
@@ -9108,6 +9111,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.10.1
       '@vitest/ui': 3.1.2(vitest@3.1.2)
+      happy-dom: 17.4.7
       jsdom: 26.1.0
     transitivePeerDependencies:
       - jiti

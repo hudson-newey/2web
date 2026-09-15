@@ -14,11 +14,11 @@ import (
 	"hudson-newey/2web/src/filesystem"
 )
 
-// debugFileVersion is bumped whenever the debug document shape changes. A
-// previous debug file with a different version is discarded entirely (its
-// reactive graphs were written by an older compiler and can be missing
-// fields), so cached pages of the next build simply start without a graph
-// until they are recompiled.
+// debugFileVersion labels the debug document shape that this compiler writes.
+// Readers of previous debug files are version tolerant: entries from older
+// compilers can be missing fields, which is safe because (a) the devtools
+// extension normalizes missing fields away and (b) the reactive graph merge
+// prunes entries to the pages of the current build.
 const debugFileVersion = 2
 
 // assetInfo describes a single file in the compiled build output.
@@ -119,6 +119,12 @@ func mergedReactivity() []debugger.PageDebugInfo {
 
 // readPreviousReactivity loads the reactive graphs from the previous build's
 // debug file. Missing or corrupt debug files are treated as no previous data.
+//
+// The previous file is read regardless of its version: entries written by an
+// older compiler can be missing fields (which the devtools extension
+// normalizes away), and discarding them would leave pages that this build
+// served from the cache without a reactive graph (a cached page doesn't
+// recompile, so it can't regenerate its graph).
 func readPreviousReactivity() []debugger.PageDebugInfo {
 	raw, err := os.ReadFile(cli.GetEnvVars().DebugOverride)
 	if err != nil {
@@ -127,10 +133,6 @@ func readPreviousReactivity() []debugger.PageDebugInfo {
 
 	var previous debugDocument
 	if err := json.Unmarshal(raw, &previous); err != nil {
-		return []debugger.PageDebugInfo{}
-	}
-
-	if previous.Version != debugFileVersion {
 		return []debugger.PageDebugInfo{}
 	}
 
