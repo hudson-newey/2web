@@ -1,0 +1,18 @@
+<title>SSR Dev About</title>
+
+<script compiled>
+  import { $env, $readFile } from "@compiler/types/interop.types.ts";
+
+  // Virtual functions are evaluated at compile time; the page ships their
+  // values as constants.
+  $deployment = $env("2WEB_SSR_DEMO_ENV");
+  $note = $readFile("note.txt");
+</script>
+
+<h1>About the SSR dev site</h1>
+
+<p class="note">{{ $note }}</p>
+<p class="deployment">deployment: {{ $deployment }}</p>
+
+<a href="index.html">Back home</a>
+<!-- rebuild check -->

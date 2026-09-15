@@ -1,0 +1,15 @@
+<style>
+  .user-badge {
+    display: inline-block;
+    padding: 0.1rem 0.6rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.85rem;
+  }
+</style>
+
+<script compiled>
+  import { $props } from "@compiler/types/interop.types.ts";
+</script>
+
+<span class="user-badge">{{ $props().name }}</span>

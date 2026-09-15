@@ -1,4 +1,6 @@
 dist/
+dist-ssr/
+dist-ssr-server/
 bin/
 build/
 .cache/

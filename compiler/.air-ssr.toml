@@ -1,0 +1,78 @@
+#:schema https://json.schemastore.org/any.json
+# Air workflow for the ssr dev website (compiler/dev-ssr/).
+#
+#	Run with: air -c .air-ssr.toml
+#
+# Each rebuild of the compiler recompiles the website into ./dist-ssr/ and
+# restarts the ssr server (which serves ./dist-ssr/ and mounts
+# ./dist-ssr-server/) on http://localhost:5173.
+root = "."
+testdata_dir = "testdata"
+tmp_dir = "tmp"
+
+[build]
+  # Compile the compiler, then build the ssr dev website. The website builds
+  # into ./dist-ssr/ (and ./dist-ssr-server/ for the server routes) so that it
+  # doesn't clobber the static dev/ fixture build in ./dist/ that the
+  # compiler test suite reads.
+  cmd = "go build -o ./tmp/main ./src && ./tmp/main -i dev-ssr/ -o dist-ssr/ --no-cache"
+  # Serve the compiled website. Air stops this process before every rebuild
+  # and starts it again after cmd succeeds.
+  full_bin = "TWO_WEB_CLIENT_DIR=./dist-ssr/ TWO_WEB_SERVER_DIR=./dist-ssr-server/ node --experimental-strip-types dev-ssr/ssr.ts"
+  delay = 1
+  exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+  exclude_file = []
+  exclude_regex = ["_test.go"]
+  exclude_unchanged = false
+  follow_symlink = false
+  include_dir = ["src", "dev-ssr"]
+  include_ext = [
+    "go",
+    "tpl",
+    "tmpl",
+    "html",
+    "xml",
+    "md",
+    "txt",
+    "json",
+    "css",
+    "js",
+    "ts",
+    "yml",
+    "toml",
+  ]
+  include_file = []
+  kill_delay = "0s"
+  log = "build-errors.log"
+  poll = false
+  poll_interval = 0
+  post_cmd = []
+  pre_cmd = []
+  rerun = false
+  rerun_delay = 500
+  send_interrupt = false
+  stop_on_error = true
+
+[color]
+  app = ""
+  build = "yellow"
+  main = "magenta"
+  runner = "green"
+  watcher = "cyan"
+
+[log]
+  main_only = false
+  silent = false
+  time = false
+
+[misc]
+  clean_on_exit = false
+
+[proxy]
+  app_port = 0
+  enabled = false
+  proxy_port = 0
+
+[screen]
+  clear_on_rebuild = true
+  keep_scroll = true
