@@ -81,52 +81,10 @@ $ 2web serve <path> <arguments>
 >
 ```
 
-2Web can use Vite or an in-built development server to serve projects locally.
-
-Vite is recommended for larger projects, while the in-built server is sufficient
-for small projects, quick prototypes, or lower skill maintainers who may not
-want to install npm or node.js.
-
-2Web will use the following logic to determine which server to use:
-
-1. If the project has an SSR target (e.g. through `2web template ssr`), use SSR server.
-2. If a or `vite.config.ts` file is present in the project root, use Vite.
-   While using the Vite dev server, the cli assumes that if you wanted to use
-   the 2web compiler, you would be explicitly using the Vite plugin for 2web.
-   1. If Vite is installed as an npm package, use the `node_modules` version
-   2. If Vite is installed globally, use the global version
-   3. Otherwise, use `npx vite`
-3. Otherwise, use the in-built development server.
-   1. If a local `./bin/2webc` compiler binary is present, build the project
-      before serving any pages.
-   2. Otherwise, use the global `2webc` compiler binary to build the project
-      before serving any pages.
-   3. If there is no 2web compiler available, serve the static files as-is.
-
-#### Serve Command Flags & Arguments
-
 | Command            | Alias | Description                           |
 | ------------------ | ----- | ------------------------------------- |
 | `--no-watch`       |       | Do not watch files for changes        |
 | `--no-auto-reload` |       | Do not automatically reload dev pages |
-
-### Build Command
-
-2Web prefers using Vite for building projects, but can directly call the 2web
-compiler (`2webc`) if Vite is not available.
-
-The logic for determining which build tool to use is as follows:
-
-1. If a `vite.config.ts` file is present in the project root,
-   use Vite.
-   1. If Vite is installed as an npm package, use the `node_modules` version
-   2. If Vite is installed globally, use the global version
-   3. Otherwise, use `npx vite`
-2. Otherwise, use the in-built 2web compiler.
-   1. If a local `./bin/2webc` compiler binary is present, use that
-   2. Otherwise, use the global `2webc` compiler binary
-   3. If there is no 2web compiler available, assets are directly copied to the
-      output directory without any compilation and a warning is shown.
 
 ### Doctor Command
 
@@ -153,7 +111,6 @@ to be installed until you need some of the dependencies features.
 | [pandoc](https://pandoc.org)                      | `.tex`, `.docx`, `.doc`, `.odt`             |
 | [dart-sass](https://sass-lang.com)                | `.sass`, `.scss`                            |
 | [fable](https://fable.io)                         | `.fs`                                       |
-| [.NET](https://dotnet.microsoft.com)              | `.cs`, `.fs`, `.vb`                         |
 | [ffmpeg](https://ffmpeg.org)                      | Optimizing images/videos                    |
 | [docker](https://www.docker.com)                  | Database, load balancer & deployment images |
 | [docker-compose](https://docs.docker.com/compose) |                                             |
@@ -170,6 +127,5 @@ frequently, and in the projects `node_modules/` for larger projects.
 
 | Dependency                                         | Required for  |
 | -------------------------------------------------- | ------------- |
-| [Vite](https://vite.dev)                           | `2web serve`  |
 | [oxlint](https://oxc.rs/docs/guide/usage/linter)   | `2web lint`   |
 | [oxfmt](https://oxc.rs/docs/guide/usage/formatter) | `2web format` |

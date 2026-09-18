@@ -6,7 +6,6 @@ import (
 	"path"
 
 	"github.com/hudson-newey/2web-cli/src/builders"
-	"github.com/hudson-newey/2web-cli/src/builders/configs"
 	"github.com/hudson-newey/2web-cli/src/constants"
 )
 
@@ -18,11 +17,6 @@ func BuildSolution(args []string) {
 }
 
 func BuildPath(inPath string, outPath string) {
-	if configs.HasViteConfig() {
-		buildWithVite(inPath)
-		return
-	}
-
 	compilerPath, err := twoWebCompilerPath()
 	if err == nil {
 		buildWithInbuiltCompiler(compilerPath, inPath, outPath)

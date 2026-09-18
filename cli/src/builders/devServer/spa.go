@@ -7,7 +7,7 @@ import (
 	"github.com/hudson-newey/2web-cli/src/server"
 )
 
-func serveInbuilt(args []string) {
+func serveSpa(args []string) {
 	inPath := builders.EntryTargets(args)[0]
 	outPath := builders.OutputTarget(args)
 
