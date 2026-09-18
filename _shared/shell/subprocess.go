@@ -35,11 +35,7 @@ func ExecuteSubProcess(command ...string) {
 
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-
-	// Ensure the child process dies if the parent dies
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Pdeathsig: syscall.SIGKILL,
+	if err := cmd.Run(); err != nil {
+		panic(err)
 	}
-
-	cmd.Start()
 }
