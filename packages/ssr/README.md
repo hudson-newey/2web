@@ -21,5 +21,6 @@ import { runServer } from "@two-web/kit/ssr";
 
 runServer({
     port: 2000, // Default: 2000
+    path: ".", // Default: "dist/"
 });
 ```

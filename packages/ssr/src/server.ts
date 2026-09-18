@@ -1,5 +1,5 @@
 import { createServer as createViteServer } from "vite";
-import { handleSsrRequest } from "./renderer/handler";
+import { createSsrHandler } from "./renderer/handler";
 import express from "express";
 import type { SsrConfig } from "./config/config";
 import { mergeDefaultConfig } from "./config/defaultConfig";
@@ -25,7 +25,9 @@ export async function runServer(userConfig: Readonly<Partial<SsrConfig>>) {
   // middlewares). The following is valid even after restarts.
   app.use(vite.middlewares);
 
-  app.use(/(.*)/, handleSsrRequest);
+  const handler = createSsrHandler(config);
+
+  app.use(/(.*)/, handler);
 
   app.listen(config.port);
 }

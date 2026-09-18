@@ -69,7 +69,8 @@
   },
   "dependencies": {
     "express": "^5.1.0",
-    "happy-dom": "17.4.7"
+    "happy-dom": "17.4.7",
+    "sanitize-filename": "^1.6.4"
   },
   "devDependencies": {
     "@total-typescript/tsconfig": "^1.0.4",
