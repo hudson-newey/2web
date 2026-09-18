@@ -3,13 +3,10 @@ package devserver
 import (
 	"fmt"
 	"os"
-	"slices"
 
 	"github.com/hudson-newey/2web-cli/src/builders"
 	"github.com/hudson-newey/2web-cli/src/builders/configs"
 	"github.com/hudson-newey/2web-cli/src/packages"
-	"github.com/hudson-newey/2web-cli/src/runner"
-	"github.com/hudson-newey/2web-cli/src/server"
 	"github.com/hudson-newey/2web-cli/src/ssr"
 	"github.com/hudson-newey/2web/_shared/logger"
 )
@@ -46,19 +43,4 @@ func serveVite(args []string) {
 		// --config arguments, meaning that Vite should use the default config.
 		packages.ExecutePackage("vite", pathTarget)
 	}
-}
-
-func serveInbuilt(args []string) {
-	inPath := builders.EntryTargets(args)[0]
-	outPath := builders.OutputTarget(args)
-
-	server.Run(inPath, outPath, server.Options{
-		// TODO: Refactor to use go flags package
-		WatchFiles: !slices.Contains(args, "--no-watch"),
-		AutoReload: !slices.Contains(args, "--no-auto-reload"),
-	})
-}
-
-func serveSsr() {
-	runner.ExecuteScript("./server/ssr.ts")
 }
