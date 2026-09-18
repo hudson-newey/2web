@@ -1,6 +1,6 @@
 package build
 
-import "github.com/hudson-newey/2web-cli/src/shell"
+import "github.com/hudson-newey/2web/_shared/shell"
 
 func buildWithInbuiltCompiler(
 	compilerPath string,

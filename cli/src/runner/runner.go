@@ -2,8 +2,8 @@ package runner
 
 import (
 	"github.com/hudson-newey/2web-cli/src/packages"
-	"github.com/hudson-newey/2web-cli/src/shell"
 	"github.com/hudson-newey/2web/_shared/logger"
+	"github.com/hudson-newey/2web/_shared/shell"
 )
 
 // Executes a JavaScript / TypeScript file

@@ -3,8 +3,8 @@ package installer
 import (
 	"fmt"
 
-	"github.com/hudson-newey/2web-cli/src/shell"
 	"github.com/hudson-newey/2web/_shared/logger"
+	"github.com/hudson-newey/2web/_shared/shell"
 )
 
 func installBunPackage(name string) {

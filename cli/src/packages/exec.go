@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/hudson-newey/2web-cli/src/shell"
 	"github.com/hudson-newey/2web/_shared/logger"
+	"github.com/hudson-newey/2web/_shared/shell"
 )
 
 // Allows you to run a package managers "exec" command.
