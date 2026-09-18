@@ -67,8 +67,6 @@
 | Package | State |
 | ------- | ----- |
 | css     | ✅    |
-| sass    | ❌    |
-| scss    | ❌    |
 
 ## Compiler Developer Options
 

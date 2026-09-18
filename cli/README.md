@@ -109,7 +109,6 @@ to be installed until you need some of the dependencies features.
 | ------------------------------------------------- | ------------------------------------------- |
 | [2webc](https://github.com/hudson-newey/2web)     |                                             |
 | [pandoc](https://pandoc.org)                      | `.tex`, `.docx`, `.doc`, `.odt`             |
-| [dart-sass](https://sass-lang.com)                | `.sass`, `.scss`                            |
 | [fable](https://fable.io)                         | `.fs`                                       |
 | [ffmpeg](https://ffmpeg.org)                      | Optimizing images/videos                    |
 | [docker](https://www.docker.com)                  | Database, load balancer & deployment images |

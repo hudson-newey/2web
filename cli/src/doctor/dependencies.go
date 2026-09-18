@@ -11,7 +11,6 @@ import (
 func CheckDependencies() {
 	requiredDependencies := []dependency{
 		{name: "pandoc", url: "https://pandoc.org/installing.html"},
-		{name: "sass", url: "https://sass-lang.com/install"},
 		{name: "fable", url: "https://fable.io"},
 		{name: ".NET", url: "https://dotnet.microsoft.com"},
 		{name: "ffmpeg", url: "https://ffmpeg.org/download.html"},
@@ -25,7 +24,6 @@ func CheckDependencies() {
 	}
 
 	optionalDependencies := []dependency{
-		{name: "vite", url: "https://vite.dev"},
 		{name: "oxlint", url: "https://oxc.rs/docs/guide/usage/linter"},
 		{name: "oxfmt", url: "https://oxc.rs/docs/guide/usage/formatter"},
 	}
