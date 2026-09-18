@@ -10,7 +10,10 @@ import (
 // output and error streams of the current process.
 // Returns the exit code of the executed command and any error that occurred
 // while trying to run the command.
-func ExecuteCommand(command ...string) (int, error) {
+//
+// Using this function will stop the execution of the current program and wait
+// for the new shell command to finish execution.
+func ExecuteSync(command ...string) (int, error) {
 	log.Println(command)
 
 	commandLen := len(command)

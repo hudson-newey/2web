@@ -39,7 +39,7 @@ func nodeModulesExecute(args []string, allowFallback bool) {
 		// package instead.
 		packageName := args[0]
 		if isGloballyInstalled(packageName) {
-			shell.ExecuteCommand(args...)
+			shell.ExecuteSync(args...)
 		} else {
 			warningMsg := fmt.Sprintf("could not find global install of package '%s'.\n This may result in slow execution.", packageName)
 			logger.PrintWarning(warningMsg)
@@ -52,7 +52,7 @@ func nodeModulesExecute(args []string, allowFallback bool) {
 	shellCommand := []string{packageManagerPath(packageManager), "exec"}
 	shellCommand = append(shellCommand, args...)
 
-	shell.ExecuteCommand(shellCommand...)
+	shell.ExecuteSync(shellCommand...)
 }
 
 // If no local package manager is installed, we can run most commands using the
@@ -67,7 +67,7 @@ func executeNpx(args []string) {
 	shellCommand := []string{"npx"}
 	shellCommand = append(shellCommand, args...)
 
-	shell.ExecuteCommand(shellCommand...)
+	shell.ExecuteSync(shellCommand...)
 }
 
 func isGloballyInstalled(packageName string) bool {

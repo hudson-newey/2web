@@ -10,5 +10,5 @@ func copyAssetsOnly(inPath string, outPath string) {
 
 	// For some reason copying files is not a trivial task in Go.
 	// TODO: Replace this shell script hack with a proper Go implementation.
-	shell.ExecuteCommand("cp", "-r", inPath+"/*", outPath)
+	shell.ExecuteSync("cp", "-r", inPath+"/*", outPath)
 }

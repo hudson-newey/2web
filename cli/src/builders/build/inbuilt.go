@@ -7,5 +7,5 @@ func buildWithInbuiltCompiler(
 	inPath string,
 	outPath string,
 ) {
-	shell.ExecuteCommand(compilerPath, "-i", inPath, "-o", outPath)
+	shell.ExecuteSync(compilerPath, "-i", inPath, "-o", outPath)
 }

@@ -22,7 +22,7 @@ func ExecuteScript(filePath string, args ...string) {
 		args...,
 	)
 
-	shell.ExecuteCommand(shellCommand...)
+	shell.ExecuteSync(shellCommand...)
 }
 
 // Returns the base commands needed to execute a file using the projects
