@@ -58,4 +58,8 @@ func createFile(fileModel File) {
 			return
 		}
 	}
+
+	if fileModel.IsExecutable {
+		os.Chmod(fileModel.Path, 0755)
+	}
 }
