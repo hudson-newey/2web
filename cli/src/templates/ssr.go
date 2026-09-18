@@ -6,7 +6,10 @@ import (
 	"github.com/hudson-newey/2web-cli/src/files"
 )
 
-const serverEntryContent string = `import { runServer } from "@two-web/kit/ssr";
+const serverEntryContent string = `#!/usr/bin/env deno -A
+// To change the runtime, just change the shebang above.
+// No config files needed.
+import { runServer } from "@two-web/kit/ssr";
 
 runServer();
 `
