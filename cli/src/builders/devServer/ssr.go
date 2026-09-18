@@ -1,7 +1,9 @@
 package devserver
 
-import "github.com/hudson-newey/2web-cli/src/runner"
+import (
+	"github.com/hudson-newey/2web-cli/src/shell"
+)
 
 func serveSsr() {
-	runner.ExecuteScript("./server/ssr.ts")
+	shell.ExecuteCommand("./server/ssr.ts")
 }
