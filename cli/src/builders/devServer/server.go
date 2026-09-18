@@ -7,7 +7,7 @@ import (
 func ServeSolution(args []string) {
 	if ssr.HasSsrTarget() {
 		serveSsr()
+	} else {
+		serveSpa(args)
 	}
-
-	serveSpa(args)
 }
