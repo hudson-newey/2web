@@ -2,10 +2,6 @@
 
 A basic utility tool that can be used to create 2web projects.
 
-This cli tool takes inspiration from the [Ember](https://cli.emberjs.com) and
-[Angular](https://angular.dev/tools/cli) cli tools that emphasize configuration
-over composition.
-
 ## Installation (system wide)
 
 The easiest way to get started with the 2Web cli is to install it as a global
