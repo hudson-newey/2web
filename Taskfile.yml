@@ -20,31 +20,7 @@ tasks:
   "install:dev":
     cmds:
       - task: build
-      - task: setup
       - task: install
-
-  # Links npm namespaces to this local repository
-  # Useful for testing development builds
-  setup:
-    cmds:
-      - task: "setup:compiler"
-      - task: "setup:cli"
-      - task: "setup:kit"
-
-  "setup:compiler":
-    dir: compiler
-    cmds:
-      - npm link @two-web/compiler
-
-  "setup:cli":
-    dir: cli
-    cmds:
-      - npm link @two-web/compiler
-
-  "setup:kit":
-    dir: packages
-    cmds:
-      - npm link @two-web/kit
 
   "build:cli":
     dir: cli
