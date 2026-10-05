@@ -1,4 +1,4 @@
-import type { RouteGuard } from "./predicates";
+import type { RouteGuard } from "./predicates.ts";
 
 const routeGuards = new Set<RouteGuard>();
 

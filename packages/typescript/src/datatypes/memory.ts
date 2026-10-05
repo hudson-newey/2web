@@ -1,6 +1,6 @@
-import type { Unwrap } from "../structural/unwrap";
-import type { FunctionType } from "./functions";
-import type { ObjectType } from "./objects";
+import type { Unwrap } from "../structural/unwrap.ts";
+import type { FunctionType } from "./functions.ts";
+import type { ObjectType } from "./objects.ts";
 
 export type StackVariable =
   | string

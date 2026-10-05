@@ -1,5 +1,5 @@
-import type { FunctionType, Synchronous } from "../datatypes/functions";
-import type { Hide } from "../visibility/hide";
+import type { FunctionType, Synchronous } from "../datatypes/functions.ts";
+import type { Hide } from "../visibility/hide.ts";
 
 /**
  * @description

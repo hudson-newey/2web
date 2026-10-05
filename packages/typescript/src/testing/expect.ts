@@ -1,7 +1,7 @@
-import type { ObjectType } from "../datatypes/objects";
-import type { Assert } from "./assertions";
-import type { FunctionType } from "../datatypes/functions";
-import type { CompileError } from "../conditions/error";
+import type { ObjectType } from "../datatypes/objects.ts";
+import type { Assert } from "./assertions.ts";
+import type { FunctionType } from "../datatypes/functions.ts";
+import type { CompileError } from "../conditions/error.ts";
 
 type AssertMethod<T, Expected, ExpectPass = true> = Assert<
   T,

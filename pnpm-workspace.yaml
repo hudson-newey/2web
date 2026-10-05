@@ -1,7 +1,6 @@
 packages:
   - cli
   - compiler
-  - packages
   - tools/vscode-extension
   - tools/chrome-extension
   - "benchmarks/performance"

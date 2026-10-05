@@ -1,5 +1,5 @@
-import type { TwoElement } from "../elements/element";
-import type { Directive } from "./directive";
+import type { TwoElement } from "../elements/element.ts";
+import type { Directive } from "./directive.ts";
 
 type StyleName = string;
 type StyleValue = string;

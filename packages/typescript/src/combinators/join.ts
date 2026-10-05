@@ -1,6 +1,6 @@
-import type { CompileError } from "../conditions/error";
-import type { Extends } from "../conditions/extends";
-import type { Or } from "../conditions/or";
+import type { CompileError } from "../conditions/error.ts";
+import type { Extends } from "../conditions/extends.ts";
+import type { Or } from "../conditions/or.ts";
 
 /**
  * @description

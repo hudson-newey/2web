@@ -10,6 +10,7 @@ import (
 // Automatically checks that all dependencies are installed on the system.
 func CheckDependencies() {
 	requiredDependencies := []dependency{
+		{name: "deno", url: "https://deno.com"},
 		{name: "pandoc", url: "https://pandoc.org/installing.html"},
 		{name: "fable", url: "https://fable.io"},
 		{name: ".NET", url: "https://dotnet.microsoft.com"},

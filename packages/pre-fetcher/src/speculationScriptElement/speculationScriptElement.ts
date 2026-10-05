@@ -1,6 +1,6 @@
-import type { PrefetchConfig } from "../config";
-import { convertUrlAndConfigToSpeculationRule } from "../utils/convertUrlAndConfigToSpeculationRule";
-import type { SpeculationRule } from "./speculationRule";
+import type { PrefetchConfig } from "../config.ts";
+import { convertUrlAndConfigToSpeculationRule } from "../utils/convertUrlAndConfigToSpeculationRule.ts";
+import type { SpeculationRule } from "./speculationRule.ts";
 
 /**
  * @summary

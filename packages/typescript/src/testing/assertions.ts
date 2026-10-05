@@ -1,4 +1,4 @@
-import type { CompileError } from "../conditions/error";
+import type { CompileError } from "../conditions/error.ts";
 
 export type Assert<T, Expected> = T extends Expected
   ? true

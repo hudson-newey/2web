@@ -1,4 +1,4 @@
-import type { Unwrap } from "../structural/unwrap";
+import type { Unwrap } from "../structural/unwrap.ts";
 
 export type UppercaseAlphaCharacter = Uppercase<LowercaseAlphaCharacter>;
 export type LowercaseAlphaCharacter =

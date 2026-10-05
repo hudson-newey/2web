@@ -1,3 +1,3 @@
-import { identityStringTemplate } from "./identity";
+import { identityStringTemplate } from "./identity.ts";
 
 export const svg = identityStringTemplate;

@@ -1,3 +1,3 @@
-import type { BaseSpeculationRule } from "./speculationScriptElement/speculationRule";
+import type { BaseSpeculationRule } from "./speculationScriptElement/speculationRule.ts";
 
 export type PrefetchConfig = BaseSpeculationRule;

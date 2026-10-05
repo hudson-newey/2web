@@ -1,0 +1,41 @@
+{
+  "name": "@two-web/kit",
+  "version": "0.0.1-rc.5",
+  "description": "A collection of packages to enhance your 2web application",
+  "author": "hudson-newey",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "tasks": {
+    "dev": "vite ./dev/",
+    "test": "vitest",
+    "dev:build": "deno pack --allow-dirty && mkdir -p dist/ && tar -xvzf ./two-web-kit-*.tgz -C dist/"
+  },
+  "exports": {
+    ".": "./index.ts",
+    "./animations": "./animations/index.ts",
+    "./iron": "./iron/index.ts",
+    "./named-strings": "./named-strings/index.ts",
+    "./pre-fetcher": "./pre-fetcher/index.ts",
+    "./route-guards": "./route-guards/index.ts",
+    "./ssr": "./ssr/index.ts",
+    "./typescript": "./typescript/index.ts",
+    "./2js": "./2js/index.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/path": "jsr:@std/path@1",
+    "happy-dom": "npm:happy-dom@^20.14.5",
+    "sanitize-filename": "npm:sanitize-filename@^1.6.4",
+    "vite": "npm:vite@^8.3.2",
+    "vitest": "npm:vitest@^5.0.3"
+  },
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "allowJs": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "lib": ["esnext", "dom", "dom.iterable", "deno.ns"]
+  }
+}

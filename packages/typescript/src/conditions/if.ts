@@ -1,4 +1,4 @@
-import type { CompileError } from "./error";
+import type { CompileError } from "./error.ts";
 
 /**
  * @description

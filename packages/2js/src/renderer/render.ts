@@ -1,5 +1,5 @@
-import type { TwoElement } from "../elements/element";
-import { updateDom } from "../../../_shared/updateDom";
+import type { TwoElement } from "../elements/element.ts";
+import { updateDom } from "../../../_shared/updateDom.ts";
 
 export function render(
   target: HTMLElement,

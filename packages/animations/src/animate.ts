@@ -1,4 +1,4 @@
-import type { AnimationIdentifier } from "./animation";
+import type { AnimationIdentifier } from "./animation.ts";
 
 export type AnimationCallback = <AnimationArgs extends unknown[]>(
   ...args: AnimationArgs

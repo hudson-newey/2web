@@ -1,4 +1,4 @@
-import type { SsrConfig } from "./config";
+import type { SsrConfig } from "./config.ts";
 
 export const defaultConfig = Object.freeze({
     // Should match the default port for the SPA dev server to reduce confusion.

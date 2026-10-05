@@ -1,5 +1,5 @@
-import type { PrefetchConfig } from "./config";
-import { SpeculationScript } from "./speculationScriptElement/speculationScriptElement";
+import type { PrefetchConfig } from "./config.ts";
+import { SpeculationScript } from "./speculationScriptElement/speculationScriptElement.ts";
 
 export function bootstrapLinkPrefetch(config: Readonly<PrefetchConfig>) {
   SpeculationScript.addRule({

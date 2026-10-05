@@ -12,8 +12,6 @@ A collection of packages to enhance your 2web application
 | [ssr](ssr/README.md)                           | 🔧    |
 | [typescript](typescript/README.md)             | 🔧    |
 | [2js](2js/README.md)                           | 🔧    |
-| [view-transitions](view-transitions/README.md) | 🔧    |
-| [vite-plugin](vite-plugin/README.md)           | 🔧    |
 
 ❌ = Not working, 🔧 = Developer preview, ✅ = Production ready
 

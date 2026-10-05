@@ -1,5 +1,5 @@
-import type { Directive } from "../directives/directive";
-import { updateDom } from "../../../_shared/updateDom";
+import type { Directive } from "../directives/directive.ts";
+import { updateDom } from "../../../_shared/updateDom.ts";
 
 // In the constructor we use a plain object for easier construction
 // but internally we use Maps for easier updates.

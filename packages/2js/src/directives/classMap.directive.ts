@@ -1,7 +1,7 @@
-import type { TwoElement } from "../elements/element";
-import type { ElementProperty } from "../elements/properties";
-import { updateDom } from "../../../_shared/updateDom";
-import type { Directive } from "./directive";
+import type { TwoElement } from "../elements/element.ts";
+import type { ElementProperty } from "../elements/properties.ts";
+import { updateDom } from "../../../_shared/updateDom.ts";
+import type { Directive } from "./directive.ts";
 
 type ClassPredicate = () => boolean;
 type ClassMap = Readonly<Record<string, ElementProperty | ClassPredicate>>;

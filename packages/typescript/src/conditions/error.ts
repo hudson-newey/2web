@@ -1,4 +1,4 @@
-import type { ObjectType } from "../datatypes/objects";
+import type { ObjectType } from "../datatypes/objects.ts";
 
 /**
  * @description

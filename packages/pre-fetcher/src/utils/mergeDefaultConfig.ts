@@ -1,4 +1,4 @@
-import type { PrefetchConfig } from "../config";
+import type { PrefetchConfig } from "../config.ts";
 
 export const defaultPrefetchConfig = Object.freeze({
   eagerness: "eager",

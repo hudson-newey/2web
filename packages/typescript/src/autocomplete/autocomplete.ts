@@ -1,4 +1,4 @@
-import type { Without } from "../helpers/without";
+import type { Without } from "../helpers/without.ts";
 
 /**
  * @description

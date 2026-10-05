@@ -1,35 +1,31 @@
-import type { Request, Response, NextFunction } from "express";
 import { fileURLToPath } from "node:url";
 import { Window } from "happy-dom";
-import fs from "node:fs";
-import path from "node:path";
-import type { SsrConfig } from "../config/config";
+import type { SsrConfig } from "../config/config.ts";
+import { join, dirname, resolve } from "@std/path";
 import sanitizePath from "sanitize-filename";
 
 export function createSsrHandler(config: Readonly<SsrConfig>) {
-  const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
-  const servedPath = path.join(currentDirectory, config.path);
+  const currentDirectory = dirname(fileURLToPath(import.meta.url));
+  const servedPath = join(currentDirectory, config.path);
 
-  return async (
-    req: Readonly<Request>,
-    res: Readonly<Response>,
-    next: NextFunction,
-  ) => {
-    const url = req.originalUrl;
-    const safePath = sanitizePath(path.resolve(servedPath + req.path));
+  return async (req: Readonly<Request>) => {
+    const url = new URL(req.url);
+    const safePath = sanitizePath(resolve(servedPath + url.pathname));
 
     try {
-      const template = fs.readFileSync(safePath, "utf-8");
+      const template = await Deno.readTextFile(safePath);
 
       // If we are not serving a html file, return it without modification
-      if (!req.path.endsWith(".html") && !req.path.endsWith("/")) {
-        res.status(200).end(template);
-        return;
+      const href = url.href;
+      if (!href.endsWith(".html") && !href.endsWith("/")) {
+        return new Response(template, {
+          status: 200,
+        });
       }
 
-      const window = new Window({ url });
-      const document = window.document;
+      const window = new Window({ url: href });
 
+      const document = window.document;
       document.write(template);
 
       // Waits for async operations such as timers, resource loading and fetch() on the page to complete
@@ -37,11 +33,20 @@ export function createSsrHandler(config: Readonly<SsrConfig>) {
       await window.happyDOM.waitUntilComplete();
       const html = window.document.documentElement.outerHTML;
 
-      res.status(200).set({ "Content-Type": "text/html" }).end(html);
-
       await window.happyDOM.close();
+
+      return new Response(html, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/html",
+        },
+      });
     } catch (e) {
-      next(e);
+      console.error(e);
     }
+
+    return new Response("Unknown Error", {
+      status: 500,
+    });
   };
 }

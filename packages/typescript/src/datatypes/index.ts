@@ -8,4 +8,4 @@ export * from "./numbers.ts";
 export * from "./objects.ts";
 export * from "./json.ts";
 
-export * from "./safe-variants";
+export * from "./safe-variants/index.ts";

@@ -1,4 +1,4 @@
-import type { Variable } from "./memory";
+import type { Variable } from "./memory.ts";
 
 export type Truthy<T> = T extends object ? T : never;
 export type Falsy<T> = T extends object ? never : T;
