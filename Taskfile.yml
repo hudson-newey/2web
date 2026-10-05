@@ -2,27 +2,57 @@ version: "3"
 
 tasks:
   "build":
-    deps:
-      - "build:cli"
-      - "build:compiler"
-      - "build:mcp"
-      - "build:packages"
-      - "build:vscode-extension"
-      - "build:chrome-extension"
+    cmds:
+      - task: "build:cli"
+      - task: "build:compiler"
+      - task: "build:mcp"
+      - task: "build:packages"
+      - task: "build:vscode-extension"
+      - task: "build:chrome-extension"
 
+  # Installs the current development build binaries
   install:
     cmds:
       - sudo cp ./compiler/bin/2webc /usr/local/bin/2webc
       - sudo cp ./cli/bin/2web /usr/local/bin/2web
       - sudo cp ./tools/mcp/bin/2web-mcp /usr/local/bin/2web-mcp
 
+  "install:dev":
+    cmds:
+      - task: build
+      - task: setup
+      - task: install
+
+  # Links npm namespaces to this local repository
+  # Useful for testing development builds
+  setup:
+    cmds:
+      - task: "setup:compiler"
+      - task: "setup:cli"
+      - task: "setup:kit"
+
+  "setup:compiler":
+    dir: compiler
+    cmds:
+      - npm link @two-web/compiler
+
+  "setup:cli":
+    dir: cli
+    cmds:
+      - npm link @two-web/compiler
+
+  "setup:kit":
+    dir: packages
+    cmds:
+      - npm link @two-web/kit
+
   "build:cli":
-    dir: "./cli"
+    dir: cli
     cmds:
       - go build -ldflags "-s -w" -o ./bin/2web ./src/main.go
 
   "build:compiler":
-    dir: "./compiler"
+    dir: compiler
     cmds:
       - go build -ldflags "-s -w" -o ./bin/2webc ./src/main.go
 
@@ -32,7 +62,7 @@ tasks:
       - go build -ldflags "-s -w" -o ./bin/2web-mcp ./src/main.go
 
   "build:packages":
-    dir: "./packages"
+    dir: packages
     cmds:
       - pnpm build
 
