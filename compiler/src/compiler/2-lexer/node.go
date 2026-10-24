@@ -6,8 +6,6 @@ import (
 	"strconv"
 )
 
-type LexNodeType[T voidNode] any
-
 type Position struct {
 	Row int
 	Col int
