@@ -16,10 +16,12 @@ The implementations `dist/` directory will be used for benchmarking.
 To run the benchmark script, simply run the following command with
 [Deno](https://deno.com/) installed.
 
+Benchmarking software is written in JavaScript so that it can easily interop
+with real browsers to test the speed of each framework.
+
+## Usage
+
 ```sh
 $ pnpm start
 >
 ```
-
-Benchmarking software is written in JavaScript so that it can easily interop
-with real browsers to test the speed of each framework.

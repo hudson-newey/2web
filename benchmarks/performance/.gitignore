@@ -1,6 +1,5 @@
 # project specific gitignore
-reports/
-dist_bench/
+dist/
 
 # Logs
 logs

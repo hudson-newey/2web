@@ -1,5 +1,6 @@
 #!/usr/bin/env -S deno run --allow-all
-import { testedFrameworks } from "./frameworks.ts";
+import { getFrameworks } from "../src/constants/frameworks.ts";
+import { ASSETS } from "../src/constants/assets.ts";
 
 // We use tachometer to benchmark the runtime performance of different
 // frameworks.
@@ -43,21 +44,22 @@ for (let i = 0; i < 200; i++) {
 bench.stop();
 `;
 
-// Create the dist_bench directory if it doesn't exist. If  it already exists,
+const buildDir = ASSETS.outDir + "builds/";
+
+// Create the build directory if it doesn't exist. If  it already exists,
 // delete it first
 try {
-  await Deno.remove("./dist_bench", { recursive: true });
-}
-catch {
+  Deno.removeSync(buildDir, { recursive: true });
+} catch {
   // do nothing
 }
 
-await Deno.mkdir("./dist_bench", { recursive: true });
+Deno.mkdirSync(buildDir, { recursive: true });
 
 // Copy the bench.js file to the framework's dist directory.
-await Deno.copyFile(
+Deno.copyFileSync(
   "./node_modules/tachometer/client/lib/bench.js",
-  "./dist_bench/bench.js"
+  buildDir + "bench.js",
 );
 
 function copyDirectory(src: string, dest: string) {
@@ -75,34 +77,34 @@ function copyDirectory(src: string, dest: string) {
   });
 }
 
-for (const framework of testedFrameworks) {
+const targets = getFrameworks();
+for (const framework of targets) {
   const distPath = `./implementations/${framework}/dist`;
   const indexPath = `${distPath}/index.html`;
 
   // Read the framework's index.html file.
-  let indexHtml = await Deno.readTextFile(indexPath);
+  let indexHtml = Deno.readTextFileSync(indexPath);
 
   // Inject the benchmarking code.
   indexHtml = indexHtml.replace(
     "</body>",
-    `<script type="module">\n${injectedCode}\n</script>\n</body>`
+    `<script type="module">\n${injectedCode}\n</script>\n</body>`,
   );
 
   // Write the modified index.html file back to the framework's dist directory.
   await Deno.writeTextFile(indexPath, indexHtml);
 
   // Copy all files from the framework's dist directory to a new directory
-  // called dist_bench.
-  const distBenchPath = `./dist_bench/`;
-  await Deno.mkdir(distBenchPath, { recursive: true });
+  Deno.mkdirSync(buildDir, { recursive: true });
 
   for await (const entry of Deno.readDir(distPath)) {
     const srcPath = `${distPath}/${entry.name}`;
 
     // If we are copying the index.html file, replace it with the framework name
-    const destPath = entry.name === "index.html"
-      ? `${distBenchPath}/${framework}.html`
-      : `${distBenchPath}/${entry.name}`;
+    const destPath =
+      entry.name === "index.html"
+        ? `${buildDir}/${framework}.html`
+        : `${buildDir}/${entry.name}`;
 
     if (entry.isFile) {
       await Deno.copyFile(srcPath, destPath);

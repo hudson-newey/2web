@@ -1,10 +1,11 @@
 #!/usr/bin/env -S deno run --allow-run --allow-write --allow-read
-import { FrameworkName, testedFrameworks } from "./frameworks.ts";
+import { FrameworkName, getFrameworks } from "../src//constants/frameworks.ts";
+import { ASSETS } from "../src/constants/assets.ts";
 
 type Kilobyte = number;
 type Milliseconds = number;
 
-const reportsDirectory = "reports/";
+const reportsDirectory = ASSETS.outDir + "reports/";
 
 function implementationPath<T extends FrameworkName>(name: T) {
   return `implementations/${name}` as const;
@@ -44,7 +45,8 @@ async function getDirectorySize(dirPath: string): Promise<Kilobyte> {
   let totalSize = 0;
 
   try {
-    for await (const entry of Deno.readDir(dirPath)) {
+    const dir = Deno.readDirSync(dirPath);
+    for (const entry of dir) {
       const path = `${dirPath}/${entry.name}`;
 
       if (entry.isFile) {
@@ -66,29 +68,27 @@ async function getDirectorySize(dirPath: string): Promise<Kilobyte> {
 }
 
 async function runBenchmark() {
+  const targets = getFrameworks();
+
   // Delete the dist/ directory if it exists
-  for (const framework of testedFrameworks) {
+  for (const framework of targets) {
     const distPath = implementationPath(framework) + "/dist";
 
     try {
-      await Deno.remove(distPath, { recursive: true });
+      Deno.removeSync(distPath, { recursive: true });
     } catch {
       // do nothing
     }
   }
 
-  const results = Promise.all(
-    testedFrameworks.map((name) => ({
-      name: name,
-      buildTime: buildImplementation(name),
-    })),
+  const buildOutputs = await Promise.all(
+    targets.map(async (name) => {
+      const buildTime = await buildImplementation(name);
+      return { name, buildTime };
+    }),
   );
 
-  const buildOutputs = await results;
-
-  const buildTimes: Partial<
-    Record<keyof typeof testedFrameworks, Milliseconds>
-  > = {};
+  const buildTimes: Partial<Record<string, Milliseconds>> = {};
   for (const build of buildOutputs) {
     buildTimes[build.name] = build.buildTime;
   }
@@ -99,17 +99,17 @@ async function runBenchmark() {
     await Deno.lstat(reportsDirectory);
 
     // reports directory exists
-    await Deno.remove(reportsDirectory, { recursive: true });
+    Deno.removeSync(reportsDirectory, { recursive: true });
   } catch {
     // do nothing
   }
 
-  await Deno.mkdir(reportsDirectory, { recursive: true });
+  Deno.mkdirSync(reportsDirectory, { recursive: true });
 
   // I write to a csv so that I can do some cool graphs in the future and so
   // that loading into excel is easy
   const assetSizeFileName = reportsDirectory + "build_report.csv";
-  await Deno.writeTextFile(
+  Deno.writeTextFileSync(
     assetSizeFileName,
     "Framework,size (KB),Build Time (ms)\n",
     {
@@ -118,12 +118,12 @@ async function runBenchmark() {
   );
 
   // we do this in async because I'm too tired to code it otherwise
-  for (const implementation of testedFrameworks) {
+  for (const implementation of targets) {
     const distPath = implementationPath(implementation) + "/dist/";
     const distSize = await getDirectorySize(distPath);
-    const buildTime = await buildTimes[implementation];
+    const buildTime = buildTimes[implementation];
 
-    await Deno.writeTextFile(
+    Deno.writeTextFileSync(
       assetSizeFileName,
       `${implementation},${distSize},${buildTime}\n`,
       { append: true },
