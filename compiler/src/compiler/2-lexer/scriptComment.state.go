@@ -4,7 +4,7 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 )
 
-func scriptCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
+func scriptCommentLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"*/": {token: lexeme.MarkupCommentStart, next: inlineScriptTagLexer},
 	}

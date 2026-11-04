@@ -11,11 +11,11 @@ type Position struct {
 	Col int
 }
 
-func NewV2LexNode() V2LexNode {
-	return V2LexNode{}
+func NewLexNode() LexNode {
+	return LexNode{}
 }
 
-type V2LexNode struct {
+type LexNode struct {
 	Pos     Position
 	Token   lexeme.Lexeme
 	State   lexState
@@ -27,7 +27,7 @@ type V2LexNode struct {
 // (which is typically row 1, column 1).
 var StartingPosition = Position{Row: 0, Col: 0}
 
-func (model *V2LexNode) PrintDebug() string {
+func (model *LexNode) PrintDebug() string {
 	// We replace all of the new lines and tabs with their escape character
 	// representations so that the output is easier to read.
 	quotedContent := strconv.Quote(model.Content)

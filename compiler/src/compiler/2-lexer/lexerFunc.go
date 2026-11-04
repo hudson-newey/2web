@@ -5,10 +5,10 @@ import (
 	"io"
 )
 
-type LexFunc func(*Lexer) (V2LexNode, LexFunc)
+type LexFunc func(*Lexer) (LexNode, LexFunc)
 
 func lexerFactory(lexMap lexDefMap, state lexState) LexFunc {
-	return func(lexerModel *Lexer) (V2LexNode, LexFunc) {
+	return func(lexerModel *Lexer) (LexNode, LexFunc) {
 		matchingLexNode, nextState := lexMap.matching(lexerModel, state)
 		if nextState != nil {
 			return matchingLexNode, nextState
@@ -37,7 +37,7 @@ func lexerFactory(lexMap lexDefMap, state lexState) LexFunc {
 				// We still return a textLexer state here so that if a file is partially
 				// corrupted and contains an EOF before the real end, we can recover
 				// gracefully.
-				lexNode := V2LexNode{
+				lexNode := LexNode{
 					Pos:     position,
 					Token:   lexeme.EOF,
 					Content: "",
@@ -74,7 +74,7 @@ func lexerFactory(lexMap lexDefMap, state lexState) LexFunc {
 			Col: startPos.Col,
 		}
 
-		lexNode := V2LexNode{
+		lexNode := LexNode{
 			Pos:     position,
 			Token:   token,
 			State:   state,

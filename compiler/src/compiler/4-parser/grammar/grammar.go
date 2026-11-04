@@ -13,7 +13,7 @@ type Grammar struct {
 	Def definition
 
 	// A constructor function to create a node from the tokens
-	Constructor func(lexNodes []*lexer.V2LexNode) *nodes.Node
+	Constructor func(lexNodes []*lexer.LexNode) *nodes.Node
 
 	// Any child grammar definitions that should be recursively applied within
 	// this grammar once matched.
@@ -22,11 +22,11 @@ type Grammar struct {
 
 // Matches lexer nodes against the given grammar.
 // Returns the matched subset.
-func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode {
+func (model *Grammar) Match(lexNodes []*lexer.LexNode) []*lexer.LexNode {
 	// If we have not processed enough tokens to have a match yet, we can quickly
 	// return false.
 	if len(lexNodes) < len(model.Def) {
-		return []*lexer.V2LexNode{}
+		return []*lexer.LexNode{}
 	}
 
 	// Because a grammar definition can sometimes come after multiple non-matching
@@ -35,7 +35,7 @@ func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode {
 	matchingSubset := lexNodes
 	// matchingSubset := lexNodes[len(lexNodes)-len(model.Def):]
 
-	matchedSubset := []*lexer.V2LexNode{}
+	matchedSubset := []*lexer.LexNode{}
 
 	// Use an outer index token so that it can increment independently of the
 	// loop iteration (e.g. so we can increment the index in the captureUntil
@@ -74,7 +74,7 @@ func (model *Grammar) Match(lexNodes []*lexer.V2LexNode) []*lexer.V2LexNode {
 		}
 
 		if matchingSubset[index].Token != token {
-			return []*lexer.V2LexNode{}
+			return []*lexer.LexNode{}
 		}
 
 		matchedSubset = append(matchedSubset, matchingSubset[index])

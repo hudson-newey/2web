@@ -7,9 +7,9 @@ import (
 )
 
 func FirstToken(
-	tokens []*lexer.V2LexNode,
+	tokens []*lexer.LexNode,
 	matcher lexeme.Lexeme,
-) (*lexer.V2LexNode, error) {
+) (*lexer.LexNode, error) {
 	return NthToken(tokens, matcher, 1)
 }
 
@@ -17,10 +17,10 @@ func FirstToken(
 // N is 1-indexed meaning that if you pass in n=1, it will return the first
 // occurrence.
 func NthToken(
-	tokens []*lexer.V2LexNode,
+	tokens []*lexer.LexNode,
 	matcher lexeme.Lexeme,
 	n int,
-) (*lexer.V2LexNode, error) {
+) (*lexer.LexNode, error) {
 	count := 0
 	for _, candidate := range tokens {
 		if candidate.Token == matcher {

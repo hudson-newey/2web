@@ -19,7 +19,7 @@ import (
 )
 
 // import importName from "importPath";
-func NewscriptImportNode(lexNodes []*lexer.V2LexNode) *scriptImportNode {
+func NewscriptImportNode(lexNodes []*lexer.LexNode) *scriptImportNode {
 	importNameNode, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 1)
 	importNameNode.Content = strings.TrimSpace(importNameNode.Content)
 	if err != nil {

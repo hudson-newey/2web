@@ -8,7 +8,7 @@ import (
 	"hudson-newey/2web/src/content/page"
 )
 
-func NewTextOutputNode(lexNodes []*lexer.V2LexNode) *textOutputNode {
+func NewTextOutputNode(lexNodes []*lexer.LexNode) *textOutputNode {
 	expression, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
 		panic(err)

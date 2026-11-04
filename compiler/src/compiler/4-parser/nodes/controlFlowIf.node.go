@@ -11,7 +11,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewControlFlowIfNode(lexNodes []*lexer.V2LexNode) *controlFlowIfNode {
+func NewControlFlowIfNode(lexNodes []*lexer.LexNode) *controlFlowIfNode {
 	expression, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
 		panic(err)

@@ -6,7 +6,7 @@ import (
 
 // The lexer for when the <script> tag has been opened and before the first >
 // meaning that we are technically still in an element tag.
-func inlineCompiledScriptTagLexer(model *Lexer) (V2LexNode, LexFunc) {
+func inlineCompiledScriptTagLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		">": {token: lexeme.GreaterAngle, next: compiledScriptContentLexer},
 	}
@@ -29,7 +29,7 @@ func withScriptExitCase(src lexDefMap) lexDefMap {
 	return src.with(exitCases)
 }
 
-func compiledScriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {
+func compiledScriptContentLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		// process comments first so that commenting out a code block can
 		// disable the code (the commented out code never gets lexed output).
@@ -42,7 +42,7 @@ func compiledScriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	return lexerFactory(cases, compiledScriptSource)(model)
 }
 
-func reactiveVarAssignmentLexer(model *Lexer) (V2LexNode, LexFunc) {
+func reactiveVarAssignmentLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"=": {token: lexeme.Equals, next: reactiveVarAssignmentLexer},
 		";": {token: lexeme.Semicolon, next: compiledScriptContentLexer},
@@ -51,7 +51,7 @@ func reactiveVarAssignmentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	return lexerFactory(cases, compiledScriptSource)(model)
 }
 
-func esmImportLexer(model *Lexer) (V2LexNode, LexFunc) {
+func esmImportLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"from": {token: lexeme.KeywordFrom, next: esmImportLexer},
 		";":    {token: lexeme.Semicolon, next: compiledScriptContentLexer},
@@ -60,7 +60,7 @@ func esmImportLexer(model *Lexer) (V2LexNode, LexFunc) {
 	return lexerFactory(cases, compiledScriptSource)(model)
 }
 
-func esmLineCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
+func esmLineCommentLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"\n": {token: lexeme.BlockCommentEnd, next: compiledScriptContentLexer},
 	}
@@ -68,7 +68,7 @@ func esmLineCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
 	return lexerFactory(cases, compiledScriptSource)(model)
 }
 
-func esmBlockCommentLexer(model *Lexer) (V2LexNode, LexFunc) {
+func esmBlockCommentLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"*/": {token: lexeme.BlockCommentEnd, next: compiledScriptContentLexer},
 	}

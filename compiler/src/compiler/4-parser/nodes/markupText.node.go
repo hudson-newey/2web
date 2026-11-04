@@ -8,7 +8,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewMarkupTextNode(lexNode []*lexer.V2LexNode) *markupTextNode {
+func NewMarkupTextNode(lexNode []*lexer.LexNode) *markupTextNode {
 	return &markupTextNode{
 		content: lexNode[0].Content,
 	}

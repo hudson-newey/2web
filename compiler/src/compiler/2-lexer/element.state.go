@@ -6,7 +6,7 @@ import (
 
 // When inside the first starting angle bracket (<) and up until (and including)
 // the closing angle bracket (>).
-func elementLexer(model *Lexer) (V2LexNode, LexFunc) {
+func elementLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"!doctype": {token: lexeme.Doctype, next: elementLexer},
 

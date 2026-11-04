@@ -14,7 +14,7 @@ import (
 	"github.com/hudson-newey/2web/_shared/lists"
 )
 
-func NewReactiveEventNode(lexNodes []*lexer.V2LexNode) *reactiveEventNode {
+func NewReactiveEventNode(lexNodes []*lexer.LexNode) *reactiveEventNode {
 	propName, err := scanners.NthToken(lexNodes, lexeme.TextContent, 1)
 	if err != nil {
 		panic(err)

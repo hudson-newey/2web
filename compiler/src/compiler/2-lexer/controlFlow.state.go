@@ -2,7 +2,7 @@ package lexer
 
 import "hudson-newey/2web/src/compiler/2-lexer/lexeme"
 
-func controlFlowLexer(model *Lexer) (V2LexNode, LexFunc) {
+func controlFlowLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"if": {token: lexeme.ControlFlowIfKeyword, next: controlFlowLexer},
 		"(":  {token: lexeme.BracketOpen, next: controlFlowLexer},

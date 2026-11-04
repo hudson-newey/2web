@@ -9,7 +9,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewTwoScriptNode(lexNodes []*lexer.V2LexNode) *twoScriptNode {
+func NewTwoScriptNode(lexNodes []*lexer.LexNode) *twoScriptNode {
 	// Find the lexNode that is a StyleSource token
 	var content string
 	for _, lexNode := range lexNodes {
@@ -26,7 +26,7 @@ func NewTwoScriptNode(lexNodes []*lexer.V2LexNode) *twoScriptNode {
 }
 
 type twoScriptNode struct {
-	lexerNodes []*lexer.V2LexNode
+	lexerNodes []*lexer.LexNode
 	content    string
 	children   AbstractSyntaxTree
 }

@@ -6,7 +6,7 @@ import (
 
 // The lexer for when the <script> tag has been opened and before the first >
 // meaning that we are technically still in an element tag.
-func inlineScriptTagLexer(model *Lexer) (V2LexNode, LexFunc) {
+func inlineScriptTagLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		">": {token: lexeme.GreaterAngle, next: scriptContentLexer},
 	}
@@ -17,7 +17,7 @@ func inlineScriptTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 	return lexerFactory(cases, scriptSource)(model)
 }
 
-func scriptContentLexer(model *Lexer) (V2LexNode, LexFunc) {
+func scriptContentLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"</script>": {token: lexeme.ScriptEndTag, next: textLexer},
 	}

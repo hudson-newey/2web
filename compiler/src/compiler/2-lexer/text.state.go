@@ -4,7 +4,7 @@ import (
 	"hudson-newey/2web/src/compiler/2-lexer/lexeme"
 )
 
-func textLexer(model *Lexer) (V2LexNode, LexFunc) {
+func textLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		// The comment state has to always come first that it takes precedence over
 		// other matches and can omit them as source text.

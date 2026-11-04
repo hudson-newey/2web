@@ -28,7 +28,7 @@ func withAttributes(src lexDefMap) lexDefMap {
 	return src.with(attributeStates)
 }
 
-func reactivePropertyLexer(model *Lexer) (V2LexNode, LexFunc) {
+func reactivePropertyLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"=": {token: lexeme.Equals, next: reactivePropertyLexer},
 	}
@@ -36,7 +36,7 @@ func reactivePropertyLexer(model *Lexer) (V2LexNode, LexFunc) {
 	return lexerFactory(cases, element)(model)
 }
 
-func reactiveEventLexer(model *Lexer) (V2LexNode, LexFunc) {
+func reactiveEventLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"=": {token: lexeme.Equals, next: reactiveEventLexer},
 	}

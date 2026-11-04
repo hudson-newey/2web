@@ -6,7 +6,7 @@ import (
 	"text/tabwriter"
 )
 
-func PrintVerboseLexer(structure []*V2LexNode) {
+func PrintVerboseLexer(structure []*LexNode) {
 	tabWriter := tabwriter.NewWriter(os.Stdout, 0, 0, 4, ' ', 0)
 	defer tabWriter.Flush()
 

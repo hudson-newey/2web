@@ -7,7 +7,7 @@ import (
 // The lexer for when the <style> tag has been opened and before the first >
 // meaning that we are technically still in an element tag, but when we
 // transition to a text content state, we need to start lexing style content.
-func inlineStyleTagLexer(model *Lexer) (V2LexNode, LexFunc) {
+func inlineStyleTagLexer(model *Lexer) (LexNode, LexFunc) {
 	// We need these = and > conditions because inline style tags can have element
 	// attributes.
 	cases := lexDefMap{
@@ -20,7 +20,7 @@ func inlineStyleTagLexer(model *Lexer) (V2LexNode, LexFunc) {
 	return lexerFactory(cases, styleSource)(model)
 }
 
-func styleContentLexer(model *Lexer) (V2LexNode, LexFunc) {
+func styleContentLexer(model *Lexer) (LexNode, LexFunc) {
 	cases := lexDefMap{
 		"</style>": {token: lexeme.StyleEndTag, next: textLexer},
 	}

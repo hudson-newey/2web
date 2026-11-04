@@ -7,7 +7,7 @@ import (
 )
 
 func CreateAst(
-	lexNodes []*lexer.V2LexNode,
+	lexNodes []*lexer.LexNode,
 	grammars []grammar.Grammar,
 	withTextMatcher bool,
 ) nodes.AbstractSyntaxTree {
@@ -36,7 +36,7 @@ func CreateAst(
 // old string manipulation methods.
 func processNode(
 	index int,
-	lexNodes []*lexer.V2LexNode,
+	lexNodes []*lexer.LexNode,
 	grammars []grammar.Grammar,
 	withTextMatcher bool,
 ) (nodes.Node, int) {
@@ -71,7 +71,7 @@ func processNode(
 
 	if withTextMatcher {
 		currentNode := lexNodes[index]
-		return nodes.NewMarkupTextNode([]*lexer.V2LexNode{currentNode}), 0
+		return nodes.NewMarkupTextNode([]*lexer.LexNode{currentNode}), 0
 	}
 	return nil, 0
 }

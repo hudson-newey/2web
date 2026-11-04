@@ -20,8 +20,8 @@ func NewLexer(reader *reader.Reader) *Lexer {
 	}
 }
 
-func (model *Lexer) Execute() []*V2LexNode {
-	representation := []*V2LexNode{}
+func (model *Lexer) Execute() []*LexNode {
+	representation := []*LexNode{}
 
 	for {
 		lexNode := model.lex()
@@ -74,7 +74,7 @@ func (model *Lexer) backup(length int) {
 
 // This lexer is heavily inspired by arron raff's blog post
 // https://www.aaronraff.dev/blog/how-to-write-a-lexer-in-go
-func (model *Lexer) lex() V2LexNode {
+func (model *Lexer) lex() LexNode {
 	node, state := model.State(model)
 
 	model.State = state

@@ -8,7 +8,7 @@ import (
 
 type LexMatcher = string
 
-type V2Lexer func(l *Lexer) (V2LexNode, LexFunc)
+type V2Lexer func(l *Lexer) (LexNode, LexFunc)
 
 type lexDef struct {
 	token lexeme.Lexeme
@@ -17,7 +17,7 @@ type lexDef struct {
 
 type lexDefMap map[LexMatcher]lexDef
 
-func (lexMap *lexDefMap) matching(lexerModel *Lexer, state lexState) (V2LexNode, LexFunc) {
+func (lexMap *lexDefMap) matching(lexerModel *Lexer, state lexState) (LexNode, LexFunc) {
 	dereferencedMap := *lexMap
 
 	// Collect keys into a slice explicitly to avoid relying on maps.Keys which
@@ -71,7 +71,7 @@ func (lexMap *lexDefMap) matching(lexerModel *Lexer, state lexState) (V2LexNode,
 				Col: lexerModel.Pos.Col - matcherOffset,
 			}
 
-			lexNode := V2LexNode{
+			lexNode := LexNode{
 				Pos:     position,
 				Token:   definition.token,
 				State:   state,
@@ -82,7 +82,7 @@ func (lexMap *lexDefMap) matching(lexerModel *Lexer, state lexState) (V2LexNode,
 		}
 	}
 
-	return NewV2LexNode(), nil
+	return NewLexNode(), nil
 }
 
 // wouldMatchAt returns true if any matcher in the map matches at the current

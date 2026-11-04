@@ -10,7 +10,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewScriptNode(lexNodes []*lexer.V2LexNode) *scriptNode {
+func NewScriptNode(lexNodes []*lexer.LexNode) *scriptNode {
 	sourceNode, err := scanners.FirstToken(lexNodes, lexeme.ScriptSource)
 	if err != nil {
 		panic(err)
@@ -23,7 +23,7 @@ func NewScriptNode(lexNodes []*lexer.V2LexNode) *scriptNode {
 }
 
 type scriptNode struct {
-	lexerNodes []*lexer.V2LexNode
+	lexerNodes []*lexer.LexNode
 	content    string
 	children   AbstractSyntaxTree
 }

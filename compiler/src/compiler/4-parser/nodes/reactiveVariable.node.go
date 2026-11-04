@@ -19,7 +19,7 @@ import (
 	"github.com/hudson-newey/2web/_shared/logger"
 )
 
-func NewreactiveVariableNode(lexNodes []*lexer.V2LexNode) *reactiveVariableNode {
+func NewreactiveVariableNode(lexNodes []*lexer.LexNode) *reactiveVariableNode {
 	variableName, err := scanners.NthToken(lexNodes, lexeme.CompiledScriptSource, 1)
 	if err != nil {
 		panic(err)

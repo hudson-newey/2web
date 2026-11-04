@@ -10,7 +10,7 @@ import (
 	twoscript "hudson-newey/2web/src/content/twoScript"
 )
 
-func NewCodeNode(lexNodes []*lexer.V2LexNode) *codeNode {
+func NewCodeNode(lexNodes []*lexer.LexNode) *codeNode {
 	startingCodeTagContent := ""
 
 	// Find the lexNode that is a StyleSource token
@@ -42,7 +42,7 @@ func NewCodeNode(lexNodes []*lexer.V2LexNode) *codeNode {
 // it makes this distinction VERY clear without any ambiguity.
 type codeNode struct {
 	startingCodeTagContent string
-	lexerNodes             []*lexer.V2LexNode
+	lexerNodes             []*lexer.LexNode
 	content                string
 	children               AbstractSyntaxTree
 }
