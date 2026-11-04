@@ -80,15 +80,15 @@ The CLI also contains a lot of templates and generators that can be used to
 easily add functionality such as SSR, database, load balancers, etc... to your
 application with one command.
 
-### VsCode Extension
+### [VsCode Extension](./tools/vscode-extension/)
 
 A vscode extension to integrate with the 2web cli.
 
-### Chrome Extension
+### [Chrome Extension](./tools/chrome-extension/)
 
 Chrome dev tool integration for 2Web.
 
-### MCP Server
+### [MCP Server](./tools/mcp/)
 
 2Web comes with a built-in MCP server that can be used to directly connect LLMs
 and code editors to your 2Web project for AI-enhanced development.
