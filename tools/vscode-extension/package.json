@@ -27,30 +27,6 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "languages": [
-      {
-        "id": "2web",
-        "aliases": [
-          "2Web",
-          "2web"
-        ],
-        "extensions": [
-          ".2web"
-        ],
-        "icon": {
-          "light": "./icons/2web.svg",
-          "dark": "./icons/2web.svg"
-        },
-        "configuration": "./language-configuration.json"
-      }
-    ],
-    "grammars": [
-      {
-        "language": "2web",
-        "scopeName": "source.2web",
-        "path": "./syntaxes/2web.tmLanguage.json"
-      }
-    ],
     "snippets": [
       {
         "language": "2web",

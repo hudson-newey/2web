@@ -1,7 +1,0 @@
-<title>2Web File Format</title>
-
-<script compiled>
-  $ count = 0;
-</script>
-
-<button @click="$count = $count + 1">{{ $count }} Clicks</button>

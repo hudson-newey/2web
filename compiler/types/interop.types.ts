@@ -27,7 +27,7 @@ declare module "@two-web/compiler" {
    *
    * @example
    * ```html
-   * <!-- message.component.2web -->
+   * <!-- message.component.html -->
    * <script compiled>
    *   import { $props } from "@two-web/compiler";
    * </script>

@@ -1,7 +1,6 @@
 package builder
 
 import (
-	twoWeb "hudson-newey/2web/src/content/2web"
 	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/markdown"
 	"hudson-newey/2web/src/content/odt"
@@ -26,8 +25,6 @@ func outputFileName(inputPath string, outputPath string, fileName string) string
 	adjustedFileName := fileName
 	if markdown.IsMarkdownFile(fileName) {
 		adjustedFileName = strings.TrimSuffix(adjustedFileName, ".md") + ".html"
-	} else if twoWeb.IsTwoWebFile(fileName) {
-		adjustedFileName = strings.TrimSuffix(adjustedFileName, ".2web") + ".html"
 	} else if docx.IsDocxFile(fileName) {
 		adjustedFileName = strings.TrimSuffix(adjustedFileName, ".docx") + ".html"
 	} else if odt.IsOdtFile(fileName) {

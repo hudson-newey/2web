@@ -1,7 +1,6 @@
 package assets
 
 import (
-	twoWeb "hudson-newey/2web/src/content/2web"
 	"hudson-newey/2web/src/content/docx"
 	"hudson-newey/2web/src/content/html"
 	"hudson-newey/2web/src/content/markdown"
@@ -12,7 +11,6 @@ import (
 
 func IsMarkupFile(filePath string) bool {
 	return html.IsHtmlFile(filePath) ||
-		twoWeb.IsTwoWebFile(filePath) ||
 		markdown.IsMarkdownFile(filePath) ||
 
 		docx.IsDocxFile(filePath) ||

@@ -3,7 +3,7 @@ import { getByTestId, getByText } from "@testing-library/dom";
 import { navigateToPage } from "./tests/helpers/fixture";
 import userEvent from "@testing-library/user-event";
 import { assertNoErrors } from "./tests/helpers/assertions";
-import { BrowserFrame, Document } from "happy-dom";
+import { Document } from "happy-dom";
 
 let document: Document;
 

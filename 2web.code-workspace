@@ -39,10 +39,7 @@
     "[html]": {
       // "files.autoSave": "afterDelay",
       "files.autoSaveDelay": 0,
-
-      // Do not foramt HTML of .2web files on save because it tries to make all
-      // html tags lowercase which might break imports.
-      "editor.formatOnSave": false,
+      "editor.formatOnSave": true,
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[2web]": {
