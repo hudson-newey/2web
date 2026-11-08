@@ -1,14 +1,11 @@
 import { beforeEach, test } from "vitest";
 import { assertNoErrors } from "./tests/helpers/assertions";
 import { navigateToPage } from "./tests/helpers/fixture";
-import { Document } from "happy-dom";
-
-let document: Document;
 
 beforeEach(async () => {
-  document = (await navigateToPage("control-flow-if.html")).document;
+  await navigateToPage("control-flow-if.html");
 });
 
 test("should load", () => {
-  assertNoErrors(document);
+  assertNoErrors();
 });

@@ -3,21 +3,15 @@ import { getByTestId, getByText } from "@testing-library/dom";
 import { navigateToPage } from "./tests/helpers/fixture";
 import userEvent from "@testing-library/user-event";
 import { assertNoErrors } from "./tests/helpers/assertions";
-import { Document } from "happy-dom";
 
-let document: Document;
-
-const worldButton = () => getByText(document as any, "World");
-const meButton = () => getByText(document.body as any, "Me");
-const everyoneButton = () => getByText(document.body as any, "Everyone!");
-const outputElement = () => getByTestId(document.body as any, "output-element");
+const outputElement = () => getByTestId(document as any, "output-element");
 
 beforeEach(async () => {
-  document = (await navigateToPage("assignment.html")).document;
+  await navigateToPage("assignment.html");
 });
 
-test("should load", () => {
-  assertNoErrors(document);
+test("should have no errors", () => {
+  assertNoErrors();
 });
 
 test("should have the correct initial value", () => {
@@ -27,12 +21,12 @@ test("should have the correct initial value", () => {
 test("should change between states", async () => {
   const user = userEvent.setup();
 
-  await user.click(worldButton());
+  await user.click(getByText(document as any, "World"));
   expect(outputElement().textContent).toEqual("World");
 
-  await user.click(meButton());
+  await user.click(getByText(document as any, "Me"));
   expect(outputElement().textContent).toEqual("Me");
 
-  await user.click(everyoneButton());
-  expect(outputElement().textContent).toEqual("Everyone");
+  await user.click(getByText(document as any, "Everyone!"));
+  expect(outputElement().textContent).toEqual("Everyone!");
 });

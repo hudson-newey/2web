@@ -1,23 +1,20 @@
 import { test, beforeEach, expect } from "vitest";
 import { assertNoErrors } from "./tests/helpers/assertions";
 import { navigateToPage } from "./tests/helpers/fixture";
-import { getByTestId, getByText } from "@testing-library/dom";
 import { randNumber } from "@ngneat/falso";
+import { screen  } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { Document } from "happy-dom";
 
-let document: Document;
-
-const incrementButton = () => getByText(document.body as any, "Increment");
-const decrementButton = () => getByText(document.body as any, "Decrement");
-const countOutput = () => getByTestId(document.body as any, "count-output");
+const incrementButton = () => screen.getByText("Increment");
+const decrementButton = () => screen.getByText("Decrement");
+const countOutput = () => screen.getByTestId("count-output");
 
 beforeEach(async () => {
-  document = (await navigateToPage("reactive.html")).document;
+  await navigateToPage("reactive.html");
 });
 
 test("should load", () => {
-  assertNoErrors(document);
+  assertNoErrors();
 });
 
 test.skip("should increment and decrement the count when using the increment button", async () => {

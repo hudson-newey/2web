@@ -10,6 +10,7 @@ export default defineConfig({
       html: "./html-report/index.html",
     },
     environment: "happy-dom",
+    globals: true,
   },
   server: {
     port: 3000,

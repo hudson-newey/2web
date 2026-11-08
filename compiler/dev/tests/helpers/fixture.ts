@@ -1,16 +1,19 @@
-import { Browser, BrowserErrorCaptureEnum, BrowserFrame } from "happy-dom";
+import { Browser, BrowserErrorCaptureEnum } from "happy-dom";
 
-export async function navigateToPage(location: string): Promise<BrowserFrame> {
+export async function navigateToPage(location: string) {
   const browser = new Browser({
     settings: {
       errorCapture: BrowserErrorCaptureEnum.processLevel,
       disableJavaScriptEvaluation: false,
+      enableJavaScriptEvaluation: true,
+      suppressInsecureJavaScriptEnvironmentWarning: true,
+      disableCSSFileLoading: true,
     },
   });
 
   const page = browser.newPage();
-  await page.goto(location);
+  await page.goto(`http://localhost:4173/${location}`);
   await page.waitUntilComplete();
 
-  return page.mainFrame;
+  document = page.mainFrame.document as any;
 }

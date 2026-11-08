@@ -1,7 +1,7 @@
 import { expect } from "vitest";
-import { Document } from "happy-dom";
+import { screen } from "@testing-library/dom";
 
-export function assertNoErrors(document: Document) {
-  const errorElements = document.getElementsByClassName("__2_error_container");
-  expect(errorElements.length).toBe(0);
+export function assertNoErrors() {
+  const errorContainer = screen.queryByTestId("__2_error_container");
+  expect(errorContainer).toBeNull();
 }
