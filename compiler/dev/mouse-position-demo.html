@@ -8,13 +8,11 @@
 <p>x: {{ $mouseX }}</p>
 <p>y: {{ $mouseY }}</p>
 
-<!--
-      TODO: The compiler needs to get better to get rid of this double event
-      listener hack.
-    -->
-<div @mousemove="$mouseY = event.offsetY">
-  <div class="canvas" @mousemove="$mouseX = event.offsetX"></div>
-</div>
+<div
+  class="canvas"
+  @mousemove="$mouseY = event.offsetY"
+  @mousemove="$mouseX = event.offsetX"
+></div>
 
 <style>
   .canvas {

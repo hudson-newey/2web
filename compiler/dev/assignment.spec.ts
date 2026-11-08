@@ -1,4 +1,4 @@
-import { beforeEach, expect, test } from "vitest";
+import { beforeEach, expect, it } from "vitest";
 import { getByTestId, getByText } from "@testing-library/dom";
 import { navigateToPage } from "./tests/helpers/fixture";
 import userEvent from "@testing-library/user-event";
@@ -10,15 +10,15 @@ beforeEach(async () => {
   await navigateToPage("assignment.html");
 });
 
-test("should have no errors", () => {
+it("has no errors", () => {
   assertNoErrors();
 });
 
-test("should have the correct initial value", () => {
+it("should have the correct initial value", () => {
   expect(outputElement().textContent).toEqual("Hello");
 });
 
-test("should change between states", async () => {
+it("should change between states", async () => {
   const user = userEvent.setup();
 
   await user.click(getByText(document as any, "World"));

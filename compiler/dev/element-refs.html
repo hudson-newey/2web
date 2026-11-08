@@ -1,8 +1,8 @@
 <title>Reactive Variables</title>
 
-<h1 #outputElement>No Content</h1>
+<h1 #outputElement data-testid="output-element">No Content</h1>
 
-<input #inputElement type="text" />
+<input #inputElement data-testid="input-element" type="text" />
 
 <script>
   inputElement.addEventListener("input", (event: Event) => {

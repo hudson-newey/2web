@@ -11,11 +11,11 @@
     $ message = "aaaaa";
     $ count = "";
   */
-  $message = "Hello World!";
+  $message = "This page is set up correctly";
   /* $ message = "Trailing single line block comment"; */
 </script>
 
-<h1 *textContent="$message">This text should be overwritten at compile time</h1>
+<h1 *textContent="$message" style="color: red;">This text should be overwritten at compile time</h1>
 
 <p>
   You should see a "Hello World!" header on this page because the message

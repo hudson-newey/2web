@@ -1,4 +1,4 @@
-import { test, beforeEach, expect } from "vitest";
+import { it, beforeEach, expect } from "vitest";
 import { assertNoErrors } from "./tests/helpers/assertions";
 import { navigateToPage } from "./tests/helpers/fixture";
 import { randNumber } from "@ngneat/falso";
@@ -13,11 +13,11 @@ beforeEach(async () => {
   await navigateToPage("reactive.html");
 });
 
-test("should have no errors", () => {
+it("has no errors", () => {
   assertNoErrors();
 });
 
-test.skip("should increment and decrement the count when using the increment button", async () => {
+it.skip("should increment and decrement the count when using the increment button", async () => {
   const user = userEvent.setup();
 
   const expectedCount = randNumber({ min: 1, max: 5 });
@@ -34,7 +34,7 @@ test.skip("should increment and decrement the count when using the increment but
   expect(countOutput().textContent).toEqual(expectedCount - 1);
 });
 
-test.skip("should decrement the count below zero when using the decrement button", async () => {
+it.skip("should decrement the count below zero when using the decrement button", async () => {
   const user = userEvent.setup();
   const expectedCount = randNumber({ min: 1, max: 5 });
 
