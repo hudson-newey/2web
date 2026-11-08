@@ -6,6 +6,6 @@ beforeEach(async () => {
   await navigateToPage("esm-modules.html");
 });
 
-test("should load", () => {
+test("should have no errors", () => {
   assertNoErrors();
 });

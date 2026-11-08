@@ -6,6 +6,6 @@ beforeEach(async () => {
   await navigateToPage("control-flow-if.html");
 });
 
-test("should load", () => {
+test("should have no errors", () => {
   assertNoErrors();
 });

@@ -13,7 +13,7 @@ beforeEach(async () => {
   await navigateToPage("reactive.html");
 });
 
-test("should load", () => {
+test("should have no errors", () => {
   assertNoErrors();
 });
 

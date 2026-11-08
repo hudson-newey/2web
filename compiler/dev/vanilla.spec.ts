@@ -6,6 +6,6 @@ beforeEach(async () => {
   await navigateToPage("vanilla.html");
 });
 
-test("should load", () => {
+test("should have no errors", () => {
   assertNoErrors();
 });

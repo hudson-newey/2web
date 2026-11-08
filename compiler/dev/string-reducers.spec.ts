@@ -6,6 +6,6 @@ beforeEach(async () => {
   await navigateToPage("string-reducers.html");
 });
 
-test("should load", () => {
+test("should have no errors", () => {
   assertNoErrors();
 });

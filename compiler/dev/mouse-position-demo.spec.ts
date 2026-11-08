@@ -6,6 +6,6 @@ beforeEach(async () => {
   await navigateToPage("mouse-position-demo.html");
 });
 
-test("should load", () => {
+test("should have no errors", () => {
   assertNoErrors();
 });
