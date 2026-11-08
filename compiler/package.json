@@ -39,15 +39,15 @@
     }
   },
   "devDependencies": {
-    "@ngneat/falso": "^7.3.0",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^22.14.1",
-    "@vitest/ui": "3.1.2",
-    "happy-dom": "^17.4.7",
-    "oxlint": "^1.28.0",
-    "vite": "^6.3.4",
-    "vitest": "3.1.2"
+    "@ngneat/falso": "^8.0.2",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/user-event": "^14.6.8",
+    "@types/node": "^26.6.6",
+    "@vitest/ui": "5.1.0",
+    "happy-dom": "^21.0.4",
+    "oxlint": "^1.92.0",
+    "vite": "^8.3.6",
+    "vitest": "5.1.0"
   },
-  "packageManager": "pnpm@10.6.5"
+  "packageManager": "pnpm@11.28.9+sha512.35421cea2720eca3f5ad722b67e8ef18f4d3cd4745ed2fcfeb0dc288d4e9437fad3870d91ee6e83f268f0f6f7e0f62723317b19617bb45ee4333172ef51159f8"
 }

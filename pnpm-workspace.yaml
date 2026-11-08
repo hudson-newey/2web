@@ -1,3 +1,6 @@
+version: 11.28.9
+minimumReleaseAge: 120
+
 packages:
   - cli
   - compiler
@@ -9,3 +12,10 @@ packages:
 
 onlyBuiltDependencies:
   - esbuild
+
+allowBuilds:
+  '@parcel/watcher': set this to true or false
+  '@swc/core': set this to true or false
+  '@vscode/vsce-sign': set this to true or false
+  esbuild: set this to true or false
+  keytar: set this to true or false
