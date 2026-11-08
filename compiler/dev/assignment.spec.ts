@@ -1,8 +1,8 @@
 import { beforeEach, expect, test } from "vitest";
 import { getByTestId, getByText } from "@testing-library/dom";
-import { navigateToPage } from "./helpers/fixture";
+import { navigateToPage } from "./tests/helpers/fixture";
 import userEvent from "@testing-library/user-event";
-import { assertNoErrors } from "./helpers/assertions";
+import { assertNoErrors } from "./tests/helpers/assertions";
 import { BrowserFrame, Document } from "happy-dom";
 
 let document: Document;

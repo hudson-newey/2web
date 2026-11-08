@@ -1,6 +1,6 @@
 import { test, beforeEach, expect } from "vitest";
-import { assertNoErrors } from "./helpers/assertions";
-import { navigateToPage } from "./helpers/fixture";
+import { assertNoErrors } from "./tests/helpers/assertions";
+import { navigateToPage } from "./tests/helpers/fixture";
 import { getByTestId, getByText } from "@testing-library/dom";
 import { randNumber } from "@ngneat/falso";
 import userEvent from "@testing-library/user-event";

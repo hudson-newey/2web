@@ -1,12 +1,12 @@
 import { beforeEach, test } from "vitest";
-import { assertNoErrors } from "./helpers/assertions";
-import { navigateToPage } from "./helpers/fixture";
+import { assertNoErrors } from "./tests/helpers/assertions";
+import { navigateToPage } from "./tests/helpers/fixture";
 import { Document } from "happy-dom";
 
 let document: Document;
 
 beforeEach(async () => {
-  document = (await navigateToPage("markdown-test.html")).document;
+  document = (await navigateToPage("compiled-styles.html")).document;
 });
 
 test("should load", () => {

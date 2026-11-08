@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test } from "vitest";
-import { assertNoErrors } from "./helpers/assertions";
-import { navigateToPage } from "./helpers/fixture";
+import { assertNoErrors } from "./tests/helpers/assertions";
+import { navigateToPage } from "./tests/helpers/fixture";
 import { BrowserFrame, BrowserWindow, Document } from "happy-dom";
 import { getByTestId } from "@testing-library/dom";
 
