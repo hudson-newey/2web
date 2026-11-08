@@ -33,12 +33,6 @@ export default defineConfig({
         ssr: "./ssr/index.ts",
         typescript: "./typescript/index.ts",
         "2js": "./2js/index.ts",
-
-        // the "vite-plugin" and "typescript" packages are not compiled here
-        // because they are intended to be consumed by development environments
-        // instead of production environments.
-        //
-        // "view-transitions" are included as a static copy.
       },
       formats: ["es", "cjs"],
     },

@@ -58,10 +58,6 @@
       "import": "./dist/2js.js",
       "types": "./dist/2js/index.d.ts"
     },
-    "./view-transitions": {
-      "import": "./dist/view-transitions/*",
-      "types": "./dist/view-transitions/index.d.ts"
-    },
     "./vite-plugin": {
       "import": "./vite-plugin/index.ts",
       "types": "./vite-plugin/index.d.ts"
