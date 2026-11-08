@@ -94,18 +94,12 @@ Automatically checks for common problems in a 2web project.
 
 #### Dependencies
 
-The 2web compiler requires some dependencies to convert file formats.
-This is typically only needed in edge cases for unconventional file formats
-e.g. creating a web page from a `.docx` (Microsoft Word) file.
-
 To keep the number of dependencies low, 2web does not require these dependencies
 to be installed until you need some of the dependencies features.
 
 | Dependency                                        | Required for                                |
 | ------------------------------------------------- | ------------------------------------------- |
 | [2webc](https://github.com/hudson-newey/2web)     |                                             |
-| [pandoc](https://pandoc.org)                      | `.tex`, `.docx`, `.doc`, `.odt`             |
-| [fable](https://fable.io)                         | `.fs`                                       |
 | [ffmpeg](https://ffmpeg.org)                      | Optimizing images/videos                    |
 | [docker](https://www.docker.com)                  | Database, load balancer & deployment images |
 | [docker-compose](https://docs.docker.com/compose) |                                             |

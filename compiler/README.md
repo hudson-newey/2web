@@ -53,14 +53,10 @@
 | Package | State | File Extensions |
 | ------- | ----- | --------------- |
 | html    | ✅    | `.html`, `.htm` |
-| xhtml   | ❌    | `.xhtml`        |
 | xml     | ✅    | `.xml`          |
-| xslt    | ❌    | `.xslt`, `.xsl` |
 | txt     | ✅    | `.txt`          |
 | pdf     | ✅    | `.pdf`          |
 | md      | ✅    | `.md`           |
-| docx    | 🔧    | `.docx`, `.doc` |
-| odt     | ✅    | `.odt`          |
 
 ### Supported Style Languages
 
