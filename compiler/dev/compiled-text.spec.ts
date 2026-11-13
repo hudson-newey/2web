@@ -14,7 +14,7 @@ it("has no errors", () => {
 it("should replace the initial text", () => {
   expect(
     queryByText(
-      document as any,
+      document.body,
       "This page is set up correctly",
     )
   ).not.toBeNull();

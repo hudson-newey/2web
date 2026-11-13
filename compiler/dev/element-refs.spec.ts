@@ -5,9 +5,9 @@ import { getByTestId } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
 const inputElement = () =>
-  getByTestId<HTMLInputElement>(document as any, "input-element");
+  getByTestId<HTMLInputElement>(document.body, "input-element");
 const outputElement = () =>
-  getByTestId<HTMLHeadingElement>(document as any, "output-element");
+  getByTestId<HTMLHeadingElement>(document.body, "output-element");
 
 beforeEach(async () => {
   await navigateToPage("element-refs.html");

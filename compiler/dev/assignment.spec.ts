@@ -4,7 +4,7 @@ import { navigateToPage } from "./tests/helpers/fixture";
 import userEvent from "@testing-library/user-event";
 import { assertNoErrors } from "./tests/helpers/assertions";
 
-const outputElement = () => getByTestId(document as any, "output-element");
+const outputElement = () => getByTestId(document.body, "output-element");
 
 beforeEach(async () => {
   await navigateToPage("assignment.html");
@@ -21,12 +21,12 @@ it("should have the correct initial value", () => {
 it("should change between states", async () => {
   const user = userEvent.setup();
 
-  await user.click(getByText(document as any, "World"));
+  await user.click(getByText(document.body, "World"));
   expect(outputElement().textContent).toEqual("World");
 
-  await user.click(getByText(document as any, "Me"));
+  await user.click(getByText(document.body, "Me"));
   expect(outputElement().textContent).toEqual("Me");
 
-  await user.click(getByText(document as any, "Everyone!"));
+  await user.click(getByText(document.body, "Everyone!"));
   expect(outputElement().textContent).toEqual("Everyone!");
 });

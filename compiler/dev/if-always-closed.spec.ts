@@ -4,7 +4,7 @@ import { navigateToPage } from "./tests/helpers/fixture";
 import { queryByTestId } from "@testing-library/dom";
 
 const toggleableContent = () => queryByTestId(
-  document as any,
+  document.body,
   "toggleable-content",
 );
 
