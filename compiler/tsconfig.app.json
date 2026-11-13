@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.base.json",
+  "include": ["src", "dev", "types"],
+  "exclude": ["**/*.spec.ts", "**/tests-setup.ts"],
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client", "./types/index"],
+  }
+}

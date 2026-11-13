@@ -17,7 +17,7 @@ it("has no errors", () => {
   assertNoErrors();
 });
 
-it.skip("should increment and decrement the count when using the increment button", async () => {
+it.skip("increments and decrement the count", async () => {
   const user = userEvent.setup();
 
   const expectedCount = randNumber({ min: 1, max: 5 });
@@ -34,7 +34,7 @@ it.skip("should increment and decrement the count when using the increment butto
   expect(countOutput().textContent).toEqual(expectedCount - 1);
 });
 
-it.skip("should decrement the count below zero when using the decrement button", async () => {
+it.skip("decrements the count below zero", async () => {
   const user = userEvent.setup();
   const expectedCount = randNumber({ min: 1, max: 5 });
 

@@ -5,10 +5,9 @@ export async function navigateToPage(location: string) {
   const browser = new Browser({
     settings: {
       errorCapture: BrowserErrorCaptureEnum.processLevel,
-      disableJavaScriptEvaluation: false,
       enableJavaScriptEvaluation: true,
       suppressInsecureJavaScriptEnvironmentWarning: true,
-      disableCSSFileLoading: true,
+      enableCSSFileLoading: true,
     },
   });
 

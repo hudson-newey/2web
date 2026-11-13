@@ -13,5 +13,5 @@ it("has no errors", () => {
 
 it("input should have the correct initial value", () => {
   const inputElement = getByTestId<HTMLInputElement>(document.body, "value-output");
-  expect(inputElement.value).toBe("Hello World!");
+  expect(inputElement).toHaveValue("Hello World!");
 });

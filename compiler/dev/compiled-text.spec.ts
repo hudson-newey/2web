@@ -12,10 +12,6 @@ it("has no errors", () => {
 });
 
 it("should replace the initial text", () => {
-  expect(
-    queryByText(
-      document.body,
-      "This page is set up correctly",
-    )
-  ).not.toBeNull();
+  const el = queryByText(document.body, "This page is set up correctly");
+  expect(el).not.toBeNull();
 });

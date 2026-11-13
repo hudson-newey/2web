@@ -9,6 +9,7 @@ export default defineConfig(() =>
         dir: ".",
         include: ["**/*.spec.ts"],
         forceRerunTriggers: ["/dist/**"],
+        setupFiles: ["./tests/vitest.setup.ts"],
         reporters: ["default"],
         environment: "happy-dom",
         globals: true,

@@ -18,12 +18,12 @@ it("has no errors", () => {
 });
 
 it("sets the ids of tagged elements", () => {
-  expect(inputElement().id).toBe("inputElement");
-  expect(outputElement().id).toBe("outputElement");
+  expect(inputElement()).toHaveAttribute("id", "inputElement");
+  expect(outputElement()).toHaveAttribute("id", "outputElement");
 });
 
 it("has the correct initial output value", () => {
-  expect(outputElement().textContent.trim()).toBe("No Content");
+  expect(outputElement()).toHaveTextContent("No Content");
 });
 
 it("updates the heading when the input changes", async () => {
@@ -31,5 +31,5 @@ it("updates the heading when the input changes", async () => {
   const user = userEvent.setup();
 
   await user.type(inputElement(), testText);
-  expect(outputElement().textContent.trim(), testText);
+  expect(outputElement()).toHaveTextContent(testText);
 });

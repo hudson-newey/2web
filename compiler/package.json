@@ -41,9 +41,11 @@
   "devDependencies": {
     "@ngneat/falso": "^8.0.2",
     "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/user-event": "^14.6.8",
     "@types/node": "^26.6.6",
     "@vitest/browser-playwright": "^5.1.0",
+    "@vitest/coverage-v8": "5.1.0",
     "@vitest/ui": "5.1.0",
     "happy-dom": "^21.0.4",
     "oxlint": "^1.92.0",
