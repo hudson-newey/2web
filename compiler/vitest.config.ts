@@ -1,14 +1,14 @@
 import { defineConfig, mergeConfig } from "vitest/config";
 import viteConfig from "./vite.config";
 
-export default defineConfig((configEnv) =>
+export default defineConfig(() =>
   mergeConfig(
     viteConfig,
     defineConfig({
       test: {
         dir: ".",
         include: ["**/*.spec.ts"],
-        forceRerunTriggers: ["**/dist/**"],
+        forceRerunTriggers: ["/dist/**"],
         reporters: ["default"],
         environment: "happy-dom",
         globals: true,

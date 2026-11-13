@@ -13,7 +13,7 @@ export async function navigateToPage(location: string) {
   });
 
   const page = browser.newPage();
-  await page.goto(`http://localhost:5173/${location}`);
+  await page.goto(`http://localhost:5174/${location}`);
   await page.waitUntilComplete();
 
   document = page.mainFrame.document as any;
