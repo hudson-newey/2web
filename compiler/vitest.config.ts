@@ -1,22 +1,18 @@
-import { defineConfig } from "vitest/config";
+import { defineConfig, mergeConfig } from "vitest/config";
+import viteConfig from "./vite.config";
 
-export default defineConfig({
-  test: {
-    dir: ".",
-    include: ["**/*.spec.ts"],
-    forceRerunTriggers: ["**/dist/**"],
-    reporters: ["html", "default"],
-    outputFile: {
-      html: "./html-report/index.html",
-    },
-    environment: "happy-dom",
-    globals: true,
-  },
-  server: {
-    port: 3000,
-    open: false,
-    watch: {
-      usePolling: true,
-    },
-  },
-});
+export default defineConfig((configEnv) =>
+  mergeConfig(
+    viteConfig,
+    defineConfig({
+      test: {
+        dir: ".",
+        include: ["**/*.spec.ts"],
+        forceRerunTriggers: ["**/dist/**"],
+        reporters: ["default"],
+        environment: "happy-dom",
+        globals: true,
+      },
+    }),
+  ),
+);
