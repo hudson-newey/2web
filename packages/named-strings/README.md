@@ -8,6 +8,8 @@ to provide syntax highlighting to your code in strings.
 The following code snippets can be syntax highlighted in vscode.
 
 ```ts
+import { html, css, js, svg } from "@two-web/kit/named-strings";
+
 const cssCode = css`
     .primary {
         color: blue;
