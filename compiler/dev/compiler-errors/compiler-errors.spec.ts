@@ -7,5 +7,8 @@ beforeEach(async () => {
 });
 
 it("has errors", () => {
-  assertHasErrors();
+  assertHasErrors([
+    "error importing file. Could not find file: './should-error.html'",
+    "error importing file. Could not find file: './error2.html'",
+  ]);
 });

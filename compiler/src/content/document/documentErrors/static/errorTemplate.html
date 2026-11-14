@@ -19,7 +19,7 @@
       {{ range .Errors }}
       <div class="__2_error">
         <h2 class="__2_error_file">{{ .FilePath }}</h2>
-        <pre class="__2_error_message">{{ .Message }}</pre>
+        <pre class="__2_error_message" data-testid="compiler-error-message">{{ .Message }}</pre>
 
         <div class="__2_error_actions">
           <a

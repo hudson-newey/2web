@@ -14,11 +14,15 @@ it("has no errors", () => {
   assertNoErrors();
 });
 
-it("should have the correct initial value", () => {
+it("has the correct title", () => {
+  expect(document.title).toBe("Assignment Variables");
+});
+
+it("has the correct initial value", () => {
   expect(outputElement()).toHaveTextContent("Hello");
 });
 
-it("should change between states", async () => {
+it("changes between states", async () => {
   const user = userEvent.setup();
 
   await user.click(getByText(document.body, "World"));
