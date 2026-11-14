@@ -28,7 +28,7 @@ it("has the correct initial output value", () => {
 
 it("updates the heading when the input changes", async () => {
   const testText = "This is a test 123";
-  const user = userEvent.setup();
+  const user = userEvent.setup({ document });
 
   await user.type(inputElement(), testText);
   expect(outputElement()).toHaveTextContent(testText);
