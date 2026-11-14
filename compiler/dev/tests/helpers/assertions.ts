@@ -1,7 +1,13 @@
 import { expect } from "vitest";
-import { screen } from "@testing-library/dom";
+import { queryByTestId } from "@testing-library/dom";
+
+const errorContainer = () =>
+  queryByTestId(document.body, "__2_error_container");
 
 export function assertNoErrors() {
-  const errorContainer = screen.queryByTestId("__2_error_container");
-  expect(errorContainer).toBeNull();
+  expect(errorContainer()).toBeNull();
+}
+
+export function assertHasErrors() {
+  expect(errorContainer()).toBeDefined();
 }
