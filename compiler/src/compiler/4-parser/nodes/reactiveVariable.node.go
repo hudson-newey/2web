@@ -136,12 +136,15 @@ The compiled code will look something like this:
 <h1 id="_0">Hello!</h1>
 <script>
 
-	document.addEventListener("DOMContentLoaded", () => {
+	document.addEventListener("DOMContentLoaded", ($event) => {
 	    document.getElementById("_0").textContent = "Hello!";
 	});
 
 </script>
 ```
+
+Note: we add the $event parameter so that we don't have to rely on window.event
+to get the emitted event.
 
 "Assignment" reactive variables are reactive, but do not require a runtime
 variable to keep track of state.
@@ -368,7 +371,7 @@ func (m *reactiveVariableNode) compileReactiveVar(
 		eventDomSelector := javascript.CreateJsElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
 		eventListeners = eventListeners + fmt.Sprintf(`
-			document.querySelector("[%s]").addEventListener("%s", () => {
+			document.querySelector("[%s]").addEventListener("%s", ($event) => {
 				%s = %s;
 				%s(%s);
 			});
@@ -414,7 +417,7 @@ func (m *reactiveVariableNode) compileAssignmentVar(
 		eventDomSelector := javascript.CreateJsElementName()
 		pageContent = strings.ReplaceAll(pageContent, e.selector(), eventDomSelector)
 		eventListeners = eventListeners + fmt.Sprintf(
-			`document.querySelector("[%s]").addEventListener("%s", () => %s(%s));`,
+			`document.querySelector("[%s]").addEventListener("%s", ($event) => %s(%s));`,
 			eventDomSelector, e.eventName, handlerFuncName, e.assignmentExpr,
 		)
 	}

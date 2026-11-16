@@ -19,8 +19,6 @@ it("has the correct initial value", () => {
   expect(outputEl()).toHaveTextContent("");
 });
 
-// TODO: This test is failing because we use deprecated window.event instead of
-// using a callback in event listeners.
 it("updates when the input changes", async () => {
   const user = userEvent.setup({ document });
 

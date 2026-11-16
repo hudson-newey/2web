@@ -11,4 +11,4 @@
 
 <h1 data-testid="output-el" *textContent="$value"></h1>
 
-<input data-testid="input-el" @input="$value = event.target.value" />
+<input data-testid="input-el" @input="$value = $event.target.value" />
