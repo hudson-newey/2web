@@ -47,7 +47,10 @@ func (m *textOutputNode) Children() AbstractSyntaxTree {
 }
 
 func (m *textOutputNode) MarkupContent() string {
-	return m.reactiveProp.MarkupContent()
+	// The text node itself doesn't produce any text output because the
+	// textContent alias comes from the Content()
+	// TODO: Why do we even have both MarkupContent and Content ????
+	return ""
 }
 
 func (m *textOutputNode) Content(page *page.Page, ast AbstractSyntaxTree) NodeContent {
