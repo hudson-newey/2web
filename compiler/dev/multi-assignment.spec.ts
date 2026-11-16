@@ -37,7 +37,7 @@ it("has the correct initial value", () => {
 });
 
 it("updates correctly", async () => {
-  const user = userEvent.setup();
+  const user = userEvent.setup({ document });
 
   // Note that pressing the "world" button removes the exclamation point.
   await user.click(worldBtn());

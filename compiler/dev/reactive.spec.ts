@@ -18,7 +18,7 @@ it("has no errors", () => {
 });
 
 it.skip("increments and decrement the count", async () => {
-  const user = userEvent.setup();
+  const user = userEvent.setup({ document });
 
   const expectedCount = randNumber({ min: 1, max: 5 });
 
@@ -35,7 +35,7 @@ it.skip("increments and decrement the count", async () => {
 });
 
 it.skip("decrements the count below zero", async () => {
-  const user = userEvent.setup();
+  const user = userEvent.setup({ document });
   const expectedCount = randNumber({ min: 1, max: 5 });
 
   const incrementTarget = decrementButton();

@@ -23,7 +23,7 @@ it("has the correct initial value", () => {
 });
 
 it("changes between states", async () => {
-  const user = userEvent.setup();
+  const user = userEvent.setup({ document });
 
   await user.click(getByText(document.body, "World"));
   expect(outputElement()).toHaveTextContent("World");
